@@ -234,27 +234,30 @@ SMODS.Joker {
 
             local quasiCount = 0
             local jokers = {}
-            local blind_debuff = {}
+            local oneQuasiExcluded = false
             for i = 1, #G.jokers.cards do
                 if G.jokers.cards[i].ability.name == "Quasi Connectivity" then
                     quasiCount = quasiCount + 1
                 end
-                if G.jokers.cards[i].debuff then
-                    blind_debuff[#blind_debuff+1]=(G.jokers.cards[i])
-                end
-                if (not G.jokers.cards[i].debuff or #G.jokers.cards < 2) and G.jokers.cards[i] ~= card and not table_contains(blind_debuff,G.jokers.cards[i]) then
+                if (G.jokers.cards[i] ~= card or oneQuasiExcluded) then
                     jokers[#jokers + 1] = G.jokers.cards[i]
+                end
+                
+                if G.jokers.cards[i].ability.name == "Observer" and not oneQuasiExcluded then
+                    oneQuasiExcluded = true
                 end
                 G.jokers.cards[i]:set_debuff(false)
                 
             end
             for i = 1, quasiCount do
-                local _card = pseudorandom_element(jokers, pseudoseed('akyrj:quasi_connectivity'))
-                if _card then
-                    _card:set_debuff(true)
-                    _card:juice_up(1, 1)
+                if(#jokers > 0) then
+                    local _card = pseudorandom_element(jokers, pseudoseed('akyrj:quasi_connectivity'))
+                    if _card then
+                        _card:set_debuff(true)
+                        _card:juice_up(1, 1)
+                    end
+                    jokers[_card] = nil
                 end
-                jokers[_card] = nil
             end
             card.ability.extra.first_hand = false
         end

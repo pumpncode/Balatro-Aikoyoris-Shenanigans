@@ -24,15 +24,15 @@ function Card:trigger_external(card)
             },
             
         })
+        update_hand_text({immediate = true, nopulse = true, delay = 0}, {mult_stored = stored})
 
         if card.ability.extra.times == 0 then
-
-            card_eval_status_text(card, 'jokers', nil, nil, nil, {
+            SMODS.eval_this(card, {
                 instant = true,
                 message = localize {
                     type = 'variable',
                     key = 'a_mult',
-                    vars = {card.ability.extra.mult_stored}
+                    vars = {(card.ability.extra.mult_stored+card.ability.extra.mult)}
                 }
             })
             card.ability.extra.total_times = card.ability.extra.total_times + card.ability.extra.times_increment
@@ -81,11 +81,7 @@ SMODS.Joker {
 
             })
             card.ability.extra.mult_stored = stored
-            update_hand_text({
-                delay = 0
-            }, {
-                mult_stored = stored
-            })
+            update_hand_text({immediate = true, nopulse = true, delay = 0}, {mult_stored = stored})
             return {
                 Xmult_mod = card.ability.extra.mult,
                 message = localize {
@@ -118,7 +114,7 @@ function EventManager:update(dt, forced)
             G.GAME.last_chips = G.GAME.current_round.current_hand.chips
             for i = 1, #G.jokers.cards do
                 if true then
-                    if (G.jokers.cards[i].trigger_external) then
+                    if (G.jokers.cards[i].trigger_external) and not G.jokers.cards[i].debuff then
                         
                         G.jokers.cards[i]:trigger_external(G.jokers.cards[i])
                         --G.E_MANAGER:add_event(Event({trigger = "immediate",func = (function()return true end)}), 'base')
@@ -197,7 +193,15 @@ SMODS.Joker {
     end,
     blueprint_compat = true
 }
-
+function table_contains(tbl, x)
+    found = false
+    for _, v in pairs(tbl) do
+        if v == x then 
+            found = true 
+        end
+    end
+    return found
+end
 SMODS.Joker {
 
     atlas = 'AikoyoriJokers',
@@ -221,27 +225,38 @@ SMODS.Joker {
     config = {
         name = "Quasi Connectivity",
         extra = {
-            mult = 5
+            mult = 6,
+            first_hand = true
         }
     },
     calculate = function(self, card, context)
-
-        print("TRIGGERED REAL!")
         if context.before and not context.blueprint then
 
+            local quasiCount = 0
             local jokers = {}
+            local blind_debuff = {}
             for i = 1, #G.jokers.cards do
-                if (not G.jokers.cards[i].debuff or #G.jokers.cards < 2) and G.jokers.cards[i] ~= card and
-                    not G.jokers.cards[i].debuff then
+                if G.jokers.cards[i].ability.name == "Quasi Connectivity" then
+                    quasiCount = quasiCount + 1
+                end
+                if G.jokers.cards[i].debuff then
+                    blind_debuff[#blind_debuff+1]=(G.jokers.cards[i])
+                end
+                if (not G.jokers.cards[i].debuff or #G.jokers.cards < 2) and G.jokers.cards[i] ~= card and not table_contains(blind_debuff,G.jokers.cards[i]) then
                     jokers[#jokers + 1] = G.jokers.cards[i]
                 end
-                G.jokers.cards[i]:set_debuff(G.jokers.cards[i].debuff)
+                G.jokers.cards[i]:set_debuff(false)
+                
             end
-            local _card = pseudorandom_element(jokers, pseudoseed('akyrj:quasi_connectivity'))
-            if _card then
-                _card:set_debuff(true)
-                _card:juice_up(1, 1)
+            for i = 1, quasiCount do
+                local _card = pseudorandom_element(jokers, pseudoseed('akyrj:quasi_connectivity'))
+                if _card then
+                    _card:set_debuff(true)
+                    _card:juice_up(1, 1)
+                end
+                jokers[_card] = nil
             end
+            card.ability.extra.first_hand = false
         end
         if context.joker_main then
             return {

@@ -100,6 +100,7 @@ function Game:init_game_object()
     local ret = igo(self)
     ret.last_mult = 0
     ret.last_chips = 0
+    ret.has_quasi = false
     return ret
 end
 
@@ -220,7 +221,10 @@ SMODS.Joker {
     loc_txt = {
         name = "Quasi Connectivity",
         text = {"{C:white,X:mult} X#1# {} Mult", "Disables one {C:attention}random Joker{}",
-                "every time a hand is played"}
+                "every time a hand is played",
+                "{s:0.8}Debuffs itself if it's",
+                "{s:0.8}the sole card"
+            }
     },
     config = {
         name = "Quasi Connectivity",
@@ -234,20 +238,21 @@ SMODS.Joker {
 
             local quasiCount = 0
             local jokers = {}
-            local oneQuasiExcluded = false
             for i = 1, #G.jokers.cards do
                 if G.jokers.cards[i].ability.name == "Quasi Connectivity" then
                     quasiCount = quasiCount + 1
                 end
-                if (G.jokers.cards[i] ~= card or oneQuasiExcluded) then
+                if (G.jokers.cards[i] ~= card or #G.jokers.cards < 2) then
                     jokers[#jokers + 1] = G.jokers.cards[i]
                 end
                 
-                if G.jokers.cards[i].ability.name == "Observer" and not oneQuasiExcluded then
-                    oneQuasiExcluded = true
-                end
                 G.jokers.cards[i]:set_debuff(false)
                 
+            end
+            -- remove the current card from the list
+            if not G.GAME.has_quasi then
+                jokers[card] = nil
+                G.GAME.has_quasi = true
             end
             for i = 1, quasiCount do
                 if(#jokers > 0) then
@@ -259,6 +264,7 @@ SMODS.Joker {
                     jokers[_card] = nil
                 end
             end
+            G.GAME.has_quasi = false
             card.ability.extra.first_hand = false
         end
         if context.joker_main then

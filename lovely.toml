@@ -1,0 +1,16 @@
+[manifest]
+version = "1.2"
+dump_lua = true
+priority = 0
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = """    local card_aligned = 'bm'"""
+position = "at"
+payload = """    local card_aligned = 'bm'
+    if extra and extra.card_align then card_aligned = extra.card_align end
+"""
+overwrite = true
+match_indent = true

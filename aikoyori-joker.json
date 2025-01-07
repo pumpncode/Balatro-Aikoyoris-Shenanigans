@@ -1,0 +1,21 @@
+{
+	"id": "aikoyorisjoker",
+	"name": "Aikoyori's Jokers",
+	"author": ["Aikoyori"],
+	"description": "Adds a bunch of jokers I want to add to the game.",
+	"prefix": "akyrj",
+	"main_file": "main.lua",
+	"priority": 0,
+	"badge_colour": "ff475a",
+	"badge_text_colour": "edefff",
+	"display_name": "Aikoyori's Jokers",
+	"version": "1.0.0",
+	"dependencies": [
+		"Steamodded (*)", 
+		"Lovely (*)", 
+		"Balatro (>=1.0.1m)"],
+	"conflicts": [
+	],
+	"provides": [
+	]
+}

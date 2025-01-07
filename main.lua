@@ -221,7 +221,7 @@ SMODS.Joker {
     loc_txt = {
         name = "Quasi Connectivity",
         text = {"{C:white,X:mult} X#1# {} Mult", "Disables one {C:attention}random Joker{}",
-                "every time a hand is played",
+                "after a hand is played",
                 "{s:0.8}Debuffs itself if it's",
                 "{s:0.8}the sole card"
             }

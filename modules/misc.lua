@@ -17,3 +17,17 @@ for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
         NON_STONE_UPGRADES[#NON_STONE_UPGRADES + 1] = v
     end
 end
+
+function aiko_intersect_table(a,b)
+    local ai = {}
+    for _,v in ipairs(a) do
+        ai[v] = true
+    end
+    local ret = {}
+    for _,v in ipairs(b) do
+        if ai[v] then
+            ret[#ret + 1] = v
+        end
+    end
+    return ret
+end

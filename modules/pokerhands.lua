@@ -1,4 +1,5 @@
 assert(SMODS.load_file("./func/numbers.lua"))()
+assert(SMODS.load_file("./modules/misc.lua"))()
 function aiko_get_X_same(num, hand)
     local vals = { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} }
     for i = #hand, 1, -1 do
@@ -32,7 +33,8 @@ local aiko_pickRandomInTable = function(t)
 end
 local pickableSuit = { "S", "H", "C", "D" }
 local pickableRank = { "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A" }
-local rankToNumber = { ["2"] = 2, ["3"] = 3, ["4"] = 4, ["5"] = 5, ["6"] = 6, ["7"] = 7, ["8"] = 8, ["9"] = 9, ["T"] = 10, ["J"] = 11, ["Q"] = 12, ["K"] = 13, ["A"] = 14 }
+local rankToNumber = { ["2"] = 2, ["3"] = 3, ["4"] = 4, ["5"] = 5, ["6"] = 6, ["7"] = 7, ["8"] = 8, ["9"] = 9, ["T"] = 10,
+    ["J"] = 11, ["Q"] = 12, ["K"] = 13, ["A"] = 14 }
 
 
 function aiko_get_flush(hand, flush_amount)
@@ -65,13 +67,12 @@ function aiko_get_flush(hand, flush_amount)
     end
 end
 
-
 --    for k, v in pairs(suits) do
 --        if v then
 --            for ind = 1,#v do
 --                local card_to_insert = { card = v[ind].card, sort_value = v[ind].sort_value+ 13, checked = false }
 --                table.insert(v, card_to_insert)
---                
+--
 --            end
 --            if #v > 0 then
 --                while suits[k][#suits[k]].sort_value == 27 or (suits[k][#suits[k]].sort_value == 26 and can_skip) do
@@ -80,7 +81,7 @@ end
 --            end
 --        end
 --    end
-    
+
 --    for k, v in pairs(suits) do
 --        print(k)
 --        if v then
@@ -90,78 +91,194 @@ end
 --        end
 --    end
 
-function aiko_get_straight(hand, straight_amount)
+local function concat_table(t1, t2)
+    for i = 1, #t2 do
+        t1[#t1 + 1] = t2[i]
+    end
+    return t1
+end
+
+local function getFirstElementOfTable(t)
+    for k, v in pairs(t) do
+        return v
+    end
+    
+end
+
+local card_suits = { "Spades", "Hearts", "Clubs", "Diamonds" }
+
+local function aiko_search_straight(cards, calculate_wildcard, consider_flush, straight_amount, has_skip)
     local ret = {}
-    local suits = {}
-    suits["Spades"] = {}
-    suits["Hearts"] = {}
-    suits["Clubs"] = {}
-    suits["Diamonds"] = {}
+    local count = 1
+    for suitNo = 1, #card_suits do
+        local suit = card_suits[suitNo]
+        local cards_in_straight = {}
+        for rank_f, cards_in_rank in pairs(cards) do
+            local rank = rank_f - 1
+            -- print("LOOPING THRU "..rank)
+
+            --print("LOOPING THRU "..suit)
+            ::aiko_suit_loop_continue::
+            local keep_going = false
+            
+            local cards_to_check = {}
+            -- insert first card so it is included 
+            if cards[rank] and cards[rank][suit] then
+                for j = 1, #cards[rank][suit] do
+                    if not cards[rank][suit][j].counted then
+                        table.insert(cards_to_check, cards[rank][suit][j])
+                    end
+                end
+            end
+            if cards_in_rank then
+                -- print("LOOPING THRU SUIT "..suit)
+
+                if (calculate_wildcard) or not consider_flush then
+                    for suit_wild, cards_in_suit_wild in pairs(cards_in_rank) do
+                        if cards[rank + 1] and cards[rank + 1][suit_wild] then
+                            for k = 1, #cards[rank + 1][suit_wild] do
+                                if not cards[rank + 1][suit_wild][k].counted then
+                                    if (calculate_wildcard and cards[rank + 1][suit_wild].is_wild) or (not consider_flush) then
+                                        table.insert(cards_to_check, cards[rank + 1][suit_wild][k])
+                                        keep_going = true
+                                        goto aiko_exit_search_loop
+                                    end
+                                end
+                            end
+                        end
+                        if has_skip then
+                            if cards[rank + 2] then
+                                for k = 1, #cards[rank + 2][suit_wild] do
+                                    if not cards[rank + 1][suit_wild][k].counted then
+                                        if (calculate_wildcard and cards[rank + 2][suit_wild][k].is_wild) or (not consider_flush) then
+                                            table.insert(cards_to_check, cards[rank + 2][suit_wild][k])
+                                            keep_going = true
+                                            goto aiko_exit_search_loop
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                else
+                    if cards[rank + 1] and cards[rank + 1][suit] then
+                        for j = 1, #cards[rank + 1][suit] do
+                            if not cards[rank + 1][suit][j].counted then
+                                table.insert(cards_to_check, cards[rank + 1][suit][j])
+                                keep_going = true
+                                goto aiko_exit_search_loop
+                            end
+                        end
+                    end
+                    if has_skip then
+                        if cards[rank + 2] and cards[rank + 2][suit] then
+                            for j = 1, #cards[rank + 2][suit] do
+                                if not cards[rank + 2][suit][j].counted then
+                                    table.insert(cards_to_check, cards[rank + 2][suit][j])
+                                    keep_going = true
+                                    goto aiko_exit_search_loop
+                                end
+                            end
+                        end
+                    end
+                end
+                ::aiko_exit_search_loop::
+            end
+            local strprint = ""
+
+            for k = 1, #cards_to_check do
+                strprint = strprint .. cards_to_check[k].sort_value .. " "
+            end
+            local has_available_card = false
+            for j = 1, #cards_to_check do
+                if not cards_to_check[j].counted then
+                    count = count + 1
+                    cards_to_check[j].counted = true
+                    table.insert(cards_in_straight, cards_to_check[j])
+                    has_available_card = true
+                else
+                end
+                if not keep_going then
+                    count = 1
+                    for k = 1, #cards_in_straight do
+                        cards_in_straight[k].counted = false
+                    end
+                    cards_in_straight = {}
+                end
+                if #cards_in_straight == straight_amount then
+                    -- print("FOUND STRAIGHT"..(consider_flush and " FLUSH" or ""))
+                    local strprint2 = ""
+
+                    for k = 1, #cards_in_straight do
+                        strprint2 = strprint2 .. cards_in_straight[k].sort_value .. " "
+                    end
+                    -- print(strprint2)
+                    local add_to_return = {}
+                    --rank = rank + 1 + (has_skip and 1 or 0)
+                    for k = 1, #cards_in_straight do
+                        table.insert(add_to_return, cards_in_straight[k].card)
+                    end
+                    table.insert(ret, add_to_return)
+                    goto aiko_suit_loop_continue
+                end
+            end
+        end
+    end
+    return ret
+end
+function aiko_get_straight(hand, straight_amount, consider_flush)
+    local ret = {}
+    local ranks = {}
+    -- data structure
+    -- rank = { 2 = { Spades = {card},Clubs = {card,card}}, 3 = { Hearts = {card},Diamonds = {card,card}}}
     local four_fingers = next(find_joker('Four Fingers'))
     local can_skip = next(find_joker('Shortcut'))
-    local hands = hand
-    -- put them in suits
-    for k, v in pairs(suits) do
-        if hands then
-            for i = 1, #hands do
-                if hands[i]:is_suit(k, nil, true) then
+    for i = 1, #hand do
+        local card = hand[i]
+        local rank = card:get_id()
+        local suit = card.base.suit
+        if ranks[rank] == nil then
+            ranks[rank] = {}
+        end
+        if ranks[rank][suit] == nil then
+            ranks[rank][suit] = {}
+        end
 
-                    local abc = {card = hands[i], sort_value = hands[i].base.id}
-                    abc.card.aiko_is_counted_towards_straight = false
-                    suits[k][#suits[k] + 1] = abc
-                end
-            end
+        ranks[rank][suit][#ranks[rank][suit] + 1] = { card = card, is_wild = card.ability.name == "Wild Card", sort_value =
+        card:get_id(), counted = false }
+    end
+    -- sort
+    for k, v in pairs(ranks) do
+        for k2, v2 in pairs(v) do
+            table.sort(v2, function(a, b) return a.sort_value < b.sort_value end)
         end
     end
-    -- sort them
-    
-    for k, v in pairs(suits) do
-        if v then
-            if v[1] and v[1].sort_value == 14 then
-                local card_to_insert = { card = v[1].card, sort_value = 1 }
-                table.insert(v, card_to_insert)
+    -- add ace to the starts
+    if ranks[14] then
+        
+        local aces = {}
+        for suit, suitStuff in pairs(ranks[14]) do
+            local rankAceAtOne = {}
+            for i = 1, #suitStuff do
+                table.insert(rankAceAtOne, suitStuff[i])
+            end
+            aces[suit] = rankAceAtOne
+        end
+        ranks[1] = aces
+    end
+    --[[
+    for k, v in pairs(ranks) do
+        local stringForPrint = ""
+        for k2, v2 in pairs(v) do
+            for i = 1, #v2 do
+                stringForPrint = stringForPrint .. v2[i].sort_value .. " "
             end
         end
+        print("RANK "..k.." :"..stringForPrint)
     end
-
-    for k, v in pairs(suits) do
-        table.sort(v, function(a, b) return a.sort_value < b.sort_value end)
-    end
-    for k, v in pairs(suits) do
-        local count = 1
-        local last = v[1]
-        local amnt = straight_amount - (four_fingers and 1 or 0)
-        local current_streak = {}
-        local current_streak_copy = {}
-        local has_straight = false
-        for i = 2, #v do
-            if v[i].card.aiko_is_counted_towards_straight then
-                goto aiko_straight_counted
-            end
-            if (v[i].sort_value == last.sort_value + 1 or (v[i].sort_value == last.sort_value + 2 and can_skip))then
-                count = count + 1
-                --print("FOUND CARD WITH VALUE " .. v[i].sort_value)
-                table.insert(current_streak, v[i].card)
-                if count >= (amnt) then
-                    has_straight = true   
-                end
-            elseif v[i].sort_value ~= last.sort_value then
-                current_streak_copy = current_streak
-                count = 1
-                current_streak = {}
-            end
-            if has_straight then
-                for ix = 1, #current_streak_copy do
-                    v[i].card.aiko_is_counted_towards_straight = true
-                    table.insert(ret, current_streak_copy)   
-                    --print("FOUND STRAIGHT")        
-                end
-            end
-            
-            ::aiko_straight_counted::
-            last = v[i]
-        end
-    end
+    ]]
+    ret = concat_table(ret, aiko_search_straight(ranks, false, consider_flush, straight_amount - (four_fingers and 1 or 0), can_skip))
+    ret = concat_table(ret, aiko_search_straight(ranks, true, consider_flush, straight_amount - (four_fingers and 1 or 0), can_skip))
     return ret
 end
 
@@ -195,7 +312,7 @@ local function randomConsecutiveRank(cardCode, up, randomSuit)
     local suit = string.sub(cardCode, 1, 1)
     local rank = string.sub(cardCode, 3, 3)
     local newRank = rank
-    newRank = pickableRank[math.fmod(rankToNumber[rank]-1, #pickableRank)+1]
+    newRank = pickableRank[math.fmod(rankToNumber[rank] - 1, #pickableRank) + 1]
     if randomSuit then
         local newSuit = aiko_pickRandomInTable(pickableSuit)
         while newSuit == suit do
@@ -268,7 +385,7 @@ local function SPC(s)
     return s .. " "
 end
 
-for j = 14, 5,-1 do
+for j = 14, 5, -1 do
     for i = 1, 4 do
         straightFlushTable = {}
         local card = randomCard()
@@ -298,11 +415,12 @@ for j = 14, 5,-1 do
                 description = { j .. ' cards in a row', 'all cards share the same suit', i > 1 and "For " .. i .. " Sets" or "" },
             },
             evaluate = function(parts, hand)
-                if not next(aiko_get_straight(hand, j)) or #aiko_get_straight(hand, j) < i or not next(aiko_get_flush(hand, j)) then return {} end
-                return { SMODS.merge_lists(aiko_get_straight(hand, i), aiko_get_flush(hand, i)) }
+                local straight_flushes = aiko_get_straight(hand, j, true)
+                if not next(straight_flushes) or #straight_flushes < i then return {} end
+                return { SMODS.merge_lists(straight_flushes) }
             end,
-            chips = (60 * j*i + 20) * j * i,
-            mult = (5 + j + i) * j * i,
+            chips = 100 * (j - 4) + 200 * (i - 1),
+            mult = (6 + 2 * j + i),
             l_chips = 15 * j * i,
             l_mult = math.ceil(j + 1) * i,
         }
@@ -315,11 +433,12 @@ for j = 14, 5,-1 do
                 description = { j .. ' cards in a row', i > 1 and "For " .. i .. " Sets" or "" },
             },
             evaluate = function(parts, hand)
-                if not next(aiko_get_straight(hand, j)) or #aiko_get_straight(hand, j) < i then return {} end
-                return { aiko_get_straight(hand, j) }
+                local straights = aiko_get_straight(hand, j, false)
+                if not next(straights) or #straights < i then return {} end
+                return { SMODS.merge_lists(straights) }
             end,
-            chips = (6 * j) * i,
-            mult = 2+(2*j)* math.ceil(i/1.4),
+            chips = 30 + 50 * (j - 4) + 70 * (i - 1),
+            mult = (4 + j + i),
             l_chips = (8 + j) * i,
             l_mult = math.ceil(j / 1.75) * i,
         }

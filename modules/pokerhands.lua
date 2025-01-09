@@ -113,8 +113,8 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
     for suitNo = 1, #card_suits do
         local suit = card_suits[suitNo]
         local cards_in_straight = {}
-        for rank_f, cards_in_rank in pairs(cards) do
-            local rank = rank_f - 1
+        for rank_f, cards_in_rank in ipairs(cards) do
+            local rank = rank_f
             -- print("LOOPING THRU "..rank)
 
             --print("LOOPING THRU "..suit)
@@ -127,9 +127,11 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
                 for j = 1, #cards[rank][suit] do
                     if not cards[rank][suit][j].counted then
                         table.insert(cards_to_check, cards[rank][suit][j])
+                        goto aiko_suit_first_card_added
                     end
                 end
             end
+            ::aiko_suit_first_card_added::
             if cards_in_rank then
                 -- print("LOOPING THRU SUIT "..suit)
 
@@ -182,8 +184,9 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
                         end
                     end
                 end
-                ::aiko_exit_search_loop::
+                
             end
+            ::aiko_exit_search_loop::
             local strprint = ""
 
             for k = 1, #cards_to_check do
@@ -206,13 +209,13 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
                     cards_in_straight = {}
                 end
                 if #cards_in_straight == straight_amount then
-                    -- print("FOUND STRAIGHT"..(consider_flush and " FLUSH" or ""))
+                    print("FOUND STRAIGHT"..(consider_flush and " FLUSH" or ""))
                     local strprint2 = ""
 
                     for k = 1, #cards_in_straight do
                         strprint2 = strprint2 .. cards_in_straight[k].sort_value .. " "
                     end
-                    -- print(strprint2)
+                    print(strprint2)
                     local add_to_return = {}
                     --rank = rank + 1 + (has_skip and 1 or 0)
                     for k = 1, #cards_in_straight do
@@ -337,7 +340,7 @@ for i = 6, 100 do
     end
     SMODS.PokerHand {
         key = aiko_numberToWords(i) .. " of a Kind",
-        visible = false,
+        visible = true,
         example = ofAkindTable,
         loc_txt = {
             name = aiko_numberToWords(i) .. " of a Kind",
@@ -354,7 +357,7 @@ for i = 6, 100 do
     }
     SMODS.PokerHand {
         key = "Flush " .. aiko_numberToWords(i),
-        visible = false,
+        visible = true,
         example = flushCardTable,
         loc_txt = {
             name = 'Flush ' .. aiko_numberToWords(i),
@@ -385,7 +388,7 @@ local function SPC(s)
     return s .. " "
 end
 
-for j = 14, 5, -1 do
+for j = 13, 5, -1 do
     for i = 1, 4 do
         straightFlushTable = {}
         local card = randomCard()
@@ -406,30 +409,34 @@ for j = 14, 5, -1 do
             end
         end
         if i == 1 and j == 5 then goto straights_continue end
+        local strflName = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight Flush"
+        if j == 13 and i == 4 then
+            strflName = "The Deck:tm:"
+        end
         SMODS.PokerHand {
-            key = SPC(getPleWord(i)) .. aiko_numberToWords(j) .. " Straight Flush",
-            visible = false,
+            key = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight Flush",
+            visible = true,
             example = straightFlushTable,
             loc_txt = {
-                name = SPC(getPleWord(i)) .. aiko_numberToWords(j) .. " Straight Flush",
-                description = { j .. ' cards in a row', 'all cards share the same suit', i > 1 and "For " .. i .. " Sets" or "" },
+                name = strflName,
+                description = { j .. ' cards in a row', 'Cards share the same suit', i > 1 and "in " .. i .. " Sets" or "" },
             },
             evaluate = function(parts, hand)
                 local straight_flushes = aiko_get_straight(hand, j, true)
                 if not next(straight_flushes) or #straight_flushes < i then return {} end
                 return { SMODS.merge_lists(straight_flushes) }
             end,
-            chips = 100 * (j - 4) + 200 * (i - 1),
-            mult = (6 + 2 * j + i),
-            l_chips = 15 * j * i,
-            l_mult = math.ceil(j + 1) * i,
+            chips = (j - 4) * 100 ^ (i / 1.5),
+            mult = (6 + 2 * j + 7 ^ (i/1.1)),
+            l_chips = 25 * j * i * i * i * i * j,
+            l_mult = math.ceil(j + 1) * i  * i * j,
         }
         SMODS.PokerHand {
-            key = SPC(getPleWord(i)) .. aiko_numberToWords(j) .. " Straight",
-            visible = false,
+            key = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight",
+            visible = true,
             example = straightTable,
             loc_txt = {
-                name = SPC(getPleWord(i)) .. aiko_numberToWords(j) .. " Straight",
+                name = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight",
                 description = { j .. ' cards in a row', i > 1 and "For " .. i .. " Sets" or "" },
             },
             evaluate = function(parts, hand)
@@ -437,10 +444,10 @@ for j = 14, 5, -1 do
                 if not next(straights) or #straights < i then return {} end
                 return { SMODS.merge_lists(straights) }
             end,
-            chips = 30 + 50 * (j - 4) + 70 * (i - 1),
-            mult = (4 + j + i),
-            l_chips = (8 + j) * i,
-            l_mult = math.ceil(j / 1.75) * i,
+            chips = (j - 4) * 70 ^ (i / 1.6),
+            mult = (4 + j +  5 ^ (i/1.2)),
+            l_chips = (8 + j) * i * i * i * j,
+            l_mult = math.ceil(j / 1.75) * i * i * j,
         }
         ::straights_continue::
     end

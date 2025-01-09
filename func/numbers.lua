@@ -2,13 +2,22 @@ local DIGITS_WORDS = {"zero", "one", "two", "three", "four", "five", "six", "sev
 local TEENS_WORDS = {"", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"}
 local TENTHS_WORDS = {"", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"}
 local TEN_POWERS = {"", "thousand", "million", "billion", "trillion", "quadrillion", "quintillion", "sextillion", "septillion", "octillion", "nonillion", "decillion", "undecillion", "duodecillion", "tredecillion", "quattuordecillion", "quindecillion", "sexdecillion", "septendecillion", "octodecillion", "novemdecillion", "vigintillion"}
-local PLE_WORDS = {"", "Double", "Triple", "Quadruple", "Quintuple", "Sextuple", "Septuple", "Octuple", "Nonuple", "Decuple"}
+local TUPLE_WORDS = {"Single", "Double", "Triple", "Quadruple", "Quintuple", "Sextuple", "Septuple", "Octuple", "Nonuple", "Decuple"}
 local function capitalize(str)
     return (str:gsub("^%l", string.upper))
 end
 
-function getPleWord(i)
-    return PLE_WORDS[i]
+function getTupleWord(i, single)
+    if i == 1 and not single then
+        return ""
+    end
+    if i > 10 then
+        return i.."-ple"
+    elseif i > 0 then
+        return TUPLE_WORDS[i]
+    else
+        return "???"
+    end
 end
 
 

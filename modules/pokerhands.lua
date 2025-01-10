@@ -88,11 +88,10 @@ local function aiko_recurse_straight(current_rank, current_suit, cards, calculat
     end
     if #current_streak.streaks > 0 then
         
-        print(table_to_string(current_streak), current_rank, current_suit)
+        --print(table_to_string(current_streak), current_rank, current_suit)
     end
-
-    local suits_to_check = {}
-    table.insert(suits_to_check,current_suit)
+    --print(table_to_string(current_streak))
+    local suits_to_check = {current_suit}
     if (calculate_wildcard or not consider_flush) and card_suits then
         for i, v in ipairs(card_suits) do
             if not table_contains(suits_to_check,v) then
@@ -100,28 +99,38 @@ local function aiko_recurse_straight(current_rank, current_suit, cards, calculat
             end
         end
     end
-    for ind, le_suit in ipairs(suits_to_check) do
+    --print("SUITS "..table_to_string(suits_to_check))
+    for ind,le_suit in pairs(suits_to_check) do
+        local le_suit = suits_to_check[ind]
         local should_skip = true
         local found_next = false
         local nexts = getNextIDs(current_rank)
+        --print(le_suit)
         
         for _, next in pairs(nexts) do
-            if cards[next]then
-                print("YUEAHHHHHHHH")
-            end
-            if cards[next] and cards[next][le_suit] then
-                print(next)
-                for _, card in pairs(cards[next][le_suit]) do
-                    if (card.is_wild or not consider_flush) and not card.counted then
-                        should_skip = false
-                        found_next = true
-                        table.insert(current_streak.streaks,card)
-                        print(table_to_string(card))
-                        local straighters = aiko_recurse_straight(next, current_suit, cards, calculate_wildcard, consider_flush, straight_amount, has_skip, current_streak)
-                        return straighters
+            --print(next, " do we have next card  ? "..(cards[next] and "yes" or "no").. " streak "..#current_streak.streaks .." suit "..le_suit)
+            --print("====== ")
+            --print(table_to_string_depth(cards[next],3))
+            --print("SUIT "..le_suit)
+            --print("====== ")
+            --print("CARD NEXT IN SUIT "..cards[next][le_suit])
+            if cards[next] then
+                if cards[next][le_suit] then
+                    --print(next, " do we have next card with suit  ? "..(cards[next][le_suit] and "yes" or "no").. " streak "..#current_streak.streaks)
+                    for _, card in pairs(cards[next][le_suit]) do
+                        if (card.is_wild or not consider_flush) and not card.counted then
+                            should_skip = false
+                            found_next = true
+                            card.counted = true
+                            table.insert(current_streak.streaks,card)
+                            --print(table_to_string(card))
+                            local straighters = aiko_recurse_straight(next, current_suit, cards, calculate_wildcard, consider_flush, straight_amount, has_skip, current_streak)
+                            return straighters
+                        end
                     end
                 end
 
+                
             end
             
             if has_skip and should_skip then
@@ -133,6 +142,7 @@ local function aiko_recurse_straight(current_rank, current_suit, cards, calculat
                         for _, card in pairs(cards[next][le_suit]) do
                             if (cards[next2][le_suit].is_wild or not consider_flush) and not card.counted then
                                 found_next = true
+                                card.counted = true
                                 table.insert(current_streak.streaks,card)
                                 local straighters = aiko_recurse_straight(next2, current_suit, cards, calculate_wildcard, consider_flush, straight_amount, has_skip, current_streak)
                                 return straighters
@@ -177,7 +187,7 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
             
             if straight and straight.found then
                 local le_tabloid = {}
-                for _,la_fucking_idk_anymore_dude in straight.streaks do
+                for _,la_fucking_idk_anymore_dude in pairs(straight.streaks) do
                     table.insert(le_tabloid,la_fucking_idk_anymore_dude.card)
                 end
                 table.insert(ret,le_tabloid)

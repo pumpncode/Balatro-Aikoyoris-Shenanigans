@@ -11,7 +11,6 @@ function table_contains(tbl, x)
     return found
 end
 
-
 card_suits = {}
 card_ranks = {}
 card_rank_numbers = {}
@@ -41,7 +40,7 @@ function getNextIDs(id)
     if(card_ranks_with_meta[id]) then
             --print(table_to_string(card_ranks_with_meta[id]))
         for i, v in ipairs(card_ranks_with_meta[id].next) do
-            table.insert(nexts,v) 
+            table.insert(nexts,card_rank_numbers[v]) 
         end
     end
     --print(table_to_string(nexts))
@@ -79,6 +78,24 @@ function table_to_string(tables)
         local stra = v
         if type(stra) == "table" then
             strRet = strRet..k.." :( "..table_to_string(stra).." ), "
+        else
+            strRet = strRet..k.." : "..tostring(stra)..", "
+        end
+    end
+    return strRet
+end
+function table_to_string_depth(tables, depth)
+    if depth == 0 then
+        return "..."
+    end
+    if type(tables) == "nil" then
+        return "nil"
+    end
+    local strRet = ""
+    for k,v in pairs(tables) do
+        local stra = v
+        if type(stra) == "table" then
+            strRet = strRet..k.." :( "..table_to_string_depth(stra, depth - 1).." ), "
         else
             strRet = strRet..k.." : "..tostring(stra)..", "
         end

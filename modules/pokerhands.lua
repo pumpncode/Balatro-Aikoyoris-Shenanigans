@@ -40,7 +40,7 @@ local rankToNumber = { ["2"] = 2, ["3"] = 3, ["4"] = 4, ["5"] = 5, ["6"] = 6, ["
 function aiko_get_flush(hand, flush_amount)
     local ret = {}
     local four_fingers = next(find_joker('Four Fingers'))
-    local suits = SMODS.Suits
+    local suits = card_suits
     if #hand < (math.max(flush_amount, 5) - (four_fingers and 1 or 0)) then
         return ret
     else
@@ -105,15 +105,6 @@ local function getFirstKeyOfTable(t)
     end
 end
 
-local card_suits = {}
-local card_ranks = {}
-
-for k, v in pairs(SMODS.Suits) do
-    table.insert(card_suits, k)
-end
-for k, v in pairs(SMODS.Ranks) do
-    table.insert(card_ranks, k)
-end
 
 -- print thru all suits 
 

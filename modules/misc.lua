@@ -11,6 +11,17 @@ function table_contains(tbl, x)
     return found
 end
 
+
+card_suits = {}
+card_ranks = {}
+
+for k, v in pairs(SMODS.Suits) do
+    table.insert(card_suits, k)
+end
+for k, v in pairs(SMODS.Ranks) do
+    table.insert(card_ranks, k)
+end
+
 local NON_STONE_UPGRADES = {}
 for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
     if v.key ~= 'm_stone' then

@@ -40,12 +40,7 @@ local rankToNumber = { ["2"] = 2, ["3"] = 3, ["4"] = 4, ["5"] = 5, ["6"] = 6, ["
 function aiko_get_flush(hand, flush_amount)
     local ret = {}
     local four_fingers = next(find_joker('Four Fingers'))
-    local suits = {
-        "Spades",
-        "Hearts",
-        "Clubs",
-        "Diamonds"
-    }
+    local suits = SMODS.Suits
     if #hand < (math.max(flush_amount, 5) - (four_fingers and 1 or 0)) then
         return ret
     else
@@ -110,8 +105,17 @@ local function getFirstKeyOfTable(t)
     end
 end
 
-local card_suits = { "Spades", "Hearts", "Clubs", "Diamonds" }
-local card_ranks = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }
+local card_suits = {}
+local card_ranks = {}
+
+for k, v in pairs(SMODS.Suits) do
+    table.insert(card_suits, k)
+end
+for k, v in pairs(SMODS.Ranks) do
+    table.insert(card_ranks, k)
+end
+
+-- print thru all suits 
 
 local function aiko_search_straight(cards, calculate_wildcard, consider_flush, straight_amount, has_skip)
     local ret = {}
@@ -141,7 +145,7 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
             cards_to_check = {}
             local cards_in_rank = cards[rank]
             if cards[rank] then
-                -- print("LOOPING THRU SUIT "..suit)
+                --print("LOOPING THRU SUIT "..suit)
 
                 if (calculate_wildcard) or not consider_flush then
                     for suit_wild, cards_in_suit_wild in pairs(cards_in_rank) do
@@ -151,6 +155,7 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
                                     if (calculate_wildcard and cards[rank + 1][suit_wild].is_wild) and (not consider_flush) then
                                         table.insert(cards_to_check, cards[rank + 1][suit_wild][k])
                                         keep_going = true
+                                        --print("FOUND "..rank + 1 .. " of " .. suit_wild)
                                         goto aiko_exit_search_loop
                                     end
                                 end
@@ -162,6 +167,7 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
                                     if not cards[rank + 2][suit_wild][k].counted then
                                         if (calculate_wildcard and cards[rank + 2][suit_wild][k].is_wild) and (not consider_flush) then
                                             table.insert(cards_to_check, cards[rank + 2][suit_wild][k])
+                                            cards[rank + 1][suit][j].counted = true
                                             keep_going = true
                                             goto aiko_exit_search_loop
                                         end
@@ -197,6 +203,7 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
             ::aiko_exit_search_loop::
             local strprint = ""
 
+            --print(cards_to_check)
             for k = 1, #cards_to_check do
                 strprint = strprint .. cards_to_check[k].sort_value .. " "
             end
@@ -223,7 +230,7 @@ local function aiko_search_straight(cards, calculate_wildcard, consider_flush, s
                     for k = 1, #cards_in_straight do
                         strprint2 = strprint2 .. cards_in_straight[k].sort_value .. " "
                     end
-                    --print(strprint2)
+                    print(strprint2)
                     local add_to_return = {}
                     --rank = rank + 1 + (has_skip and 1 or 0)
                     for k = 1, #cards_in_straight do

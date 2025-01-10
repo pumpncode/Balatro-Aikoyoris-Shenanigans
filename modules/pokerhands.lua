@@ -83,12 +83,12 @@ local function aiko_recurse_straight(current_rank, current_suit, cards, calculat
         return {streaks = current_streak.streaks, found = true}
     end
     if #current_streak.streaks < straight_amount and #current_streak.streaks > 1 and card_ranks_with_meta[current_rank].straight_edge then
-        print("failure to go past Ace")
+        --print("failure to go past Ace")
         return {streaks = {}, found = false}
     end
-    if #current_streak.streaks > 0 then
+    if #current_streak.streaks > 4 then
         
-        --print(table_to_string(current_streak), current_rank, current_suit)
+        print(table_to_string(current_streak), current_rank, current_suit)
     end
     --print(table_to_string(current_streak))
     local suits_to_check = {current_suit}

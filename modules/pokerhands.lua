@@ -62,30 +62,6 @@ function aiko_get_flush(hand, flush_amount)
     end
 end
 
---    for k, v in pairs(suits) do
---        if v then
---            for ind = 1,#v do
---                local card_to_insert = { card = v[ind].card, sort_value = v[ind].sort_value+ 13, checked = false }
---                table.insert(v, card_to_insert)
---
---            end
---            if #v > 0 then
---                while suits[k][#suits[k]].sort_value == 27 or (suits[k][#suits[k]].sort_value == 26 and can_skip) do
---                    table.remove(suits[k])
---                end
---            end
---        end
---    end
-
---    for k, v in pairs(suits) do
---        print(k)
---        if v then
---            for i = 1, #v do
---                print(v[i].sort_value)
---            end
---        end
---    end
-
 local function concat_table(t1, t2)
     for i = 1, #t2 do
         t1[#t1 + 1] = t2[i]
@@ -93,153 +69,124 @@ local function concat_table(t1, t2)
     return t1
 end
 
-local function getFirstElementOfTable(t)
-    for k, v in pairs(t) do
-        return v
+
+local function aiko_recurse_straight(current_rank, current_suit, cards, calculate_wildcard, consider_flush, straight_amount, has_skip, current_streak)
+    -- if current streak length equals straight amount then return the thing with a true
+    -- then check if cards has cards in current rank
+    -- if not then return blank 
+    -- but if so then set the card as counted
+    -- if has cards then check if next rank has any card then check if card is not counted then add to the streak
+    -- do it again for has skip but instead of next card do next 2 cards
+    -- recursively do it
+    -- unintuitively the card that has number 2 on it has index 1 here because ace is the last one and it is moved to 13
+    if #current_streak.streaks == straight_amount then
+        return {streaks = current_streak.streaks, found = true}
+    end
+    if #current_streak.streaks < straight_amount and #current_streak.streaks > 1 and card_ranks_with_meta[current_rank].straight_edge then
+        print("failure to go past Ace")
+        return {streaks = {}, found = false}
+    end
+    if #current_streak.streaks > 0 then
+        
+        print(table_to_string(current_streak), current_rank, current_suit)
+    end
+
+    local suits_to_check = {}
+    table.insert(suits_to_check,current_suit)
+    if (calculate_wildcard or not consider_flush) and card_suits then
+        for i, v in ipairs(card_suits) do
+            if not table_contains(suits_to_check,v) then
+                table.insert(suits_to_check,v)
+            end
+        end
+    end
+    for ind, le_suit in ipairs(suits_to_check) do
+        local should_skip = true
+        local found_next = false
+        local nexts = getNextIDs(current_rank)
+        
+        for _, next in pairs(nexts) do
+            if cards[next]then
+                print("YUEAHHHHHHHH")
+            end
+            if cards[next] and cards[next][le_suit] then
+                print(next)
+                for _, card in pairs(cards[next][le_suit]) do
+                    if (card.is_wild or not consider_flush) and not card.counted then
+                        should_skip = false
+                        found_next = true
+                        table.insert(current_streak.streaks,card)
+                        print(table_to_string(card))
+                        local straighters = aiko_recurse_straight(next, current_suit, cards, calculate_wildcard, consider_flush, straight_amount, has_skip, current_streak)
+                        return straighters
+                    end
+                end
+
+            end
+            
+            if has_skip and should_skip then
+                local nexts2 = getNextIDs(next)
+                
+                for i3, next2 in pairs(nexts2) do
+                    
+                    if cards[next2] and cards[next2][le_suit] then
+                        for _, card in pairs(cards[next][le_suit]) do
+                            if (cards[next2][le_suit].is_wild or not consider_flush) and not card.counted then
+                                found_next = true
+                                table.insert(current_streak.streaks,card)
+                                local straighters = aiko_recurse_straight(next2, current_suit, cards, calculate_wildcard, consider_flush, straight_amount, has_skip, current_streak)
+                                return straighters
+                            end
+                        end
+                    end
+
+                end
+
+            end
+        end
+        if not found_next then
+            return {streaks = {}, found = false}
+        end
     end
 end
 
-local function getFirstKeyOfTable(t)
-    for k, v in pairs(t) do
-        return k
-    end
-end
 
-
--- print thru all suits 
 
 local function aiko_search_straight(cards, calculate_wildcard, consider_flush, straight_amount, has_skip)
     local ret = {}
-    local count = 1
     local skip = (has_skip and 1 or 0)
     for suitNo = 1, #card_suits do
-        local suit = card_suits[suitNo]
-        local cards_in_straight = {}
-        
-        local cards_to_check = {}
+        local Suit = card_suits[suitNo]
+        local streaks = {}
+        local keep_going = false
         -- insert first card so it is included 
-        for rank, cards_in_rank in pairs(cards) do
-            -- print("LOOPING THRU "..rank)
-
-            --print("LOOPING THRU "..suit)
-            ::aiko_suit_loop_continue::
-            local keep_going = false
-            local last_in_straight = cards_in_straight[#cards_in_straight] and cards_in_straight[#cards_in_straight].sort_value or -9999999
-            --cards_to_check = {}
+        for RankIndex, rankMetadata in pairs(card_ranks_with_meta) do
+            local Rank = rankMetadata.key
+            if cards[Rank] and cards[Rank][Suit] then
+                local card = nil
+                for cards_t in cards[Rank][Suit] do
+                    if not cards_t.counted then
+                        card = cards_t
+                    end
+                end
+                if #streaks == 0 and card then
+                    table.insert(streaks,card)
+                end
+            end
+            local straight = aiko_recurse_straight(RankIndex, Suit, cards, calculate_wildcard, consider_flush, straight_amount, has_skip, {streaks = {},found = false})
             
-            
-            if #cards_to_check == 0 then
-                --print ("NO CARDS IN STRAIGHT")
-                if cards_in_rank[suit] then
-                    for card_ranker = 1, #cards_in_rank[suit] do
-                        if not cards_in_rank[suit][card_ranker].counted then
-                            table.insert(cards_to_check, cards_in_rank[suit][card_ranker])
-                            cards_in_rank[suit][card_ranker].counted = true
-                            last_in_straight = rank
-                            print("inserted "..cards_in_rank[suit][card_ranker].sort_value.." of "..suit .. " as starting straight card")
-                            
-                        end
-                    end
+            if straight and straight.found then
+                local le_tabloid = {}
+                for _,la_fucking_idk_anymore_dude in straight.streaks do
+                    table.insert(le_tabloid,la_fucking_idk_anymore_dude.card)
                 end
-            end
-            if (not consider_flush) then
-                for skipperval = 1, skip+1 do
-                    if(has_skip or skipperval == 1) then
-                        if cards[last_in_straight+skipperval] then
-                            for suit_loop, cards_in_rank_suit in pairs(cards[last_in_straight+skipperval]) do
-                                if cards_in_rank_suit then
-                                    for j = 1, #cards_in_rank_suit do
-                                        if cards_in_rank_suit[j] then
-                                            if not cards_in_rank_suit[j].counted and ((not consider_flush) or ((cards_in_rank_suit[j].is_wild) and calculate_wildcard)) then
-                                                cards_in_rank_suit[j].counted = true
-                                                table.insert(cards_to_check, cards_in_rank_suit[j])
-                                                last_in_straight = cards_in_rank_suit[j].sort_value
-                                                if(not has_skip) then
-                                                    print("f - inserted "..cards_in_rank_suit[j].sort_value.." of "..suit_loop)
-                                                    print("f - last_in_straight is now "..last_in_straight)
-                                                end
-                                                keep_going = true
-                                                goto aiko_exit_search_loop
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            else
-                for skipperval = 1, skip+1 do
-                    if(has_skip or skipperval == 1) then
-                        if cards[last_in_straight+skipperval] then
-                            if cards[last_in_straight+skipperval][suit] then
-                                local cards_in_suit = cards[last_in_straight+skipperval][suit]
-                                for j = 1, #cards_in_suit do
-                                    if cards_in_suit[j] and not cards_in_suit[j].counted then
-                                        cards_in_suit[j].counted = true
-                                        table.insert(cards_to_check, cards_in_suit[j])
-                                        last_in_straight = cards_in_suit[j].sort_value
-                                        if(not has_skip) then
-                                            print("sf - inserted "..cards_in_suit[j].sort_value.." of "..suit)
-                                            print("f - last_in_straight is now "..last_in_straight)
-                                        end
-                                        keep_going = true
-                                        goto aiko_exit_search_loop
-                                    end
-                                end
-                            end
-                        end
-                    end
-
-                end
-
-            end
-            ::aiko_exit_search_loop::
-            local strprint = ""
-
-            --print(cards_to_check)
-            for k = 1, #cards_to_check do
-                strprint = strprint .. cards_to_check[k].sort_value .. " "
-            end
-            local has_available_card = false
-            for j = 1, #cards_to_check do
-                if not cards_to_check[j].counted then
-                    print("!!!!!!!! ok "..cards_to_check[j].sort_value.." of "..cards_to_check[j].card.base.suit)
-                    count = count + 1
-                    cards_to_check[j].counted = true
-                    table.insert(cards_in_straight, cards_to_check[j])
-                    has_available_card = true
-                else
-                end
-                if not keep_going then
-                    count = 1
-                    --print("!!!!!!!! WIPE BCS DO NOT KEEP GOING")
-                    for k = 1, #cards_in_straight do
-                        cards_in_straight[k].counted = false
-                    end
-                    cards_in_straight = {}
-                end
-                if #cards_in_straight == straight_amount then
-                    print("FOUND STRAIGHT"..(consider_flush and " FLUSH" or ""))
-                    local strprint2 = ""
-
-                    for k = 1, #cards_in_straight do
-                        strprint2 = strprint2 .. cards_in_straight[k].sort_value .. " "
-                    end
-                    print(strprint2)
-                    local add_to_return = {}
-                    --rank = rank + 1 + (has_skip and 1 or 0)
-                    for k = 1, #cards_in_straight do
-                        table.insert(add_to_return, cards_in_straight[k].card)
-                    end
-                    table.insert(ret, add_to_return)
-                    goto aiko_suit_loop_continue
-                end
+                table.insert(ret,le_tabloid)
             end
         end
     end
     return ret
 end
+table_to_string({sus={scrofa={"domesticus"},sussy=true}})
 function aiko_get_straight(hand, straight_amount, consider_flush)
     local ret = {}
     local ranks = {}
@@ -247,51 +194,20 @@ function aiko_get_straight(hand, straight_amount, consider_flush)
     -- rank = { 2 = { Spades = {card},Clubs = {card,card}}, 3 = { Hearts = {card},Diamonds = {card,card}}}
     local four_fingers = next(find_joker('Four Fingers'))
     local can_skip = next(find_joker('Shortcut'))
-    for i = 1, #hand do
-        local card = hand[i]
-        local rank = card:get_id()
+    for i, v in ipairs(hand) do
+        local card = v
+        local rank = card_rank_numbers[card.base.value]
         local suit = card.base.suit
-        if ranks[rank] == nil then
+        if not ranks[rank] then
             ranks[rank] = {}
         end
-        if ranks[rank][suit] == nil then
+        if not ranks[rank][suit] then
             ranks[rank][suit] = {}
         end
 
         ranks[rank][suit][#ranks[rank][suit] + 1] = { card = card, is_wild = card.ability.name == "Wild Card", sort_value =
         card:get_id(), counted = false }
     end
-    -- sort
-    -- add ace to the starts
-    if ranks[14] then
-        
-        local aces = {}
-        for suit, suitStuff in pairs(ranks[14]) do
-            local rankAceAtOne = {}
-            for i = 1, #suitStuff do
-                table.insert(rankAceAtOne, suitStuff[i])
-            end
-            aces[suit] = rankAceAtOne
-        end
-        ranks[1] = aces
-    end
-    for k, v in pairs(ranks) do
-        for k2, v2 in pairs(v) do
-            table.sort(v2, function(a, b) return a.sort_value < b.sort_value end)
-        end
-    end
-    --[[
-    for k, v in pairs(ranks) do
-        local stringForPrint = ""
-        for k2, v2 in pairs(v) do
-            for i = 1, #v2 do
-                stringForPrint = stringForPrint .. v2[i].sort_value .. " "
-            end
-        end
-        print("RANK "..k.." :"..stringForPrint)
-    end
-    ]]
-    -- print for debug 
     for rank, cards_in_rank in pairs(ranks) do
         -- print("RANK "..rank)
         for suit, cards_in_suit in pairs(cards_in_rank) do

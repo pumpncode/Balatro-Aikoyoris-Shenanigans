@@ -86,7 +86,11 @@ function table_to_string(tables)
 end
 function table_to_string_depth(tables, depth)
     if depth == 0 then
-        return "..."
+        local keys = ""
+        for k, _ in pairs(tables) do
+            keys= keys..k..":k , "
+        end
+        return "["..#tables.."]"
     end
     if type(tables) == "nil" then
         return "nil"

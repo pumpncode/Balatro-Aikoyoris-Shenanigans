@@ -79,18 +79,22 @@ local function aiko_recurse_straight(current_rank, current_suit, cards, calculat
     -- do it again for has skip but instead of next card do next 2 cards
     -- recursively do it
     -- unintuitively the card that has number 2 on it has index 1 here because ace is the last one and it is moved to 13
+    
+    if #current_streak.streaks > 1 then
+        --print(table_to_string_depth((current_streak),3))
+        
+    end
     if #current_streak.streaks == straight_amount then
+        print(table_to_string_depth(current_streak,2), current_rank, current_suit," str8 amnt : ",straight_amount)
         return {streaks = current_streak.streaks, found = true}
     end
-    if #current_streak.streaks < straight_amount and #current_streak.streaks > 1 and card_ranks_with_meta[current_rank].straight_edge then
-        --print("failure to go past Ace")
-        return {streaks = {}, found = false}
-    end
-    if #current_streak.streaks > 4 then
+    if #current_streak.streaks > 0 then
         
-        print(table_to_string(current_streak), current_rank, current_suit)
+        if #current_streak.streaks < straight_amount and current_streak.streaks[#current_streak.streaks].straight_edge then
+            --print("failure to go past Ace")
+            return {streaks = current_streak.streaks, found = false}
+        end
     end
-    --print(table_to_string(current_streak))
     local suits_to_check = {current_suit}
     if (calculate_wildcard or not consider_flush) and card_suits then
         for i, v in ipairs(card_suits) do
@@ -216,8 +220,9 @@ function aiko_get_straight(hand, straight_amount, consider_flush)
         end
 
         ranks[rank][suit][#ranks[rank][suit] + 1] = { card = card, is_wild = card.ability.name == "Wild Card", sort_value =
-        card:get_id(), counted = false }
+        card:get_id(), counted = false, rank = rank, suit = suit, straight_edge = card_ranks_with_meta[rank].straight_edge }
     end
+    ranks[0]=ranks[13]
     for rank, cards_in_rank in pairs(ranks) do
         -- print("RANK "..rank)
         for suit, cards_in_suit in pairs(cards_in_rank) do

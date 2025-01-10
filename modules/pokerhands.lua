@@ -237,6 +237,8 @@ function aiko_get_straight(hand, straight_amount, consider_flush)
     end
     ret = concat_table(ret, aiko_search_straight(ranks, false, consider_flush, straight_amount - (four_fingers and 1 or 0), can_skip))
     ret = concat_table(ret, aiko_search_straight(ranks, true, consider_flush, straight_amount - (four_fingers and 1 or 0), can_skip))
+    
+    table.sort(ret, function(a,b) return #a > #b end)
     return ret
 end
 

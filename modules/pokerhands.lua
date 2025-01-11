@@ -304,7 +304,7 @@ for i = 6, 100 do
     end
     SMODS.PokerHand {
         key = aiko_numberToWords(i) .. " of a Kind",
-        visible = true,
+        visible = false,
         example = ofAkindTable,
         loc_txt = {
             name = aiko_numberToWords(i) .. " of a Kind",
@@ -321,7 +321,7 @@ for i = 6, 100 do
     }
     SMODS.PokerHand {
         key = "Flush " .. aiko_numberToWords(i),
-        visible = true,
+        visible = false,
         example = flushCardTable,
         loc_txt = {
             name = 'Flush ' .. aiko_numberToWords(i),
@@ -379,7 +379,7 @@ for j = 13, 5, -1 do
         end
         SMODS.PokerHand {
             key = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight Flush",
-            visible = true,
+            visible = false,
             example = straightFlushTable,
             loc_txt = {
                 name = strflName,
@@ -397,7 +397,7 @@ for j = 13, 5, -1 do
         }
         SMODS.PokerHand {
             key = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight",
-            visible = true,
+            visible = false,
             example = straightTable,
             loc_txt = {
                 name = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight",

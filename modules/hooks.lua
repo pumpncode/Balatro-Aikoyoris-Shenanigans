@@ -2,6 +2,7 @@
 
 assert(SMODS.load_file("./modules/misc.lua"))() 
 assert(SMODS.load_file("./modules/atlasses.lua"))() 
+assert(SMODS.load_file("./func/word_utils.lua"))() 
 
 function CardArea:aiko_change_playable(delta)
     self.config.highlighted_limit = self.config.highlight_limit or G.GAME.aiko_cards_playable or 5
@@ -13,16 +14,20 @@ function CardArea:aiko_change_playable(delta)
             end
         }))
     end
+    
 end
 
 function Card:set_letters_random()
-    self.aikoyori_letters_stickers = pseudorandom_element(aiko_alphabets, pseudoseed('aiko:letters'))
+    self.ability.aikoyori_letters_stickers = pseudorandom_element(scrabble_letters, pseudoseed('aiko:letters'))
 end
 
 
 function Card:set_letters(letter)
-    if #letter > 1 then return end
-    self.aikoyori_letters_stickers = letter
+    self.ability.aikoyori_letters_stickers = letter
+end
+
+function Card:remove_letters()
+    self.ability.aikoyori_letters_stickers = nil
 end
 
 
@@ -37,13 +42,32 @@ function aiko_mod_startup(self)
 end
 
 
-local cardInitHooker = Card.init
-function Card:init(X, Y, W, H, card, center, params)
-    local ret = cardInitHooker(self ,X, Y, W, H, card, center, params)
-    self:set_letters_random()
+local cardBaseHooker = Card.set_base
+function Card:set_base(card, initial)
+    local ret = cardBaseHooker(self,card, initial)
+    self.aiko_draw_delay = math.random() * 1.75 + 0.25
+    if self.base.name and not self.ability.aikoyori_letters_stickers then
+        self:set_letters_random()
+    end
     return ret
 end
+--[[
+local cardSave = Card.save
+function Card:save()
+    local c = cardSave(self)
+    c.ability.aikoyori_letters_stickers = self.ability.aikoyori_letters_stickers
+    return c
+end
 
+
+local cardLoad = Card.load
+function Card:load(cardTable, other_card)
+    local c = cardLoad(self, cardTable, other_card)
+    self.ability.aikoyori_letters_stickers = cardTable.ability.aikoyori_letters_stickers
+    return c
+end
+
+]]
 local igo = Game.init_game_object
 function Game:init_game_object()
     local ret = igo(self)
@@ -57,10 +81,15 @@ end
 function aikoyori_draw_extras(card, layer)
     --print("DRAWING EXTRAS")
     if G.aikoyori_letters_stickers then
-        if card.aikoyori_letters_stickers then
-            G.aikoyori_letters_stickers[card.aikoyori_letters_stickers].role.draw_major = card
-            G.aikoyori_letters_stickers[card.aikoyori_letters_stickers]:draw_shader('dissolve', nil, nil, nil, card.children.center)
-            G.aikoyori_letters_stickers[card.aikoyori_letters_stickers]:draw_shader('voucher', nil, card.ARGS.send_to_shader, nil, card.children.center)
+        if card.ability.aikoyori_letters_stickers then
+            local movement_mod = 0.05*math.sin(1.1*(G.TIMERS.REAL + card.aiko_draw_delay)) - 0.07
+            local rot_mod = 0.02*math.sin(0.72*(G.TIMERS.REAL + card.aiko_draw_delay)) + 0.03
+            local drag_mod = card.velocity
+            
+            G.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers].role.draw_major = card
+            G.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers]:draw_shader('dissolve', 0, nil, nil, card.children.center, 0.1, rot_mod - drag_mod.r, drag_mod.x * -3, movement_mod - drag_mod.y * -3)
+            G.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers]:draw_shader('dissolve', nil, nil, nil, card.children.center, nil, rot_mod - drag_mod.r, drag_mod.x * -3, -0.02 + movement_mod*0.9 - drag_mod.y * -3, nil)
+
         end
         
     end
@@ -102,7 +131,6 @@ function mod_chips(_chips)
 end
 
 
-
 function Card:aiko_trigger_external(card)
     if (card.ability.name == "Observer") then
         card.ability.extra.times = card.ability.extra.times - 1
@@ -136,3 +164,38 @@ function Card:aiko_trigger_external(card)
         card.ability.extra.chip_change = chips
     end
 end
+
+
+
+local cardReleaseRecalcHook = Card.stop_drag
+function Card:stop_drag()
+    local c = cardReleaseRecalcHook(self)
+    --print("CARD RELEASED!!!!")
+    if G.hand and self.area then
+        self.area:parse_highlighted()
+    end
+    return c
+end
+
+
+
+local debugKeysNShit = Controller.key_press_update
+function Controller:key_press_update(key, dt)
+    local c = debugKeysNShit(self,key, dt)
+    local _card = self.hovering.target
+    if not _RELEASE_MODE and _card then
+        
+        if key == ',' then
+            if _card.playing_card then
+                _card:set_letters(alphabet_delta(_card.ability.aikoyori_letters_stickers, - 1))
+            end
+        end
+        if key == '.' then
+            if _card.playing_card then
+                _card:set_letters(alphabet_delta(_card.ability.aikoyori_letters_stickers, 1))
+            end
+        end
+    end
+    return c
+end
+

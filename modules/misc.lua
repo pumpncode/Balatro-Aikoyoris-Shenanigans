@@ -13,8 +13,26 @@ function table_contains(tbl, x)
 end
 
 aiko_alphabets = {}
+aiko_alphabets_no_wilds = {}
+aiko_alphabets_to_num = {}
 for i = 97, 122 do
     table.insert(aiko_alphabets, string.char(i))
+    table.insert(aiko_alphabets_no_wilds, string.char(i))
+    aiko_alphabets_to_num[string.char(i)] = i - 96
+end
+table.insert(aiko_alphabets,"#")
+aiko_alphabets_to_num["#"] = 27
+
+function alphabet_delta(alpha, delta) 
+    local numero = aiko_alphabets_to_num[alpha] + delta
+    while numero < 1 do
+        numero = numero + #aiko_alphabets
+    end
+    if numero > #aiko_alphabets then
+        numero = math.fmod(numero, #aiko_alphabets)
+    end
+    --print(aiko_alphabets[numero])
+    return aiko_alphabets[numero]
 end
 
 card_suits = {}

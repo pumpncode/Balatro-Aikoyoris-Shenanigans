@@ -119,3 +119,14 @@ payload = """    aiko_mod_startup(self)"""
 overwrite = true
 match_indent = true
 
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "      ease_value(card.T, 'scale',v[2] and 0.25 or -0.15,nil,'REAL',true,0.2)"
+position = "after"
+payload = """
+if v[3] then card.ability.aikoyori_letters_stickers = v[3] else card.ability.aikoyori_letters_stickers = nil end
+"""
+overwrite = true
+match_indent = true

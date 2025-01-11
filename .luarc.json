@@ -1,3 +1,7 @@
 {
     "workspace.library": ["../Steamodded-main", "../../BalatroSRC"],
+    "workspace.ignoreDir": [
+        ".vscode",
+        "./func/words"
+    ]
 }

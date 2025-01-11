@@ -1,4 +1,6 @@
 assert(SMODS.load_file("./func/numbers.lua"))()
+assert(SMODS.load_file("./func/words/words.lua"))()
+assert(SMODS.load_file("./func/word_utils.lua"))()
 assert(SMODS.load_file("./modules/misc.lua"))()
 function aiko_get_X_same(num, hand, how_many)
     local how_many = how_many or 1
@@ -508,3 +510,117 @@ end
 --         }
 --     end
 -- end
+local example_words = {
+    "cry",
+    "card",
+    "jimbo",
+    "thrash",
+    "sticker",
+    "foreword",
+    "mainframe",
+    "mainlander",
+    "hyperactive",
+    "skeletonised",
+    "neanderthaler",
+    "televisionally",
+    "demographically",
+    "tropostereoscope",
+    "erythroneocytosis",
+    "heteroscedasticity",
+    "unmisunderstandable",
+    "adrenocorticosteroid",
+    "poluphloisboiotatotic",
+    "polioencephalomyelitis",
+    "overintellectualization",
+    "formaldehydesulphoxylate",
+    "demethylchlortetracycline",
+    "##########################",
+    "electroencephalographically",
+    "antidisestablishmentarianism",
+    "cyclotrimethylenetrinitramine",
+    "##############################",
+    "dichlorodiphenyltrichloroethane",
+}
+local function replace_char(pos, str, r)
+    return str:sub(1, pos-1) .. r .. str:sub(pos+1)
+end
+function check_word(str_arr_in, length)
+    local wild_count = 0
+    local word_composite = ""
+    for _, val in ipairs(str_arr_in) do
+        if val == "#" then
+            wild_count = wild_count + 1
+        end
+        word_composite = word_composite..val
+    end
+    --print("CHECKING "..word_composite.." WITH "..wild_count)
+    if wild_count == 0 then
+        if words[word_composite] and #str_arr_in == length then
+            return true
+        else
+            return false
+        end
+    end
+    for i, v in ipairs(str_arr_in) do
+        if v == "#" then
+            for k, v2 in ipairs(aiko_alphabets_no_wilds)do
+                local new_arr = {}
+                for m, v3 in ipairs(str_arr_in) do
+                    if i == m then
+                        table.insert(new_arr,v2)
+                    else
+                        table.insert(new_arr,v3)
+                    end
+                end
+                if check_word(new_arr,length) then
+                    return true
+                end
+            end 
+        end 
+    end
+    return false
+    
+end
+for i = 3, 31 do
+    local exampler = {}
+    for j = 1, #example_words[i-2] do
+        local c = example_words[i-2]:sub(j,j)
+        table.insert(exampler,{
+            randomCard(),
+            true,
+            c
+        })
+    end
+        
+
+    SMODS.PokerHand {
+        key = i.."-letter Word",
+        visible = i <= 5,
+        example = exampler,
+        loc_txt = {
+            name =  i.."-letter Word",
+            description = { 'Create a valid '..i..'-letter English word', 'with Exact Amount of Character' },
+        },
+        evaluate = function(parts, hand)
+            local word_hand = {}
+            table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+            for _, v in pairs(hand) do
+                
+                table.insert(word_hand, v.ability.aikoyori_letters_stickers)
+                    
+            end
+            if #word_hand ~= i then
+                return {}
+            end
+            if check_word(word_hand, i) then
+                return {hand}
+            else 
+                return {}
+            end
+        end,
+        chips = 20 * i + 5 * i ^ (1 + i * 0.2 ),
+        mult = (i ^ 2) - 2 * i,
+        l_chips = 5*i,
+        l_mult = 2*i,
+    }
+end

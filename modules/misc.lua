@@ -1,3 +1,4 @@
+aikoyori_mod_config = SMODS.current_mod.config
 
 G.C.PLAYABLE = HEX("ee36ff")
 
@@ -12,6 +13,7 @@ function table_contains(tbl, x)
 end
 
 card_suits = {}
+card_suits_with_meta = {}
 card_ranks = {}
 card_rank_numbers = {}
 card_ranks_with_meta = {}
@@ -33,6 +35,7 @@ end
 
 for k, v in pairs(SMODS.Suits) do
     table.insert(card_suits, k)
+    table.insert(card_suits_with_meta, v)
 end
 
 function getNextIDs(id)

@@ -1,6 +1,7 @@
 assert(SMODS.load_file("./func/numbers.lua"))()
 assert(SMODS.load_file("./modules/misc.lua"))()
-function aiko_get_X_same(num, hand)
+function aiko_get_X_same(num, hand, how_many)
+    local how_many = how_many or 1
     local vals = { {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} }
     for i = #hand, 1, -1 do
         local curr = {}
@@ -291,7 +292,7 @@ local function randomConsecutiveRank(cardCode, up, randomSuit)
     end
 end
 
-for i = 6, 100 do
+for i = 6, aikoyori_mod_config.x_of_a_kind_limit do
     flushCardTable = {}
     local acard = randomCard()
     for i = 1, i do
@@ -349,21 +350,25 @@ local function setCardSuit(cardCode, suit)
 end
 
 local function SPC(s)
+    if not s or s == "" then
+
+        return ""
+    end
     return s .. " "
 end
 
-for j = 13, 5, -1 do
-    for i = 1, 4 do
-        straightFlushTable = {}
+for j = #card_ranks, 5, -1 do
+    for i = 1, #card_suits_with_meta do
+        local straightFlushTable = {}
         local card = randomCard()
         for i = 1, i do
-            card = setCardSuit(card, pickableSuit[i])
+            card = setCardSuit(card, card_suits_with_meta[i].card_key)
             for i = 1, j do
                 table.insert(straightFlushTable, { card, true })
                 card = randomConsecutiveRank(card, math.random(2) == 1, false)
             end
         end
-        straightTable = {}
+        local straightTable = {}
         local card = randomCard()
         for i = 1, i do
             local card = randomCard()
@@ -416,3 +421,90 @@ for j = 13, 5, -1 do
         ::straights_continue::
     end
 end
+
+-- i don't care enough
+
+-- for suit_no = 2, #card_suits do
+-- 
+--     
+--     for of_a_kind_factor = 2, aikoyori_mod_config.x_of_a_kind_limit / suit_no do
+--         if of_a_kind_factor == 2 and suit_no == 2 then
+--             break
+--         end
+--         local flushCardTable = {}
+--         for x = 1, suit_no do
+--             local acard = randomCard()
+--             for i = 1, of_a_kind_factor do
+--                 table.insert(flushCardTable, { setCardSuit(acard,card_suits_with_meta[x].card_key), true })
+--             end
+--         end
+--         local partialflushCardTable = {}
+--         for x = 1, suit_no do
+--             
+--             local acard = randomCard()
+--             for i = 1, of_a_kind_factor do
+--                 table.insert(partialflushCardTable, { setCardSuit(acard,card_suits_with_meta[x].card_key), true })
+--             end
+--         end
+--         local ofAkindTable = {}
+--         local acard = randomCard()
+--         
+--         for x = 1, suit_no do
+--             local acard = randomCard()
+--             for i = 1, of_a_kind_factor do
+--                 table.insert(ofAkindTable, { randomSameRank(acard), true })
+--             end
+--         end
+--         SMODS.PokerHand {
+--             key = SPC(getTupleWord(suit_no))..aiko_numberToWords(of_a_kind_factor) .. " of a Kind",
+--             visible = false,
+--             example = ofAkindTable,
+--             loc_txt = {
+--                 name = SPC(getTupleWord(suit_no))..aiko_numberToWords(of_a_kind_factor) .. " of a Kind",
+--                 description = { of_a_kind_factor .. ' cards with the same rank',  "For " .. suit_no .. " Sets" },
+--             },
+--             evaluate = function(parts, hand)
+--                 if not next(aiko_get_X_same(of_a_kind_factor, hand)) or not #aiko_get_X_same(of_a_kind_factor, hand) <= suit_no * of_a_kind_factor  then return {} end
+--                 return { aiko_get_X_same(of_a_kind_factor, hand) }
+--             end,
+--             chips = (30 * of_a_kind_factor)  * suit_no,
+--             mult = 2 * of_a_kind_factor + 3 * suit_no,
+--             l_chips = 5 * (of_a_kind_factor + 3) * suit_no,
+--             l_mult = math.ceil(of_a_kind_factor / 1.77) * suit_no ,
+--         }
+--         SMODS.PokerHand {
+--             key = SPC(getTupleWord(suit_no)).." Full Flush " .. aiko_numberToWords(of_a_kind_factor),
+--             visible = false,
+--             example = flushCardTable,
+--             loc_txt = {
+--                 name = SPC(getTupleWord(suit_no))..'Flush ' .. aiko_numberToWords(of_a_kind_factor),
+--                 description = { of_a_kind_factor .. ' cards with all of them having the same rank',  "For " .. suit_no .. " Sets and all of them are in the same suit"  },
+--             },
+--             evaluate = function(parts, hand)
+--                 if not next(aiko_get_X_same(of_a_kind_factor, hand)) or not next(aiko_get_flush(hand, of_a_kind_factor)) or #aiko_get_X_same(of_a_kind_factor, hand) <= suit_no * of_a_kind_factor  then return {} end
+--                 return { SMODS.merge_lists(aiko_get_X_same(of_a_kind_factor, hand), aiko_get_flush(hand, of_a_kind_factor)) }
+--             end,
+--             chips = (40 + 50 * of_a_kind_factor) * of_a_kind_factor * suit_no ^ 1.2,
+--             mult = (4 + of_a_kind_factor) * of_a_kind_factor * suit_no ^ 1.2,
+--             l_chips = 10 * of_a_kind_factor * suit_no,
+--             l_mult = math.ceil(of_a_kind_factor / 2 + 1) * suit_no,
+--         }
+--         SMODS.PokerHand {
+--             key = SPC(getTupleWord(suit_no)).." Partial Flush " .. aiko_numberToWords(of_a_kind_factor),
+--             visible = false,
+--             example = partialflushCardTable,
+--             loc_txt = {
+--                 name = SPC(getTupleWord(suit_no))..'Flush ' .. aiko_numberToWords(of_a_kind_factor),
+--                 description = { of_a_kind_factor .. ' cards with the same rank and suit',  "For " .. suit_no .. " Sets"  },
+--             },
+--             evaluate = function(parts, hand)
+--                 if not next(aiko_get_X_same(of_a_kind_factor, hand)) or not next(aiko_get_flush(hand, of_a_kind_factor)) or  #aiko_get_X_same(of_a_kind_factor, hand) <= suit_no * of_a_kind_factor  then return {} end
+--                 return { SMODS.merge_lists(aiko_get_X_same(of_a_kind_factor, hand), aiko_get_flush(hand, of_a_kind_factor)) }
+--             end,
+--             chips = (40 + 50 * of_a_kind_factor) * of_a_kind_factor * suit_no ^ 1.1,
+--             mult = (4 + of_a_kind_factor) * of_a_kind_factor * suit_no ^ 1.1,
+--             l_chips = 10 * of_a_kind_factor * suit_no,
+--             l_mult = math.ceil(of_a_kind_factor / 2 + 1) * suit_no,
+--         }
+--     end
+-- end

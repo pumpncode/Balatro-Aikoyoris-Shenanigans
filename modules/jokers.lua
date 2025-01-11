@@ -236,7 +236,6 @@ SMODS.Joker {
                         context.other_card:juice_up(0.5, 2)
                         context.other_card:set_ability(
                             pseudorandom_element(NON_STONE_UPGRADES, pseudoseed('akyrj:pickaxe')), nil)
-
                         return true
                     end,
                     delay = 0.5,

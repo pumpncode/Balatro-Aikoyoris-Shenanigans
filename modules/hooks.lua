@@ -71,10 +71,11 @@ end
 local igo = Game.init_game_object
 function Game:init_game_object()
     local ret = igo(self)
+    ret.aiko_cards_playable = 5
+    ret.starting_params.special_hook = false
     ret.aiko_last_mult = 0
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
-    ret.aiko_cards_playable = 5
     return ret
 end
 
@@ -199,3 +200,40 @@ function Controller:key_press_update(key, dt)
     return c
 end
 
+local applyToRunBackHook = Back.apply_to_run
+local suits = {"S","H","D","C"}
+
+function Back:apply_to_run()
+    local c = applyToRunBackHook(self)
+    
+    if self.effect.config.all_nulls then
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                G.playing_cards = {}
+                for i, letter in pairs(scrabble_letters) do
+                    G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                    local front = pseudorandom_element(G.P_CARDS, pseudoseed('marb_fr'))
+                    local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['m_akyrs_null'], {playing_card = G.playing_card})
+                    G.deck:emplace(car)
+                    table.insert(G.playing_cards, car)
+                end
+                return true
+            end
+        }))
+        G.GAME.starting_params.all_nulls = true
+    end
+    if self.effect.config.selection then
+        G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable + self.effect.config.selection
+    end
+    if self.effect.config.special_hook then
+        G.GAME.starting_params.special_hook = true
+    end
+    return c
+end
+
+function customDeckHooks(self,card_protos)
+    if self.GAME.starting_params.special_hook then
+        return {}
+    end
+    return card_protos
+end

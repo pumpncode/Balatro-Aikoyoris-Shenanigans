@@ -130,3 +130,15 @@ if v[3] then card.ability.aikoyori_letters_stickers = v[3] else card.ability.aik
 """
 overwrite = true
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "        for k, v in ipairs(card_protos) do"
+position = "before"
+payload = """
+card_protos = customDeckHooks(self,card_protos)
+
+"""
+overwrite = true
+match_indent = true

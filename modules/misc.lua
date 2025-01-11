@@ -69,6 +69,26 @@ function aiko_intersect_table(a,b)
 end
 
 
+function concat_table(t1, t2)
+    for i = 1, #t2 do
+        t1[#t1 + 1] = t2[i]
+    end
+    return t1
+end
+
+function getFirstElementOfTable(t)
+    for k, v in pairs(t) do
+        return v
+    end
+end
+
+function getFirstKeyOfTable(t)
+    for k, v in pairs(t) do
+        return k
+    end
+end
+
+
 function table_to_string(tables)
     if type(tables) == "nil" then
         return "nil"

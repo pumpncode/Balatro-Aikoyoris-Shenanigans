@@ -1,4 +1,8 @@
 
+
+assert(SMODS.load_file("./modules/misc.lua"))() 
+assert(SMODS.load_file("./modules/atlasses.lua"))() 
+
 function CardArea:aiko_change_playable(delta)
     self.config.highlighted_limit = self.config.highlight_limit or G.GAME.aiko_cards_playable or 5
     if delta ~= 0 then
@@ -11,6 +15,34 @@ function CardArea:aiko_change_playable(delta)
     end
 end
 
+function Card:set_letters_random()
+    self.aikoyori_letters_stickers = pseudorandom_element(aiko_alphabets, pseudoseed('aiko:letters'))
+end
+
+
+function Card:set_letters(letter)
+    if #letter > 1 then return end
+    self.aikoyori_letters_stickers = letter
+end
+
+
+function aiko_mod_startup(self)
+    if not self.aikoyori_letters_stickers then
+        self.aikoyori_letters_stickers = {}
+    end
+    for i, v in ipairs(aiko_alphabets) do
+        print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
+        self.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS["akyrs_lettersStickers"], {x =(i - 1) % 10 ,y =  math.floor((i-1) / 10)})
+    end
+end
+
+
+local cardInitHooker = Card.init
+function Card:init(X, Y, W, H, card, center, params)
+    local ret = cardInitHooker(self ,X, Y, W, H, card, center, params)
+    self:set_letters_random()
+    return ret
+end
 
 local igo = Game.init_game_object
 function Game:init_game_object()
@@ -20,6 +52,18 @@ function Game:init_game_object()
     ret.aiko_has_quasi = false
     ret.aiko_cards_playable = 5
     return ret
+end
+
+function aikoyori_draw_extras(card, layer)
+    --print("DRAWING EXTRAS")
+    if G.aikoyori_letters_stickers then
+        if card.aikoyori_letters_stickers then
+            G.aikoyori_letters_stickers[card.aikoyori_letters_stickers].role.draw_major = card
+            G.aikoyori_letters_stickers[card.aikoyori_letters_stickers]:draw_shader('dissolve', nil, nil, nil, card.children.center)
+            G.aikoyori_letters_stickers[card.aikoyori_letters_stickers]:draw_shader('voucher', nil, card.ARGS.send_to_shader, nil, card.children.center)
+        end
+        
+    end
 end
 
 local gameUpdate = EventManager.update

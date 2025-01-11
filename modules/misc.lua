@@ -12,6 +12,11 @@ function table_contains(tbl, x)
     return found
 end
 
+aiko_alphabets = {}
+for i = 97, 122 do
+    table.insert(aiko_alphabets, string.char(i))
+end
+
 card_suits = {}
 card_suits_with_meta = {}
 card_ranks = {}

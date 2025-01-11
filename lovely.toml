@@ -98,3 +98,24 @@ payload = """,
     playable = G.C.PLAYABLE"""
 overwrite = true
 match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = """                if self.ability.name == 'The Soul' and (self.config.center.discovered or self.bypass_discovery_center) then"""
+position = "before"
+payload = """                aikoyori_draw_extras(self, layer)"""
+overwrite = true
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "    boot_timer('prep stage', 'splash prep',1)"
+position = "before"
+payload = """    aiko_mod_startup(self)"""
+overwrite = true
+match_indent = true
+

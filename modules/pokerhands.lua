@@ -359,72 +359,72 @@ local function SPC(s)
     return s .. " "
 end
 
-for j = #card_ranks, 5, -1 do
-    for i = 1, #card_suits_with_meta do
-        local straightFlushTable = {}
-        local card = randomCard()
-        for i = 1, i do
-            card = setCardSuit(card, card_suits_with_meta[i].card_key)
-            for i = 1, j do
-                table.insert(straightFlushTable, { card, true })
-                card = randomConsecutiveRank(card, math.random(2) == 1, false)
-            end
-        end
-        local straightTable = {}
-        local card = randomCard()
-        for i = 1, i do
-            local card = randomCard()
-            for i = 1, j do
-                table.insert(straightTable, { card, true })
-                card = randomConsecutiveRank(card, math.random(2) == 1, true)
-            end
-        end
-        if i == 1 and j == 5 then goto straights_continue end
-        local strflName = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight Flush"
-        if j == 13 and i == 4 then
-            strflName = "The Deck:tm:"
-        end
-        SMODS.PokerHand {
-            key = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight Flush",
-            visible = false,
-            example = straightFlushTable,
-            loc_txt = {
-                name = strflName,
-                description = { j .. ' cards in a row', 'Cards share the same suit', i > 1 and "in " .. i .. " Sets" or "" },
-            },
-            evaluate = function(parts, hand)
-                local straight_flushes = aiko_get_straight(hand, j - 1, true)
-                if not next(straight_flushes) or #straight_flushes < i then return {} end
-                return { SMODS.merge_lists(straight_flushes) }
-            end,
-            chips = (j - 4) * 100 ^ (i / 1.5) * 5,
-            mult = (6 + 2 * j + 7 ^ (i/1.1)) * 5,
-            l_chips = 25 * j * i * i * i * i * j,
-            l_mult = math.ceil(j + 1) * i  * i * j,
-        }
-        SMODS.PokerHand {
-            key = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight",
-            visible = false,
-            example = straightTable,
-            loc_txt = {
-                name = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight",
-                description = { j .. ' cards in a row', i > 1 and "For " .. i .. " Sets" or "" },
-            },
-            evaluate = function(parts, hand)
-                local straights = aiko_get_straight(hand, j - 1, false)
-                if not next(straights) or #straights < i then return {} end
-                return { SMODS.merge_lists(straights) }
-            end,
-            chips = (j - 4) * 70 ^ (i / 1.6),
-            mult = (4 + j +  5 ^ (i/1.2)),
-            l_chips = (8 + j) * i * i * i * j,
-            l_mult = math.ceil(j / 1.75) * i * i * j,
-        }
-        ::straights_continue::
-    end
-end
-
--- i don't care enough
+--for j = #card_ranks, 5, -1 do
+--    for i = 1, #card_suits_with_meta do
+--        local straightFlushTable = {}
+--        local card = randomCard()
+--        for i = 1, i do
+--            card = setCardSuit(card, card_suits_with_meta[i].card_key)
+--            for i = 1, j do
+--                table.insert(straightFlushTable, { card, true })
+--                card = randomConsecutiveRank(card, math.random(2) == 1, false)
+--            end
+--        end
+--        local straightTable = {}
+--        local card = randomCard()
+--        for i = 1, i do
+--            local card = randomCard()
+--            for i = 1, j do
+--                table.insert(straightTable, { card, true })
+--                card = randomConsecutiveRank(card, math.random(2) == 1, true)
+--            end
+--        end
+--        if i == 1 and j == 5 then goto straights_continue end
+--        local strflName = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight Flush"
+--        if j == 13 and i == 4 then
+--            strflName = "The Deck:tm:"
+--        end
+--        SMODS.PokerHand {
+--            key = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight Flush",
+--            visible = false,
+--            example = straightFlushTable,
+--            loc_txt = {
+--                name = strflName,
+--                description = { j .. ' cards in a row', 'Cards share the same suit', i > 1 and "in " .. i .. " Sets" or "" },
+--            },
+--            evaluate = function(parts, hand)
+--                local straight_flushes = aiko_get_straight(hand, j - 1, true)
+--                if not next(straight_flushes) or #straight_flushes < i then return {} end
+--                return { SMODS.merge_lists(straight_flushes) }
+--            end,
+--            chips = (j - 4) * 100 ^ (i / 1.5) * 5,
+--            mult = (6 + 2 * j + 7 ^ (i/1.1)) * 5,
+--            l_chips = 25 * j * i * i * i * i * j,
+--            l_mult = math.ceil(j + 1) * i  * i * j,
+--        }
+--        SMODS.PokerHand {
+--            key = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight",
+--            visible = false,
+--            example = straightTable,
+--            loc_txt = {
+--                name = SPC(getTupleWord(i)) .. aiko_numberToWords(j) .. " Straight",
+--                description = { j .. ' cards in a row', i > 1 and "For " .. i .. " Sets" or "" },
+--            },
+--            evaluate = function(parts, hand)
+--                local straights = aiko_get_straight(hand, j - 1, false)
+--                if not next(straights) or #straights < i then return {} end
+--                return { SMODS.merge_lists(straights) }
+--            end,
+--            chips = (j - 4) * 70 ^ (i / 1.6),
+--            mult = (4 + j +  5 ^ (i/1.2)),
+--            l_chips = (8 + j) * i * i * i * j,
+--            l_mult = math.ceil(j / 1.75) * i * i * j,
+--        }
+--        ::straights_continue::
+--    end
+--end
+--
+---- i don't care enough
 
 -- for suit_no = 2, #card_suits do
 -- 

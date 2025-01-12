@@ -46,16 +46,16 @@ local cardBaseHooker = Card.set_base
 function Card:set_base(card, initial)
     local ret = cardBaseHooker(self,card, initial)
     self.aiko_draw_delay = math.random() * 1.75 + 0.25
+    self.is_null = false
     if self.base.name and not self.ability.aikoyori_letters_stickers then
         self:set_letters_random()
     end
     return ret
 end
---[[
 local cardSave = Card.save
 function Card:save()
     local c = cardSave(self)
-    c.ability.aikoyori_letters_stickers = self.ability.aikoyori_letters_stickers
+    c.is_null = self.is_null
     return c
 end
 
@@ -63,16 +63,17 @@ end
 local cardLoad = Card.load
 function Card:load(cardTable, other_card)
     local c = cardLoad(self, cardTable, other_card)
-    self.ability.aikoyori_letters_stickers = cardTable.ability.aikoyori_letters_stickers
+    self.is_null = cardTable.is_null
     return c
 end
 
-]]
 local igo = Game.init_game_object
 function Game:init_game_object()
     local ret = igo(self)
     ret.aiko_cards_playable = 5
     ret.starting_params.special_hook = false
+    ret.letters_enabled = false
+    ret.letters_mult_enabled = false
     ret.aiko_last_mult = 0
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
@@ -81,7 +82,7 @@ end
 
 function aikoyori_draw_extras(card, layer)
     --print("DRAWING EXTRAS")
-    if G.aikoyori_letters_stickers then
+    if G.aikoyori_letters_stickers and G.GAME.letters_enabled then
         if card.ability.aikoyori_letters_stickers then
             local movement_mod = 0.05*math.sin(1.1*(G.TIMERS.REAL + card.aiko_draw_delay)) - 0.07
             local rot_mod = 0.02*math.sin(0.72*(G.TIMERS.REAL + card.aiko_draw_delay)) + 0.03
@@ -213,7 +214,8 @@ function Back:apply_to_run()
                 for i, letter in pairs(scrabble_letters) do
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                     local front = pseudorandom_element(G.P_CARDS, pseudoseed('marb_fr'))
-                    local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['m_akyrs_null'], {playing_card = G.playing_card})
+                    local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
+                    car.is_null = true
                     G.deck:emplace(car)
                     table.insert(G.playing_cards, car)
                 end
@@ -228,6 +230,12 @@ function Back:apply_to_run()
     if self.effect.config.special_hook then
         G.GAME.starting_params.special_hook = true
     end
+    if self.effect.config.letters_enabled then
+        G.GAME.letters_enabled = true
+    end
+    if self.effect.config.letters_mult_enabled then
+        G.GAME.letters_mult_enabled = true
+    end
     return c
 end
 
@@ -236,4 +244,42 @@ function customDeckHooks(self,card_protos)
         return {}
     end
     return card_protos
+end
+
+local getChipBonusHook = Card.get_chip_bonus
+function Card:get_chip_bonus()
+    if self.is_null then self.base.nominal = 0 end
+    local c = getChipBonusHook(self)
+    
+    return c
+end
+local getMultBonusHook = Card.get_chip_mult
+function Card:get_chip_mult()
+    local c = getChipBonusHook(self)
+    
+    if self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled then c = c + scrabble_scores[self.ability.aikoyori_letters_stickers] end
+    return c
+end
+
+
+local copyCardHook = copy_card
+function copy_card(other, new_card, card_scale, playing_card, strip_edition)
+    local c = copyCardHook(other, new_card, card_scale, playing_card, strip_edition)
+    c.is_null = other.is_null
+    return c
+end
+
+local isSuitHook = Card.is_suit
+function Card:is_suit(suit, bypass_debuff, flush_calc)
+    if self.is_null then return false end
+    local c = isSuitHook(self, suit, bypass_debuff, flush_calc)
+    return c
+end
+
+
+local getIDHook = Card.get_id
+function Card:get_id()
+    if self.is_null then return -math.random(100, 1000000) end
+    local c = getIDHook(self, suit, bypass_debuff, flush_calc)
+    return c
 end

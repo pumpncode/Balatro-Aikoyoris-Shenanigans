@@ -24,12 +24,13 @@ SMODS.Back{
     pos = {x = 0, y = 0},
     config = {
         all_nulls = true,
-        hand_size = -1,
-        selection = 2,
-        special_hook = true
+        selection = 2000000000,
+        special_hook = true,
+        letters_enabled = true,
+        letters_mult_enabled = true
     },
     loc_txt =  	{
         name = 'Letter Deck',
-        text = { 'Play with {C:red}No Ranks and Suits{}', 'Hands only come from Letter', "{C:blue}-1{} Hand Size", "{C:playable}+2{} Card Selections" },
+        text = { 'Play with {C:red}No Ranks and Suits{}', 'Letters enabled by default', "Play {C:playable}as many{} card as you want per hand" },
     },
 }

@@ -595,13 +595,14 @@ for i = 3, 31 do
 
     SMODS.PokerHand {
         key = i.."-letter Word",
-        visible = i <= 5,
+        visible = false,
         example = exampler,
         loc_txt = {
             name =  i.."-letter Word",
             description = { 'Create a valid '..i..'-letter English word', 'with Exact Amount of Character' },
         },
         evaluate = function(parts, hand)
+            if not G.GAME.letters_enabled then return {} end
             local word_hand = {}
             table.sort(hand, function(a,b) return a.T.x < b.T.x end)
             for _, v in pairs(hand) do

@@ -1,22 +1,22 @@
-SMODS.Enhancement{
-    key = "null",
-    atlas = 'cardUpgrades',
-    pos = {x = 0, y = 0},
-    loc_txt =  	{
-        name = 'Null',
-        text = { 'No Base Chips' },
-    },
-    replace_base_card = true,
-    no_rank = true,
-    no_suit = true,
-    always_scores = true,
-    weight = 0,
-    config = {
-        bonus = 0,
-        bonus_chips = 0,
-        mult = 0,
-    }
-}
+--SMODS.Enhancement{
+--    key = "null",
+--    atlas = 'cardUpgrades',
+--    pos = {x = 0, y = 0},
+--    loc_txt =  	{
+--        name = 'Null',
+--        text = { 'No Base Chips' },
+--    },
+--    replace_base_card = true,
+--    no_rank = true,
+--    no_suit = true,
+--    always_scores = true,
+--    weight = 0,
+--    config = {
+--        bonus = 0,
+--        bonus_chips = 0,
+--        mult = 0,
+--    }
+--}
 
 SMODS.Back{
     key = "Letter Deck",

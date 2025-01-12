@@ -73,12 +73,6 @@ function getNextIDs(id)
     return nexts
 end
 
-local NON_STONE_UPGRADES = {}
-for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
-    if v.key ~= 'm_stone' then
-        NON_STONE_UPGRADES[#NON_STONE_UPGRADES + 1] = v
-    end
-end
 
 function aiko_intersect_table(a,b)
     local ai = {}

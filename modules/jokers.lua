@@ -51,6 +51,14 @@ SMODS.Joker {
     end,
     blueprint_compat = true
 }
+
+
+local NON_STONE_UPGRADES = {}
+for k, v in pairs(G.P_CENTER_POOLS["Enhanced"]) do
+    if v.key ~= 'm_stone' then
+        NON_STONE_UPGRADES[#NON_STONE_UPGRADES + 1] = v
+    end
+end
 -- observer
 SMODS.Joker {
     atlas = 'AikoyoriJokers',

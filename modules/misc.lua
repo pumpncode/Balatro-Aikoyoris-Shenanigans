@@ -11,30 +11,6 @@ function table_contains(tbl, x)
     end
     return found
 end
-
-aiko_alphabets = {}
-aiko_alphabets_no_wilds = {}
-aiko_alphabets_to_num = {}
-for i = 97, 122 do
-    table.insert(aiko_alphabets, string.char(i))
-    table.insert(aiko_alphabets_no_wilds, string.char(i))
-    aiko_alphabets_to_num[string.char(i)] = i - 96
-end
-table.insert(aiko_alphabets,"#")
-aiko_alphabets_to_num["#"] = 27
-
-function alphabet_delta(alpha, delta) 
-    local numero = aiko_alphabets_to_num[alpha] + delta
-    while numero < 1 do
-        numero = numero + #aiko_alphabets
-    end
-    if numero > #aiko_alphabets then
-        numero = math.fmod(numero, #aiko_alphabets)
-    end
-    --print(aiko_alphabets[numero])
-    return aiko_alphabets[numero]
-end
-
 card_suits = {}
 card_suits_with_meta = {}
 card_ranks = {}
@@ -151,4 +127,31 @@ function table_to_string_depth(tables, depth)
         end
     end
     return strRet
+end
+function pretty_print_json(t)
+    local function serialize(tbl)
+        local result = {}
+        for k, v in pairs(tbl) do
+            local key = type(k) == "string" and '"' .. k .. '"' or k
+            local value = type(v) == "table" and serialize(v) or (type(v) == "string" and '"' .. v .. '"' or tostring(v))
+            table.insert(result, key .. ":" .. value)
+        end
+        return "{" .. table.concat(result, ",") .. "}"
+    end
+    return serialize(t)
+end
+function pretty_print_json_with_depth(t, depth)
+    local function serialize(tbl, d)
+        if d == 0 then
+            return '"max depth reached"'
+        end
+        local result = {}
+        for k, v in pairs(tbl) do
+            local key = type(k) == "string" and '"' .. k .. '"' or k
+            local value = type(v) == "table" and serialize(v, d - 1) or (type(v) == "string" and '"' .. v .. '"' or tostring(v))
+            table.insert(result, key .. ":" .. value)
+        end
+        return "{" .. table.concat(result, ",") .. "}"
+    end
+    return serialize(t, depth)
 end

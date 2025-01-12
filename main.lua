@@ -1,4 +1,5 @@
-
+AIKOYORI_CENTERS = {}
+assert(SMODS.load_file("./modules/extenders.lua"))() 
 assert(SMODS.load_file("./modules/atlasses.lua"))() 
 assert(SMODS.load_file("./modules/hooks.lua"))() 
 assert(SMODS.load_file("./modules/misc.lua"))() 

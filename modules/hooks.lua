@@ -3,6 +3,9 @@
 assert(SMODS.load_file("./modules/misc.lua"))() 
 assert(SMODS.load_file("./modules/atlasses.lua"))() 
 assert(SMODS.load_file("./func/word_utils.lua"))() 
+local pprint = assert(SMODS.load_file("./func/pprint.lua"))() 
+
+pprint.setup({level_width = 12, wrap_string = true})
 
 function CardArea:aiko_change_playable(delta)
     self.config.highlighted_limit = self.config.highlight_limit or G.GAME.aiko_cards_playable or 5
@@ -31,12 +34,82 @@ function Card:remove_letters()
 end
 
 
+function Card:set_special_sprites(_special)
+    if _special then 
+        if _special.set then
+            if self.children.special then
+                self.children.special.atlas = G.ASSET_ATLAS[_special.atlas or 'centers']
+                self.children.special:set_sprite_pos(_special.pos)
+            else
+                self.children.special = Sprite(self.T.x, self.T.y, self.T.w, self.T.h, G.ASSET_ATLAS[_special.atlas or 'centers'], _special.pos)
+                self.children.special.states.hover = self.states.hover
+                self.children.special.states.click = self.states.click
+                self.children.special.states.drag = self.states.drag
+                self.children.special.states.collide.can = false
+                self.children.special:set_role({major = self, role_type = 'Glued', draw_major = self})
+            end
+        end
+    end
+end
+
+
+function Card:set_special_ability(extra_cards_attr, initial, delay_sprites)
+
+    local old_center = self.aikoyori_extra_cards_attr
+    self.aikoyori_extra_cards_attr = extra_cards_attr
+
+    if delay_sprites then 
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                if not self.REMOVED then
+                    self:set_special_sprites(extra_cards_attr)
+                end
+                return true
+            end
+        })) 
+    else
+        self:set_special_sprites(extra_cards_attr)
+    end
+
+    if self.aikoyori_extra_cards_attr and old_center and old_center.bonus then
+        self.aikoyori_extra_cards_attr.bonus = self.ability.bonus - old_center.bonus
+    end
+    
+    self.aikoyori_extra_cards_attr = {
+        name = extra_cards_attr.name,
+        effect = extra_cards_attr.effect,
+        set = extra_cards_attr.set,
+        mult = extra_cards_attr.config.mult or 0,
+        h_mult = extra_cards_attr.config.h_mult or 0,
+        h_x_mult = extra_cards_attr.config.h_x_mult or 0,
+        h_dollars = extra_cards_attr.config.h_dollars or 0,
+        p_dollars = extra_cards_attr.config.p_dollars or 0,
+        t_mult = extra_cards_attr.config.t_mult or 0,
+        t_chips = extra_cards_attr.config.t_chips or 0,
+        x_mult = extra_cards_attr.config.Xmult or 1,
+        h_size = extra_cards_attr.config.h_size or 0,
+        d_size = extra_cards_attr.config.d_size or 0,
+        extra = copy_table(extra_cards_attr.config.extra) or nil,
+        extra_value = 0,
+        type = extra_cards_attr.config.type or '',
+        order = extra_cards_attr.order or nil,
+        forced_selection = self.ability and self.ability.forced_selection or nil,
+        perma_bonus = self.ability and self.ability.perma_bonus or 0,
+    }
+
+    self.aikoyori_extra_cards_attr.bonus = (self.aikoyori_extra_cards_attr.bonus or 0) + (extra_cards_attr.bonus or 0)
+
+    if not initial then G.GAME.blind:debuff_card(self) end
+    if self.playing_card and not initial then check_for_unlock({type = 'modify_deck'}) end
+end
+
+
 function aiko_mod_startup(self)
     if not self.aikoyori_letters_stickers then
         self.aikoyori_letters_stickers = {}
     end
     for i, v in ipairs(aiko_alphabets) do
-        print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
+        --print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
         self.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS["akyrs_lettersStickers"], {x =(i - 1) % 10 ,y =  math.floor((i-1) / 10)})
     end
 end
@@ -46,16 +119,16 @@ local cardBaseHooker = Card.set_base
 function Card:set_base(card, initial)
     local ret = cardBaseHooker(self,card, initial)
     self.aiko_draw_delay = math.random() * 1.75 + 0.25
+    self.aikoyori_extra_cards_attr = {}
     if self.base.name and not self.ability.aikoyori_letters_stickers then
         self:set_letters_random()
     end
     return ret
 end
---[[
 local cardSave = Card.save
 function Card:save()
     local c = cardSave(self)
-    c.ability.aikoyori_letters_stickers = self.ability.aikoyori_letters_stickers
+    c.aikoyori_extra_cards_attr = self.aikoyori_extra_cards_attr
     return c
 end
 
@@ -63,11 +136,10 @@ end
 local cardLoad = Card.load
 function Card:load(cardTable, other_card)
     local c = cardLoad(self, cardTable, other_card)
-    self.ability.aikoyori_letters_stickers = cardTable.ability.aikoyori_letters_stickers
+    self.aikoyori_extra_cards_attr = cardTable.aikoyori_extra_cards_attr
     return c
 end
 
-]]
 local igo = Game.init_game_object
 function Game:init_game_object()
     local ret = igo(self)
@@ -204,30 +276,39 @@ local applyToRunBackHook = Back.apply_to_run
 local suits = {"S","H","D","C"}
 
 function Back:apply_to_run()
-    local c = applyToRunBackHook(self)
-    
-    if self.effect.config.all_nulls then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                G.playing_cards = {}
-                for i, letter in pairs(scrabble_letters) do
-                    G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                    local front = pseudorandom_element(G.P_CARDS, pseudoseed('marb_fr'))
-                    local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['m_akyrs_null'], {playing_card = G.playing_card})
-                    G.deck:emplace(car)
-                    table.insert(G.playing_cards, car)
+    if self.effect then
+        applyToRunBackHook(self)
+        if self.effect.config.all_nulls then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    G.playing_cards = {}
+                    for i, letter in pairs(scrabble_letters) do
+                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('marb_fr'))
+                        local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
+                        car:set_special_ability(G.P_CENTERS['aiko_x_akyrs_null'])
+                        G.deck:emplace(car)
+                        table.insert(G.playing_cards, car)
+                    end
+                    return true
                 end
-                return true
-            end
-        }))
-        G.GAME.starting_params.all_nulls = true
+            }))
+            G.GAME.starting_params.all_nulls = true
+        end
+        if self.effect.config.selection then
+            G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable + self.effect.config.selection
+        end
+        if self.effect.config.special_hook then
+            G.GAME.starting_params.special_hook = true
+        end
     end
-    if self.effect.config.selection then
-        G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable + self.effect.config.selection
-    end
-    if self.effect.config.special_hook then
-        G.GAME.starting_params.special_hook = true
-    end
+end
+
+local getChipBonusHook = Card.get_chip_bonus
+function Card:get_chip_bonus()
+    if self.aikoyori_extra_cards_attr.do_not_give_chips then return 0 end
+    local c = getChipBonusHook(self)
+    
     return c
 end
 
@@ -237,3 +318,5 @@ function customDeckHooks(self,card_protos)
     end
     return card_protos
 end
+
+

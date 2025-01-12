@@ -3,5 +3,6 @@
     "workspace.ignoreDir": [
         ".vscode",
         "./func/words"
-    ]
+    ],
+    "diagnostics.workspaceDelay": -1
 }

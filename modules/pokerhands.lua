@@ -1,6 +1,6 @@
 assert(SMODS.load_file("./func/numbers.lua"))()
-assert(SMODS.load_file("./func/words/words.lua"))()
 assert(SMODS.load_file("./func/word_utils.lua"))()
+assert(SMODS.load_file("./func/words/words.lua"))()
 assert(SMODS.load_file("./modules/misc.lua"))()
 function aiko_get_X_same(num, hand, how_many)
     local how_many = how_many or 1
@@ -203,6 +203,9 @@ function aiko_get_straight(hand, straight_amount, consider_flush)
     -- rank = { 2 = { Spades = {card},Clubs = {card,card}}, 3 = { Hearts = {card},Diamonds = {card,card}}}
     local four_fingers = next(find_joker('Four Fingers'))
     local can_skip = next(find_joker('Shortcut'))
+    if #ranks < 1 then
+        return {}
+    end
     for i = 1, #hand do
         local card = hand[i]
         local rank = card:get_id()
@@ -543,43 +546,6 @@ local example_words = {
 }
 local function replace_char(pos, str, r)
     return str:sub(1, pos-1) .. r .. str:sub(pos+1)
-end
-function check_word(str_arr_in, length)
-    local wild_count = 0
-    local word_composite = ""
-    for _, val in ipairs(str_arr_in) do
-        if val == "#" then
-            wild_count = wild_count + 1
-        end
-        word_composite = word_composite..val
-    end
-    --print("CHECKING "..word_composite.." WITH "..wild_count)
-    if wild_count == 0 then
-        if words[word_composite] and #str_arr_in == length then
-            return true
-        else
-            return false
-        end
-    end
-    for i, v in ipairs(str_arr_in) do
-        if v == "#" then
-            for k, v2 in ipairs(aiko_alphabets_no_wilds)do
-                local new_arr = {}
-                for m, v3 in ipairs(str_arr_in) do
-                    if i == m then
-                        table.insert(new_arr,v2)
-                    else
-                        table.insert(new_arr,v3)
-                    end
-                end
-                if check_word(new_arr,length) then
-                    return true
-                end
-            end 
-        end 
-    end
-    return false
-    
 end
 for i = 3, 31 do
     local exampler = {}

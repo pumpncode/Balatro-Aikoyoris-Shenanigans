@@ -223,8 +223,7 @@ target = "card.lua"
 pattern = "    return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start, main_end)"
 position = "before"
 payload = """
-self.config.center.is_null = self.is_null
-self.config.center.aikoyori_letters_stickers = self.ability.aikoyori_letters_stickers
+
 """
 
 overwrite = true

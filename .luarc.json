@@ -1,5 +1,5 @@
 {
-    "workspace.library": ["../Steamodded-main", "../../BalatroSRC"],
+    "workspace.library": ["../smods-old-calc", "../../BalatroSRC"],
     "workspace.ignoreDir": [
         ".vscode",
         "./func/words"

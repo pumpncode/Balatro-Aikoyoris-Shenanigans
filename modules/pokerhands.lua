@@ -310,8 +310,14 @@ for i = 6, aikoyori_mod_config.x_of_a_kind_limit do
         visible = false,
         example = ofAkindTable,
         loc_txt = {
-            name = aiko_numberToWords(i) .. " of a Kind",
-            description = { i .. ' cards with the same rank' },
+            ["en-us"]={
+                name = aiko_numberToWords(i) .. " of a Kind",
+                description = { i .. ' cards with the same rank' },
+            },
+            ["th_TH"]={
+                name = aiko_ThEnNumberToWords(i),
+                description = { 'ไพ่แต้มเดียวกัน ',i .. ' ใบ' },
+            },
         },
         evaluate = function(parts, hand)
             if not next(aiko_get_X_same(i, hand)) then return {} end
@@ -327,8 +333,14 @@ for i = 6, aikoyori_mod_config.x_of_a_kind_limit do
         visible = false,
         example = flushCardTable,
         loc_txt = {
-            name = 'Flush ' .. aiko_numberToWords(i),
-            description = { i .. ' cards with the same rank and suit' },
+            ["en-us"]={
+                name = 'Flush ' .. aiko_numberToWords(i),
+                description = { i .. ' cards with the same rank and suit' },
+            },
+            ["th_TH"]={
+                name = 'ฟลัช ' .. aiko_ThEnNumberToWords(i),
+                description = { 'ไพ่เหมือนกันเป๊ะ ',i .. ' ใบ' },
+            },
         },
         evaluate = function(parts, hand)
             if not next(aiko_get_X_same(i, hand)) or not next(aiko_get_flush(hand, i)) then return {} end
@@ -599,8 +611,14 @@ for i = 3, 31 do
         visible = false,
         example = exampler,
         loc_txt = {
-            name =  i.."-letter Word",
-            description = { 'Create a valid '..i..'-letter English word', 'with Exact Amount of Character' },
+            ["en-us"]={
+                name =  i.."-letter Word",
+                description = { 'Create a valid '..i..'-letter English word', 'with Exact Amount of Character' },
+            },
+            ["th_TH"]={
+                name =  "คำยาว "..i.." ตัวอักษร",
+                description = { 'สร้างคำภาษาอังกฤษที่มี '..i..'ตัวอักษร', 'โดยที่ตัวอักษรไม่ขาดไม่เกิน' },
+            },
         },
         evaluate = function(parts, hand)
             local hand_count = 0

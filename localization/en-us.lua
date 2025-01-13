@@ -1,10 +1,60 @@
 return {
     descriptions = {
-        Back={},
+        Back={
+            b_akrys_letter_deck = {
+                name = 'Letter Deck',
+                text = { 'Play with {C:red}No Ranks and Suits{}', 'Letters enabled by default', "Play {C:playable}as many{} card as you want per hand" },
+            }
+        },
         Blind={},
         Edition={},
         Enhanced={},
-        Joker={},
+        Joker={
+            j_akyrs_utage_charts = {
+                name = "Utage Charts",
+                text = {
+                    "{C:playable}+#1#{} Hand Selection"
+                }
+            },
+            j_akyrs_netherite_pickaxe = {
+                name = "Netherite Pickaxe",
+                text = {
+                    "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
+                    "for every {C:attention}Stone{} Cards scored",
+                    "{C:red,E:1}Destroys that card"
+                }
+            },
+            j_akyrs_diamond_pickaxe = {
+                name = "Diamond Pickaxe",
+                text = {
+                    "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
+                    "for every {C:attention}Stone{} Cards scored",
+                    "Randomly change that card's upgrades"
+                }
+            },
+            j_akyrs_redstone_repeater = {
+                name = "Redstone Repeater",
+                text = { "Swaps the current {C:white,X:mult} Mult {}", "with the stored {C:mult}Mult",
+                    "then {C:white,X:mult} X#2# {} Mult", "Start with X {C:white,X:mult}   #3#   {} {C:mult}Mult{}",
+                    "{C:inactive}(Currently X {C:white,X:mult}   #1#   {} {C:mult}Mult{}{C:inactive}){}" }
+            },
+            j_akyrs_observer = {
+                name = "Observer",
+                text = { "This Joker gains {C:mult}#1#{} Mult", "for every{C:attention} #4# {}times {C:inactive}(#3#)",
+                    "{C:chips}Chips{} or {C:mult}Mult{} value changes",
+                    "{s:0.8}Times needed increases by {C:attention}#5#{}",
+                    "{s:0.8}every time this Joker gains {C:mult}Mult{}",
+                    "{C:inactive}(Currently {C:mult}+#2#{} Mult{C:inactive}){}" }
+            },
+            j_akyrs_quasi_connectivity = {
+                name = "Quasi Connectivity",
+                text = { "{C:white,X:mult} X#1# {} Mult", "Disables one {C:attention}random Joker{}",
+                    "after a hand is played",
+                    "{s:0.8}Debuffs itself if it's",
+                    "{s:0.8}the sole card"
+                }
+            },
+        },
         Other={},
         Planet={},
         Spectral={},

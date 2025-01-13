@@ -19,7 +19,7 @@
 --}
 
 SMODS.Back{
-    key = "Letter Deck",
+    key = "letter_deck",
     atlas = 'deckBacks',
     pos = {x = 0, y = 0},
     config = {
@@ -28,9 +28,5 @@ SMODS.Back{
         special_hook = true,
         letters_enabled = true,
         letters_mult_enabled = true
-    },
-    loc_txt =  	{
-        name = 'Letter Deck',
-        text = { 'Play with {C:red}No Ranks and Suits{}', 'Letters enabled by default', "Play {C:playable}as many{} card as you want per hand" },
     },
 }

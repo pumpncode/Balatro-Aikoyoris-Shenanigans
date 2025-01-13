@@ -23,12 +23,6 @@ SMODS.Joker {
             vars = { card.ability.extra.mult_stored, card.ability.extra.mult, card.ability.extra.starting_mult }
         }
     end,
-    loc_txt = {
-        name = "Redstone Repeater",
-        text = { "Swaps the current {C:white,X:mult} Mult {}", "with the stored {C:mult}Mult",
-            "then {C:white,X:mult} X#2# {} Mult", "Start with X {C:white,X:mult}   #3#   {} {C:mult}Mult{}",
-            "{C:inactive}(Currently X {C:white,X:mult}   #1#   {} {C:mult}Mult{}{C:inactive}){}" }
-    },
     calculate = function(self, card, context)
         if context.joker_main and card then
             stored = mult
@@ -88,14 +82,6 @@ SMODS.Joker {
                 card.ability.extra.total_times, card.ability.extra.times_increment }
         }
     end,
-    loc_txt = {
-        name = "Observer",
-        text = { "This Joker gains {C:mult}#1#{} Mult", "for every{C:attention} #4# {}times {C:inactive}(#3#)",
-            "{C:chips}Chips{} or {C:mult}Mult{} value changes",
-            "{s:0.8}Times needed increases by {C:attention}#5#{}",
-            "{s:0.8}every time this Joker gains {C:mult}Mult{}",
-            "{C:inactive}(Currently {C:mult}+#2#{} Mult{C:inactive}){}" }
-    },
     calculate = function(self, card, context)
         if context.joker_main then
             return {
@@ -127,14 +113,6 @@ SMODS.Joker {
             vars = { card.ability.extra.mult }
         }
     end,
-    loc_txt = {
-        name = "Quasi Connectivity",
-        text = { "{C:white,X:mult} X#1# {} Mult", "Disables one {C:attention}random Joker{}",
-            "after a hand is played",
-            "{s:0.8}Debuffs itself if it's",
-            "{s:0.8}the sole card"
-        }
-    },
     config = {
         name = "Quasi Connectivity",
         extra = {
@@ -201,7 +179,7 @@ SMODS.Joker {
         x = 3,
         y = 0
     },
-    key = "DiamondPickaxe",
+    key = "diamond_pickaxe",
     rarity = 2,
     cost = 3,
     loc_vars = function(self, info_queue, card)
@@ -209,14 +187,6 @@ SMODS.Joker {
             vars = { card.ability.extra.chip_add, card.ability.extra.chip_add_stack }
         }
     end,
-    loc_txt = {
-        name = "Diamond Pickaxe",
-        text = {
-            "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
-            "for every {C:attention}Stone{} Cards scored",
-            "Randomly change that card's upgrades"
-        }
-    },
     config = {
         name = "Diamond Pickaxe",
         extra = {
@@ -260,7 +230,7 @@ SMODS.Joker {
         x = 4,
         y = 0
     },
-    key = "Netherite Pickaxe",
+    key = "netherite_pickaxe",
     rarity = 2,
     cost = 4,
     loc_vars = function(self, info_queue, card)
@@ -268,14 +238,6 @@ SMODS.Joker {
             vars = { card.ability.extra.chip_add, card.ability.extra.chip_add_stack }
         }
     end,
-    loc_txt = {
-        name = "Netherite Pickaxe",
-        text = {
-            "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
-            "for every {C:attention}Stone{} Cards scored",
-            "{C:red,E:1}Destroys that card"
-        }
-    },
     config = {
         name = "Netherite Pickaxe",
         extra = {
@@ -320,7 +282,7 @@ SMODS.Joker {
         x = 5,
         y = 0
     },
-    key = "Utage Charts",
+    key = "utage_charts",
     rarity = 3,
     cost = 4,
     loc_vars = function(self, info_queue, card)
@@ -328,12 +290,6 @@ SMODS.Joker {
             vars = { card.ability.play_mod }
         }
     end,
-    loc_txt = {
-        name = "Utage Charts",
-        text = {
-            "{C:playable}+#1#{} Hand Selection"
-        }
-    },
     config = {
         name = "Playable Cards",
         play_mod = 1,

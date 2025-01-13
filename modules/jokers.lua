@@ -305,10 +305,10 @@ SMODS.Joker {
                     end,
                     delay = 0.5,
                 }), 'base')
+                if context.destroying_card and not context.blueprint and not context.destroying_card.ability.eternal then
+                    return true
+                end
             end
-        end
-        if context.destroying_card and not context.blueprint and not context.destroying_card.ability.eternal then
-            return true
         end
     end,
     blueprint_compat = false

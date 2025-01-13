@@ -259,31 +259,6 @@ pattern = """   --Fill all remaining info if this is the main desc"""
 position = "before"
 payload = """
 
-if _c.is_null then
-    
-    localize {type = 'descriptions', key = "aiko_x_akyrs_null", set = "AikoyoriExtraBases", nodes = desc_nodes, vars = {_c.aikoyori_letters_stickers}}
-    info_queue[#info_queue+1] = {type = 'descriptions', key = "aiko_x_akyrs_null", set = "AikoyoriExtraBases", nodes = desc_nodes, vars = {_c.aikoyori_letters_stickers, colour = G.C.UI.TEXT_LIGHT}}
-end
-
-if _c.aikoyori_letters_stickers then
-    --print(_c.aikoyori_letters_stickers)
-    local dsdsds = string.upper(_c.aikoyori_letters_stickers)
-    if dsdsds == "#" then
-        dsdsds = "Wild"
-    end
-    if G.GAME.letters_enabled then
-
-        info_queue[#info_queue+1] = {type = 'descriptions', key = "letters"..dsdsds, set = "AikoyoriExtraBases", nodes = stuff, vars = {colour = G.C.UI.TEXT_LIGHT}}
-        if G.GAME.letters_mult_enabled then 
-            local stuff  = localize{type = 'descriptions', key = "letters"..dsdsds, set = "AikoyoriExtraBases", nodes = desc_nodes, vars = {colour = G.C.UI.TEXT_LIGHT}}
-        else
-
-            local stuff  = localize{type = 'descriptions', key = "letterNotScored", set = "AikoyoriExtraBases", nodes = desc_nodes, vars = {colour = G.C.UI.TEXT_LIGHT}}
-
-        end
-
-    end
-end
 """
 overwrite = true
 match_indent = true

@@ -103,7 +103,7 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "card.lua"
-pattern = """                if self.ability.name == 'The Soul' and (self.config.center.discovered or self.bypass_discovery_center) then"""
+pattern = """                if self.greyed then"""
 position = "before"
 payload = """                aikoyori_draw_extras(self, layer)"""
 overwrite = true

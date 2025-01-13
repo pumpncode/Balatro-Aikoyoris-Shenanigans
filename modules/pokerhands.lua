@@ -556,9 +556,9 @@ function check_word(str_arr_in, length)
     --print("CHECKING "..word_composite.." WITH "..wild_count)
     if wild_count == 0 then
         if words[word_composite] and #str_arr_in == length then
-            return true
+            return { valid = true, word = word_composite }
         else
-            return false
+            return { valid = false, word = nil }
         end
     end
     for i, v in ipairs(str_arr_in) do
@@ -572,13 +572,14 @@ function check_word(str_arr_in, length)
                         table.insert(new_arr,v3)
                     end
                 end
-                if check_word(new_arr,length) then
-                    return true
+                local chk = check_word(new_arr,length)
+                if chk.valid then
+                    return {word = chk.word, valid = true}
                 end
             end 
         end 
     end
-    return false
+    return { valid = false, word = nil }
     
 end
 for i = 3, 31 do
@@ -602,6 +603,12 @@ for i = 3, 31 do
             description = { 'Create a valid '..i..'-letter English word', 'with Exact Amount of Character' },
         },
         evaluate = function(parts, hand)
+            local hand_count = 0
+            for _,v in pairs(G.hand.cards) do
+                if v.highlighted then
+                    hand_count = hand_count + 1
+                end
+            end
             if not G.GAME.letters_enabled then return {} end
             local word_hand = {}
             table.sort(hand, function(a,b) return a.T.x < b.T.x end)
@@ -613,7 +620,14 @@ for i = 3, 31 do
             if #word_hand ~= i then
                 return {}
             end
-            if check_word(word_hand, i) then
+            local wordData = check_word(word_hand, i)
+            if wordData.valid then
+                if (G.STATE == G.STATES.HAND_PLAYED)then  
+                    attention_text({
+                        scale = 1.5, text = string.upper(wordData.word), hold = 2, align = 'tm',
+                        major = G.play, offset = {x = 0, y = -1}
+                    })
+                end
                 return {hand}
             else 
                 return {}

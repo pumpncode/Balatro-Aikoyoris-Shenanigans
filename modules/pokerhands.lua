@@ -621,13 +621,13 @@ for i = 3, 31 do
             },
         },
         evaluate = function(parts, hand)
+            if not G.GAME.letters_enabled then return {} end
             local hand_count = 0
             for _,v in pairs(G.hand.cards) do
                 if v.highlighted then
                     hand_count = hand_count + 1
                 end
             end
-            if not G.GAME.letters_enabled then return {} end
             local word_hand = {}
             table.sort(hand, function(a,b) return a.T.x < b.T.x end)
             for _, v in pairs(hand) do

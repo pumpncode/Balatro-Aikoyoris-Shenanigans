@@ -286,7 +286,7 @@ end
 
 local isFaceHook = Card.is_face
 function Card:is_face(from_boss)
-    local c = isFaceHook(self, from_boss)
     if self.is_null and not next(find_joker("Pareidolia")) then return false end
+    local c = isFaceHook(self, from_boss)
     return c
 end

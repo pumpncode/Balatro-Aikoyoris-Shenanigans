@@ -207,6 +207,30 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "card.lua"
+pattern = "                    card:set_base(G.P_CARDS[suit_prefix..rank_suffix])"
+position = "before"
+payload = """
+local null = false
+if G.hand.cards[i].is_null then null = true end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "                    card:set_base(G.P_CARDS[suit_prefix..rank_suffix])"
+position = "after"
+payload = """
+if null then card.is_null = true end
+"""
+overwrite = true
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
 pattern = "                        self.children.front:draw_shader('played', nil, self.ARGS.send_to_shader)"
 position = "after"
 payload = """

@@ -279,7 +279,14 @@ end
 
 local getIDHook = Card.get_id
 function Card:get_id()
-    if self.is_null then return 10000 + string.byte(self.ability.aikoyori_letters_stickers) end
+    if self.is_null then return -math.random(100,1000000) end
     local c = getIDHook(self, suit, bypass_debuff, flush_calc)
+    return c
+end
+
+local isFaceHook = Card.is_face
+function Card:is_face(from_boss)
+    local c = isFaceHook(self, from_boss)
+    if self.is_null and not next(find_joker("Pareidolia")) then return false end
     return c
 end

@@ -10,6 +10,7 @@ scrabble_scores = {
     u = 1, v = 4, w = 4, x = 8, y = 4, z = 10, ["#"] = 0
 }
 
+
 scrabble_letters = {}
 
 for letter, count in pairs(scrabble_distribution) do

@@ -6,7 +6,16 @@ return {
                 text = { 'Play with {C:red}No Ranks and Suits{}', 'Letters enabled by default', "Play {C:playable}as many{} card as you want per hand" },
             }
         },
-        Blind={},
+        Blind={
+            bl_akyrs_the_thought= {
+                name = "The Thought",
+                text = {
+                    "Solving 5-letter puzzle and Win.",
+                    "Start with at least 6 hands",
+                    "<Doesn't do anything just yet>",
+                }
+            },
+        },
         Edition={},
         Enhanced={},
         Joker={
@@ -189,7 +198,8 @@ return {
         challenge_names={},
         collabs={},
         dictionary={
-            k_aikoyoriextrabases = "Extra Base"
+            k_aikoyoriextrabases = "Extra Base",
+            ph_puzzle_clear = "Puzzle Clear!"
         },
         high_scores={},
         labels={},

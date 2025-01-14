@@ -46,7 +46,6 @@ local cardBaseHooker = Card.set_base
 function Card:set_base(card, initial)
     local ret = cardBaseHooker(self,card, initial)
     self.aiko_draw_delay = math.random() * 1.75 + 0.25
-    self.is_null = false
     if self.base.name and not self.ability.aikoyori_letters_stickers then
         self:set_letters_random()
     end

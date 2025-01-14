@@ -12,6 +12,11 @@ function table_contains(tbl, x)
     return found
 end
 
+
+aiko_pickRandomInTable = function(t)
+    return t[math.random(1, #t)]
+end
+
 aiko_alphabets = {}
 aiko_alphabets_no_wilds = {}
 aiko_alphabets_to_num = {}

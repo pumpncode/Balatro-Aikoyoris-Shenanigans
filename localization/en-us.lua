@@ -1,7 +1,7 @@
 return {
     descriptions = {
         Back={
-            b_akrys_letter_deck = {
+            b_akyrs_letter_deck = {
                 name = 'Letter Deck',
                 text = { 'Play with {C:red}No Ranks and Suits{}', 'Letters enabled by default', "Play {C:playable}as many{} card as you want per hand" },
             }

@@ -333,8 +333,6 @@ if not (self.is_null) then
     $render
 end
 """
-overwrite = true
-match_indent = true
 
 [[patches]]
 [patches.pattern]

@@ -254,7 +254,7 @@ function Card:get_chip_bonus()
 end
 local getMultBonusHook = Card.get_chip_mult
 function Card:get_chip_mult()
-    local c = getChipBonusHook(self)
+    local c = getMultBonusHook(self)
     
     if self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled then c = c + scrabble_scores[self.ability.aikoyori_letters_stickers] end
     return c

@@ -186,7 +186,7 @@ return {
             },
             letterNotScored = {
                 name = '',
-                text = { 'Allows Words Hands to be formed'},
+                text = { 'Allows Words','to be played'},
             },
         },
             

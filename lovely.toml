@@ -184,6 +184,19 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "card.lua"
+pattern = "            --Draw the main part of the card"
+position = "after"
+payload = """
+        if self.is_null then
+            self.children.front = nil
+        end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
 pattern = "                    self.children.front:draw_shader('negative', nil, self.ARGS.send_to_shader)"
 position = "after"
 payload = """
@@ -212,9 +225,9 @@ position = "after"
 payload = """
 end
 """
-
 overwrite = true
 match_indent = true
+
 
 
 [[patches]]
@@ -304,6 +317,61 @@ position = "after"
 payload = """
         end
         G.GAME.aiko_puzzle_win = nil
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = """   end
+
+    if main_end then 
+        desc_nodes[#desc_nodes+1] = main_end 
+    end"""
+position = "before"
+payload = """    
+    elseif _c.set == 'AikoyoriExtraBases' then
+        if _c.is_null then
+            full_UI_table.name = localize{type = 'name', set = _c.set, key = _c.key, nodes = full_UI_table.name}
+            localize{type = 'other', key = 'aiko_x_akyrs_null', nodes = desc_nodes}
+        end
+        if(G.GAME.letters_mult_enabled) then
+            localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = loc_vars}
+        else
+            if _c.is_null then
+                localize{type = 'descriptions', key = "letterNotScored", set = _c.set, nodes = desc_nodes, vars = loc_vars}
+            else 
+                localize{type = 'descriptions', key = "aiko_x_akyrs_null", set = _c.set, nodes = desc_nodes, vars = loc_vars}
+            end
+        end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = """    return generate_card_ui(self.config.center, nil, loc_vars, card_type, badges, hide_desc, main_start, main_end)"""
+position = "before"
+payload = """
+self.config.center.is_null = self.is_null
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = """        loc_vars = { playing_card = not not self.base.colour, value = self.base.value, suit = self.base.suit, colour = self.base.colour,
+                    nominal_chips = self.base.nominal > 0 and self.base.nominal or nil,
+                    bonus_chips = (self.ability.bonus + (self.ability.perma_bonus or 0)) > 0 and (self.ability.bonus + (self.ability.perma_bonus or 0)) or nil,
+                }   """
+position = "after"
+payload = """
+            if self.is_null then
+                loc_vars.nominal_chips = nil
+            end
 """
 overwrite = true
 match_indent = true

@@ -289,3 +289,72 @@ function Card:is_face(from_boss)
     local c = isFaceHook(self, from_boss)
     return c
 end
+
+function table.aiko_shallow_copy(t)
+    local t2 = {}
+    for k,v in pairs(t) do
+      t2[k] = v
+    end
+    return t2
+  end
+  
+
+local cardGetUIBoxRef = Card.generate_UIBox_ability_table
+
+function Card:generate_UIBox_ability_table()
+    local ret = cardGetUIBoxRef(self)
+    local letter = self.ability.aikoyori_letters_stickers
+    if letter and letter == "#" then
+        letter = "Wild"
+    else 
+        if letter then
+        letter = string.upper(letter)
+        end
+    end
+    if self.is_null then  
+        --print(table_to_string(ret))
+        local newRetTable = table.aiko_shallow_copy(ret)
+        newRetTable.name = {}
+        localize({type = 'name_text', key = 'aiko_x_akyrs_null', set = 'AikoyoriExtraBases', vars={colours={G.C.BLUE}}, nodes = newRetTable.name})
+        newRetTable.name = newRetTable.name[1]
+        newRetTable.main = {}
+        newRetTable.info = {}
+        newRetTable.type = {}
+
+        for i, v in ipairs(ret.info) do
+            if i > 0 then
+                table.insert(newRetTable.info, v)
+            end
+        end
+
+        
+        if(G.GAME.letters_enabled and letter) then
+            generate_card_ui({key = 'letters'..letter, set = 'AikoyoriExtraBases'}, newRetTable)
+        else
+            
+            generate_card_ui({key = 'aiko_x_akyrs_null', set = 'AikoyoriExtraBases'}, newRetTable)
+        end
+        if self.ability.set ~= 'Default' then
+            for i, v in ipairs(ret.main) do            
+                if i > 0 then
+                    table.insert(newRetTable.main, v)
+                end
+            end
+            for i, v in ipairs(ret.type) do
+                if i > 0 then
+                    table.insert(newRetTable.type, v)
+                end
+            end
+        else
+            
+        end
+        
+        
+        ret = newRetTable
+    else
+        if(G.GAME.letters_enabled and letter) then
+            generate_card_ui({key = 'letters'..letter, set = 'AikoyoriExtraBases'}, ret)
+        end
+    end
+    return ret
+end

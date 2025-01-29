@@ -91,42 +91,42 @@ local function replace_char(pos, str, r)
     return str:sub(1, pos-1) .. r .. str:sub(pos+1)
 end
 function check_word(str_arr_in, length)
+    local wild_positions = {}
     local wild_count = 0
-    local word_composite = ""
-    for _, val in ipairs(str_arr_in) do
-        if val == "#" then
+
+    for i = 1, #str_arr_in do
+        if str_arr_in[i] == "#" then
             wild_count = wild_count + 1
+            wild_positions[wild_count] = i
         end
-        word_composite = word_composite..val
     end
-    --print("CHECKING "..word_composite.." WITH "..wild_count)
+
+    -- If no wildcards, check directly
     if wild_count == 0 then
-        if words[word_composite] and #str_arr_in == length then
-            return { valid = true, word = word_composite }
-        else
-            return { valid = false, word = nil }
+        local word_str = table.concat(str_arr_in)
+        return { valid = words[word_str] and #str_arr_in == length, word = words[word_str] and word_str or nil }
+    end
+
+    local function backtrack(index)
+        if index > wild_count then
+            local word_str = table.concat(str_arr_in)
+            if words[word_str] and #word_str == length then
+                return { valid = true, word = word_str }
+            end
+            return nil
         end
+
+        local pos = wild_positions[index]
+        for i = 1, #aiko_alphabets_no_wilds do
+            str_arr_in[pos] = aiko_alphabets_no_wilds[i]
+            local result = backtrack(index + 1)
+            if result then return result end
+        end
+        str_arr_in[pos] = "#"
+        return nil
     end
-    for i, v in ipairs(str_arr_in) do
-        if v == "#" then
-            for k, v2 in ipairs(aiko_alphabets_no_wilds)do
-                local new_arr = {}
-                for m, v3 in ipairs(str_arr_in) do
-                    if i == m then
-                        table.insert(new_arr,v2)
-                    else
-                        table.insert(new_arr,v3)
-                    end
-                end
-                local chk = check_word(new_arr,length)
-                if chk.valid then
-                    return {word = chk.word, valid = true}
-                end
-            end 
-        end 
-    end
-    return { valid = false, word = nil }
-    
+
+    return backtrack(1) or { valid = false, word = nil }
 end
 for i = 3, 31 do
     local exampler = {}
@@ -172,11 +172,31 @@ for i = 3, 31 do
             if #word_hand ~= i then
                 return {}
             end
+            
+            local all_wildcards = true
+            for _, val in ipairs(word_hand) do
+                if val ~= "#" then
+                    all_wildcards = false
+                    break
+                end
+            end
+            if all_wildcards then
+                if (G.STATE == G.STATES.HAND_PLAYED)then  
+                    
+                    G.GAME.aiko_current_word = string.upper(example_words[i-2])
+                    attention_text({
+                        scale = 1.5, text = string.upper(example_words[i-2]), hold = 15, align = 'tm',
+                        major = G.play, offset = {x = 0, y = -1}
+                    })
+                end
+                return { hand }
+            end
             local wordData = check_word(word_hand, i)
             if wordData.valid then
                 if (G.STATE == G.STATES.HAND_PLAYED)then  
+                    G.GAME.aiko_current_word = wordData.word
                     attention_text({
-                        scale = 1.5, text = string.upper(wordData.word), hold = 2, align = 'tm',
+                        scale =  1.5, text = string.upper(wordData.word), hold = 15, align = 'tm',
                         major = G.play, offset = {x = 0, y = -1}
                     })
                 end

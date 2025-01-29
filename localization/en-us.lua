@@ -1,5 +1,8 @@
 return {
     descriptions = {
+        Alphabets = {
+            
+        },
         Back={
             b_akyrs_letter_deck = {
                 name = 'Letter Deck',
@@ -61,6 +64,18 @@ return {
                     "after a hand is played",
                     "{s:0.8}Debuffs itself if it's",
                     "{s:0.8}the sole card"
+                }
+            },
+            j_akyrs_maxwells_notebook = {
+                name = "Maxwell's Notebook",
+                text = { 
+                    "Spelling the name of a card",
+                    "gives you one of that card",
+                    "Spelling enhancements enhance",
+                    "the scored card to the one you spelled",
+                    "{C:inactive}For example, Spelling {C:spectral}'Spectral'",
+                    "{C:inactive}gives you a {C:spectral}Spectral{C:inactive} Card",
+                    "{C:inactive}(Must have room)",
                 }
             },
         },
@@ -198,8 +213,12 @@ return {
         challenge_names={},
         collabs={},
         dictionary={
+            b_akyrs_alphabets="Alphabet Cards",
             k_aikoyoriextrabases = "Extra Base",
-            ph_puzzle_clear = "Puzzle Clear!"
+            k_akyrs_alphabets = "Alphabet",
+            k_akyrs_alphabets_pack = "Alphabet Pack",
+            k_created = "Created!",
+            ph_puzzle_clear = "Puzzle Clear!",
         },
         high_scores={},
         labels={},

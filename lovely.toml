@@ -333,7 +333,12 @@ position = "before"
 payload = """    
     elseif _c.set == 'AikoyoriExtraBases' then
         if _c.is_null then
-            full_UI_table.name = localize{type = 'name', set = _c.set, key = _c.key, nodes = full_UI_table.name}
+        
+            if(G.GAME.letters_mult_enabled) then
+                localize{type = 'descriptions', key = _c.key, set = _c.set, full_UI_table.name, vars = loc_vars}
+            else
+                full_UI_table.name = localize{type = 'name', set = _c.set, key = _c.key, nodes = full_UI_table.name}
+            end
             localize{type = 'other', key = 'aiko_x_akyrs_null', nodes = desc_nodes}
         end
         if(G.GAME.letters_mult_enabled) then

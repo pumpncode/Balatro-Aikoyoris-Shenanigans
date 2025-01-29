@@ -76,6 +76,7 @@ function Game:init_game_object()
     ret.aiko_last_mult = 0
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
+    ret.aiko_current_word = nil
     return ret
 end
 
@@ -212,7 +213,7 @@ function Back:apply_to_run()
                 G.playing_cards = {}
                 for i, letter in pairs(scrabble_letters) do
                     G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                    local front = pseudorandom_element(G.P_CARDS, pseudoseed('marb_fr'))
+                    local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:all_nulls'))
                     local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
                     car.is_null = true
                     G.deck:emplace(car)

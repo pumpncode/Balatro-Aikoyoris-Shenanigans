@@ -304,3 +304,117 @@ SMODS.Joker {
     end,
     blueprint_compat = false,
 }
+
+local function is_valid_pool(name)
+    for _, v in pairs(G.P_CENTER_POOLS) do
+        if v.name then
+            return true
+        end
+    end
+    return false
+end
+
+function string.split(inputstr, sep)
+    if sep == nil then
+        sep = "%s"
+    end
+    local t = {}
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+        table.insert(t, str)
+    end
+    return t
+end
+
+local function is_valid_edition(name)
+    for _, v in pairs(G.P_CENTER_POOLS.Edition) do
+        if v.name == name then
+            return true
+        end
+    end
+    return false
+end
+
+
+local function is_valid_enhancement(name)
+    for _, v in pairs(G.P_CENTER_POOLS.Enhanced) do
+        local first_part = string.split(v.name," ")[1]
+        if first_part == name then
+            return true
+        end
+    end
+    return false
+end
+-- maxwell's notebook
+SMODS.Joker {
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 6,
+        y = 0
+    },
+    key = "maxwells_notebook",
+    rarity = 3,
+    cost = 4,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {  }
+        }
+    end,
+    config = {
+        
+    },
+    calculate = function(self, card, context)
+        if G.GAME.letters_enabled and G.GAME.aiko_current_word then
+            local word = G.GAME.aiko_current_word
+            if not word then return {} end
+            word = string.lower(word)
+            local lowerword = string.lower(word)
+            word = string.gsub(" " .. word, "%W%l", string.upper):sub(2)
+            if word == "Default" then word = nil end
+            if word == "Card" then word = "Default" end
+            if word == "Consumable" then word = "Consumeables" end
+            if word == "Holo" then word = "Holographic" end
+            --print(word)
+            if context.cardarea == G.play and context.individual then
+                if (is_valid_edition(word)) then
+                    context.other_card:set_edition({[lowerword] = true}, false, false)
+                end
+
+                if (is_valid_enhancement(word)) then
+                    
+                    local enhancement_from_name = {}
+                    for i,k in pairs(G.P_CENTERS) do
+                        if(k.set == "Enhanced") then
+                            enhancement_from_name[string.split(k.name," ")[1]] = k
+                        end
+                    end
+                    context.other_card:set_ability(enhancement_from_name[word],nil,true)
+                end
+
+            elseif context.joker_main and word and is_valid_pool(word) then         
+                if (word == "Joker") then
+                        local carder = create_card(word,G.jokers, nil, nil, nil, nil, nil, 'akyrs:maxwell')
+                        G.jokers:emplace(carder)
+                    elseif word == "Default" then
+                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
+                        local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
+                        G.deck:emplace(carder)
+                        table.insert(G.playing_cards, carder)
+                    else
+                        local carder = create_card(word,G.consumeables, nil, nil, nil, nil, nil, 'akyrs:maxwell')
+                        if carder then
+                            G.consumeables:emplace(carder)
+                        end
+                    end
+
+                    G.GAME.consumeable_buffer = 0
+                return {
+                    message = localize {
+                        key = 'k_created',
+                        vars = { word }
+                    }
+                }
+            end
+        end
+    end,
+    blueprint_compat = true,
+}

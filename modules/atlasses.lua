@@ -36,6 +36,13 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+    key = "aikoyoriBoosterPack",
+    path = "aikoyoriBoosterPack.png",
+    px = 71,
+    py = 95
+}
+
+SMODS.Atlas {
     key = "aikoyoriBlindsChips",
     path = "aikoyoriBlindsChips.png",
     px = 34,

@@ -218,6 +218,8 @@ return {
             k_akyrs_alphabets = "Alphabet",
             k_akyrs_alphabets_pack = "Alphabet Pack",
             k_created = "Created!",
+            ph_aiko_beat_puzzle = "Solve this Puzzle",
+            ph_word_puzzle = "Word Puzzle",
             ph_puzzle_clear = "Puzzle Clear!",
         },
         high_scores={},

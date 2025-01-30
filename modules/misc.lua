@@ -1,5 +1,7 @@
 aikoyori_mod_config = SMODS.current_mod.config
 
+aikoyori_mod_config.x_of_a_kind_limit = 100
+
 G.C.PLAYABLE = HEX("ee36ff")
 
 function table_contains(tbl, x)

@@ -14,13 +14,25 @@ SMODS.Blind{
     vars = {},
     set_blind = function(self)
         G.GAME.aiko_puzzle_win = false
+        G.GAME.current_round.advanced_blind = true
         G.GAME.word_todo = aiko_pickRandomInTable(puzzle_words)
         print ("Word is "..G.GAME.word_todo)
         G.E_MANAGER:add_event(
             Event({
-                delay = 1,
+                delay = 10,
                 func = function()
                     ease_background_colour{new_colour = HEX('95df3e'), special_colour = HEX('ffd856'), tertiary_colour = G.C.BLACK, contrast = 3}
+                    
+                    recalculateBlindUI()
+                    return true
+                end
+            })
+        )
+        G.E_MANAGER:add_event(
+            Event({
+                delay = 10,
+                func = function()
+                    recalculateBlindUI()
                     return true
                 end
             })
@@ -30,6 +42,8 @@ SMODS.Blind{
         return G.GAME.letters_enabled or false
     end,
     disable = function(self)
+        G.GAME.current_round.advanced_blind = false
+        recalculateBlindUI()
         
     end,
     defeat = function(self)

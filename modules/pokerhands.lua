@@ -188,6 +188,8 @@ for i = 3, 31 do
                         scale = 1.5, text = string.upper(example_words[i-2]), hold = 15, align = 'tm',
                         major = G.play, offset = {x = 0, y = -1}
                     })
+                    G.GAME.aiko_words_played[G.GAME.aiko_current_word] = true
+                    G.GAME.current_round.aiko_round_played_words[G.GAME.aiko_current_word] = true
                 end
                 return { hand }
             end
@@ -199,6 +201,8 @@ for i = 3, 31 do
                         scale =  1.5, text = string.upper(wordData.word), hold = 15, align = 'tm',
                         major = G.play, offset = {x = 0, y = -1}
                     })
+                    G.GAME.aiko_words_played[wordData.word] = true
+                    G.GAME.current_round.aiko_round_played_words[wordData.word] = true
                 end
                 return {hand}
             else 

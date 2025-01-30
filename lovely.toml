@@ -380,3 +380,33 @@ payload = """
 """
 overwrite = true
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "engine/sprite.lua"
+pattern = """         G.SHADERS[_shader or 'dissolve']:send("shadow",(not not _shadow_height))"""
+position = "after"
+payload = """
+    if _send and _send.red then
+        G.SHADERS[_shader or 'dissolve']:send("red",(_send.red))
+    end
+    if _send and _send.green then
+        G.SHADERS[_shader or 'dissolve']:send("green",(_send.green))
+    end
+    if _send and _send.blue then
+        G.SHADERS[_shader or 'dissolve']:send("blue",(_send.blue))
+    end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """        {n=G.UIT.R, config={align = "cm",padding = 0.15}, nodes={"""
+position = "at"
+payload = """
+        {n=G.UIT.R, config={align = "cm",padding = 0.15}, nodes = (G.GAME.current_round.advanced_blind) and THOUGHT_BOSS_BLIND(G, stake_sprite) or {
+"""
+overwrite = true
+match_indent = true

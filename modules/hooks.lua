@@ -36,9 +36,12 @@ function aiko_mod_startup(self)
         self.aikoyori_letters_stickers = {}
     end
     for i, v in ipairs(aiko_alphabets) do
-        print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
+        --print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
         self.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS["akyrs_lettersStickers"], {x =(i - 1) % 10 ,y =  math.floor((i-1) / 10)})
     end
+    self.aikoyori_letters_stickers["correct"] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS["akyrs_lettersStickers"], {x =7 ,y = 2})
+    self.aikoyori_letters_stickers["misalign"] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS["akyrs_lettersStickers"], {x =8 ,y =  2})
+    self.aikoyori_letters_stickers["incorrect"] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS["akyrs_lettersStickers"], {x =9,y =  2})
 end
 
 
@@ -77,16 +80,58 @@ function Game:init_game_object()
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
     ret.aiko_current_word = nil
+    ret.aiko_words_played = {}
+    ret.current_round.aiko_round_played_words = {}
+    ret.current_round.aiko_round_correct_letter = {}
+    ret.current_round.aiko_round_misaligned_letter = {}
+    ret.current_round.aiko_round_incorrect_letter = {}
+    ret.current_round.advanced_blind = false
     return ret
 end
 
+function SMODS.current_mod.reset_game_globals(run_start)
+    G.GAME.current_round.aiko_round_played_words = {}
+    G.GAME.current_round.aiko_round_correct_letter = {}
+    G.GAME.current_round.aiko_round_misaligned_letter = {}
+    G.GAME.current_round.aiko_round_incorrect_letter = {}
+    G.GAME.current_round.advanced_blind = false
+end
+
+
+SMODS.Shader{
+    key = "tint",
+    path = "tint.fs",
+}
+
+
+
 function aikoyori_draw_extras(card, layer)
     --print("DRAWING EXTRAS")
+    
+    
     if G.aikoyori_letters_stickers and G.GAME.letters_enabled then
         if card.ability.aikoyori_letters_stickers then
             local movement_mod = 0.05*math.sin(1.1*(G.TIMERS.REAL + card.aiko_draw_delay)) - 0.07
             local rot_mod = 0.02*math.sin(0.72*(G.TIMERS.REAL + card.aiko_draw_delay)) + 0.03
             local drag_mod = card.velocity
+            
+            if not card then return color end
+            if G.GAME.current_round.aiko_round_correct_letter and G.GAME.current_round.aiko_round_correct_letter[card.ability.aikoyori_letters_stickers] then
+                G.aikoyori_letters_stickers["correct"].role.draw_major = card
+                G.aikoyori_letters_stickers["correct"]:draw_shader('dissolve', 0, nil, nil, card.children.center, 0.1, rot_mod - drag_mod.r, drag_mod.x * -3, movement_mod - drag_mod.y * -3)
+                G.aikoyori_letters_stickers["correct"]:draw_shader('dissolve', nil, nil, nil, card.children.center, nil, rot_mod - drag_mod.r, drag_mod.x * -3, -0.02 + movement_mod*0.9 - drag_mod.y * -3, nil)
+            end
+            if G.GAME.current_round.aiko_round_misaligned_letter and G.GAME.current_round.aiko_round_misaligned_letter[card.ability.aikoyori_letters_stickers] then
+                G.aikoyori_letters_stickers["misalign"].role.draw_major = card
+                G.aikoyori_letters_stickers["misalign"]:draw_shader('dissolve', 0, nil, nil, card.children.center, 0.1, rot_mod - drag_mod.r, drag_mod.x * -3, movement_mod - drag_mod.y * -3)
+                G.aikoyori_letters_stickers["misalign"]:draw_shader('dissolve', nil, nil, nil, card.children.center, nil, rot_mod - drag_mod.r, drag_mod.x * -3, -0.02 + movement_mod*0.9 - drag_mod.y * -3, nil)
+            end
+            if G.GAME.current_round.aiko_round_incorrect_letter and G.GAME.current_round.aiko_round_incorrect_letter[card.ability.aikoyori_letters_stickers] then
+                G.aikoyori_letters_stickers["incorrect"].role.draw_major = card
+                G.aikoyori_letters_stickers["incorrect"]:draw_shader('dissolve', 0, nil, nil, card.children.center, 0.1, rot_mod - drag_mod.r, drag_mod.x * -3, movement_mod - drag_mod.y * -3)
+                G.aikoyori_letters_stickers["incorrect"]:draw_shader('dissolve', nil, nil, nil, card.children.center, nil, rot_mod - drag_mod.r, drag_mod.x * -3, -0.02 + movement_mod*0.9 - drag_mod.y * -3, nil)
+            end
+            local send = card.ARGS.send_to_shader
             
             G.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers].role.draw_major = card
             G.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers]:draw_shader('dissolve', 0, nil, nil, card.children.center, 0.1, rot_mod - drag_mod.r, drag_mod.x * -3, movement_mod - drag_mod.y * -3)
@@ -358,4 +403,20 @@ function Card:generate_UIBox_ability_table()
         end
     end
     return ret
+end
+
+local eval_hook = eval_card
+function eval_card(card, context)
+    local ret = eval_hook(card, context)
+    G.GAME.aiko_current_word = nil
+    return ret
+end
+
+
+function recalculateBlindUI()
+    if G.HUD_blind then
+        G.HUD_blind.definition = create_UIBox_HUD_blind()
+        G.HUD_blind:set_parent_child(G.HUD_blind.definition, nil)
+        G.HUD_blind:recalculate()
+    end
 end

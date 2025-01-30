@@ -344,7 +344,7 @@ payload = """
         if(G.GAME.letters_mult_enabled) then
             localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = loc_vars}
         else
-            if _c.is_null then
+            if not _c.is_null then
                 localize{type = 'descriptions', key = "letterNotScored", set = _c.set, nodes = desc_nodes, vars = loc_vars}
             else 
                 localize{type = 'descriptions', key = "aiko_x_akyrs_null", set = _c.set, nodes = desc_nodes, vars = loc_vars}

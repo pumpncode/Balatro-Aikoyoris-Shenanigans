@@ -35,17 +35,18 @@ for k, v in ipairs(aiko_alphabets_no_wilds) do
         pos = { x = math.fmod(k-1,20), y = math.floor((k-1)/20) } ,
         loc_txt = {
             name = upper.." for "..word_letter[k],
-            text = { "Convert all selected cards'","letter to {C:red}#1#{}" },
+            text = { "Convert all selected cards'","letter to {C:red}#1#{}","{C:inactive,s:0.75}(up to #2# cards){}" },
         },
         loc_vars = function(self, info_queue, card)
+            info_queue[#info_queue+1] = {key = 'letters'..string.upper(card.ability.extra.letter), set = 'AikoyoriExtraBases'}
             return {
                 vars = {
-                    card.ability.letter,
-                    card.ability.max_selected,
+                    string.upper(card.ability.extra.letter),
+                    card.ability.extra.max_selected,
                 },
             }
         end,
-        config = {extra = {letter = v, max_selected = 9999999}},
+        config = {extra = {letter = v, max_selected = 999999}},
         
         can_use = function(self, card)
             return #G.hand.highlighted <= card.ability.extra.max_selected and #G.hand.highlighted > 0
@@ -82,10 +83,11 @@ SMODS.Consumable{
         text = { "Convert up to #2# selected card's","letter to {C:red}Wild (#1#){}" },
     },
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = {key = 'lettersWild', set = 'AikoyoriExtraBases'}
         return {
             vars = {
-                card.ability.letter,
-                card.ability.max_selected,
+                string.upper(card.ability.extra.letter),
+                card.ability.extra.max_selected,
             },
         }
     end,

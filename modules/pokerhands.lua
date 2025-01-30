@@ -181,9 +181,9 @@ for i = 3, 31 do
                 end
             end
             if all_wildcards then
+                G.GAME.aiko_current_word = string.upper(example_words[i-2])
                 if (G.STATE == G.STATES.HAND_PLAYED)then  
                     
-                    G.GAME.aiko_current_word = string.upper(example_words[i-2])
                     attention_text({
                         scale = 1.5, text = string.upper(example_words[i-2]), hold = 15, align = 'tm',
                         major = G.play, offset = {x = 0, y = -1}
@@ -195,8 +195,8 @@ for i = 3, 31 do
             end
             local wordData = check_word(word_hand, i)
             if wordData.valid then
+                G.GAME.aiko_current_word = wordData.word
                 if (G.STATE == G.STATES.HAND_PLAYED)then  
-                    G.GAME.aiko_current_word = wordData.word
                     attention_text({
                         scale =  1.5, text = string.upper(wordData.word), hold = 15, align = 'tm',
                         major = G.play, offset = {x = 0, y = -1}

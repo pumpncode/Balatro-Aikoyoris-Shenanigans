@@ -1,7 +1,49 @@
 
 assert(SMODS.load_file("./modules/misc.lua"))() 
 
+local function numberToColor(num)
+  if num == 1 then
+    return G.C.GREEN
+  elseif num == 2 then
+    return G.C.ORANGE
+  elseif num == 3 then
+    return G.C.GREY
+  end
+  return G.C.TRANSPARENT_DARK
+end
+
 SMODS.current_mod.config_tab = function()
+
+  local nodesnshit = {}
+  for a,x in ipairs(G.GAME.current_round.aiko_round_played_words) do
+    local subnoteforrow = {}
+    for b,y in ipairs(x) do
+      -- 1 is letter and [2] is stats
+      table.insert(subnoteforrow,{
+        n = G.UIT.C,
+        config = {padding = 0.1,w=3,h=1,colour = numberToColor(y[2])},
+        nodes = {
+          {
+            n = G.UIT.T,
+            config = {
+              text = y[1],
+              colour = G.C.WHITE,
+              scale = 0.5
+            }
+          }
+        }
+      })
+    end
+    table.insert(
+      nodesnshit,
+      {
+        n = G.UIT.R,
+        config = {padding = 0.0,w=3,h=1},
+        nodes = subnoteforrow
+
+      }
+    )
+  end
 	return {n = G.UIT.ROOT, config = {
         align = "cm",
         minw = 4,
@@ -9,44 +51,7 @@ SMODS.current_mod.config_tab = function()
         colour = G.C.UI.TRANSPARENT_DARK, 
         r = 0.1,
         padding = 0.1
-	}, nodes = {
-        {
-            n = G.UIT.C, config = {
-
-                minw = 2,
-                minh = 0.6,
-                padding = 0.1,
-            }, nodes = {
-                {
-                    n = G.UIT.C, 
-                    config = {
-                        w = 2,
-                        h = 0.6,
-                        padding = 0.1,
-                    },
-                    nodes = {
-                        
-                        {
-                            n = G.UIT.T,
-                            config = {
-                                text = "X of a Kind Limit",
-                                colour = G.C.WHITE,
-                                scale = 0.5
-                            }
-                        }
-                    }
-                }
-                ,
-                create_text_input({prompt_text = '100', extended_corpus = true, ref_table = 
-                    aikoyori_mod_config
-                , ref_value = 'x_of_a_kind_limit', text_scale = 0.5, w = 2, h = 0.6,
-                onUpdate = function(val) 
-                    aikoyori_mod_config.x_of_a_kind_limit = val
-                end
-                }),
-            }
-        }
-	}
+	}, nodes = nodesnshit
 }
 end
 
@@ -71,4 +76,20 @@ function THOUGHT_BOSS_BLIND(G, stake_sprite)
           }},
         }},
       }
+end
+function THOUGHT_BOSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choice) 
+    return {
+      {n=G.UIT.R, config={align = "cm", maxw = 3}, nodes={
+        {n=G.UIT.T, config={text = localize('ph_aiko_beat_puzzle'), scale = 0.3, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.WHITE, shadow = not disabled}}
+      }},
+      {n=G.UIT.R, config={align = "cm", minh = 0.6, maxw=2}, nodes={
+        {n=G.UIT.O, config={w=0.5,h=0.5, colour = G.C.BLUE, object = stake_sprite, hover = true, can_collide = false}},
+        {n=G.UIT.B, config={h=0.1,w=0.1}},
+        {n=G.UIT.T, config={text = localize('ph_word_puzzle'), scale = score_number_scale(0.9, blind_amt), colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.RED, shadow =  not disabled}}
+      }},
+      _reward and {n=G.UIT.R, config={align = "cm"}, nodes={
+        {n=G.UIT.T, config={text = localize('ph_blind_reward'), scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.WHITE, shadow = not disabled}},
+        {n=G.UIT.T, config={text = string.rep(localize("$"), blind_choice.config.dollars)..'+', scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.MONEY, shadow = not disabled}}
+      }} or nil,
+    }
 end

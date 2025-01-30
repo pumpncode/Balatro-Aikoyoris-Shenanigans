@@ -103,6 +103,15 @@ SMODS.Shader{
     path = "tint.fs",
 }
 
+local getNominalHook = Card.get_nominal
+function Card:get_nominal(mod)
+    if self.is_null then
+        
+        return -10-aiko_alphabets_to_num[self.ability.aikoyori_letters_stickers]
+    end
+    local ret = getNominalHook(self, mod)
+    return ret
+end
 
 
 function aikoyori_draw_extras(card, layer)
@@ -120,13 +129,11 @@ function aikoyori_draw_extras(card, layer)
                 G.aikoyori_letters_stickers["correct"].role.draw_major = card
                 G.aikoyori_letters_stickers["correct"]:draw_shader('dissolve', 0, nil, nil, card.children.center, 0.1, rot_mod - drag_mod.r, drag_mod.x * -3, movement_mod - drag_mod.y * -3)
                 G.aikoyori_letters_stickers["correct"]:draw_shader('dissolve', nil, nil, nil, card.children.center, nil, rot_mod - drag_mod.r, drag_mod.x * -3, -0.02 + movement_mod*0.9 - drag_mod.y * -3, nil)
-            end
-            if G.GAME.current_round.aiko_round_misaligned_letter and G.GAME.current_round.aiko_round_misaligned_letter[card.ability.aikoyori_letters_stickers] then
+            elseif G.GAME.current_round.aiko_round_misaligned_letter and G.GAME.current_round.aiko_round_misaligned_letter[card.ability.aikoyori_letters_stickers] then
                 G.aikoyori_letters_stickers["misalign"].role.draw_major = card
                 G.aikoyori_letters_stickers["misalign"]:draw_shader('dissolve', 0, nil, nil, card.children.center, 0.1, rot_mod - drag_mod.r, drag_mod.x * -3, movement_mod - drag_mod.y * -3)
                 G.aikoyori_letters_stickers["misalign"]:draw_shader('dissolve', nil, nil, nil, card.children.center, nil, rot_mod - drag_mod.r, drag_mod.x * -3, -0.02 + movement_mod*0.9 - drag_mod.y * -3, nil)
-            end
-            if G.GAME.current_round.aiko_round_incorrect_letter and G.GAME.current_round.aiko_round_incorrect_letter[card.ability.aikoyori_letters_stickers] then
+            elseif G.GAME.current_round.aiko_round_incorrect_letter and G.GAME.current_round.aiko_round_incorrect_letter[card.ability.aikoyori_letters_stickers] then
                 G.aikoyori_letters_stickers["incorrect"].role.draw_major = card
                 G.aikoyori_letters_stickers["incorrect"]:draw_shader('dissolve', 0, nil, nil, card.children.center, 0.1, rot_mod - drag_mod.r, drag_mod.x * -3, movement_mod - drag_mod.y * -3)
                 G.aikoyori_letters_stickers["incorrect"]:draw_shader('dissolve', nil, nil, nil, card.children.center, nil, rot_mod - drag_mod.r, drag_mod.x * -3, -0.02 + movement_mod*0.9 - drag_mod.y * -3, nil)
@@ -321,11 +328,17 @@ function Card:is_suit(suit, bypass_debuff, flush_calc)
     return c
 end
 
-
 local getIDHook = Card.get_id
 function Card:get_id()
-    if self.is_null then return -math.random(100,1000000) end
-    local c = getIDHook(self, suit, bypass_debuff, flush_calc)
+    if self.is_null then 
+        if self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled then
+            --print(self.ability.aikoyori_letters_stickers)
+            return -10-aiko_alphabets_to_num[self.ability.aikoyori_letters_stickers]
+        else
+            return -math.random(100,1000000) 
+        end
+    end
+    local c = getIDHook(self)
     return c
 end
 
@@ -419,4 +432,13 @@ function recalculateBlindUI()
         G.HUD_blind:set_parent_child(G.HUD_blind.definition, nil)
         G.HUD_blind:recalculate()
     end
+end
+
+
+local cashOutHook = G.FUNCS.cash_out
+G.FUNCS.cash_out = function (e)
+    local ret = cashOutHook(e)
+    G.GAME.aiko_puzzle_win = nil
+    G.GAME.current_round.advanced_blind = false
+    return ret
 end

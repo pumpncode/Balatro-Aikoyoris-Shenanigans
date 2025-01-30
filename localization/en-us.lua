@@ -15,7 +15,7 @@ return {
                 text = {
                     "Solving 5-letter puzzle and Win.",
                     "Start with at least 6 hands",
-                    "<Doesn't do anything just yet>",
+                    "Check Mod Config for Table",
                 }
             },
         },
@@ -218,7 +218,7 @@ return {
             k_akyrs_alphabets = "Alphabet",
             k_akyrs_alphabets_pack = "Alphabet Pack",
             k_created = "Created!",
-            ph_aiko_beat_puzzle = "Solve this Puzzle",
+            ph_aiko_beat_puzzle = "Solve the following",
             ph_word_puzzle = "Word Puzzle",
             ph_puzzle_clear = "Puzzle Clear!",
         },

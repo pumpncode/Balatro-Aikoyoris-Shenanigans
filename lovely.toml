@@ -246,14 +246,59 @@ end
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = """            if G.GAME.chips - G.GAME.blind.chips >= 0 then
+pattern = """            
+            if G.GAME.chips - G.GAME.blind.chips >= 0 then
                 game_over = false
             end
 """
 position = "after"
 payload = """
-            if G.GAME.aiko_puzzle_win then
-                game_over = false
+            if G.GAME.current_round.advanced_blind then
+                if G.GAME.aiko_puzzle_win then
+                    game_over = false
+                else
+                    game_over = true
+                end
+            end
+"""
+overwrite = true
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """
+        if G.GAME.chips - G.GAME.blind.chips >= 0 or G.GAME.current_round.hands_left < 1 then
+            G.STATE = G.STATES.NEW_ROUND
+        else
+            G.STATE = G.STATES.DRAW_TO_HAND
+        end
+"""
+position = "before"
+payload = """
+            if not G.GAME.current_round.advanced_blind then
+"""
+overwrite = true
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """
+        if G.GAME.chips - G.GAME.blind.chips >= 0 or G.GAME.current_round.hands_left < 1 then
+            G.STATE = G.STATES.NEW_ROUND
+        else
+            G.STATE = G.STATES.DRAW_TO_HAND
+        end
+"""
+position = "after"
+payload = """
+            else
+                if G.GAME.aiko_puzzle_win or G.GAME.current_round.hands_left < 1 then
+                    G.STATE = G.STATES.NEW_ROUND
+                else
+                    G.STATE = G.STATES.DRAW_TO_HAND
+                end
             end
 """
 overwrite = true
@@ -282,9 +327,8 @@ pattern = """                    table.insert(left_text,
 position = "before"
 payload = """
             if G.GAME.aiko_puzzle_win then
-                table.insert(left_text,                  
-                config.saved and 
-                {n=G.UIT.C, config={padding = 0.05, align = 'cm'}, nodes={
+                table.insert(left_text,
+                {n=G.UIT.C, config={padding = 0.05, align = 'cm', minw = 4}, nodes={
                     {n=G.UIT.R, config={align = 'cm'}, nodes={
                         {n=G.UIT.O, config={object = DynaText({string = {' '..localize('ph_puzzle_clear')..' '}, colours = {G.C.FILTER}, shadow = true, pop_in = 0, scale = 0.5*scale, silent = true})}}
                     }}
@@ -316,7 +360,6 @@ pattern = """                    table.insert(left_text,
 position = "after"
 payload = """
         end
-        G.GAME.aiko_puzzle_win = nil
 """
 overwrite = true
 match_indent = true
@@ -408,5 +451,14 @@ position = "at"
 payload = """
         {n=G.UIT.R, config={align = "cm",padding = 0.15}, nodes = (G.GAME.current_round.advanced_blind) and THOUGHT_BOSS_BLIND(G, stake_sprite) or {
 """
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """            {n=G.UIT.R, config={align = "cm",r = 0.1, padding = 0.05, minw = 3.1, colour = G.C.BLACK, emboss = 0.05}, nodes={"""
+position = "at"
+payload = """            {n=G.UIT.R, config={align = "cm",r = 0.1, padding = 0.05, minw = 3.1, colour = G.C.BLACK, emboss = 0.05}, nodes= (blind_choice.config.debuff.special_blind) and THOUGHT_BOSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choice) or {"""
 overwrite = true
 match_indent = true

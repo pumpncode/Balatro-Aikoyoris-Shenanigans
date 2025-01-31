@@ -153,3 +153,11 @@ function table_to_string_depth(tables, depth)
     end
     return strRet
 end
+
+function getSpecialBossBlindText(key)
+    if (key == "bl_akyrs_the_thought") then
+        return {localize("ph_aiko_beat_puzzle"),localize("ph_word_puzzle")}
+    else
+        return {localize("ph_akyrs_unknown"),localize("ph_akyrs_unknown")}
+    end
+end

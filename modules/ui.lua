@@ -55,17 +55,18 @@ SMODS.current_mod.config_tab = function()
 }
 end
 
-function THOUGHT_BOSS_BLIND(G, stake_sprite) 
+function SPECIAL_BOSSS_BLIND(G, stake_sprite) 
+  local blindloc = getSpecialBossBlindText((G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind) and G.GAME.blind.config.blind.key or "nu")
     return {
         {n=G.UIT.O, config={object = G.GAME.blind, draw_layer = 1}},
         {n=G.UIT.C, config={align = "cm",r = 0.1, padding = 0.05, emboss = 0.05, minw = 2.9, colour = G.C.BLACK}, nodes={
           {n=G.UIT.R, config={align = "cm", maxw = 2.8}, nodes={
-            {n=G.UIT.T, config={text = localize('ph_aiko_beat_puzzle'), scale = 0.3, colour = G.C.WHITE, shadow = true}}
+            {n=G.UIT.T, config={text = blindloc[1], scale = 0.3, colour = G.C.WHITE, shadow = true}}
           }},
           {n=G.UIT.R, config={align = "cm", minh = 0.6, maxw=2.5}, nodes={
             {n=G.UIT.O, config={w=0.5,h=0.5, colour = G.C.BLUE, object = stake_sprite, hover = true, can_collide = false}},
             {n=G.UIT.B, config={h=0.1,w=0.1}},
-            {n=G.UIT.T, config={ref_table = G.GAME.blind, text = localize('ph_word_puzzle'), scale = 0.5, colour = G.C.RED, shadow = true}}
+            {n=G.UIT.T, config={ref_table = G.GAME.blind, text = blindloc[2], scale = 0.5, colour = G.C.RED, shadow = true}}
           }},
           {n=G.UIT.R, config={align = "cm", maxh = 0, maxw=0}, nodes={
             {n=G.UIT.T, config={ref_table = G.GAME.blind, scale = 0, colour = G.C.RED, shadow = true, id = 'HUD_blind_count'}}
@@ -77,15 +78,17 @@ function THOUGHT_BOSS_BLIND(G, stake_sprite)
         }},
       }
 end
-function THOUGHT_BOSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choice) 
+function SPECIAL_BOSSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choice) 
+    --print(table_to_string_depth(blind_choice.config,1))
+    local blindloc = getSpecialBossBlindText((blind_choice.config and blind_choice.config.key ) and blind_choice.config.key or "nu")
     return {
-      {n=G.UIT.R, config={align = "cm", maxw = 3}, nodes={
-        {n=G.UIT.T, config={text = localize('ph_aiko_beat_puzzle'), scale = 0.3, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.WHITE, shadow = not disabled}}
+      {n=G.UIT.R, config={align = "cm", maxw = 2}, nodes={
+        {n=G.UIT.T, config={text = blindloc[1], scale = 0.3, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.WHITE, shadow = not disabled}}
       }},
       {n=G.UIT.R, config={align = "cm", minh = 0.6, maxw=2}, nodes={
         {n=G.UIT.O, config={w=0.5,h=0.5, colour = G.C.BLUE, object = stake_sprite, hover = true, can_collide = false}},
         {n=G.UIT.B, config={h=0.1,w=0.1}},
-        {n=G.UIT.T, config={text = localize('ph_word_puzzle'), scale = score_number_scale(0.9, blind_amt), colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.RED, shadow =  not disabled}}
+        {n=G.UIT.T, config={text = blindloc[2], scale=0.9, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.RED, shadow =  not disabled}}
       }},
       _reward and {n=G.UIT.R, config={align = "cm"}, nodes={
         {n=G.UIT.T, config={text = localize('ph_blind_reward'), scale = 0.35, colour = disabled and G.C.UI.TEXT_INACTIVE or G.C.WHITE, shadow = not disabled}},

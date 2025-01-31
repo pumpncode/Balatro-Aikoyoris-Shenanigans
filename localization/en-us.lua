@@ -79,7 +79,14 @@ return {
                 }
             },
         },
-        Other={},
+        Other={
+            akyrs_self_destructs={
+                name="Self Destructs",
+                text={
+                    "{C:red}Self-Destructs{} at ",
+                    "the end of the round",
+                },
+            },},
         Planet={},
         Spectral={},
         Stake={},
@@ -221,9 +228,12 @@ return {
             ph_aiko_beat_puzzle = "Solve the following",
             ph_word_puzzle = "Word Puzzle",
             ph_puzzle_clear = "Puzzle Clear!",
+            ph_akyrs_unknown = "???",
         },
         high_scores={},
-        labels={},
+        labels={
+            akyrs_self_destructs="Self Destructs",
+        },
         poker_hand_descriptions={},
         poker_hands={},
         quips={},

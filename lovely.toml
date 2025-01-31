@@ -449,7 +449,7 @@ target = "functions/UI_definitions.lua"
 pattern = """        {n=G.UIT.R, config={align = "cm",padding = 0.15}, nodes={"""
 position = "at"
 payload = """
-        {n=G.UIT.R, config={align = "cm",padding = 0.15}, nodes = (G.GAME.current_round.advanced_blind) and THOUGHT_BOSS_BLIND(G, stake_sprite) or {
+        {n=G.UIT.R, config={align = "cm",padding = 0.15}, nodes = (G.GAME.current_round.advanced_blind) and SPECIAL_BOSSS_BLIND(G, stake_sprite) or {
 """
 overwrite = true
 match_indent = true
@@ -459,6 +459,6 @@ match_indent = true
 target = "functions/UI_definitions.lua"
 pattern = """            {n=G.UIT.R, config={align = "cm",r = 0.1, padding = 0.05, minw = 3.1, colour = G.C.BLACK, emboss = 0.05}, nodes={"""
 position = "at"
-payload = """            {n=G.UIT.R, config={align = "cm",r = 0.1, padding = 0.05, minw = 3.1, colour = G.C.BLACK, emboss = 0.05}, nodes= (blind_choice.config.debuff.special_blind) and THOUGHT_BOSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choice) or {"""
+payload = """            {n=G.UIT.R, config={align = "cm",r = 0.1, padding = 0.05, minw = 3.1, colour = G.C.BLACK, emboss = 0.05}, nodes= (blind_choice.config.debuff.special_blind) and SPECIAL_BOSSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choice) or {"""
 overwrite = true
 match_indent = true

@@ -225,7 +225,7 @@ local cardReleaseRecalcHook = Card.stop_drag
 function Card:stop_drag()
     local c = cardReleaseRecalcHook(self)
     --print("CARD RELEASED!!!!")
-    if G.hand and self.area then
+    if G.hand and self.area and self.area == G.hand then
         self.area:parse_highlighted()
     end
     return c
@@ -248,6 +248,9 @@ function Controller:key_press_update(key, dt)
             if _card.playing_card then
                 _card:set_letters(alphabet_delta(_card.ability.aikoyori_letters_stickers, 1))
             end
+        end
+        if key == ";" then
+            _card.ability.akyrs_self_destructs = not _card.ability.akyrs_self_destructs
         end
     end
     return c
@@ -428,6 +431,7 @@ end
 
 function recalculateBlindUI()
     if G.HUD_blind then
+        G.HUD_blind.definition = nil
         G.HUD_blind.definition = create_UIBox_HUD_blind()
         G.HUD_blind:set_parent_child(G.HUD_blind.definition, nil)
         G.HUD_blind:recalculate()
@@ -440,5 +444,21 @@ G.FUNCS.cash_out = function (e)
     local ret = cashOutHook(e)
     G.GAME.aiko_puzzle_win = nil
     G.GAME.current_round.advanced_blind = false
+    return ret
+end
+
+local startRunHook = Game.start_run
+function Game:start_run(args)
+    local ret = startRunHook(self,args)
+    recalculateBlindUI()
+    return ret 
+end
+
+local cardSetCostHook = Card.set_cost
+function Card:set_cost()
+    local ret = cardSetCostHook(self)
+    if self.ability.akyrs_self_destructs then
+        self.sell_cost = -1
+    end
     return ret
 end

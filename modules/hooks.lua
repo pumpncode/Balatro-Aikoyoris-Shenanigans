@@ -84,6 +84,8 @@ function Game:init_game_object()
     ret.current_round.aiko_round_correct_letter = {}
     ret.current_round.aiko_round_misaligned_letter = {}
     ret.current_round.aiko_round_incorrect_letter = {}
+    ret.current_round.discards_sub = 0
+    ret.current_round.hands_sub = 0
     ret.current_round.advanced_blind = false
     return ret
 end
@@ -93,6 +95,8 @@ function SMODS.current_mod.reset_game_globals(run_start)
     G.GAME.current_round.aiko_round_correct_letter = {}
     G.GAME.current_round.aiko_round_misaligned_letter = {}
     G.GAME.current_round.aiko_round_incorrect_letter = {}
+    G.GAME.current_round.discards_sub = 0
+    G.GAME.current_round.hands_sub = 0
     G.GAME.current_round.advanced_blind = false
 end
 
@@ -441,6 +445,16 @@ function recalculateBlindUI()
 end
 
 
+function recalculateHUDUI()
+    if G.HUD then
+        G.HUD.definition = nil
+        G.HUD.definition = create_UIBox_HUD()
+        G.HUD:set_parent_child(G.HUD.definition, nil)
+        G.HUD:recalculate()
+    end
+end
+
+
 local cashOutHook = G.FUNCS.cash_out
 G.FUNCS.cash_out = function (e)
     local ret = cashOutHook(e)
@@ -453,6 +467,7 @@ local startRunHook = Game.start_run
 function Game:start_run(args)
     local ret = startRunHook(self,args)
     recalculateBlindUI()
+    recalculateHUDUI()
     return ret 
 end
 

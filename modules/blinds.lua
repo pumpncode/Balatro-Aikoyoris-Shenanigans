@@ -22,9 +22,12 @@ SMODS.Blind{
         
         G.hand:change_size(3)
         G.FUNCS.draw_from_deck_to_hand(3)
+        
+        G.GAME.current_round.discards_sub = G.GAME.current_round.discards_left + 1
         self.discards_sub = G.GAME.current_round.discards_left + 1 -- math.max(G.GAME.current_round.discards_left, 0)
         ease_discard(-self.discards_sub)
         
+        G.GAME.current_round.hand_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,6)
         self.hands_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,6)
         ease_hands_played(-self.hands_sub)
         
@@ -44,6 +47,7 @@ SMODS.Blind{
                 delay = 10,
                 func = function()
                     recalculateBlindUI()
+                    recalculateHUDUI()
                     return true
                 end
             })
@@ -59,10 +63,11 @@ SMODS.Blind{
         G.GAME.current_round.advanced_blind = false
         G.hand:change_size(-3)
         
-        ease_hands_played(self.hands_sub)
-        ease_discard(self.discards_sub)
+        ease_hands_played(self.hands_sub or G.GAME.current_round.hand_sub)
+        ease_discard(self.discards_sub or G.GAME.current_round.discards_sub)
         
         recalculateBlindUI()
+        recalculateHUDUI()
         
     end,
     defeat = function(self)

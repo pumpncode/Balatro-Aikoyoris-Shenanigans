@@ -96,3 +96,12 @@ function SPECIAL_BOSSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choi
       }} or nil,
     }
 end
+
+function INFINITE_DISCARD_UI(temp_col2,scale) 
+  return {
+    {n=G.UIT.R, config={align = "cm", r = 0.1, minw = 1.2, minh=0.7, colour = temp_col2}, nodes={
+      {n=G.UIT.O, config={object = DynaText({string = {{string = ""}}, font = G.LANGUAGES['en-us'].font, colours = {HEX("00000000")},shadow = true, rotate = true, scale = 2*scale}),id = 'discard_UI_count'}},
+      {n=G.UIT.T, config={text = "8",hover = true,shadow=true, colour = G.C.RED,vert = true, scale = 2*scale}},
+    }}
+  }
+end

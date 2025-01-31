@@ -270,6 +270,7 @@ function Back:apply_to_run()
                     local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:all_nulls'))
                     local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
                     car.is_null = true
+                    car:set_letters(letter)
                     G.deck:emplace(car)
                     table.insert(G.playing_cards, car)
                 end
@@ -458,6 +459,34 @@ function Card:set_cost()
     local ret = cardSetCostHook(self)
     if self.ability.akyrs_self_destructs then
         self.sell_cost = -1
+    end
+    return ret
+end
+
+local discardAbilityHook = G.FUNCS.can_discard
+G.FUNCS.can_discard = function(e)
+    local ret = discardAbilityHook(e)
+    if #G.hand.highlighted > 0 and G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.debuff and G.GAME.blind.config.blind.debuff.infinite_discards then
+        e.config.colour = G.C.RED
+        e.config.button = 'discard_cards_from_highlighted'
+    end
+  end
+  
+
+
+local endRoundHook = end_round
+function end_round()
+    local ret = endRoundHook()
+    for i,card in ipairs(G.consumeables.cards) do
+        if card.ability.akyrs_self_destructs then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    card:start_dissolve({G.C.RED}, nil, 1.6)
+                    return true
+                end,
+                delay = 0.5,
+            }), 'base')
+        end
     end
     return ret
 end

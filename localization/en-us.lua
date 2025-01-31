@@ -14,8 +14,8 @@ return {
                 name = "The Thought",
                 text = {
                     "Solving 5-letter puzzle and Win.",
-                    "Start with at least 10 hands",
-                    "Check Mod Config for Table",
+                    "Start with at least 6 hands and Infinite Discards.",
+                    "Discarded & Played cards Go Back to the Deck.",
                 }
             },
         },

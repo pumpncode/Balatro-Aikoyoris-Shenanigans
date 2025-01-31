@@ -11,7 +11,8 @@ SMODS.Blind{
     boss = {min = 1, max = 10},
     pos = { x = 0, y = 0 },
     debuff = {
-        special_blind = true
+        special_blind = true,
+        infinite_discards = true,
     },
     vars = {},
     set_blind = function(self)
@@ -21,11 +22,10 @@ SMODS.Blind{
         
         G.hand:change_size(3)
         G.FUNCS.draw_from_deck_to_hand(3)
+        self.discards_sub = G.GAME.current_round.discards_left + 1 -- math.max(G.GAME.current_round.discards_left, 0)
+        ease_discard(-self.discards_sub)
         
-        --self.discards_sub = G.GAME.current_round.discards_left --math.max(G.GAME.current_round.discards_left,0)
-        --ease_discard(-self.discards_sub)
-        
-        self.hands_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,10)
+        self.hands_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,6)
         ease_hands_played(-self.hands_sub)
         
         --print ("Word is "..G.GAME.word_todo)
@@ -48,6 +48,9 @@ SMODS.Blind{
                 end
             })
         )
+    end,
+    drawn_to_hand = function(self)
+        G.FUNCS.draw_from_discard_to_deck()
     end,
     in_pool = function(self)
         return G.GAME.letters_enabled or false

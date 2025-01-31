@@ -22,10 +22,10 @@ SMODS.Blind{
         G.hand:change_size(3)
         G.FUNCS.draw_from_deck_to_hand(3)
         
-        self.discards_sub = G.GAME.current_round.discards_left-math.max(G.GAME.current_round.discards_left,20)
+        self.discards_sub = G.GAME.current_round.discards_left --math.max(G.GAME.current_round.discards_left,0)
         ease_discard(-self.discards_sub)
         
-        self.hands_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,6)
+        self.hands_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,10)
         ease_hands_played(-self.hands_sub)
         
         --print ("Word is "..G.GAME.word_todo)

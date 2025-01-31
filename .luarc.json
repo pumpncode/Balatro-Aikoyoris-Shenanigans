@@ -1,5 +1,5 @@
 {
-    "workspace.library": ["../smods-old-calc", "../../BalatroSRC"],
+    "workspace.library": ["../smods", "../../BalatroSRC"],
     "workspace.ignoreDir": [
         ".vscode",
         "./func/words"

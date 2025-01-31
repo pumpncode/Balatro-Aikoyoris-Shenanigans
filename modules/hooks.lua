@@ -196,18 +196,18 @@ function Card:aiko_trigger_external(card)
                 key = 'a_remaining',
                 vars = { card.ability.extra.times }
             },
-
         })
         update_hand_text({ immediate = true, nopulse = true, delay = 0 }, { mult_stored = stored })
 
         if card.ability.extra.times == 0 then
-            SMODS.eval_this(card, {
+            card_eval_status_text(card, 'jokers', nil, 0.5, nil, {
                 instant = true,
+                card_align = "m",
                 message = localize {
                     type = 'variable',
-                    key = 'a_mult',
-                    vars = { (card.ability.extra.mult_stored + card.ability.extra.mult) }
-                }
+                    key = 'a_remaining',
+                    vars = { card.ability.extra.times }
+                },
             })
             card.ability.extra.total_times = card.ability.extra.total_times + card.ability.extra.times_increment
             card.ability.extra.times = card.ability.extra.total_times
@@ -249,7 +249,9 @@ function Controller:key_press_update(key, dt)
             end
         end
         if key == ";" then
-            _card.ability.akyrs_self_destructs = not _card.ability.akyrs_self_destructs
+            if(_card and _card.ability) then
+                _card.ability.akyrs_self_destructs = _card.ability.akyrs_self_destructs and false or true
+            end
         end
     end
     return c
@@ -421,8 +423,8 @@ function Card:generate_UIBox_ability_table()
     return ret
 end
 
-local eval_hook = eval_card
-function eval_card(card, context)
+local eval_hook = evaluate_play
+function evaluate_play(card, context)
     local ret = eval_hook(card, context)
     G.GAME.aiko_current_word = nil
     return ret

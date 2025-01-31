@@ -11,7 +11,7 @@
 	"display_name": "AikoShenanigan",
 	"version": "0.1.0",
 	"dependencies": [
-		"Steamodded (<=1.0.0~ALPHA-1304d)", 
+		"Steamodded (>=1.0.0~ALPHA-1314d)", 
 		"Lovely (*)", 
 		"Balatro (>=1.0.1m)"],
 	"conflicts": [

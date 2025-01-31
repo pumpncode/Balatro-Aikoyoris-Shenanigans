@@ -27,19 +27,11 @@ SMODS.Joker {
         if context.joker_main and card then
             stored = mult
             mult = mod_mult(card.ability.extra.mult_stored)
-            SMODS.eval_this(card, {
-                message = "Swapped!"
-
-            })
             card.ability.extra.mult_stored = stored
             update_hand_text({ immediate = true, nopulse = true, delay = 0 }, { mult_stored = stored })
             return {
-                Xmult_mod = card.ability.extra.mult,
-                message = localize {
-                    type = 'variable',
-                    key = 'a_xmult',
-                    vars = { card.ability.extra.mult }
-                }
+                message = "Swapped!",
+                xmult = card.ability.extra.mult,
             }
         end
     end,
@@ -86,12 +78,6 @@ SMODS.Joker {
         if context.joker_main then
             return {
                 mult_mod = card.ability.extra.mult_stored,
-                message = localize {
-                    type = 'variable',
-                    key = 'a_mult',
-                    vars = { card.ability.extra.mult_stored }
-                },
-                colour = G.C.MULT
             }
         end
     end,
@@ -154,12 +140,7 @@ SMODS.Joker {
         end
         if context.joker_main then
             return {
-                Xmult_mod = card.ability.extra.mult,
-                message = localize {
-                    type = 'variable',
-                    key = 'a_xmult',
-                    vars = { card.ability.extra.mult }
-                }
+                xmult = card.ability.extra.mult,
             }
         end
         if context.selling_card then
@@ -198,26 +179,20 @@ SMODS.Joker {
         if context.individual and context.cardarea == G.play then
             if context.other_card.ability.name == "Stone Card" then
                 for i = 1, card.ability.extra.chip_add_stack do
-                    SMODS.eval_this(card, {
-                        chip_mod = card.ability.extra.chip_add,
-                        colour = G.C.CHIPS,
-                        message = localize {
-                            type = 'variable',
-                            key = 'a_chips',
-                            vars = { card.ability.extra.chip_add }
-                        },
-                    })
+                    context.other_card:juice_up(0.5, 2)
+                    SMODS.calculate_effect({
+                        chips = card.ability.extra.chip_add,
+                        juice_card = context.other_card,
+                    },card)
                 end
-
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        context.other_card:juice_up(0.5, 2)
+                return {
+                    juice_card = context.other_card,
+                    func = function ()
                         context.other_card:set_ability(
-                            pseudorandom_element(NON_STONE_UPGRADES, pseudoseed('akyrj:pickaxe')), nil)
-                        return true
-                    end,
-                    delay = 0.5,
-                }), 'base')
+                            pseudorandom_element(NON_STONE_UPGRADES, pseudoseed('akyrj:pickaxe')), nil, true)
+                                
+                    end
+                }
             end
         end
     end,
@@ -248,28 +223,33 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
             if context.other_card.ability.name == "Stone Card" then
+                context.other_card.ability.aiko_about_to_be_destroyed = true
                 for i = 1, card.ability.extra.chip_add_stack do
-                    SMODS.eval_this(card, {
-                        chip_mod = card.ability.extra.chip_add,
-                        colour = G.C.CHIPS,
-                        message = localize {
-                            type = 'variable',
-                            key = 'a_chips',
-                            vars = { card.ability.extra.chip_add }
-                        },
-                    })
+                    SMODS.calculate_effect({
+                        chips = card.ability.extra.chip_add,
+                        juice_card = context.other_card,
+                    },card)
                 end
+                
+            end
+        end
 
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        context.other_card:start_dissolve({ G.C.BLUE }, nil, 1.6, false)
-                        return true
-                    end,
-                    delay = 0.5,
-                }), 'base')
-                if context.destroying_card and not context.blueprint and not context.destroying_card.ability.eternal then
-                    return true
+        if context.after and context.cardarea == G.play then
+            
+            for i,k in ipairs(G.play.cards)do
+                if k.ability.aiko_about_to_be_destroyed then
+                    k:start_dissolve({ G.C.BLACK }, nil, 4, false); 
+                    k:juice_up(0.1) 
+                    
                 end
+            end
+
+        end
+
+        if context.destroying_card and context.cardarea == G.play and not context.blueprint and not context.destroying_card.ability.eternal then
+            
+            if context.destroy_card.ability.aiko_about_to_be_destroyed then
+                return { remove = true }
             end
         end
     end,
@@ -306,12 +286,7 @@ SMODS.Joker {
 }
 
 local function is_valid_pool(name)
-    for _, v in pairs(G.P_CENTER_POOLS) do
-        if v.name then
-            return true
-        end
-    end
-    return false
+    return G.P_CENTER_POOLS[name] and true or false
 end
 
 function string.split(inputstr, sep)
@@ -365,6 +340,7 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if G.GAME.letters_enabled and G.GAME.aiko_current_word then
             local word = G.GAME.aiko_current_word
+            
             if not word then return {} end
             word = string.lower(word)
             local lowerword = string.lower(word)
@@ -389,24 +365,29 @@ SMODS.Joker {
                     end
                     context.other_card:set_ability(enhancement_from_name[word],nil,true)
                 end
+            end
 
-            elseif context.joker_main and word and is_valid_pool(word) then         
+            if context.joker_main then     
                 if (word == "Joker") then
-                        local carder = create_card(word,G.jokers, nil, nil, nil, nil, nil, 'akyrs:maxwell')
-                        G.jokers:emplace(carder)
-                    elseif word == "Default" then
-                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
-                        local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
-                        G.deck:emplace(carder)
-                        table.insert(G.playing_cards, carder)
-                    else
+                    local carder = create_card(word,G.jokers, nil, nil, nil, nil, nil, 'akyrs:maxwell')
+                    G.jokers:emplace(carder)
+                elseif word == "Default" then
+                    local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
+                    local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
+                    G.deck:emplace(carder)
+                    table.insert(G.playing_cards, carder)
+                else
+                    print(word)
+                    pcall(function(word)
+                        
                         local carder = create_card(word,G.consumeables, nil, nil, nil, nil, nil, 'akyrs:maxwell')
                         if carder then
                             G.consumeables:emplace(carder)
                         end
-                    end
+                    end, word)
+                end
 
-                    G.GAME.consumeable_buffer = 0
+                G.GAME.consumeable_buffer = 0
                 return {
                     message = localize {
                         key = 'k_created',

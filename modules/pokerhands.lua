@@ -128,6 +128,11 @@ function check_word(str_arr_in, length)
 
     return backtrack(1) or { valid = false, word = nil }
 end
+
+WORD_CHECKED = {
+
+}
+
 for i = 3, 31 do
     local exampler = {}
     for j = 1, #example_words[i-2] do
@@ -193,7 +198,13 @@ for i = 3, 31 do
                 end
                 return { hand }
             end
-            local wordData = check_word(word_hand, i)
+            local wordData = {}
+            if (WORD_CHECKED[word_hand]) then
+                wordData = WORD_CHECKED[word_hand]
+            else
+                wordData = check_word(word_hand, i)
+                WORD_CHECKED[word_hand] = wordData
+            end
             if wordData.valid then
                 G.GAME.aiko_current_word = wordData.word
                 if (G.STATE == G.STATES.HAND_PLAYED)then  

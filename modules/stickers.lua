@@ -29,6 +29,7 @@ SMODS.Sticker{
         end
     end,
     apply = function(self, card, val)
+        card.ability.akyrs_self_destructs = val
         card:set_cost()
     end
 

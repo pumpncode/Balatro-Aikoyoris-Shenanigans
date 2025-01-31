@@ -44,7 +44,6 @@ function aiko_mod_startup(self)
     self.aikoyori_letters_stickers["incorrect"] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS["akyrs_lettersStickers"], {x =9,y =  2})
 end
 
-
 local cardBaseHooker = Card.set_base
 function Card:set_base(card, initial)
     local ret = cardBaseHooker(self,card, initial)
@@ -225,7 +224,7 @@ local cardReleaseRecalcHook = Card.stop_drag
 function Card:stop_drag()
     local c = cardReleaseRecalcHook(self)
     --print("CARD RELEASED!!!!")
-    if G.hand and self.area and self.area == G.hand then
+    if G.hand and self.area and self.area == G.hand and G.STATE == G.STATES.SELECTING_HAND then
         self.area:parse_highlighted()
     end
     return c

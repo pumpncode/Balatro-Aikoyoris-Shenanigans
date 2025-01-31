@@ -488,5 +488,16 @@ function end_round()
             }), 'base')
         end
     end
+    for i,card in ipairs(G.deck.cards) do
+        if card.ability.akyrs_self_destructs then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    card:start_dissolve({G.C.RED}, nil, 1.6)
+                    return true
+                end,
+                delay = 0.5,
+            }), 'base')
+        end
+    end
     return ret
 end

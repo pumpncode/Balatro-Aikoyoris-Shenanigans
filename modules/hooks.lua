@@ -113,6 +113,7 @@ function Card:get_nominal(mod)
 end
 
 
+local drag_mod = {x = 0, y = 0, r = 0}
 function aikoyori_draw_extras(card, layer)
     --print("DRAWING EXTRAS")
     
@@ -121,7 +122,6 @@ function aikoyori_draw_extras(card, layer)
         if card.ability.aikoyori_letters_stickers then
             local movement_mod = 0.05*math.sin(1.1*(G.TIMERS.REAL + card.aiko_draw_delay)) - 0.07
             local rot_mod = 0.02*math.sin(0.72*(G.TIMERS.REAL + card.aiko_draw_delay)) + 0.03
-            local drag_mod = card.velocity
             
             if not card then return color end
             if G.GAME.current_round.aiko_round_correct_letter and G.GAME.current_round.aiko_round_correct_letter[card.ability.aikoyori_letters_stickers] then
@@ -518,7 +518,7 @@ function end_round()
     if (G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win) and (G.GAME.current_round.hands_left > 0)
     then
         
-        G.STATE_COMPLETE = false
+        G.STATE_COMPLETE = true
         G.STATE = G.STATES.SELECTING_HAND
     else
         local ret = endRoundHook()
@@ -559,5 +559,13 @@ local noSuitHook = SMODS.has_no_suit
 function SMODS.has_no_suit(card)
     if card.is_null then return false end
     local ret = noSuitHook(card)
+    return ret
+end
+
+
+local playCardEval = G.FUNCS.play_cards_from_highlighted
+
+G.FUNCS.play_cards_from_highlighted = function(e)
+    local ret = playCardEval(e)
     return ret
 end

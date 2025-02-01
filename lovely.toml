@@ -187,8 +187,11 @@ target = "card.lua"
 pattern = "            --Draw the main part of the card"
 position = "after"
 payload = """
+        self.front_bak = self.children.front
         if self.is_null then
             self.children.front = nil
+        else
+            self.children.front = self.front_bak
         end
 """
 overwrite = true

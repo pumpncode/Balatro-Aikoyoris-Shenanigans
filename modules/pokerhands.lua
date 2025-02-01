@@ -162,12 +162,6 @@ for i = 3, 31 do
         evaluate = function(parts, hand)
             if not G.GAME.letters_enabled then 
             return {} end
-            local hand_count = 0
-            for _,v in pairs(G.hand.cards) do
-                if v.highlighted then
-                    hand_count = hand_count + 1
-                end
-            end
             local word_hand = {}
             table.sort(hand, function(a,b) return a.T.x < b.T.x end)
             for _, v in pairs(hand) do
@@ -201,9 +195,12 @@ for i = 3, 31 do
                 return { hand }
             end
             local wordData = {}
+            --print("CHECK TIME! FOR '"..word_hand_str.."' IS THE WORD")
             if (WORD_CHECKED[word_hand_str]) then
+                --print("WORD "..word_hand_str.." IS IN MEMORY AND THUS SHOULD USE THAT")
                 wordData = WORD_CHECKED[word_hand_str]
             else
+                --print("WORD "..word_hand_str.." IS NOT IN MEMORY ... CHECKING")
                 wordData = check_word(word_hand)
                 WORD_CHECKED[word_hand_str] = wordData
             end

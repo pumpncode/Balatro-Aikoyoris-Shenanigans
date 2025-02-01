@@ -514,9 +514,11 @@ G.FUNCS.can_discard = function(e)
 
 local endRoundHook = end_round
 function end_round()
-    if (G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win) and G.GAME.current_round.hands_left > 0
+    if (G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win) and (G.GAME.current_round.hands_left > 0)
     then
         
+        G.STATE_COMPLETE = false
+        G.STATE = G.STATES.SELECTING_HAND
     else
         local ret = endRoundHook()
         G.GAME.word_todo = nil

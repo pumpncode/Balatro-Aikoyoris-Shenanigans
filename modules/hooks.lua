@@ -524,3 +524,11 @@ function end_round()
     end
 
 end
+
+local playCardsFromHiHook = G.FUNCS.play_cards_from_highlighted
+G.FUNCS.play_cards_from_highlighted = function(e)
+    G.GAME.aiko_current_word = nil
+    local ret playCardsFromHiHook(e)
+
+    return ret
+end

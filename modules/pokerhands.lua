@@ -90,7 +90,7 @@ local example_words = {
 local function replace_char(pos, str, r)
     return str:sub(1, pos-1) .. r .. str:sub(pos+1)
 end
-function check_word(str_arr_in, length)
+function check_word(str_arr_in)
     local wild_positions = {}
     local wild_count = 0
 
@@ -104,13 +104,13 @@ function check_word(str_arr_in, length)
     -- If no wildcards, check directly
     if wild_count == 0 then
         local word_str = table.concat(str_arr_in)
-        return { valid = words[word_str] and #str_arr_in == length, word = words[word_str] and word_str or nil }
+        return { valid = words[word_str], word = words[word_str] and word_str or nil }
     end
 
     local function backtrack(index)
         if index > wild_count then
             local word_str = table.concat(str_arr_in)
-            if words[word_str] and #word_str == length then
+            if words[word_str] and #word_str == #str_arr_in then
                 return { valid = true, word = word_str }
             end
             return nil
@@ -178,6 +178,7 @@ for i = 3, 31 do
             if #word_hand ~= i then
                 return {}
             end
+            local word_hand_str = table.concat(word_hand)
             
             local all_wildcards = true
             for _, val in ipairs(word_hand) do
@@ -200,11 +201,11 @@ for i = 3, 31 do
                 return { hand }
             end
             local wordData = {}
-            if (WORD_CHECKED[{word_hand,i}]) then
-                wordData = WORD_CHECKED[{word_hand,i}]
+            if (WORD_CHECKED[word_hand_str]) then
+                wordData = WORD_CHECKED[word_hand_str]
             else
-                wordData = check_word(word_hand, i)
-                WORD_CHECKED[{word_hand,i}] = wordData
+                wordData = check_word(word_hand)
+                WORD_CHECKED[word_hand_str] = wordData
             end
             if wordData.valid then
                 G.GAME.aiko_current_word = wordData.word

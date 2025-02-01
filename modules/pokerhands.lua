@@ -152,7 +152,7 @@ for i = 3, 31 do
         loc_txt = {
             ["en-us"]={
                 name =  i.."-letter Word",
-                description = { 'Create a valid '..i..'-letter English word', 'with Exact Amount of Character' },
+                description = { 'Create a valid '..i..'-letter English word', 'without extra letters' },
             },
             ["th_TH"]={
                 name =  "คำยาว "..i.." ตัวอักษร",

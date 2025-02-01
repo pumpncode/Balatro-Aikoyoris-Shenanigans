@@ -377,7 +377,7 @@ SMODS.Joker {
                     G.deck:emplace(carder)
                     table.insert(G.playing_cards, carder)
                 else
-                    print(word)
+                    --print(word)
                     pcall(function(word)
                         
                         local carder = create_card(word,G.consumeables, nil, nil, nil, nil, nil, 'akyrs:maxwell')

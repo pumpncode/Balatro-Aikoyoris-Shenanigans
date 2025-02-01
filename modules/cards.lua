@@ -24,6 +24,7 @@ SMODS.Back{
     pos = {x = 0, y = 0},
     config = {
         all_nulls = true,
+        starting_deck_size = 100,
         selection = 2000000000,
         special_hook = true,
         letters_enabled = true,

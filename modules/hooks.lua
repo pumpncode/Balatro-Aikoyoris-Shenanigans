@@ -493,7 +493,7 @@ G.FUNCS.can_discard = function(e)
 
 local endRoundHook = end_round
 function end_round()
-    if G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win
+    if G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win and not (#G.hand.cards < 1 or #G.deck.cards < 1 or #G.play.cards < 1 ) and G.GAME.current_round.hands_left > 0
     then
         
     else

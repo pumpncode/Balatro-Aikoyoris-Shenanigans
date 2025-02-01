@@ -427,9 +427,9 @@ function Card:generate_UIBox_ability_table()
     return ret
 end
 
-local eval_hook = evaluate_play
-function evaluate_play(card, context)
-    local ret = eval_hook(card, context)
+local eval_hook = G.FUNCS.evaluate_play
+G.FUNCS.evaluate_play = function()
+    local ret = eval_hook()
     G.GAME.aiko_current_word = nil
     return ret
 end
@@ -457,10 +457,14 @@ end
 
 local cashOutHook = G.FUNCS.cash_out
 G.FUNCS.cash_out = function (e)
-    local ret = cashOutHook(e)
-    G.GAME.aiko_puzzle_win = nil
-    G.GAME.current_round.advanced_blind = false
-    return ret
+    if(G.GAME.current_round.advanced_blind and G.GAME.aiko_puzzle_win) then
+        local ret = cashOutHook(e)
+        G.GAME.aiko_puzzle_win = nil
+        G.GAME.current_round.advanced_blind = false
+        return ret
+    else
+        return nil
+    end
 end
 
 local startRunHook = Game.start_run
@@ -498,6 +502,7 @@ function end_round()
         
     else
         local ret = endRoundHook()
+        G.GAME.word_todo = nil
         for i,card in ipairs(G.consumeables.cards) do
             if card.ability.akyrs_self_destructs then
                 G.E_MANAGER:add_event(Event({
@@ -523,12 +528,4 @@ function end_round()
         return ret
     end
 
-end
-
-local playCardsFromHiHook = G.FUNCS.play_cards_from_highlighted
-G.FUNCS.play_cards_from_highlighted = function(e)
-    G.GAME.aiko_current_word = nil
-    local ret playCardsFromHiHook(e)
-
-    return ret
 end

@@ -200,11 +200,11 @@ for i = 3, 31 do
                 return { hand }
             end
             local wordData = {}
-            if (WORD_CHECKED[word_hand]) then
-                wordData = WORD_CHECKED[word_hand]
+            if (WORD_CHECKED[{word_hand,i}]) then
+                wordData = WORD_CHECKED[{word_hand,i}]
             else
                 wordData = check_word(word_hand, i)
-                WORD_CHECKED[word_hand] = wordData
+                WORD_CHECKED[{word_hand,i}] = wordData
             end
             if wordData.valid then
                 G.GAME.aiko_current_word = wordData.word

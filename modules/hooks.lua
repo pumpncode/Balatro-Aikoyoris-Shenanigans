@@ -86,6 +86,7 @@ function Game:init_game_object()
     ret.current_round.aiko_round_incorrect_letter = {}
     ret.current_round.discards_sub = 0
     ret.current_round.hands_sub = 0
+    ret.current_round.aiko_infinite_hack = "8"
     ret.current_round.advanced_blind = false
     return ret
 end
@@ -442,10 +443,26 @@ end
 
 function recalculateHUDUI()
     if G.HUD then
-        G.HUD.definition = nil
-        G.HUD.definition = create_UIBox_HUD()
-        G.HUD:set_parent_child(G.HUD.definition, nil)
+        ease_discard(0,true, true)
         G.HUD:recalculate()
+    end
+end
+local easeDiscardHook = ease_discard
+function ease_discard(mod, instant, silent)
+    
+    local discard_UI = G.HUD:get_UIE_by_ID('discard_UI_count')
+    if G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.debuff and G.GAME.blind.config.blind.debuff.infinite_discards and not G.GAME.blind.disabled and not G.GAME.blind.disabled and not G.GAME.aiko_puzzle_win then
+        
+        G.GAME.current_round.aiko_infinite_hack = "8"
+        discard_UI.config.object.config.string[1].ref_value = "aiko_infinite_hack"
+        discard_UI.config.object.T.r = 1.57
+        discard_UI.config.object:update()
+    else
+        discard_UI.config.object.config.string[1].ref_value = "discards_left"
+        discard_UI.config.object.T.r = 0
+        local ret = easeDiscardHook(mod, instant, silent)
+        return ret
+
     end
 end
 
@@ -470,8 +487,8 @@ end
 local startRunHook = Game.start_run
 function Game:start_run(args)
     local ret = startRunHook(self,args)
-    recalculateBlindUI()
     recalculateHUDUI()
+    recalculateBlindUI()
     return ret 
 end
 

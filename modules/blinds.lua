@@ -46,8 +46,8 @@ SMODS.Blind{
             Event({
                 delay = 10,
                 func = function()
-                    recalculateBlindUI()
                     recalculateHUDUI()
+                    recalculateBlindUI()
                     return true
                 end
             })
@@ -66,17 +66,16 @@ SMODS.Blind{
         ease_hands_played(self.hands_sub or G.GAME.current_round.hand_sub)
         ease_discard(self.discards_sub or G.GAME.current_round.discards_sub)
         
-        recalculateBlindUI()
         recalculateHUDUI()
+        recalculateBlindUI()
         
     end,
     defeat = function(self)
         G.GAME.current_round.advanced_blind = false
         G.hand:change_size(-3)
         
-        
-        recalculateBlindUI()
         recalculateHUDUI()
+        recalculateBlindUI()
     end,
     press_play = function(self)
         if(G.GAME.aiko_current_word) then

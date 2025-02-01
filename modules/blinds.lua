@@ -74,8 +74,6 @@ SMODS.Blind{
         G.GAME.current_round.advanced_blind = false
         G.hand:change_size(-3)
         
-        ease_hands_played(self.hands_sub or G.GAME.current_round.hand_sub)
-        ease_discard(self.discards_sub or G.GAME.current_round.discards_sub)
         
         recalculateBlindUI()
         recalculateHUDUI()

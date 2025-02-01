@@ -493,28 +493,34 @@ G.FUNCS.can_discard = function(e)
 
 local endRoundHook = end_round
 function end_round()
-    local ret = endRoundHook()
-    for i,card in ipairs(G.consumeables.cards) do
-        if card.ability.akyrs_self_destructs then
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    card:start_dissolve({G.C.RED}, nil, 1.6)
-                    return true
-                end,
-                delay = 0.5,
-            }), 'base')
+    if G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win
+    then
+        
+    else
+        local ret = endRoundHook()
+        for i,card in ipairs(G.consumeables.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({G.C.RED}, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
         end
-    end
-    for i,card in ipairs(G.deck.cards) do
-        if card.ability.akyrs_self_destructs then
-            G.E_MANAGER:add_event(Event({
-                func = function()
-                    card:start_dissolve({G.C.RED}, nil, 1.6)
-                    return true
-                end,
-                delay = 0.5,
-            }), 'base')
+        for i,card in ipairs(G.deck.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({G.C.RED}, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
         end
+        return ret
     end
-    return ret
+
 end

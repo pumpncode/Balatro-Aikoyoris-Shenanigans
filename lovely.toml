@@ -246,11 +246,8 @@ end
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"
-pattern = """            
-            if G.GAME.chips - G.GAME.blind.chips >= 0 then
-                game_over = false
-            end
-"""
+pattern = """                            game_over = false
+            end"""
 position = "after"
 payload = """
             if G.GAME.current_round.advanced_blind then

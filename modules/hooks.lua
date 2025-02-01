@@ -91,13 +91,8 @@ function Game:init_game_object()
 end
 
 function SMODS.current_mod.reset_game_globals(run_start)
-    G.GAME.current_round.aiko_round_played_words = {}
-    G.GAME.current_round.aiko_round_correct_letter = {}
-    G.GAME.current_round.aiko_round_misaligned_letter = {}
-    G.GAME.current_round.aiko_round_incorrect_letter = {}
     G.GAME.current_round.discards_sub = 0
     G.GAME.current_round.hands_sub = 0
-    G.GAME.current_round.advanced_blind = false
 end
 
 
@@ -457,9 +452,14 @@ end
 
 local cashOutHook = G.FUNCS.cash_out
 G.FUNCS.cash_out = function (e)
-    if(G.GAME.current_round.advanced_blind and G.GAME.aiko_puzzle_win) then
+    if not (G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win) then
         local ret = cashOutHook(e)
         G.GAME.aiko_puzzle_win = nil
+        G.GAME.current_round.advanced_blind = false
+        G.GAME.current_round.aiko_round_played_words = {}
+        G.GAME.current_round.aiko_round_correct_letter = {}
+        G.GAME.current_round.aiko_round_misaligned_letter = {}
+        G.GAME.current_round.aiko_round_incorrect_letter = {}
         G.GAME.current_round.advanced_blind = false
         return ret
     else
@@ -497,7 +497,7 @@ G.FUNCS.can_discard = function(e)
 
 local endRoundHook = end_round
 function end_round()
-    if G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win and not (#G.hand.cards < 1 or #G.deck.cards < 1 or #G.play.cards < 1 ) and G.GAME.current_round.hands_left > 0
+    if (G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win) and G.GAME.current_round.hands_left > 0
     then
         
     else

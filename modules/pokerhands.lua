@@ -182,7 +182,7 @@ for i = 3, 31 do
                 end
             end
             if all_wildcards then
-                G.GAME.aiko_current_word = string.upper(example_words[i-2])
+                G.GAME.aiko_current_word = string.lower(example_words[i-2])
                 if (G.STATE == G.STATES.HAND_PLAYED)then  
                     
                     attention_text({

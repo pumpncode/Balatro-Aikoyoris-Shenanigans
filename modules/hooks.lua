@@ -587,3 +587,46 @@ G.FUNCS.play_cards_from_highlighted = function(e)
     local ret = playCardEval(e)
     return ret
 end
+
+-- UI HOOKS
+
+local updateSelectHandHook = Game.update_selecting_hand
+function Game:update_selecting_hand(dt)
+    local ret = updateSelectHandHook(self, dt)
+    if not self.aiko_wordle and isBlindKeyAThing() == "bl_akyrs_the_thought" then
+        self.aiko_wordle = UIBox{
+            definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
+            config = {align="b", offset = {x=0,y=0.4},major = G.jokers, bond = 'Weak'}
+        }
+    end
+        
+    return ret
+end
+local updateHandPlayedHook = Game.update_hand_played
+function Game:update_hand_played(dt)
+    local ret = updateHandPlayedHook(self, dt)
+    if self.aiko_wordle then self.aiko_wordle:remove(); self.aiko_wordle = nil end
+    if not self.aiko_wordle then
+        self.aiko_wordle = UIBox{
+            definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
+            config = {align="b", offset = {x=0,y=0.4},major = G.jokers, bond = 'Weak'}
+        }
+    end
+    return ret
+end
+
+local updateNewRoundHook = Game.update_new_round
+function Game:update_new_round(dt)
+    local ret = updateNewRoundHook(self,dt)
+    if self.aiko_wordle then self.aiko_wordle:remove(); self.aiko_wordle = nil end
+    
+    return ret
+end
+
+local deleteRunHook = Game.delete_run
+function Game:delete_run()
+    local ret = deleteRunHook(self)
+    
+    if self.aiko_wordle then self.aiko_wordle:remove(); self.aiko_wordle = nil end
+    return ret
+end

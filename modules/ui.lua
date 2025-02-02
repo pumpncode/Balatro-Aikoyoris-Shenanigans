@@ -12,48 +12,6 @@ local function numberToColor(num)
   return G.C.TRANSPARENT_DARK
 end
 
-SMODS.current_mod.config_tab = function()
-
-  local nodesnshit = {}
-  for a,x in ipairs(G.GAME.current_round.aiko_round_played_words) do
-    local subnoteforrow = {}
-    for b,y in ipairs(x) do
-      -- 1 is letter and [2] is stats
-      table.insert(subnoteforrow,{
-        n = G.UIT.C,
-        config = {padding = 0.1,w=3,h=1,colour = numberToColor(y[2])},
-        nodes = {
-          {
-            n = G.UIT.T,
-            config = {
-              text = y[1],
-              colour = G.C.WHITE,
-              scale = 0.5
-            }
-          }
-        }
-      })
-    end
-    table.insert(
-      nodesnshit,
-      {
-        n = G.UIT.R,
-        config = {padding = 0.0,w=3,h=1},
-        nodes = subnoteforrow
-
-      }
-    )
-  end
-	return {n = G.UIT.ROOT, config = {
-        align = "cm",
-        minw = 4,
-        minh = 0.6,
-        colour = G.C.UI.TRANSPARENT_DARK, 
-        r = 0.1,
-        padding = 0.1
-	}, nodes = nodesnshit
-}
-end
 
 function SPECIAL_BOSSS_BLIND(G, stake_sprite) 
   local blindloc = getSpecialBossBlindText((G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind) and G.GAME.blind.config.blind.key or "nu")
@@ -104,4 +62,54 @@ function INFINITE_DISCARD_UI(temp_col2,scale)
       {n=G.UIT.T, config={text = "8",hover = true,shadow=true, colour = G.C.RED,vert = true, scale = 2*scale}},
     }}
   }
+end
+
+function create_UIBOX_Aikoyori_WordPuzzleBox()
+  local nodesnshit = {}
+  for a,x in ipairs(G.GAME.current_round.aiko_round_played_words) do
+    local subnoteforrow = {}
+    for b,y in ipairs(x) do
+      -- 1 is letter and [2] is stats
+      table.insert(subnoteforrow,{
+        n = G.UIT.C,
+        config = {padding = 0.1,minw=0.4,maxh=0.5,colour = numberToColor(y[2])},
+        nodes = {
+          {
+            n = G.UIT.T,
+            config = {
+              align = "c",
+              text = y[1],
+              colour = G.C.WHITE,
+              scale = 0.3
+            }
+          }
+        }
+      })
+    end
+    table.insert(
+      nodesnshit,
+      {
+        n = G.UIT.R,
+        config = {padding = 0.0,maxh=0.5},
+        nodes = subnoteforrow
+
+      }
+    )
+  end
+	return {n = G.UIT.ROOT, config = {
+        align = "cm",
+        minw = 2,
+        minh = 0.6,
+        padding = 0.2,
+        colour = G.C.UI.TRANSPARENT_DARK, 
+        r = 0.1,
+	}, nodes = {
+    {
+      n = G.UIT.R,
+      config = {
+      },
+      nodes = nodesnshit
+    }
+  }
+}
 end

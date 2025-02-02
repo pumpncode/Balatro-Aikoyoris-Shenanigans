@@ -172,3 +172,7 @@ function getGameOverBlindText()
         return "?????"
     end
 end
+
+function isBlindKeyAThing()
+    return G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.key or nil
+end

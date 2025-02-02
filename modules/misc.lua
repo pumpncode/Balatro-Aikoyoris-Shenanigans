@@ -161,3 +161,14 @@ function getSpecialBossBlindText(key)
         return {localize("ph_akyrs_unknown"),localize("ph_akyrs_unknown")}
     end
 end
+function getGameOverBlindText()
+    if G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.key then
+        if (G.GAME.blind.config.blind.key == "bl_akyrs_the_thought") then
+            return string.upper(G.GAME.word_todo)
+        else
+            return "?????"
+        end
+    else
+        return "?????"
+    end
+end

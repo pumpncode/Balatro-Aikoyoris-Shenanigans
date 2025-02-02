@@ -462,3 +462,36 @@ position = "at"
 payload = """            {n=G.UIT.R, config={align = "cm",r = 0.1, padding = 0.05, minw = 3.1, colour = G.C.BLACK, emboss = 0.05}, nodes= (blind_choice.config.debuff.special_blind) and SPECIAL_BOSSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choice) or {"""
 overwrite = true
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """        {n=G.UIT.O, config={object = blind_choice.animation}}
+      }},
+    }"""
+position = "after"
+payload = """if (G.GAME.current_round.advanced_blind) then
+    score_tab = {
+      {n=G.UIT.R, config={align = "cm", minh = 0.6}, nodes={
+        {n=G.UIT.O, config={object = DynaText({string = {{string = getGameOverBlindText()}}, colours = {G.C.WHITE},shadow = true, float = true,maxw = 2.2, scale = 0.45})}}
+      }},
+      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+        {n=G.UIT.O, config={object = blind_choice.animation}}
+      }},
+    }
+
+end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = """                if G.GAME.blind and G.GAME.blind.config.blind then """
+position = "before"
+payload = """
+        G.GAME.word_todo = nil
+"""
+overwrite = true
+match_indent = true

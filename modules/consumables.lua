@@ -138,7 +138,7 @@ SMODS.Booster{
         }
     end,
     atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
-    group_key = "alphabets",
+    group_key = "k_alphabets",
     cost = 4,
     draw_hand = true,
     weight = 1,
@@ -173,7 +173,7 @@ SMODS.Booster{
         }
     end,
     atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
-    group_key = "alphabets",
+    group_key = "k_alphabets",
     cost = 4,
     draw_hand = true,
     weight = 1,
@@ -208,7 +208,7 @@ SMODS.Booster{
         }
     end,
     atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
-    group_key = "alphabets",
+    group_key = "k_alphabets",
     cost = 4,
     draw_hand = true,
     weight = 1,
@@ -242,7 +242,7 @@ SMODS.Booster{
         }
     end,
     atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
-    group_key = "alphabets",
+    group_key = "k_alphabets",
     cost = 4,
     draw_hand = true,
     weight = 1,
@@ -276,7 +276,7 @@ SMODS.Booster{
         }
     end,
     atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
-    group_key = "alphabets",
+    group_key = "k_alphabets",
     cost = 4,
     draw_hand = true,
     weight = 1,
@@ -310,7 +310,7 @@ SMODS.Booster{
         }
     end,
     atlas = 'aikoyoriBoosterPack', pos = { x = 1, y = 0 },
-    group_key = "alphabets",
+    group_key = "k_alphabets",
     cost = 6,
     draw_hand = true,
     weight = 1,
@@ -344,7 +344,7 @@ SMODS.Booster{
         }
     end,
     atlas = 'aikoyoriBoosterPack', pos = { x = 1, y = 0 },
-    group_key = "alphabets",
+    group_key = "k_alphabets",
     cost = 6,
     draw_hand = true,
     weight = 1,
@@ -378,7 +378,7 @@ SMODS.Booster{
         }
     end,
     atlas = 'aikoyoriBoosterPack', pos = { x = 2, y = 0 },
-    group_key = "alphabets",
+    group_key = "k_alphabets",
     cost = 8,
     draw_hand = true,
     weight = 0.25,
@@ -412,7 +412,7 @@ SMODS.Booster{
         }
     end,
     atlas = 'aikoyoriBoosterPack', pos = { x = 2, y = 0 },
-    group_key = "alphabets",
+    group_key = "k_alphabets",
     cost = 8,
     draw_hand = true,
     weight = 0.25,

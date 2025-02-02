@@ -17,8 +17,25 @@ function CardArea:aiko_change_playable(delta)
     
 end
 
+local function replenishLetters()
+    if(G.GAME and G.GAME.letters_to_give)then
+        for _,k in ipairs(aiko_alphabets_no_wilds) do
+            table.insert(G.GAME.letters_to_give,k)
+        end
+    end
+end
+
 function Card:set_letters_random()
-    self.ability.aikoyori_letters_stickers = pseudorandom_element(scrabble_letters, pseudoseed('aiko:letters'))
+    if(G.GAME and G.GAME.letters_to_give)then
+        if (#G.GAME.letters_to_give == 0) then
+            replenishLetters()
+        end
+        local index = pseudorandom(pseudoseed('aiko:letters'),1,#G.GAME.letters_to_give)
+        self.ability.aikoyori_letters_stickers = table.remove(G.GAME.letters_to_give, index)
+    else
+        self.ability.aikoyori_letters_stickers = pseudorandom_element(scrabble_letters, pseudoseed('aiko:letters'))
+    end
+    
 end
 
 
@@ -80,6 +97,8 @@ function Game:init_game_object()
     ret.aiko_has_quasi = false
     ret.aiko_current_word = nil
     ret.aiko_words_played = {}
+    ret.letters_to_give = {}
+    replenishLetters()
     ret.current_round.aiko_round_played_words = {}
     ret.current_round.aiko_round_correct_letter = {}
     ret.current_round.aiko_round_misaligned_letter = {}
@@ -250,7 +269,7 @@ function Controller:key_press_update(key, dt)
         end
         if key == ";" then
             if(_card and _card.ability) then
-                _card.ability.akyrs_self_destructs = _card.ability.akyrs_self_destructs and false or true
+                _card.ability.akyrs_self_destructs = not not not _card.ability.akyrs_self_destructs
             end
         end
     end
@@ -522,7 +541,6 @@ function end_round()
         G.STATE = G.STATES.SELECTING_HAND
     else
         local ret = endRoundHook()
-        G.GAME.word_todo = nil
         for i,card in ipairs(G.consumeables.cards) do
             if card.ability.akyrs_self_destructs then
                 G.E_MANAGER:add_event(Event({

@@ -222,6 +222,7 @@ return {
             k_aikoyoriextrabases = "Extra Base",
             k_akyrs_alphabets = "Alphabet",
             k_akyrs_alphabets_pack = "Alphabet Pack",
+            k_alphabets = "Alphabet Pack",
             k_created = "Created!",
             ph_aiko_beat_puzzle = "Solve the following",
             ph_word_puzzle = "Word Puzzle",

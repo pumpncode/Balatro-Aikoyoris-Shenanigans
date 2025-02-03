@@ -36,6 +36,25 @@ function SPECIAL_BOSSS_BLIND(G, stake_sprite)
         }},
       }
 end
+
+function SPECIAL_BOSSS_BLIND_TOOLTIP(blind,ability_text,stake_sprite,_dollars) 
+  local blindloc = getSpecialBossBlindText((blind and blind.key ) and blind.key or "nu")
+    return 
+    {n=G.UIT.R, config={align = "cm", emboss = 0.05, r = 0.1, minw = 2.5, padding = 0.07, colour = G.C.WHITE}, nodes={
+      {n=G.UIT.R, config={align = "cm", maxw = 2.4}, nodes={
+        {n=G.UIT.T, config={text = blindloc[1], scale = 0.35, colour = G.C.UI.TEXT_DARK}},
+      }},
+      {n=G.UIT.R, config={align = "cm"}, nodes={
+        {n=G.UIT.O, config={object = stake_sprite}},
+        {n=G.UIT.T, config={text = blindloc[2], scale = 0.4, colour = G.C.RED}},
+      }},
+      {n=G.UIT.R, config={align = "cm"}, nodes={
+        {n=G.UIT.T, config={text = localize('ph_blind_reward'), scale = 0.35, colour = G.C.UI.TEXT_DARK}},
+        {n=G.UIT.O, config={object = DynaText({string = {_dollars and string.rep(localize('$'),_dollars) or '-'}, colours = {G.C.MONEY}, rotate = true, bump = true, silent = true, scale = 0.45})}},
+      }},
+      ability_text[1] and {n=G.UIT.R, config={align = "cm", padding = 0.08, colour = mix_colours(blind.boss_colour, G.C.GREY, 0.4), r = 0.1, emboss = 0.05, minw = 2.5, minh = 0.9}, nodes=ability_text} or nil
+    }}
+end
 function SPECIAL_BOSSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choice) 
     --print(table_to_string_depth(blind_choice.config,1))
     local blindloc = getSpecialBossBlindText((blind_choice.config and blind_choice.config.key ) and blind_choice.config.key or "nu")

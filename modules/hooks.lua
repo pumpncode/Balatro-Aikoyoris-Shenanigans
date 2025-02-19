@@ -98,6 +98,7 @@ function Game:init_game_object()
     ret.aiko_current_word = nil
     ret.aiko_words_played = {}
     ret.letters_to_give = {}
+    ret.aiko_letters_consumable_rate = 0
     replenishLetters()
     ret.current_round.aiko_round_played_words = {}
     ret.current_round.aiko_round_correct_letter = {}
@@ -171,6 +172,12 @@ local gameUpdate = EventManager.update
 
 function EventManager:update(dt, forced)
     local s = gameUpdate(self, dt, forced)
+    if G.GAME.letters_enabled and G.GAME.aiko_letters_consumable_rate == 0 then
+        G.GAME.aiko_letters_consumable_rate = 1
+    end
+    if not G.GAME.letters_enabled and G.GAME.aiko_letters_consumable_rate == 1 then
+        G.GAME.aiko_letters_consumable_rate = 0
+    end
     if G.STATE == G.STATES.HAND_PLAYED then
         if G.GAME.aiko_last_chips ~= G.GAME.current_round.current_hand.chips or G.GAME.aiko_last_mult ~=
             G.GAME.current_round.current_hand.mult then
@@ -419,7 +426,18 @@ function Card:generate_UIBox_ability_table()
             generate_card_ui({key = 'aiko_x_akyrs_null', set = 'AikoyoriExtraBases'}, newRetTable)
         end
         if self.ability.set ~= 'Default' then
-            generate_card_ui(G.P_CENTERS[find_key_from_ability(self)], newRetTable)            
+            for i, v in ipairs(ret.main) do            
+                if i > 0 then
+                    table.insert(newRetTable.main, v)
+                end
+            end
+            for i, v in ipairs(ret.type) do
+                if i > 0 then
+                    table.insert(newRetTable.type, v)
+                end
+            end
+        else
+            
         end
         
         
@@ -558,13 +576,13 @@ function end_round()
 end
 local noRankHook = SMODS.has_no_rank
 function SMODS.has_no_rank(card)
-    if card.is_null then return true end
+    if card.is_null then return false end
     local ret = noRankHook(card)
     return ret
 end
 local noSuitHook = SMODS.has_no_suit
 function SMODS.has_no_suit(card)
-    if card.is_null then return true end
+    if card.is_null then return false end
     local ret = noSuitHook(card)
     return ret
 end
@@ -618,13 +636,4 @@ function Game:delete_run()
     
     if self.aiko_wordle then self.aiko_wordle:remove(); self.aiko_wordle = nil end
     return ret
-end
-
-function find_key_from_ability(card) 
-    for i,k in pairs(G.P_CENTERS) do
-        if (k.effect == card.ability.effect and k.set == card.ability.set) then
-            return i
-        end
-    end 
-    return "null"
 end

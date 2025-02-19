@@ -6,7 +6,7 @@ SMODS.ConsumableType{
     primary_colour = HEX("ffaf19"),
     secondary_colour = HEX("5cecff"),
     collection_rows = {6,6,6},
-    shop_rate = 1,
+    shop_rate = (G.GAME and G.GAME.aiko_letters_consumable_rate) and G.GAME.aiko_letters_consumable_rate or 1,
     loc_txt = {
         collection = "Alphabet Cards",
         name = "Alphabet",

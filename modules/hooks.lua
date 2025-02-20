@@ -6,6 +6,7 @@ assert(SMODS.load_file("./func/word_utils.lua"))()
 
 function CardArea:aiko_change_playable(delta)
     self.config.highlighted_limit = self.config.highlight_limit or G.GAME.aiko_cards_playable or 5
+    G.GAME.modifiers.cry_highlight_limit = G.GAME.aiko_cards_playable
     if delta ~= 0 then
         G.E_MANAGER:add_event(Event({
             func = function()
@@ -225,7 +226,7 @@ function Card:aiko_trigger_external(card)
         })
         update_hand_text({ immediate = true, nopulse = true, delay = 0 }, { mult_stored = stored })
 
-        if card.ability.extra.times == 0 then
+        if card.ability.extra.times <= 0 then
             card_eval_status_text(card, 'jokers', nil, 0.5, nil, {
                 instant = true,
                 card_align = "m",
@@ -287,8 +288,6 @@ local applyToRunBackHook = Back.apply_to_run
 local suits = {"S","H","D","C"}
 
 function Back:apply_to_run()
-    local c = applyToRunBackHook(self)
-    
     if self.effect.config.all_nulls then
         G.E_MANAGER:add_event(Event({
             func = function()
@@ -298,18 +297,36 @@ function Back:apply_to_run()
                     local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:all_nulls'))
                     local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
                     car.is_null = true
+                        
+                    -- misprintize
+                    if G.GAME.modifiers and G.GAME.modifiers.cry_misprint_min and G.GAME.modifiers.cry_misprint_max then
+                        for k, v in pairs(G.playing_cards) do
+                            cry_misprintize(car)
+                        end
+                    end
+
                     car:set_letters(letter)
                     G.deck:emplace(car)
+                    
                     table.insert(G.playing_cards, car)
                     G.GAME.starting_deck_size = #G.playing_cards
+                    -- for cryptid
+                    if G.GAME.modifiers and G.GAME.modifiers.cry_ccd then
+                        for k, v in pairs(G.playing_cards) do
+                            v:set_ability(get_random_consumable('cry_ccd',{"no_doe", "no_grc"}, nil, nil, true), true, nil)
+                        end
+                    end
                 end
                 return true
             end
         }))
         G.GAME.starting_params.all_nulls = true
     end
+    local c = applyToRunBackHook(self)
+    
     if self.effect.config.selection then
         G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable + self.effect.config.selection
+        G.GAME.modifiers.cry_highlight_limit = G.GAME.aiko_cards_playable
     end
     if self.effect.config.special_hook then
         G.GAME.starting_params.special_hook = true

@@ -418,7 +418,7 @@ SMODS.Joker {
         }
     end,
     config = {
-        mult = 1.3,
+        mult = 2,
         should_trigger_individual_debuff = true
     },
     calculate = function(self, card, context)

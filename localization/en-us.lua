@@ -79,7 +79,8 @@ return {
             j_akyrs_it_is_forbidden_to_dog = {
                 name = "It is forbidden to dog",
                 text = { 
-                    "Debuffed cards gives {X:mult,C:white} X#1#{}",
+                    "Debuffed Cards gives {X:mult,C:white} X#1#{} Mult",
+                    "Both held in hand and at play",
                 }
             },
         },

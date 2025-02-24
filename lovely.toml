@@ -480,11 +480,9 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = '''=[SMODS _ "src/utils.lua"]'''
-pattern = '''if scoring_hand and card.debuff then'''
+pattern = '''            card_eval_status_text(card, 'debuff')'''
 position = "after"
 payload = '''
-if (context.card.ability.should_trigger_individual_debuff) and context.individual then
-SMODS.score_card(card, context)
-end
+aikoyori_debuff_score_card(card, context)
 '''
 match_indent = true

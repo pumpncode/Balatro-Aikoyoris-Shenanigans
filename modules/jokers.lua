@@ -408,7 +408,7 @@ SMODS.Joker {
         y = 0
     },
     key = "it_is_forbidden_to_dog",
-    rarity = 3,
+    rarity = 2,
     cost = 4,
     loc_vars = function(self, info_queue, card)
         return {
@@ -418,16 +418,16 @@ SMODS.Joker {
         }
     end,
     config = {
-        mult = 1.1,
+        mult = 1.3,
         should_trigger_individual_debuff = true
     },
     calculate = function(self, card, context)
-        if context.joker_main then
-            if context.main then
-                return{
-                    xmult = card.ability.mult
-                }
-            end
+        if context.individual and context.other_card.debuff and not context.end_of_round and 
+        (   context.cardarea == G.play or 
+            context.cardarea == G.hand ) then
+            return {
+                xmult = card.ability.mult
+            }
         end
     end,
     blueprint_compat = true,

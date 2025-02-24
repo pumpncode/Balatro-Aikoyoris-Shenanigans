@@ -22,3 +22,16 @@ SMODS.Sticker{
     end
 
 }
+
+SMODS.Seal{
+    key = "debuff",
+    atlas = 'lettersStickers',
+    pos = {x = 1, y = 3},
+    badge_colour = HEX('91777c'),
+    sound = { sound = 'generic1', per = 1.2, vol = 0.4 },
+
+    calculate = function(self, card, context)
+        card.debuff = true
+    end,
+
+}

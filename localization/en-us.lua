@@ -83,6 +83,15 @@ return {
                     "Both held in hand and at play",
                 }
             },
+            j_akyrs_eat_pants = {
+                name = "eat pants",
+                text = { 
+                    "If played hand contains exactly {C:attention}#1#{} cards",
+                    "This joker gains {X:mult,C:white} X#2# {} Mult for every scored cards",
+                    "{C:red}Destroys all scored cards{}",
+                    "{C:inactive}(Currently {X:mult,C:white} X#3# {C:inactive} Mult)",
+                }
+            },
         },
         Other={
             akyrs_self_destructs={
@@ -91,7 +100,15 @@ return {
                     "{C:red}Self-Destructs{} at ",
                     "the end of the round",
                 },
-            },},
+            },
+            akyrs_debuff_seal={
+                name="Debuff Seal",
+                text={
+                    "{C:red}Debuffs itself{}",
+                    "at the start of the round",
+                },
+            },
+        },
         Planet={},
         Spectral={},
         Stake={},
@@ -239,6 +256,7 @@ return {
         high_scores={},
         labels={
             akyrs_self_destructs="Self Destructs",
+            akyrs_debuff_seal="Seal-Debuffed",
         },
         poker_hand_descriptions={},
         poker_hands={},

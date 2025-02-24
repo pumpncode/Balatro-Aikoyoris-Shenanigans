@@ -108,6 +108,12 @@ return {
                     "at the start of the round",
                 },
             },
+            akyrs_art_by_larantula_l={
+                name="Art",
+                text={
+                    "larantula_l",
+                },
+            },
         },
         Planet={},
         Spectral={},

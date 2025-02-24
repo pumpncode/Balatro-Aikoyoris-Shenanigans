@@ -330,6 +330,7 @@ SMODS.Joker {
     rarity = 3,
     cost = 4,
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { key = "akyrs_art_by_larantula_l", set = "Other" }
         return {
             vars = {  }
         }

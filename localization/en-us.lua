@@ -76,6 +76,12 @@ return {
                     "{C:inactive}(Must have room)",
                 }
             },
+            j_akyrs_it_is_forbidden_to_dog = {
+                name = "It is forbidden to dog",
+                text = { 
+                    "Debuffed cards gives {X:mult,C:white} X#1#{}",
+                }
+            },
         },
         Other={
             akyrs_self_destructs={

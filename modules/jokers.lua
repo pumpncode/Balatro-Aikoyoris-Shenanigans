@@ -399,3 +399,36 @@ SMODS.Joker {
     end,
     blueprint_compat = true,
 }
+
+-- it is forbidden to dog
+SMODS.Joker {
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 7,
+        y = 0
+    },
+    key = "it_is_forbidden_to_dog",
+    rarity = 3,
+    cost = 4,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { 
+                card.ability.mult
+             }
+        }
+    end,
+    config = {
+        mult = 1.1,
+        should_trigger_individual_debuff = true
+    },
+    calculate = function(self, card, context)
+        if context.joker_main then
+            if context.main then
+                return{
+                    xmult = card.ability.mult
+                }
+            end
+        end
+    end,
+    blueprint_compat = true,
+}

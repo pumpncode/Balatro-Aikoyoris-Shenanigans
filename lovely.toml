@@ -476,3 +476,15 @@ payload = """
 """
 overwrite = true
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''=[SMODS _ "src/utils.lua"]'''
+pattern = '''if scoring_hand and card.debuff then'''
+position = "after"
+payload = '''
+if (context.card.ability.should_trigger_individual_debuff) and context.individual then
+SMODS.score_card(card, context)
+end
+'''
+match_indent = true

@@ -91,6 +91,20 @@ return {
                     "{C:red}Destroys all played cards{}",
                     "{C:inactive}(Currently {X:mult,C:white} X#3# {C:inactive} Mult)",
                 }
+            },            
+            j_akyrs_tsunagite = {
+                name = "Tsunagite",
+                text = { 
+                    "If hand number totals to at least {C:attention}#1#{}",
+                    "{C:chips}+#2#{} Chips, {X:chips,C:white} X#3# {} Chips",
+                    "{C:mult}+#4#{} Mult, {X:mult,C:white} X#5# {} Mult",
+                    "per scored cards",
+                    "This Joker gains",
+                    "{C:chips}+#6#{} Chips, {X:chips,C:white} X#7# {} Chips",
+                    "{C:mult}+#8#{} Mult, {X:mult,C:white} X#9# {} Mult",
+                    "When a {C:planet}Planet{} card is used",
+                    "{s:0.8,C:inactive}(Aces counts as 1){}",
+                }
             },
         },
         Other={

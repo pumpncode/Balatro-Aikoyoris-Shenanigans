@@ -398,7 +398,7 @@ SMODS.Joker {
     },
     key = "it_is_forbidden_to_dog",
     rarity = 3,
-    cost = 4,
+    cost = 6,
     loc_vars = function(self, info_queue, card)
         return {
             vars = { 
@@ -431,7 +431,7 @@ SMODS.Joker {
     },
     key = "eat_pants",
     rarity = 3,
-    cost = 4,
+    cost = 6,
     loc_vars = function(self, info_queue, card)
         return {
             vars = { 
@@ -463,6 +463,87 @@ SMODS.Joker {
         if context.destroy_card and (context.cardarea == G.play or context.cardarea == 'unscored') and not context.blueprint and not context.destroy_card.ability.eternal then
             if #context.full_hand == math.floor(card.ability.card_target) then
                 return { remove = true }
+            end
+        end
+    end,
+    blueprint_compat = true,
+}
+
+
+-- tsunagite
+SMODS.Joker {
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 9,
+        y = 0
+    },
+    soul_pos = {
+        x = 9,
+        y = 1
+    },
+    key = "tsunagite",
+    rarity = 4,
+    cost = 12,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { 
+                card.ability.extras.total,
+                card.ability.extras.chips,
+                card.ability.extras.Xchips,
+                card.ability.extras.mult,
+                card.ability.extras.Xmult,
+                card.ability.extras.gain_chips,
+                card.ability.extras.gain_Xchips,
+                card.ability.extras.gain_mult,
+                card.ability.extras.gain_Xmult,
+             }
+        }
+    end,
+    config = {
+        extras = {
+            
+            total = 15,
+            chips = 15,
+            Xchips = 1.5,
+            mult = 1.5,
+            Xmult = 1.15,
+            gain_chips = 15,
+            gain_Xchips = 1.5,
+            gain_mult = 1.5,
+            gain_Xmult = 0.15,
+        }
+
+    },
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            local total = 0
+            for i,k in ipairs(G.play.cards) do
+                if k.base.face_nominal == 0 then
+                    total = total + k.base.nominal
+                    if k.base.value == 'Ace' then
+                        total = total - 10
+                    end
+                end
+            end
+            if total >= 15 then
+                return {
+                    chips = card.ability.extras.chips,
+                    xchips = card.ability.extras.Xchips,
+                    mult = card.ability.extras.mult,
+                    xmult = card.ability.extras.Xmult
+                }
+            end
+
+        end		
+        if context.using_consumeable then
+            if context.consumeable.ability.set == 'Planet' then
+                card.ability.extras.chips = card.ability.extras.chips + card.ability.extras.gain_chips 
+                card.ability.extras.Xchips = card.ability.extras.Xchips + card.ability.extras.gain_Xchips 
+                card.ability.extras.mult = card.ability.extras.mult + card.ability.extras.gain_mult 
+                card.ability.extras.Xmult = card.ability.extras.Xmult + card.ability.extras.gain_Xmult
+                SMODS.calculate_effect({
+                    message= localize('k_upgrade_ex')
+                }, card)
             end
         end
     end,

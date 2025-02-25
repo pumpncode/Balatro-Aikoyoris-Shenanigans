@@ -234,19 +234,7 @@ SMODS.Joker {
             end
         end
 
-        if context.after and context.cardarea == G.play then
-            
-            for i,k in ipairs(G.play.cards)do
-                if k.ability.aiko_about_to_be_destroyed then
-                    k:start_dissolve({ G.C.BLACK }, nil, 4, false); 
-                    k:juice_up(0.1) 
-                    
-                end
-            end
-
-        end
-
-        if context.destroying_card and context.cardarea == G.play and not context.blueprint and not context.destroying_card.ability.eternal then
+        if context.destroy_card and context.cardarea == G.play and not context.blueprint and not context.destroy_card.ability.eternal then
             
             if context.destroy_card.ability.aiko_about_to_be_destroyed then
                 return { remove = true }
@@ -409,7 +397,7 @@ SMODS.Joker {
         y = 0
     },
     key = "it_is_forbidden_to_dog",
-    rarity = 2,
+    rarity = 3,
     cost = 4,
     loc_vars = function(self, info_queue, card)
         return {
@@ -459,42 +447,21 @@ SMODS.Joker {
         Xmult = 1,
     },
     calculate = function(self, card, context)
-    
         if context.joker_main then	
-
             return {
                 xmult = card.ability.Xmult
             }
         end
-        if context.individual and context.cardarea == G.play and #G.play.cards == math.floor(card.ability.card_target) then
+        if context.individual and context.cardarea == G.play and #context.full_hand == math.floor(card.ability.card_target) then
             card.ability.Xmult = card.ability.Xmult + card.ability.extra
-            
-            context.other_card.ability.aiko_about_to_be_destroyed = true
-            SMODS.calculate_effect({
-                xmult = card.ability.extra,
-                juice_card = context.other_card,
-            },card)
             return {
-				message = 'Upgraded!',
+				message = localize('k_upgrade_ex'),
 				colour = G.C.MULT,
 				card = card
 			}
         end		
-        if context.after and context.cardarea == G.play then
-            
-            for i,k in ipairs(G.play.cards)do
-                if k.ability.aiko_about_to_be_destroyed then
-                    k:start_dissolve({ G.C.BLACK }, nil, 4, false); 
-                    k:juice_up(0.1) 
-                    
-                end
-            end
-
-        end
-
-        if context.destroying_card and context.cardarea == G.play and not context.blueprint and not context.destroying_card.ability.eternal then
-            
-            if context.destroy_card.ability.aiko_about_to_be_destroyed then
+        if context.destroy_card and (context.cardarea == G.play or context.cardarea == 'unscored') and not context.blueprint and not context.destroy_card.ability.eternal then
+            if #context.full_hand == math.floor(card.ability.card_target) then
                 return { remove = true }
             end
         end

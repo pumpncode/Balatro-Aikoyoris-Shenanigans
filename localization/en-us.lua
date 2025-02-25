@@ -84,11 +84,11 @@ return {
                 }
             },
             j_akyrs_eat_pants = {
-                name = "eat pants",
+                name = "eat pant",
                 text = { 
                     "If played hand contains exactly {C:attention}#1#{} cards",
                     "This joker gains {X:mult,C:white} X#2# {} Mult for every scored cards",
-                    "{C:red}Destroys all scored cards{}",
+                    "{C:red}Destroys all played cards{}",
                     "{C:inactive}(Currently {X:mult,C:white} X#3# {C:inactive} Mult)",
                 }
             },
@@ -105,7 +105,7 @@ return {
                 name="Debuff Seal",
                 text={
                     "{C:red}Debuffs itself{}",
-                    "at the start of the round",
+                    "when drawn to hand",
                 },
             },
             akyrs_art_by_larantula_l={

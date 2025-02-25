@@ -4,6 +4,8 @@ assert(SMODS.load_file("./modules/misc.lua"))()
 assert(SMODS.load_file("./modules/atlasses.lua"))() 
 assert(SMODS.load_file("./func/word_utils.lua"))() 
 
+SMODS.optional_features.cardareas.unscored = true
+
 function CardArea:aiko_change_playable(delta)
     self.config.highlighted_limit = self.config.highlight_limit or G.GAME.aiko_cards_playable or 5
     G.GAME.modifiers.cry_highlight_limit = G.GAME.aiko_cards_playable

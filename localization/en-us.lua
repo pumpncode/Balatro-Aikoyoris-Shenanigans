@@ -71,9 +71,9 @@ return {
                     "gives you one of that card",
                     "Spelling enhancements enhance",
                     "the scored card to the one you spelled",
-                    "{C:inactive}For example, Spelling {C:spectral}'Spectral'",
-                    "{C:inactive}gives you a {C:spectral}Spectral{C:inactive} Card",
-                    "{C:inactive}(Must have room)",
+                    "{C:inactive,s:0.8}For example, Spelling {C:spectral,s:0.8}'Spectral'",
+                    "{C:inactive,s:0.8}gives you a {C:spectral,s:0.8}Spectral{C:inactive,s:0.8} Card",
+                    "{C:inactive,s:0.8}(Must have room)",
                 }
             },
             j_akyrs_it_is_forbidden_to_dog = {
@@ -95,15 +95,10 @@ return {
             j_akyrs_tsunagite = {
                 name = "Tsunagite",
                 text = { 
-                    "If hand number totals to at least {C:attention}#1#{}",
-                    "{C:chips}+#2#{} Chips, {X:chips,C:white} X#3# {} Chips",
-                    "{C:mult}+#4#{} Mult, {X:mult,C:white} X#5# {} Mult",
-                    "per scored cards",
-                    "This Joker gains",
-                    "{C:chips}+#6#{} Chips, {X:chips,C:white} X#7# {} Chips",
-                    "{C:mult}+#8#{} Mult, {X:mult,C:white} X#9# {} Mult",
-                    "When a {C:planet}Planet{} card is used",
-                    "{s:0.8,C:inactive}(Aces counts as 1){}",
+                    "If played hand sum does not exceed {C:attention}#1#{} then {C:chips}+#2#{} {C:mult}+#4#{} and {X:chips,C:white} X#3# {} {X:mult,C:white} X#5# {}",
+                    " Chips & Mult respectively per scored cards. This Joker gains {C:chips}+#6#{} {C:mult}+#8#{} {X:chips,C:white} X#7# {} {X:mult,C:white} X#9# {}",
+                    "Chips & Mult respectively When a {C:planet}Planet{} card is used. {C:attention}Resets{} at the end of the ante.",
+                    "{s:0.8,C:inactive}(Aces counts as 1 and Face cards {s:0.8,C:white,X:red}DO{s:0.8,C:inactive} contribute 10){}",
                 }
             },
         },

@@ -504,11 +504,15 @@ SMODS.Joker {
             
             total = 15,
             chips = 15,
-            Xchips = 1.5,
+            Xchips = 1.15,
             mult = 1.5,
             Xmult = 1.15,
+            base_chips = 15,
+            base_Xchips = 1.15,
+            base_mult = 1.5,
+            base_Xmult = 1.15,
             gain_chips = 15,
-            gain_Xchips = 1.5,
+            gain_Xchips = 0.15,
             gain_mult = 1.5,
             gain_Xmult = 0.15,
         }
@@ -518,14 +522,13 @@ SMODS.Joker {
         if context.individual and context.cardarea == G.play then
             local total = 0
             for i,k in ipairs(G.play.cards) do
-                if k.base.face_nominal == 0 then
-                    total = total + k.base.nominal
-                    if k.base.value == 'Ace' then
-                        total = total - 10
-                    end
+
+                total = total + k.base.nominal
+                if k.base.value == 'Ace' then
+                    total = total - 10
                 end
             end
-            if total >= 15 then
+            if total <= 15 then
                 return {
                     chips = card.ability.extras.chips,
                     xchips = card.ability.extras.Xchips,
@@ -543,6 +546,22 @@ SMODS.Joker {
                 card.ability.extras.Xmult = card.ability.extras.Xmult + card.ability.extras.gain_Xmult
                 SMODS.calculate_effect({
                     message= localize('k_upgrade_ex')
+                }, card)
+            end
+        end
+        if context.end_of_round then
+            if G.GAME.blind.boss and (
+                card.ability.extras.chips ~= card.ability.extras.base_chips or
+                card.ability.extras.Xchips ~= card.ability.extras.base_Xchips or
+                card.ability.extras.mult ~= card.ability.extras.base_mult or
+                card.ability.extras.Xmult ~= card.ability.extras.base_Xmult  
+            ) then
+                card.ability.extras.chips = card.ability.extras.base_chips
+                card.ability.extras.Xchips = card.ability.extras.base_Xchips 
+                card.ability.extras.mult = card.ability.extras.base_mult 
+                card.ability.extras.Xmult = card.ability.extras.base_Xmult 
+                SMODS.calculate_effect({
+                    message= localize('k_reset')
                 }, card)
             end
         end

@@ -485,23 +485,25 @@ SMODS.Joker {
     rarity = 4,
     cost = 12,
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = {key = "akyrs_chip_mult_xchip_xmult", set = 'Other', vars = { 
+            card.ability.extras.chips,
+            card.ability.extras.mult,
+            card.ability.extras.Xchips,
+            card.ability.extras.Xmult, } }
+        info_queue[#info_queue+1] = {key = "akyrs_gain_chip_mult_xchip_xmult", set = 'Other', vars = { 
+            card.ability.extras.gain_chips,
+            card.ability.extras.gain_mult,
+            card.ability.extras.gain_Xchips,
+            card.ability.extras.gain_Xmult } }
+        info_queue[#info_queue+1] = {key = "akyrs_tsunagite_scores", set = 'Other', }
         return {
             vars = { 
                 card.ability.extras.total,
-                card.ability.extras.chips,
-                card.ability.extras.Xchips,
-                card.ability.extras.mult,
-                card.ability.extras.Xmult,
-                card.ability.extras.gain_chips,
-                card.ability.extras.gain_Xchips,
-                card.ability.extras.gain_mult,
-                card.ability.extras.gain_Xmult,
              }
         }
     end,
     config = {
         extras = {
-            
             total = 15,
             chips = 15,
             Xchips = 1.15,
@@ -511,12 +513,11 @@ SMODS.Joker {
             base_Xchips = 1.15,
             base_mult = 15,
             base_Xmult = 1.15,
-            gain_chips = 16,
+            gain_chips = 15,
             gain_Xchips = 0.15,
             gain_mult = 1.5,
             gain_Xmult = 0.15,
         }
-
     },
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then

@@ -95,10 +95,11 @@ return {
             j_akyrs_tsunagite = {
                 name = "Tsunagite",
                 text = { 
-                    "If played hand sum does not exceed {C:attention}#1#{} then {C:chips}+#2#{} {C:mult}+#4#{} and {X:chips,C:white} X#3# {} {X:mult,C:white} X#5# {}",
-                    " Chips & Mult respectively per scored cards. This Joker gains {C:chips}+#6#{} {C:mult}+#8#{} {X:chips,C:white} X#7# {} {X:mult,C:white} X#9# {}",
-                    "Chips & Mult respectively When a {C:planet}Planet{} card is used. {C:attention}Resets{} at the end of the ante.",
-                    "{s:0.8,C:inactive}(Aces counts as 1 and Face cards {s:0.8,C:white,X:red}DO{s:0.8,C:inactive} contribute 10){}",
+                    "Gives value listed in 'Gives'",
+                    "if played hand sum does not exceed {C:attention}#1#{}",
+                    "Joker gain the value listed in 'Joker Gains'",
+                    "When a {C:planet}Planet{} card is used",
+                    "{C:attention}Resets{} at the end of the ante.",
                 }
             },
         },
@@ -121,6 +122,29 @@ return {
                 name="Art",
                 text={
                     "larantula_l",
+                },
+            },
+            akyrs_chip_mult_xchip_xmult={
+                name="Gives",
+                text={
+                    "{C:chips}+#1#{} Chips {C:mult}+#2#{} Mult",
+                    "{X:chips,C:white} X#3# {} Chips {X:mult,C:white} X#4# {} Mult",
+                    "per scored card",
+                },
+            },
+            akyrs_gain_chip_mult_xchip_xmult={
+                name="Joker Gains",
+                text={
+                    "Joker gains",
+                    "{C:chips}+#1#{} Chips {C:mult}+#2#{} Mult",
+                    "{X:chips,C:white} X#3# {} Chips {X:mult,C:white} X#4# {} Mult",
+                },
+            },
+            akyrs_tsunagite_scores={
+                name="Totals",
+                text={
+                    "Aces count as 1",
+                    "Face Cards count as 10",
                 },
             },
         },

@@ -402,20 +402,21 @@ SMODS.Joker {
     loc_vars = function(self, info_queue, card)
         return {
             vars = { 
-                card.ability.mult
+                card.ability.extra.mult
              }
         }
     end,
     config = {
-        mult = 2,
-        should_trigger_individual_debuff = true
+        extra = {
+            mult = 2,
+        }
     },
     calculate = function(self, card, context)
         if context.individual and context.other_card.debuff and not context.end_of_round and 
         (   context.cardarea == G.play or 
             context.cardarea == G.hand ) then
             return {
-                xmult = card.ability.mult
+                xmult = card.ability.extra.mult
             }
         end
     end,
@@ -430,30 +431,32 @@ SMODS.Joker {
         y = 0
     },
     key = "eat_pants",
-    rarity = 3,
+    rarity = 1,
     cost = 6,
     loc_vars = function(self, info_queue, card)
         return {
             vars = { 
-                math.floor(card.ability.card_target),
-                card.ability.extra,
-                card.ability.Xmult,
+                math.floor(card.ability.extra.card_target),
+                card.ability.extra.extra,
+                card.ability.extra.Xmult,
              }
         }
     end,
     config = {
-        extra = 0.4,
-        card_target = 4,
-        Xmult = 1,
+        extra = {
+            extra = 0.4,
+            card_target = 4,
+            Xmult = 1,
+        }
     },
     calculate = function(self, card, context)
         if context.joker_main then	
             return {
-                xmult = card.ability.Xmult
+                xmult = card.ability.extra.Xmult
             }
         end
-        if context.individual and context.cardarea == G.play and #context.full_hand == math.floor(card.ability.card_target) then
-            card.ability.Xmult = card.ability.Xmult + card.ability.extra
+        if context.individual and context.cardarea == G.play and #context.full_hand == math.floor(card.ability.extra.card_target) then
+            card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.extra
             return {
 				message = localize('k_upgrade_ex'),
 				colour = G.C.MULT,
@@ -461,7 +464,7 @@ SMODS.Joker {
 			}
         end		
         if context.destroy_card and (context.cardarea == G.play or context.cardarea == 'unscored') and not context.blueprint and not context.destroy_card.ability.eternal then
-            if #context.full_hand == math.floor(card.ability.card_target) then
+            if #context.full_hand == math.floor(card.ability.extra.card_target) then
                 return { remove = true }
             end
         end
@@ -486,24 +489,24 @@ SMODS.Joker {
     cost = 12,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = {key = "akyrs_chip_mult_xchip_xmult", set = 'Other', vars = { 
-            card.ability.extras.chips,
-            card.ability.extras.mult,
-            card.ability.extras.Xchips,
-            card.ability.extras.Xmult, } }
+            card.ability.extra.chips,
+            card.ability.extra.mult,
+            card.ability.extra.Xchips,
+            card.ability.extra.Xmult, } }
         info_queue[#info_queue+1] = {key = "akyrs_gain_chip_mult_xchip_xmult", set = 'Other', vars = { 
-            card.ability.extras.gain_chips,
-            card.ability.extras.gain_mult,
-            card.ability.extras.gain_Xchips,
-            card.ability.extras.gain_Xmult } }
+            card.ability.extra.gain_chips,
+            card.ability.extra.gain_mult,
+            card.ability.extra.gain_Xchips,
+            card.ability.extra.gain_Xmult } }
         info_queue[#info_queue+1] = {key = "akyrs_tsunagite_scores", set = 'Other', }
         return {
             vars = { 
-                card.ability.extras.total,
+                card.ability.extra.total,
              }
         }
     end,
     config = {
-        extras = {
+        extra = {
             total = 15,
             chips = 15,
             Xchips = 1.15,
@@ -531,20 +534,20 @@ SMODS.Joker {
             end
             if total <= 15 then
                 return {
-                    chips = card.ability.extras.chips,
-                    xchips = card.ability.extras.Xchips,
-                    mult = card.ability.extras.mult,
-                    xmult = card.ability.extras.Xmult
+                    chips = card.ability.extra.chips,
+                    xchips = card.ability.extra.Xchips,
+                    mult = card.ability.extra.mult,
+                    xmult = card.ability.extra.Xmult
                 }
             end
 
         end		
         if context.using_consumeable then
             if context.consumeable.ability.set == 'Planet' then
-                card.ability.extras.chips = card.ability.extras.chips + card.ability.extras.gain_chips 
-                card.ability.extras.Xchips = card.ability.extras.Xchips + card.ability.extras.gain_Xchips 
-                card.ability.extras.mult = card.ability.extras.mult + card.ability.extras.gain_mult 
-                card.ability.extras.Xmult = card.ability.extras.Xmult + card.ability.extras.gain_Xmult
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.gain_chips 
+                card.ability.extra.Xchips = card.ability.extra.Xchips + card.ability.extra.gain_Xchips 
+                card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.gain_mult 
+                card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.gain_Xmult
                 SMODS.calculate_effect({
                     message= localize('k_upgrade_ex')
                 }, card)
@@ -552,19 +555,53 @@ SMODS.Joker {
         end
         if context.end_of_round then
             if G.GAME.blind.boss and (
-                card.ability.extras.chips ~= card.ability.extras.base_chips or
-                card.ability.extras.Xchips ~= card.ability.extras.base_Xchips or
-                card.ability.extras.mult ~= card.ability.extras.base_mult or
-                card.ability.extras.Xmult ~= card.ability.extras.base_Xmult  
+                card.ability.extra.chips ~= card.ability.extra.base_chips or
+                card.ability.extra.Xchips ~= card.ability.extra.base_Xchips or
+                card.ability.extra.mult ~= card.ability.extra.base_mult or
+                card.ability.extra.Xmult ~= card.ability.extra.base_Xmult  
             ) then
-                card.ability.extras.chips = card.ability.extras.base_chips
-                card.ability.extras.Xchips = card.ability.extras.base_Xchips 
-                card.ability.extras.mult = card.ability.extras.base_mult 
-                card.ability.extras.Xmult = card.ability.extras.base_Xmult 
+                card.ability.extra.chips = card.ability.extra.base_chips
+                card.ability.extra.Xchips = card.ability.extra.base_Xchips 
+                card.ability.extra.mult = card.ability.extra.base_mult 
+                card.ability.extra.Xmult = card.ability.extra.base_Xmult 
                 SMODS.calculate_effect({
                     message= localize('k_reset')
                 }, card)
             end
+        end
+    end,
+    blueprint_compat = true,
+}
+
+
+-- yona yona dance
+SMODS.Joker {
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 0,
+        y = 1
+    },
+    key = "yona_yona_dance",
+    rarity = 1,
+    cost = 6,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { 
+                card.ability.extra.times,
+             }
+        }
+    end,
+    config = {
+        extra = {
+            times = 2
+        },
+    },
+    calculate = function(self, card, context)
+        if context.repetition and (context.other_card:get_id() == 2 or context.other_card:get_id() == 7) then
+            return {
+                message = localize('k_again_ex'),
+                repetitions = card.ability.extra.times,
+            }
         end
     end,
     blueprint_compat = true,

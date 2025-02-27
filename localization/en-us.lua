@@ -91,7 +91,7 @@ return {
                     "{C:red}Destroys all played cards{}",
                     "{C:inactive}(Currently {X:mult,C:white} X#3# {C:inactive} Mult)",
                 }
-            },            
+            },
             j_akyrs_tsunagite = {
                 name = "Tsunagite",
                 text = { 
@@ -100,6 +100,15 @@ return {
                     "Joker gain the value listed in 'Joker Gains'",
                     "When a {C:planet}Planet{} card is used",
                     "{C:attention}Resets{} at the end of the ante.",
+                }
+            },
+            j_akyrs_yona_yona_dance = {
+                name = "Yona Yona Dance",
+                text = { 
+                    "Retrigger each played {C:attention}2{} and {C:attention}7{}",
+                    "{C:attention}#1#{} additional times",
+                    "{C:inactive,s:0.9}naraba odoranya son{}",
+                    "{C:inactive,s:0.9}odoranya son desu{}",
                 }
             },
         },

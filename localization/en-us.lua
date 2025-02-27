@@ -105,7 +105,7 @@ return {
             j_akyrs_yona_yona_dance = {
                 name = "Yona Yona Dance",
                 text = { 
-                    "Retrigger each played {C:attention}2{} and {C:attention}7{}",
+                    "Retrigger each played {C:attention}4{} and {C:attention}7{}",
                     "{C:attention}#1#{} additional times",
                     "{C:inactive,s:0.9}naraba odoranya son{}",
                     "{C:inactive,s:0.9}odoranya son desu{}",

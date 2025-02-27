@@ -597,7 +597,7 @@ SMODS.Joker {
         },
     },
     calculate = function(self, card, context)
-        if context.repetition and (context.other_card:get_id() == 2 or context.other_card:get_id() == 7) then
+        if context.repetition and (context.other_card:get_id() == 4 or context.other_card:get_id() == 7) then
             return {
                 message = localize('k_again_ex'),
                 repetitions = card.ability.extra.times,

@@ -638,3 +638,34 @@ SMODS.Joker {
     end,
     blueprint_compat = true,
 }
+
+SMODS.Joker {
+    atlas = 'AikoyoriJokers',
+    key = "reciprocal_joker",
+    pos = {
+        x = 2,
+        y = 1
+    },
+    rarity = 1,
+    cost = 2,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { }
+        }
+    end,
+    config = {
+        extra = {
+        },
+    },
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local temp_ch = hand_chips
+            local temp_mult = hand_chips
+            mult = mod_mult(temp_ch/temp_mult)
+            return {
+                message = localize('k_akyrs_reciprocaled')
+            }
+        end
+    end,
+    blueprint_compat = true,
+}

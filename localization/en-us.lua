@@ -133,6 +133,13 @@ return {
                         "strategic tool and an exhilarating element.",
                 }
             },
+            j_akyrs_reciprocal_joker = {
+                name = "Reciprocal Joker",
+                text = { 
+                    "Set {X:mult,C:white}Mult{} to",
+                    "{X:chips,C:white}Chips{} divided by {X:mult,C:white}Mult{}",
+                }
+            },
         },
         Other={
             akyrs_self_destructs={
@@ -290,6 +297,7 @@ return {
             ph_word_puzzle = "Word Puzzle",
             ph_puzzle_clear = "Puzzle Clear!",
             ph_akyrs_unknown = "???",
+            k_akyrs_reciprocaled = "Reciprocal'd!",
         },
         high_scores={},
         labels={

@@ -320,12 +320,13 @@ function Back:apply_to_run()
                         end
                     end
                 end
+                
+                G.deck:shuffle('akyrsletterdeck')
                 return true
             end
         }))
         G.GAME.starting_params.all_nulls = true
 
-        G.deck:shuffle('akyrsletterdeck')
     end
     local c = applyToRunBackHook(self)
     

@@ -426,16 +426,21 @@ local cardGetUIBoxRef = Card.generate_UIBox_ability_table
 function Card:generate_UIBox_ability_table()
     local ret = cardGetUIBoxRef(self)
     local letter = self.ability.aikoyori_letters_stickers
-    local loc_vars = {
-        (scrabble_scores[self.ability.aikoyori_letters_stickers]),
-        1 + (scrabble_scores[self.ability.aikoyori_letters_stickers]/10),
-    }
+
     if letter and letter == "#" then
         letter = "Wild"
     else 
         if letter then
         letter = string.upper(letter)
         end
+    end
+    
+    if (letter) then
+        local loc_vars = {
+            (scrabble_scores[self.ability.aikoyori_letters_stickers]),
+            1 + (scrabble_scores[self.ability.aikoyori_letters_stickers]/10),
+        }
+        
     end
     if self.is_null then  
         --print(table_to_string(ret))

@@ -671,3 +671,93 @@ SMODS.Joker {
     end,
     blueprint_compat = true,
 }
+
+SMODS.Joker {
+    atlas = 'AikoyoriJokers',
+    key = "kyoufuu_all_back",
+    pos = {
+        x = 3,
+        y = 1
+    },
+    rarity = 1,
+    cost = 3,
+    loc_vars = function(self, info_queue, card)
+        return {
+        }
+    end,
+    config = {
+        extra = {
+        },
+    },
+    calculate = function(self, card, context)
+        if context.pre_discard and G.GAME.current_round.discards_left == 1 then
+            return {
+                message = localize('k_akyrs_drawn_discard'),
+                func = function()
+                    G.FUNCS.draw_from_discard_to_deck()
+                end
+            }
+        end
+    end,
+    blueprint_compat = false,
+}
+
+SMODS.Joker {
+    atlas = 'AikoyoriJokers',
+    key = "2fa",
+    pos = {
+        x = 4,
+        y = 1
+    },
+    rarity = 1,
+    cost = 3,
+    loc_vars = function(self, info_queue, card)
+        return {
+        }
+    end,
+    config = {
+        extra = {
+        },
+    },
+    calculate = function(self, card, context)
+        if context.after and not context.blueprint then
+            
+            for i, card in ipairs(G.play.cards) do
+
+                local percent = 1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3
+                G.E_MANAGER:add_event(Event{
+                    trigger = 'after',
+                    delay = 0.5,
+                    func = function ()
+                        G.play.cards[i]:flip()
+                        play_sound('card1', percent);
+                        return true
+                    end
+                })
+                G.E_MANAGER:add_event(Event{
+                    trigger = 'after',
+                    delay = 0.5,
+                    func = function ()
+                            
+                        local _rank = nil
+                        local _suit = nil
+                        while _rank == nil or _suit == nil do
+                            _rank = pseudorandom_element(SMODS.Ranks, pseudoseed('akyrs2fa'))
+                            _suit = pseudorandom_element(SMODS.Suits, pseudoseed('akyrs2fa'))
+                        end
+                        
+                        SMODS.change_base(G.play.cards[i],_suit.key,_rank.key)
+                        
+                        G.play.cards[i]:flip()
+                        return true
+                    end
+                })
+            end
+            return {
+                message = localize("k_akyrs_2fa_regen"),
+                
+            }
+        end
+    end,
+    blueprint_compat = false,
+}

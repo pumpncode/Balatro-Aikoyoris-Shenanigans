@@ -140,6 +140,20 @@ return {
                     "{X:chips,C:white}Chips{} divided by {X:mult,C:white}Mult{}",
                 }
             },
+            j_akyrs_kyoufuu_all_back = {
+                name = "Kyoufuu All Back",
+                text = { 
+                    "Return previously {C:attention}discarded Cards",
+                    "back to deck on {C:attention}final discard{}"
+                }
+            },
+            j_akyrs_2fa = {
+                name = "Two-Factor Authentication",
+                text = { 
+                    "{C:attention}All Played Cards'{} Rank",
+                    "and Suit are {C:attention}randomized{} after scoring"
+                }
+            },
         },
         Other={
             akyrs_self_destructs={
@@ -298,6 +312,8 @@ return {
             ph_puzzle_clear = "Puzzle Clear!",
             ph_akyrs_unknown = "???",
             k_akyrs_reciprocaled = "Reciprocal'd!",
+            k_akyrs_drawn_discard = "All Back!",
+            k_akyrs_2fa_regen = "Code Refreshed!",
         },
         high_scores={},
         labels={

@@ -434,9 +434,9 @@ function Card:generate_UIBox_ability_table()
         letter = string.upper(letter)
         end
     end
-    
+    local loc_vars = { }
     if (letter) then
-        local loc_vars = {
+        loc_vars = {
             (scrabble_scores[self.ability.aikoyori_letters_stickers]),
             1 + (scrabble_scores[self.ability.aikoyori_letters_stickers]/10),
         }

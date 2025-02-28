@@ -83,7 +83,7 @@ return {
                     "Both held in hand and at play",
                 }
             },
-            j_akyrs_eat_pants = {
+            j_akyrs_eat_pant = {
                 name = "eat pant",
                 text = { 
                     "If played hand contains exactly {C:attention}#1#{} cards",
@@ -162,7 +162,22 @@ return {
         Stake={},
         Tag={},
         Tarot={},
-        Voucher={},
+        Voucher={
+            v_akyrs_alphabet_soup={
+                name="Alphabet Soup",
+                text={
+                    "{C:attention}Letters{} appear on playing cards",
+                    "Words can be made with playing cards",
+                },
+            },
+            v_akyrs_crossing_field={
+                name="Crossing Field",
+                text={
+                    "{C:attention}Letters{} give {C:mult}Mult{}",
+                    "based on their {C:attention}Scrabble value{}",
+                },
+            },
+        },
         AikoyoriExtraBases={
             aiko_x_akyrs_null = {
                 name = 'Null',

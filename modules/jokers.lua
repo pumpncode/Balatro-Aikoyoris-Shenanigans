@@ -423,15 +423,15 @@ SMODS.Joker {
     blueprint_compat = true,
 }
 
--- eat pants
+-- eat pant
 SMODS.Joker {
     atlas = 'AikoyoriJokers',
     pos = {
         x = 8,
         y = 0
     },
-    key = "eat_pants",
-    rarity = 1,
+    key = "eat_pant",
+    rarity = 3,
     cost = 6,
     loc_vars = function(self, info_queue, card)
         return {

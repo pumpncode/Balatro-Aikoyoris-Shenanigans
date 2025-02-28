@@ -50,3 +50,10 @@ SMODS.Atlas {
     atlas_table = 'ANIMATION_ATLAS',
     frames = 21,
 }
+
+SMODS.Atlas {
+    key = "aikoyoriVouchers",
+    path = "aikoyoriVouchers.png",
+    px = 71,
+    py = 95
+}

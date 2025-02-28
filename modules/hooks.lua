@@ -128,7 +128,7 @@ SMODS.Shader{
 
 local getNominalHook = Card.get_nominal
 function Card:get_nominal(mod)
-    if self.is_null then
+    if self.is_null and self.ability.aikoyori_letters_stickers then
         
         return -10-aiko_alphabets_to_num[self.ability.aikoyori_letters_stickers]
     end

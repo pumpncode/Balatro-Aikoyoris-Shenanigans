@@ -175,11 +175,11 @@ local gameUpdate = EventManager.update
 
 function EventManager:update(dt, forced)
     local s = gameUpdate(self, dt, forced)
-    if G.GAME.letters_enabled and G.GAME.aiko_letters_consumable_rate == 0 then
-        G.GAME.aiko_letters_consumable_rate = 1
+    if G.GAME.letters_enabled and G.GAME.alphabet_rate == 0 then
+        G.GAME.alphabet_rate = 1
     end
-    if not G.GAME.letters_enabled and G.GAME.aiko_letters_consumable_rate == 1 then
-        G.GAME.aiko_letters_consumable_rate = 0
+    if not G.GAME.letters_enabled and G.GAME.alphabet_rate > 0 then
+        G.GAME.alphabet_rate = 0
     end
     if G.STATE == G.STATES.HAND_PLAYED then
         if G.GAME.aiko_last_chips ~= G.GAME.current_round.current_hand.chips or G.GAME.aiko_last_mult ~=

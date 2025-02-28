@@ -268,7 +268,7 @@ return {
             xlettersY = {name = 'Letter Y',text = { '{C:white,X:mult}X#2#{} Mult'},},
             xlettersZ = {name = 'Letter Z',text = { '{C:white,X:mult}X#2#{} Mult'},},
             lettersWild = {name = 'Wild Card',text = { '{C:mult}No Extra{} Mult'},},
-            xlettersWild = {name = 'Wild Card',text = { '{C:mult}No Extra{} Mult'},},
+            xlettersWild = {name = 'Wild Card',text = { '{C:white,X:mult}No Extra{} XMult'},},
             letterNotScored = {name = '',text = { 'Allows Words','to be played'},},
         },
             

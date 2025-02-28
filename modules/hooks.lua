@@ -440,7 +440,6 @@ function Card:generate_UIBox_ability_table()
             (scrabble_scores[self.ability.aikoyori_letters_stickers]),
             1 + (scrabble_scores[self.ability.aikoyori_letters_stickers]/10),
         }
-        
     end
     if self.is_null then  
         --print(table_to_string(ret))

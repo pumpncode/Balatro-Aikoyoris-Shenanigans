@@ -197,8 +197,8 @@ return {
                 text={
                     "{C:attention}Letters{} appear on playing cards",
                     "Words can be made with playing cards",
-                    "{C:attention}Letters{} give {C:white,X:mult}XMult{}",
-                    "based on 1 + tenth of their {C:attention}Scrabble value{}",
+                    "{C:attention}Letters{} give {C:white,X:mult}XMult{} based on",
+                    "1 + tenth of their {C:attention}Scrabble value{}",
                     "{C:inactive}e.g. 1+(value/10){}",
                 },
             },

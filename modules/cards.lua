@@ -29,6 +29,7 @@ SMODS.Back{
         special_hook = true,
         letters_enabled = true,
         letters_mult_enabled = true,
-        letters_xmult_enabled = true
+        letters_xmult_enabled = true,
+        vouchers = {'v_akyrs_alphabet_soup','v_akyrs_crossing_field'}
     },
 }

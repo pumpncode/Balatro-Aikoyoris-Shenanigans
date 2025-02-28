@@ -659,11 +659,13 @@ SMODS.Joker {
     },
     calculate = function(self, card, context)
         if context.joker_main then
-            local temp_ch = hand_chips
-            local temp_mult = hand_chips
-            mult = mod_mult(temp_ch/temp_mult)
             return {
-                message = localize('k_akyrs_reciprocaled')
+                message = localize('k_akyrs_reciprocaled'),
+                func = function()
+                    mult = mod_mult(hand_chips / mult)
+                    
+                    update_hand_text({ delay = 0, immediate = false }, { mult = mult, chips = hand_chips })
+                end
             }
         end
     end,

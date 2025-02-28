@@ -6,7 +6,7 @@ return {
         Back={
             b_akyrs_letter_deck = {
                 name = 'Letter Deck',
-                text = { 'Play with {C:red}No Ranks and Suits{}', 'Letters enabled by default', "Play {C:playable}as many{} card as you want per hand" },
+                text = { 'Letters-Only Deck',"with Scrabble Distribution", "{C:mult}Mult{} and {C:white,X:mult}Xmult{} Enabled", "Play {C:playable}as many{}", "card as you want per hand" },
             }
         },
         Blind={
@@ -30,16 +30,18 @@ return {
                 name = "Netherite Pickaxe",
                 text = {
                     "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
-                    "for every {C:attention}Stone{} Cards scored",
-                    "{C:red,E:1}Destroys that card"
+                    "for every {C:attention}Stone{} Card scored",
+                    "{C:red,E:1}Destroy all scored",
+                    "{C:attention}Stone{C:red,E:1} cards afterwards"
                 }
             },
             j_akyrs_diamond_pickaxe = {
                 name = "Diamond Pickaxe",
                 text = {
                     "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
-                    "for every {C:attention}Stone{} Cards scored",
-                    "Randomly change that card's upgrades"
+                    "for every {C:attention}Stone{} Card scored",
+                    "and change every scored {C:attention}Stone{} card",
+                    "to a random {C:attention}non-Stone Upgrades{}"
                 }
             },
             j_akyrs_redstone_repeater = {
@@ -68,12 +70,10 @@ return {
                 name = "Maxwell's Notebook",
                 text = { 
                     "Spelling the name of a card",
-                    "gives you one of that card",
+                    "gives you {C:attention}one{} of that card",
                     "Spelling enhancements enhance",
-                    "the scored card to the one you spelled",
-                    "{C:inactive,s:0.8}For example, Spelling {C:spectral,s:0.8}'Spectral'",
-                    "{C:inactive,s:0.8}gives you a {C:spectral,s:0.8}Spectral{C:inactive,s:0.8} Card",
-                    "{C:inactive,s:0.8}(Must have room)",
+                    "the {C:attention}scored card{} to the one you spelled",
+                    "{C:inactive}(Must have room)",
                 }
             },
             j_akyrs_it_is_forbidden_to_dog = {
@@ -109,6 +109,28 @@ return {
                     "{C:attention}#1#{} additional times",
                     "{C:inactive,s:0.9}naraba odoranya son{}",
                     "{C:inactive,s:0.9}odoranya son desu{}",
+                }
+            },
+            j_akyrs_tldr_joker = {
+                name = "TL;DR Joker",
+                text = {
+                        "In the immersive and strategic world of {C:attention,E:1,s:1.5}Balatro{}, a distinctive role is played by this special joker card,",
+                        "equipped with a potent ability known as the '{C:mult}+#1#{} Mult.' This ability dramatically enhances a player's score",
+                        "under specific conditions, primarily centered around the presence of any {C:attention}High Card{} in the hand, which includes",
+                        "but is not limited to traditional {C:attention}high-ranking cards{} like {C:attention}Aces, Kings, Queens, and Jacks.{}",
+                        "Instead, {C:attention,E:1,s:1.5}Balatro{} expands this definition to include key strategic cards that heighten gameplay impact.",
+                        "This transformative {C:mult}multiplier{} is not just an advantage but a central aspect of strategic planning in {C:attention,E:1,s:1.5}Balatro{}.",
+                        "It compels players to consider their hand composition carefully, aiming to incorporate {C:attention}High Cards{} and maximize benefits.",
+                        "Delving into the history of gambling, card games have been a corner{C:tarot}stone{} of gaming culture for centuries.",
+                        "From the ancient {C:white,X:red}Chinese{} who are credited with inventing playing cards in the {C:attention}9th century{} to the spread of card",
+                        "games across Europe during the {C:chips}Middle Ages{}, gambling has evolved into a sophisticated form of entertainment and strategy.",
+                        "The concept of {C:mult}multipliers{}, like the '{C:mult}+#1#{} Mult' in {C:attention,E:1,s:1.5}Balatro{}, echoes innovations in probability and risk-taking found",
+                        "throughout gambling history, where players sharpened their skills to navigate the {C:green}uncertainties of chance.{}",
+                        "These elements of chance and strategy create a rich tapestry of gameplay where players harness both their intuition and",
+                        "analytical abilities. The presence of the '{C:mult}+#1#{} Mult' deepens {C:attention,E:1,s:1.5}Balatro{}'s complexity, fostering a richly engaging",
+                        "environment where tactical decision-making is crucial. Players dynamically shift the game balance by leveraging the {C:mult}multiplier{},",
+                        "turning potential {C:chips}deficits{} into {C:dark_edition,E:1}commanding leads{}. Thus, the '{C:mult}+#1#{} Mult' feature isn't merely a rule but a critical",
+                        "strategic tool and an exhilarating element.",
                 }
             },
         },
@@ -156,6 +178,13 @@ return {
                     "Face Cards count as 10",
                 },
             },
+            akyrs_maxwell_example={
+                name="Example",
+                text={
+                    "{C:inactive,s:0.8}For example, Spelling {C:spectral,s:0.8}'Spectral'",
+                    "{C:inactive,s:0.8}gives you a {C:spectral,s:0.8}Spectral{C:inactive,s:0.8} Card",
+                },
+            },
         },
         Planet={},
         Spectral={},
@@ -168,6 +197,9 @@ return {
                 text={
                     "{C:attention}Letters{} appear on playing cards",
                     "Words can be made with playing cards",
+                    "{C:attention}Letters{} give {C:white,X:mult}XMult{}",
+                    "based on 1 + tenth of their {C:attention}Scrabble value{}",
+                    "{C:inactive}e.g. 1+(value/10){}",
                 },
             },
             v_akyrs_crossing_field={
@@ -183,118 +215,61 @@ return {
                 name = 'Null',
                 text = { 'No rank or suit'},
             },
-            lettersA = {
-                name = 'Letter A',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersB = {
-                name = 'Letter B',
-                text = { '{C:mult}+3{} Mult'},
-            },
-            lettersC = {
-                name = 'Letter C',
-                text = { '{C:mult}+3{} Mult'},
-            },
-            lettersD = {
-                name = 'Letter D',
-                text = { '{C:mult}+2{} Mult'},
-            },
-            lettersE = {
-                name = 'Letter E',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersF = {
-                name = 'Letter F',
-                text = { '{C:mult}+4{} Mult'},
-            },
-            lettersG = {
-                name = 'Letter G',
-                text = { '{C:mult}+2{} Mult'},
-            },
-            lettersH = {
-                name = 'Letter H',
-                text = { '{C:mult}+4{} Mult'},
-            },
-            lettersI = {
-                name = 'Letter I',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersJ = {
-                name = 'Letter J',
-                text = { '{C:mult}+8{} Mult'},
-            },
-            lettersK = {
-                name = 'Letter K',
-                text = { '{C:mult}+5{} Mult'},
-            },
-            lettersL = {
-                name = 'Letter L',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersM = {
-                name = 'Letter M',
-                text = { '{C:mult}+3{} Mult'},
-            },
-            lettersN = {
-                name = 'Letter N',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersO = {
-                name = 'Letter O',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersP = {
-                name = 'Letter P',
-                text = { '{C:mult}+3{} Mult'},
-            },
-            lettersQ = {
-                name = 'Letter Q',
-                text = { '{C:mult}+10{} Mult'},
-            },
-            lettersR = {
-                name = 'Letter R',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersS = {
-                name = 'Letter S',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersT = {
-                name = 'Letter T',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersU = {
-                name = 'Letter U',
-                text = { '{C:mult}+1{} Mult'},
-            },
-            lettersV = {
-                name = 'Letter V',
-                text = { '{C:mult}+4{} Mult'},
-            },
-            lettersW = {
-                name = 'Letter W',
-                text = { '{C:mult}+4{} Mult'},
-            },
-            lettersX = {
-                name = 'Letter X',
-                text = { '{C:mult}+8{} Mult'},
-            },
-            lettersY = {
-                name = 'Letter Y',
-                text = { '{C:mult}+4{} Mult'},
-            },
-            lettersZ = {
-                name = 'Letter Z',
-                text = { '{C:mult}+10{} Mult'},
-            },
-            lettersWild = {
-                name = 'Wild Card',
-                text = { '{C:mult}No Extra{} Mult'},
-            },
-            letterNotScored = {
-                name = '',
-                text = { 'Allows Words','to be played'},
-            },
+            lettersA = {name = 'Letter A',text = { '{C:mult}+#1#{} Mult'},},
+            lettersB = {name = 'Letter B',text = { '{C:mult}+#1#{} Mult'},},
+            lettersC = {name = 'Letter C',text = { '{C:mult}+#1#{} Mult'},},
+            lettersD = {name = 'Letter D',text = { '{C:mult}+#1#{} Mult'},},
+            lettersE = {name = 'Letter E',text = { '{C:mult}+#1#{} Mult'},},
+            lettersF = {name = 'Letter F',text = { '{C:mult}+#1#{} Mult'},},
+            lettersG = {name = 'Letter G',text = { '{C:mult}+#1#{} Mult'},},
+            lettersH = {name = 'Letter H',text = { '{C:mult}+#1#{} Mult'},},
+            lettersI = {name = 'Letter I',text = { '{C:mult}+#1#{} Mult'},},
+            lettersJ = {name = 'Letter J',text = { '{C:mult}+#1#{} Mult'},},
+            lettersK = {name = 'Letter K',text = { '{C:mult}+#1#{} Mult'},},
+            lettersL = {name = 'Letter L',text = { '{C:mult}+#1#{} Mult'},},
+            lettersM = {name = 'Letter M',text = { '{C:mult}+#1#{} Mult'},},
+            lettersN = {name = 'Letter N',text = { '{C:mult}+#1#{} Mult'},},
+            lettersO = {name = 'Letter O',text = { '{C:mult}+#1#{} Mult'},},
+            lettersP = {name = 'Letter P',text = { '{C:mult}+#1#{} Mult'},},
+            lettersQ = {name = 'Letter Q',text = { '{C:mult}+#1#{} Mult'},},
+            lettersR = {name = 'Letter R',text = { '{C:mult}+#1#{} Mult'},},
+            lettersS = {name = 'Letter S',text = { '{C:mult}+#1#{} Mult'},},
+            lettersT = {name = 'Letter T',text = { '{C:mult}+#1#{} Mult'},},
+            lettersU = {name = 'Letter U',text = { '{C:mult}+#1#{} Mult'},},
+            lettersV = {name = 'Letter V',text = { '{C:mult}+#1#{} Mult'},},
+            lettersW = {name = 'Letter W',text = { '{C:mult}+#1#{} Mult'},},
+            lettersX = {name = 'Letter X',text = { '{C:mult}+#1#{} Mult'},},
+            lettersY = {name = 'Letter Y',text = { '{C:mult}+#1#{} Mult'},},
+            lettersZ = {name = 'Letter Z',text = { '{C:mult}+#1#{} Mult'},},
+            xlettersA = {name = 'Letter A',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersB = {name = 'Letter B',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersC = {name = 'Letter C',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersD = {name = 'Letter D',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersE = {name = 'Letter E',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersF = {name = 'Letter F',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersG = {name = 'Letter G',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersH = {name = 'Letter H',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersI = {name = 'Letter I',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersJ = {name = 'Letter J',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersK = {name = 'Letter K',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersL = {name = 'Letter L',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersM = {name = 'Letter M',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersN = {name = 'Letter N',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersO = {name = 'Letter O',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersP = {name = 'Letter P',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersQ = {name = 'Letter Q',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersR = {name = 'Letter R',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersS = {name = 'Letter S',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersT = {name = 'Letter T',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersU = {name = 'Letter U',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersV = {name = 'Letter V',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersW = {name = 'Letter W',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersX = {name = 'Letter X',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersY = {name = 'Letter Y',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            xlettersZ = {name = 'Letter Z',text = { '{C:white,X:mult}X#2#{} Mult'},},
+            lettersWild = {name = 'Wild Card',text = { '{C:mult}No Extra{} Mult'},},
+            xlettersWild = {name = 'Wild Card',text = { '{C:mult}No Extra{} Mult'},},
+            letterNotScored = {name = '',text = { 'Allows Words','to be played'},},
         },
             
     },

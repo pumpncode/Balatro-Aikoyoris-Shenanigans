@@ -4,9 +4,11 @@ SMODS.Voucher {
     cost = 10,
     redeem = function (self, card) 
         G.GAME.letters_enabled = true
+        G.GAME.letters_xmult_enabled = true
     end,
     unredeem = function (self, card) 
         G.GAME.letters_enabled = false
+        G.GAME.letters_xmult_enabled = false
     end
 }
 

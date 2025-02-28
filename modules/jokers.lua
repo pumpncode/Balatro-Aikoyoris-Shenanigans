@@ -318,6 +318,7 @@ SMODS.Joker {
     rarity = 3,
     cost = 4,
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = {key = "akyrs_maxwell_example", set = 'Other', }
         info_queue[#info_queue+1] = { key = "akyrs_art_by_larantula_l", set = "Other" }
         return {
             vars = {  }
@@ -582,7 +583,7 @@ SMODS.Joker {
         y = 1
     },
     key = "yona_yona_dance",
-    rarity = 1,
+    rarity = 2,
     cost = 6,
     loc_vars = function(self, info_queue, card)
         return {
@@ -601,6 +602,37 @@ SMODS.Joker {
             return {
                 message = localize('k_again_ex'),
                 repetitions = card.ability.extra.times,
+            }
+        end
+    end,
+    blueprint_compat = true,
+}
+
+SMODS.Joker {
+    key = "tldr_joker",
+    pos = {
+        x = 0,
+        y = 0
+    },
+    rarity = 1,
+    cost = 2,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
+        return {
+            vars = { 
+                card.ability.extra.mult,
+             }
+        }
+    end,
+    config = {
+        extra = {
+            mult = 4
+        },
+    },
+    calculate = function(self, card, context)
+        if context.joker_main or context.individual then
+            return {
+                mult = card.ability.extra.mult
             }
         end
     end,

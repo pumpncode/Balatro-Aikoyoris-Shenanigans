@@ -95,6 +95,7 @@ function Game:init_game_object()
     ret.starting_params.special_hook = false
     ret.letters_enabled = false
     ret.letters_mult_enabled = false
+    ret.letters_xmult_enabled = false
     ret.aiko_last_mult = 0
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
@@ -339,6 +340,9 @@ function Back:apply_to_run()
     if self.effect.config.letters_mult_enabled then
         G.GAME.letters_mult_enabled = true
     end
+    if self.effect.config.letters_xmult_enabled then
+        G.GAME.letters_xmult_enabled = true
+    end
     return c
 end
 
@@ -361,6 +365,14 @@ function Card:get_chip_mult()
     local c = getMultBonusHook(self)
     
     if self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled then c = c + scrabble_scores[self.ability.aikoyori_letters_stickers] end
+    return c
+end
+
+local getXMultBonusHook = Card.get_chip_x_mult
+function Card:get_chip_x_mult()
+    local c = getXMultBonusHook(self)
+    
+    if self.ability.aikoyori_letters_stickers and G.GAME.letters_xmult_enabled then c = c + (1 + (scrabble_scores[self.ability.aikoyori_letters_stickers]/10)) end
     return c
 end
 
@@ -414,6 +426,10 @@ local cardGetUIBoxRef = Card.generate_UIBox_ability_table
 function Card:generate_UIBox_ability_table()
     local ret = cardGetUIBoxRef(self)
     local letter = self.ability.aikoyori_letters_stickers
+    local loc_vars = {
+        (scrabble_scores[self.ability.aikoyori_letters_stickers]),
+        1 + (scrabble_scores[self.ability.aikoyori_letters_stickers]/10),
+    }
     if letter and letter == "#" then
         letter = "Wild"
     else 
@@ -424,6 +440,7 @@ function Card:generate_UIBox_ability_table()
     if self.is_null then  
         --print(table_to_string(ret))
         local newRetTable = table.aiko_shallow_copy(ret)
+        
         newRetTable.name = {}
         localize({type = 'name_text', key = 'aiko_x_akyrs_null', set = 'AikoyoriExtraBases', vars={colours={G.C.BLUE}}, nodes = newRetTable.name})
         newRetTable.name = newRetTable.name[1]
@@ -439,10 +456,9 @@ function Card:generate_UIBox_ability_table()
 
         
         if(G.GAME.letters_enabled and letter) then
-            generate_card_ui({key = 'letters'..letter, set = 'AikoyoriExtraBases'}, newRetTable)
+            generate_card_ui({key = 'letters'..letter, set = 'AikoyoriExtraBases', vars = loc_vars}, newRetTable)
         else
-            
-            generate_card_ui({key = 'aiko_x_akyrs_null', set = 'AikoyoriExtraBases'}, newRetTable)
+            generate_card_ui({key = 'aiko_x_akyrs_null', set = 'AikoyoriExtraBases', vars = loc_vars}, newRetTable)
         end
         if self.ability.set ~= 'Default' then
             for i, v in ipairs(ret.main) do            
@@ -463,7 +479,7 @@ function Card:generate_UIBox_ability_table()
         ret = newRetTable
     else
         if(G.GAME.letters_enabled and letter) then
-            generate_card_ui({key = 'letters'..letter, set = 'AikoyoriExtraBases'}, ret)
+            generate_card_ui({key = 'letters'..letter, set = 'AikoyoriExtraBases', vars = loc_vars}, ret)
         end
     end
     return ret

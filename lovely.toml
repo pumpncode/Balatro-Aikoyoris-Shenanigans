@@ -347,19 +347,32 @@ payload = """
         if _c.is_null then
         
             if(G.GAME.letters_mult_enabled) then
-                localize{type = 'descriptions', key = _c.key, set = _c.set, full_UI_table.name, vars = loc_vars}
-            else
-                full_UI_table.name = localize{type = 'name', set = _c.set, key = _c.key, nodes = full_UI_table.name}
+                localize{type = 'descriptions', key = _c.key, set = _c.set, full_UI_table.name, vars = _c.vars or loc_vars}
             end
-            localize{type = 'other', key = 'aiko_x_akyrs_null', nodes = desc_nodes}
+            
+            if(G.GAME.letters_xmult_enabled) then
+                localize{type = 'descriptions', key = "x".._c.key, set = _c.set, full_UI_table.name, vars = _c.vars or loc_vars}
+            end
+
+            if(not G.GAME.letters_mult_enabled and not G.GAME.letters_xmult_enabled) then
+                full_UI_table.name = localize{type = 'name', set = _c.set, key = _c.key, nodes = full_UI_table.name, vars = _c.vars or loc_vars}
+            end
+            localize{type = 'other', key = 'aiko_x_akyrs_null', nodes = desc_nodes, vars = _c.vars or loc_vars}
         end
-        if(G.GAME.letters_mult_enabled) then
-            localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = loc_vars}
+        if(G.GAME.letters_mult_enabled or G.GAME.letters_xmult_enabled) then
+        
+            if(G.GAME.letters_mult_enabled) then
+                localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
+            end
+            
+            if(G.GAME.letters_xmult_enabled) then
+                localize{type = 'descriptions', key = "x".._c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
+            end
         else
             if not _c.is_null then
-                localize{type = 'descriptions', key = "letterNotScored", set = _c.set, nodes = desc_nodes, vars = loc_vars}
+                localize{type = 'descriptions', key = "letterNotScored", set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
             else 
-                localize{type = 'descriptions', key = "aiko_x_akyrs_null", set = _c.set, nodes = desc_nodes, vars = loc_vars}
+                localize{type = 'descriptions', key = "aiko_x_akyrs_null", set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
             end
         end
 """

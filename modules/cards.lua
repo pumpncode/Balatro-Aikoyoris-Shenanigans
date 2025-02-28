@@ -28,6 +28,7 @@ SMODS.Back{
         selection = 2000000000,
         special_hook = true,
         letters_enabled = true,
-        letters_mult_enabled = true
+        letters_mult_enabled = true,
+        letters_xmult_enabled = true
     },
 }

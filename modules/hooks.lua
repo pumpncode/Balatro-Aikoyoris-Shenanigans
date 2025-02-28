@@ -324,6 +324,8 @@ function Back:apply_to_run()
             end
         }))
         G.GAME.starting_params.all_nulls = true
+
+        G.deck:shuffle('akyrsletterdeck')
     end
     local c = applyToRunBackHook(self)
     
@@ -599,6 +601,39 @@ function end_round()
             end
         end
         for i,card in ipairs(G.deck.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({G.C.RED}, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
+        end
+        for i,card in ipairs(G.discard.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({G.C.RED}, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
+        end
+        for i,card in ipairs(G.play.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({G.C.RED}, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
+        end
+        for i,card in ipairs(G.hand.cards) do
             if card.ability.akyrs_self_destructs then
                 G.E_MANAGER:add_event(Event({
                     func = function()

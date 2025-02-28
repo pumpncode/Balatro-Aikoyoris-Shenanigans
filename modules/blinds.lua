@@ -55,6 +55,7 @@ SMODS.Blind{
     end,
     drawn_to_hand = function(self)
         G.FUNCS.draw_from_discard_to_deck()
+        G.deck:shuffle('akyrthought')
     end,
     in_pool = function(self)
         return G.GAME.letters_enabled or false
@@ -84,14 +85,14 @@ SMODS.Blind{
             for char in G.GAME.aiko_current_word:gmatch(".") do
                 table.insert(word_table, char)
             end
-            for i,k in ipairs(word_table) do
-                local card = create_card('Alphabet',G.consumeables, nil, nil, nil, nil, "c_akyrs_"..k)
-                card:set_edition({negative = true})
-                card.ability.akyrs_self_destructs = true
-                card.sell_cost = 0
-                card:add_to_deck()
-                G.consumeables:emplace(card)
-                G.GAME.consumeable_buffer = 0
+            for k,v in ipairs(G.hand.cards) do
+                local _card = copy_card(v, nil, nil, G.playing_card)
+                _card.ability.akyrs_self_destructs = true
+                _card.ability.aikoyori_letters_stickers = word_table[k]
+                G.deck.config.card_limit = G.deck.config.card_limit + 1
+                table.insert(G.playing_cards, _card)
+                G.deck:emplace(_card)
+                _card:add_to_deck()
             end
             local todo_table = {}
             for char in G.GAME.word_todo:gmatch(".") do

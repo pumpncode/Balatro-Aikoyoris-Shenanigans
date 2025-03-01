@@ -216,6 +216,7 @@ SMODS.Joker {
     rarity = 2,
     cost = 4,
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
         return {
             vars = { card.ability.extra.chip_add, card.ability.extra.chip_add_stack }
         }
@@ -227,6 +228,28 @@ SMODS.Joker {
             chip_add_stack = 5,
         }
     },
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local cards = {}
+        table.insert(cards, SMODS.create_card({key = 'm_stone', area = AKYRS.temp_card_area}) )
+        SMODS.Center.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        AKYRS.card_area_preview(G.akyrsCardsPrev, desc_nodes, {
+            cards = cards,
+            override = true,
+            w = 0.2,
+            h = 0.6,
+            ml = 0,
+            scale = 0.5,
+            func_after = function(ca) 
+                if ca and ca.cards then
+                    for i,k in ipairs(ca.cards) do
+                        if not k.removed then
+                            k:start_dissolve({G.C.CHIPS}, true)
+                        end
+                    end
+                end
+             end,
+        })
+    end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
             if context.other_card.ability.name == "Stone Card" then
@@ -314,89 +337,6 @@ local function is_valid_enhancement(name)
     end
     return false
 end
--- maxwell's notebook
-AKYRS.LetterJoker {
-    atlas = 'AikoyoriJokers',
-    pos = {
-        x = 6,
-        y = 0
-    },
-    key = "maxwells_notebook",
-    rarity = 3,
-    cost = 4,
-    loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = {key = "akyrs_maxwell_example", set = 'Other', }
-        info_queue[#info_queue+1] = { key = "akyrs_art_by_larantula_l", set = "Other" }
-        return {
-            vars = {  }
-        }
-    end,
-    config = {
-        
-    },
-    calculate = function(self, card, context)
-        if G.GAME.letters_enabled and G.GAME.aiko_current_word then
-            local word = G.GAME.aiko_current_word
-            
-            if not word then return {} end
-            word = string.lower(word)
-            local lowerword = string.lower(word)
-            word = string.gsub(" " .. word, "%W%l", string.upper):sub(2)
-            if word == "Default" then word = nil end
-            if word == "Card" then word = "Default" end
-            if word == "Consumable" then word = "Consumeables" end
-            if word == "Holo" then word = "Holographic" end
-            --print(word)
-            if context.cardarea == G.play and context.individual then
-                if (is_valid_edition(word)) then
-                    context.other_card:set_edition({[lowerword] = true}, false, false)
-                end
-
-                if (is_valid_enhancement(word)) then
-                    
-                    local enhancement_from_name = {}
-                    for i,k in pairs(G.P_CENTERS) do
-                        if(k.set == "Enhanced") then
-                            enhancement_from_name[string.split(k.name," ")[1]] = k
-                        end
-                    end
-                    context.other_card:set_ability(enhancement_from_name[word],nil,true)
-                end
-            end
-
-            if context.joker_main then     
-                if (word == "Joker") then
-                    local carder = create_card(word,G.jokers, nil, nil, nil, nil, nil, 'akyrs:maxwell')
-                    G.jokers:emplace(carder)
-                elseif word == "Default" then
-                    local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
-                    local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
-                    G.deck:emplace(carder)
-                    table.insert(G.playing_cards, carder)
-                else
-                    --print(word)
-                    pcall(function(word)
-                        
-                        local carder = create_card(word,G.consumeables, nil, nil, nil, nil, nil, 'akyrs:maxwell')
-                        if carder then
-                            G.consumeables:emplace(carder)
-                        end
-                    end, word)
-                end
-
-                G.GAME.consumeable_buffer = 0
-                return {
-                    message = localize {
-                        key = 'k_created',
-                        vars = { word }
-                    }
-                }
-            end
-        end
-    end,
-    blueprint_compat = true,
-}
-
 -- it is forbidden to dog
 SMODS.Joker {
     atlas = 'AikoyoriJokers',
@@ -510,7 +450,7 @@ SMODS.Joker {
         return {
             vars = { 
                 card.ability.extra.total,
-             }
+            }
         }
     end,
     config = {
@@ -729,19 +669,35 @@ SMODS.Joker {
     config = {
         extra = {
             chips = 0,
-            extra = 2,
+            extra = 8,
         },
     },
     calculate = function(self, card, context)
+        if context.before then
+            
+            for i, _card in ipairs(G.play.cards) do
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.extra
+            end
+            return {
+                message = localize("k_akyrs_2fa_generate")
+            }
+        end
         if context.joker_main then
             return {
                 chips = card.ability.extra.chips
             }
         end
+        if context.end_of_round and context.cardarea == G.jokers  then
+            return {
+                message = localize("k_akyrs_2fa_reset"),
+                func = function ()
+                    card.ability.extra.chips = 0
+                end
+            }
+        end
         if context.after and not context.blueprint then
             
             for i, _card in ipairs(G.play.cards) do
-                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.extra
                 local percent = 1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3
                 G.E_MANAGER:add_event(Event{
                     trigger = 'after',
@@ -749,6 +705,7 @@ SMODS.Joker {
                     delay = 0.2*i,
                     func = function ()
                         G.play.cards[i]:flip()
+                        --G.play.cards[i]:a_cool_fucking_spin(1,math.pi * 100)
                         play_sound('card1', percent);
                         return true
                     end
@@ -762,11 +719,13 @@ SMODS.Joker {
                         local _rank = nil
                         local _suit = nil
                         while _rank == nil or _suit == nil do
-                            _rank = pseudorandom_element(SMODS.Ranks, pseudoseed('akyrs2fa'))
-                            _suit = pseudorandom_element(SMODS.Suits, pseudoseed('akyrs2fa'))
+                            _rank = pseudorandom_element(SMODS.Ranks, pseudoseed('akyrs2far'))
+                            _suit = pseudorandom_element(SMODS.Suits, pseudoseed('akyrs2fas'))
                         end
                         
                         SMODS.change_base(G.play.cards[i],_suit.key,_rank.key)
+                        
+                        --G.play.cards[i]:a_cool_fucking_spin(1,10)
                         
                         G.play.cards[i]:flip()
                         
@@ -784,8 +743,7 @@ SMODS.Joker {
     blueprint_compat = false,
 }
 
--- HOLY SHIT NEW PAGE
-
+-- gaslighting 
 SMODS.Joker{
     
     atlas = 'AikoyoriJokers',
@@ -855,4 +813,132 @@ SMODS.Joker{
                 end
         end
     end
+}
+
+
+-- HOLY SHIT NEW PAGE this one is dedicated to the letters
+
+-- maxwell's notebook
+AKYRS.LetterJoker {
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 6,
+        y = 0
+    },
+    key = "maxwells_notebook",
+    rarity = 3,
+    cost = 4,
+    loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { key = "akyrs_maxwell_example", set = 'Other', }
+        info_queue[#info_queue+1] = { key = "akyrs_art_by_larantula_l", set = "Other" }
+        return {
+            vars = {  }
+        }
+    end,
+    config = {
+        
+    },
+    
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        local cards = {}
+        table.insert(cards, AKYRS.create_random_card("maxwellui") )
+        table.insert(cards, AKYRS.create_random_card("maxwellui") )
+        table.insert(cards, AKYRS.create_random_card("maxwellui") )
+        table.insert(cards, AKYRS.create_random_card("maxwellui") )
+        local letters = {'g','o','l','d'}
+        for index, value in ipairs(cards) do
+            value.ability.forced_letter_render = true
+            value.ability.aikoyori_letters_stickers = letters[index]
+        end
+        SMODS.Center.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        AKYRS.card_area_preview(G.akyrsCardsPrev, desc_nodes, {
+            cards = cards,
+            override = true,
+            w = 2.4,
+            h = 0.6,
+            ml = 0,
+            scale = 0.5,
+            func_delay = 1,
+            func_after = function(ca) 
+                if ca and ca.cards then
+                    for i,k in ipairs(ca.cards) do
+                        if not k.removed then
+                            k:flip()
+                            G.E_MANAGER:add_event(Event{
+                                trigger = "after",
+                                blockable = false,
+                                delay = 0.5 + 0.1*i,
+                                func = function ()
+                                    k:set_ability(G.P_CENTERS["m_gold"],true, false)
+                                    k:flip()
+                                    return true
+                                end
+                            })
+                        end
+                    end
+                end
+             end,
+        })
+    end,
+    calculate = function(self, card, context)
+        if G.GAME.letters_enabled and G.GAME.aiko_current_word then
+            local word = G.GAME.aiko_current_word
+            
+            if not word then return {} end
+            word = string.lower(word)
+            local lowerword = string.lower(word)
+            word = string.gsub(" " .. word, "%W%l", string.upper):sub(2)
+            if word == "Default" then word = nil end
+            if word == "Card" then word = "Default" end
+            if word == "Consumable" then word = "Consumeables" end
+            if word == "Holo" then word = "Holographic" end
+            --print(word)
+            if context.cardarea == G.play and context.individual then
+                if (is_valid_edition(word)) then
+                    context.other_card:set_edition({[lowerword] = true}, false, false)
+                end
+
+                if (is_valid_enhancement(word)) then
+                    
+                    local enhancement_from_name = {}
+                    for i,k in pairs(G.P_CENTERS) do
+                        if(k.set == "Enhanced") then
+                            enhancement_from_name[string.split(k.name," ")[1]] = k
+                        end
+                    end
+                    context.other_card:set_ability(enhancement_from_name[word],nil,true)
+                end
+            end
+
+            if context.joker_main then     
+                if (word == "Joker") then
+                    local carder = create_card(word,G.jokers, nil, nil, nil, nil, nil, 'akyrs:maxwell')
+                    G.jokers:emplace(carder)
+                elseif word == "Default" then
+                    local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
+                    local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
+                    G.deck:emplace(carder)
+                    table.insert(G.playing_cards, carder)
+                else
+                    --print(word)
+                    pcall(function(word)
+                        
+                        local carder = create_card(word,G.consumeables, nil, nil, nil, nil, nil, 'akyrs:maxwell')
+                        if carder then
+                            G.consumeables:emplace(carder)
+                        end
+                    end, word)
+                end
+
+                G.GAME.consumeable_buffer = 0
+                return {
+                    message = localize {
+                        key = 'k_created',
+                        vars = { word }
+                    }
+                }
+            end
+        end
+    end,
+    blueprint_compat = true,
 }

@@ -116,6 +116,61 @@ function getFirstKeyOfTable(t)
 end
 
 
+AKYRS.pickableSuit = { "S", "H", "C", "D" }
+AKYRS.pickableRank = { "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A" }
+AKYRS.rankToNumber = { ["2"] = 2, ["3"] = 3, ["4"] = 4, ["5"] = 5, ["6"] = 6, ["7"] = 7, ["8"] = 8, ["9"] = 9, ["T"] = 10,
+   ["J"] = 11, ["Q"] = 12, ["K"] = 13, ["A"] = 14 }
+function AKYRS.concat_table(t1, t2)
+    for i = 1, #t2 do
+        t1[#t1 + 1] = t2[i]
+    end
+    return t1
+end
+
+
+
+function AKYRS.randomCard()
+    local suit = aiko_pickRandomInTable(AKYRS.pickableSuit)
+    local rank = aiko_pickRandomInTable(AKYRS.pickableRank)
+    return suit .. "_" .. rank
+end
+
+function AKYRS.randomSameRank(cardCode)
+    local suit = string.sub(cardCode, 1, 1)
+    local rank = string.sub(cardCode, 3, 3)
+    local newSuit = aiko_pickRandomInTable(AKYRS.pickableSuit)
+    while newSuit == suit do
+        newSuit = aiko_pickRandomInTable(AKYRS.pickableSuit)
+    end
+    return newSuit .. "_" .. rank
+end
+
+function AKYRS.randomSameSuit(cardCode)
+    local suit = string.sub(cardCode, 1, 1)
+    local rank = string.sub(cardCode, 3, 3)
+    local newRank = aiko_pickRandomInTable(AKYRS.pickableRank)
+    while newRank == rank do
+        newRank = AKYRS.pickableRank[math.random(1, 13)]
+    end
+    return suit .. "_" .. newRank
+end
+
+function AKYRS.randomConsecutiveRank(cardCode, up, randomSuit)
+    local suit = string.sub(cardCode, 1, 1)
+    local rank = string.sub(cardCode, 3, 3)
+    local newRank = rank
+    newRank = AKYRS.pickableRank[math.fmod(AKYRS.rankToNumber[rank] - 1, #AKYRS.pickableRank) + 1]
+    if randomSuit then
+        local newSuit = aiko_pickRandomInTable(AKYRS.pickableSuit)
+        while newSuit == suit do
+            newSuit = aiko_pickRandomInTable(AKYRS.pickableSuit)
+        end
+        return newSuit .. "_" .. newRank
+    else
+        return suit .. "_" .. newRank
+    end
+end
+
 function table_to_string(tables)
     if type(tables) == "nil" then
         return "nil"
@@ -177,3 +232,75 @@ function isBlindKeyAThing()
     return G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.key or nil
 end
 
+
+-- credit to nh6574 for helping with this bit
+AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
+    local height = config.h or 1.25
+    local width = config.w or 1
+    local card_limit = #config.cards or 1
+    local override = config.override or false
+    local cards = config.cards or {}
+    local padding = config.padding or 0.07
+    local func_after = config.func_after or nil
+    local init_delay = config.init_delay or 0.5
+    local func_list = config.func_list or nil
+    local func_delay = config.func_delay or 0.2
+    local margin_left = config.ml or 0.2
+    local scale = config.scale or 1
+    if override or not cardArea then
+        cardArea = CardArea(
+            G.ROOM.T.x + margin_left * G.ROOM.T.w, G.ROOM.T.h
+            , width * G.CARD_W, height * G.CARD_H,
+            {card_limit = card_limit, type = 'title', highlight_limit = 0, collection = true}
+        )
+        for i, card in ipairs(cards) do
+            card.T.scale = scale
+            local area = cardArea
+            area:emplace(card)
+        end
+    end
+    if cardArea then
+        desc_nodes[#desc_nodes+1] = {
+            {
+                n = G.UIT.R,
+                config = { align = "cm" , padding = padding, no_fill = true},
+                nodes = {
+                    {n = G.UIT.O, config = { object = cardArea }}
+                }
+            }
+        }
+    end
+    if func_after then 
+        G.E_MANAGER:add_event(Event{
+            delay = init_delay,
+            trigger = "after",
+            func = function ()
+                func_after(cardArea)
+                return true
+            end
+        })
+    end
+    
+    if func_list then 
+        for i, k in ipairs(func_list) do
+            G.E_MANAGER:add_event(Event{
+                delay = func_delay * i,
+                blockable = false,
+                trigger = "after",
+                func = function ()
+                    k(cardArea)
+                    return true
+                end
+            })
+        end
+    end
+end
+
+AKYRS.temp_card_area = CardArea(
+    0,0,0,0,
+    {card_limit = 999999, type = 'title', highlight_limit = 0, collection = true}
+)
+
+AKYRS.create_random_card = function(seed)
+    return Card(0,0, G.CARD_W, G.CARD_H, pseudorandom_element(G.P_CARDS,pseudoseed(seed)), G.P_CENTERS.c_base)
+end

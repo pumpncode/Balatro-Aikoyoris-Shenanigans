@@ -3,59 +3,6 @@ assert(SMODS.load_file("./func/words/words.lua"))()
 assert(SMODS.load_file("./func/word_utils.lua"))()
 assert(SMODS.load_file("./modules/misc.lua"))()
 
-local pickableSuit = { "S", "H", "C", "D" }
-local pickableRank = { "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A" }
-local rankToNumber = { ["2"] = 2, ["3"] = 3, ["4"] = 4, ["5"] = 5, ["6"] = 6, ["7"] = 7, ["8"] = 8, ["9"] = 9, ["T"] = 10,
-    ["J"] = 11, ["Q"] = 12, ["K"] = 13, ["A"] = 14 }
-local function concat_table(t1, t2)
-    for i = 1, #t2 do
-        t1[#t1 + 1] = t2[i]
-    end
-    return t1
-end
-
-local function randomCard()
-    local suit = aiko_pickRandomInTable(pickableSuit)
-    local rank = aiko_pickRandomInTable(pickableRank)
-    return suit .. "_" .. rank
-end
-
-local function randomSameRank(cardCode)
-    local suit = string.sub(cardCode, 1, 1)
-    local rank = string.sub(cardCode, 3, 3)
-    local newSuit = aiko_pickRandomInTable(pickableSuit)
-    while newSuit == suit do
-        newSuit = aiko_pickRandomInTable(pickableSuit)
-    end
-    return newSuit .. "_" .. rank
-end
-
-local function randomSameSuit(cardCode)
-    local suit = string.sub(cardCode, 1, 1)
-    local rank = string.sub(cardCode, 3, 3)
-    local newRank = aiko_pickRandomInTable(pickableRank)
-    while newRank == rank do
-        newRank = pickableRank[math.random(1, 13)]
-    end
-    return suit .. "_" .. newRank
-end
-
-local function randomConsecutiveRank(cardCode, up, randomSuit)
-    local suit = string.sub(cardCode, 1, 1)
-    local rank = string.sub(cardCode, 3, 3)
-    local newRank = rank
-    newRank = pickableRank[math.fmod(rankToNumber[rank] - 1, #pickableRank) + 1]
-    if randomSuit then
-        local newSuit = aiko_pickRandomInTable(pickableSuit)
-        while newSuit == suit do
-            newSuit = aiko_pickRandomInTable(pickableSuit)
-        end
-        return newSuit .. "_" .. newRank
-    else
-        return suit .. "_" .. newRank
-    end
-end
-
 local example_words = {
     "cry",
     "card",
@@ -138,7 +85,7 @@ for i = 3, 31 do
     for j = 1, #example_words[i-2] do
         local c = example_words[i-2]:sub(j,j)
         table.insert(exampler,{
-            randomCard(),
+            AKYRS.randomCard(),
             true,
             c
         })

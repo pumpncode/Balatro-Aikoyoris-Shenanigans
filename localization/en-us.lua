@@ -32,7 +32,7 @@ return {
                     "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
                     "for every {C:attention}Stone{} Card scored",
                     "{C:red,E:1}Destroy all scored",
-                    "{C:attention}Stone{C:red,E:1} cards afterwards"
+                    "{C:attention,E:1}Stone{C:red,E:1} cards afterwards"
                 }
             },
             j_akyrs_diamond_pickaxe = {
@@ -157,6 +157,7 @@ return {
                     "{C:attention}All Played Cards'{} Rank",
                     "and Suit are {C:attention}randomized{} after scoring",
                     "and gains {C:chips} +#1# {} Chips per card played",
+                    "{C:attention}Resets{} at the end of the round.",
                     "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
                     "{C:inactive,s:0.8}PSA: Please enable 2FA on all your online accounts!",
                 }
@@ -329,7 +330,9 @@ return {
             ph_akyrs_unknown = "???",
             k_akyrs_reciprocaled = "Reciprocal'd!",
             k_akyrs_drawn_discard = "All Back!",
+            k_akyrs_2fa_generate = "Generated!",
             k_akyrs_2fa_regen = "Code Refreshed!",
+            k_akyrs_2fa_reset = "2FA Reset!",
             k_akyrs_extinguish = "Extinguished...",
             k_akyrs_burn = "Burn!",
         },

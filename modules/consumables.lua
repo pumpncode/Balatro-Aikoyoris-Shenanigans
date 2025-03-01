@@ -38,7 +38,11 @@ for k, v in ipairs(aiko_alphabets_no_wilds) do
             text = { "Convert all selected cards'","letter to {C:red}#1#{}","{C:inactive,s:0.75}(up to #2# cards){}" },
         },
         loc_vars = function(self, info_queue, card)
-            info_queue[#info_queue+1] = {key = 'letters'..string.upper(card.ability.extra.letter), set = 'AikoyoriExtraBases'}
+            info_queue[#info_queue+1] = {key = 'letters'..string.upper(card.ability.extra.letter), set = 'AikoyoriExtraBases' ,vars = {
+      
+                (scrabble_scores[card.ability.extra.letter]),
+                1 + (scrabble_scores[card.ability.extra.letter]/10),
+            }}
             return {
                 vars = {
                     string.upper(card.ability.extra.letter),

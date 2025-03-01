@@ -237,7 +237,7 @@ end
 AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
     local height = config.h or 1.25
     local width = config.w or 1
-    local card_limit = #config.cards or 1
+    local card_limit = config.card_limit or #config.cards or 1
     local override = config.override or false
     local cards = config.cards or {}
     local padding = config.padding or 0.07

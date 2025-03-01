@@ -27,6 +27,11 @@ return {
                     "{C:inactive,s:0.8}gives you a {C:spectral,s:0.8}Spectral{C:inactive,s:0.8} Card",
                 },
             },
+            dd_akyrs_yona_yona_ex={
+                name="Example Hand",
+                text={
+                },
+            },
         },
         Joker={
             j_akyrs_utage_charts = {

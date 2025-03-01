@@ -534,6 +534,8 @@ SMODS.Joker {
     rarity = 2,
     cost = 6,
     loc_vars = function(self, info_queue, card)
+        
+        info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_yona_yona_ex"]
         return {
             vars = { 
                 card.ability.extra.times,
@@ -545,6 +547,7 @@ SMODS.Joker {
             times = 2
         },
     },
+
     calculate = function(self, card, context)
         if context.repetition and (context.other_card:get_id() == 4 or context.other_card:get_id() == 7) then
             return {

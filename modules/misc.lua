@@ -304,3 +304,5 @@ AKYRS.temp_card_area = CardArea(
 AKYRS.create_random_card = function(seed)
     return Card(0,0, G.CARD_W, G.CARD_H, pseudorandom_element(G.P_CARDS,pseudoseed(seed)), G.P_CENTERS.c_base)
 end
+
+

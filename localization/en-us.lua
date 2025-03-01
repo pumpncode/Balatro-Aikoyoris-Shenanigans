@@ -19,6 +19,15 @@ return {
         },
         Edition={},
         Enhanced={},
+        DescriptionDummy={
+            dd_akyrs_maxwell_example={
+                name="Example",
+                text={
+                    "{C:inactive,s:0.8}For example, Spelling {C:spectral,s:0.8}'Spectral'",
+                    "{C:inactive,s:0.8}gives you a {C:spectral,s:0.8}Spectral{C:inactive,s:0.8} Card",
+                },
+            },
+        },
         Joker={
             j_akyrs_utage_charts = {
                 name = "Utage Charts",
@@ -214,13 +223,6 @@ return {
                 text={
                     "Aces count as 1",
                     "Face Cards count as 10",
-                },
-            },
-            akyrs_maxwell_example={
-                name="Example",
-                text={
-                    "{C:inactive,s:0.8}For example, Spelling {C:spectral,s:0.8}'Spectral'",
-                    "{C:inactive,s:0.8}gives you a {C:spectral,s:0.8}Spectral{C:inactive,s:0.8} Card",
                 },
             },
         },

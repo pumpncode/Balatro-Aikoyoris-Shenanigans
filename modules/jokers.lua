@@ -65,7 +65,7 @@ SMODS.Joker {
     config = {
         extra = {
             mult_stored = 2,
-            mult = 2,
+            mult = 4,
             times = 2,
             total_times = 2,
             times_increment = 1,
@@ -84,7 +84,7 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.joker_main then
             return {
-                mult_mod = card.ability.extra.mult_stored,
+                mult = card.ability.extra.mult_stored,
             }
         end
     end,
@@ -637,7 +637,7 @@ SMODS.Joker {
         },
     },
     calculate = function(self, card, context)
-        if context.joker_main or context.individual then
+        if context.joker_main or context.individual and not context.end_of_round then
             return {
                 mult = card.ability.extra.mult
             }
@@ -782,4 +782,77 @@ SMODS.Joker {
         end
     end,
     blueprint_compat = false,
+}
+
+-- HOLY SHIT NEW PAGE
+
+SMODS.Joker{
+    
+    atlas = 'AikoyoriJokers',
+    key = "gaslighting",
+    pos = {
+        x = 5,
+        y = 1
+    },
+    rarity = 3,
+    cost = 3,
+    config = {
+        extra = {
+            xmult = 1,
+            extra = 0.5,
+        },
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.extra,
+                card.ability.extra.xmult,
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+        end
+        if context.final_scoring_step and G.GAME.blind then
+            
+                local comp = false
+                if Talisman then
+                    comp = G.GAME.blind.chips:lt(G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult)
+                else
+                    
+                    comp = G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult >= G.GAME.blind.chips
+                end
+                G.E_MANAGER:add_event(
+                    Event{
+                        func = function ()
+                            local comp = false
+                            if Talisman then
+                                comp = G.GAME.blind.chips:lt(G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult)
+                            else
+                                
+                                comp = G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult >= G.GAME.blind.chips
+                            end
+                            if comp then
+                                card.ability.extra.xmult = 1
+                            else 
+                                card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.extra
+                            end
+                            return true
+                        end
+                    }
+                )
+                if comp then
+                    return {
+                        message = localize("k_akyrs_extinguish")
+                    }
+                else 
+                    return {
+                        message = localize("k_akyrs_burn"),
+                    }
+                end
+        end
+    end
 }

@@ -161,6 +161,15 @@ return {
                     "{C:inactive,s:0.8}PSA: Please enable 2FA on all your online accounts!",
                 }
             },
+            j_akyrs_gaslighting = {
+                name = "Gaslighting",
+                text = { 
+                    "This Joker gains {X:mult,C:white} X#1# {} Mult every hand played",
+                    "{C:attention}Will not reset at all if score catches fire.",
+                    "{C:inactive,s:0.7}Trust me, not Jimbo.",
+                    "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+                }
+            },
         },
         Other={
             akyrs_self_destructs={
@@ -321,6 +330,8 @@ return {
             k_akyrs_reciprocaled = "Reciprocal'd!",
             k_akyrs_drawn_discard = "All Back!",
             k_akyrs_2fa_regen = "Code Refreshed!",
+            k_akyrs_extinguish = "Extinguished...",
+            k_akyrs_burn = "Burn!",
         },
         high_scores={},
         labels={

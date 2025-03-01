@@ -81,6 +81,8 @@ return {
                 text = { 
                     "Debuffed Cards gives {X:mult,C:white} X#1#{} Mult",
                     "Both held in hand and at play",
+                    "{C:inactive,s:0.8}Does NOT work properly on macOS",
+                    "{C:inactive,s:0.8}Please check back later if you're on macOS",
                 }
             },
             j_akyrs_eat_pant = {
@@ -118,10 +120,12 @@ return {
                         "equipped with a potent ability known as the '{C:mult}+#1#{} Mult.' This ability dramatically enhances a player's score",
                         "under specific conditions, primarily centered around the presence of any {C:attention}High Card{} in the hand, which includes",
                         "but is not limited to traditional {C:attention}high-ranking cards{} like {C:attention}Aces, Kings, Queens, and Jacks.{}",
-                        "Instead, {C:attention,E:1,s:1.5}Balatro{} expands this definition to include key strategic cards that heighten gameplay impact.",
+                        "Even then, the ability of this card goes further. But let's not get ahead of ourselves by going through with it before learning that",
+                        "{C:attention,E:1,s:1.5}Balatro{} expands the definition of scoring to include key strategic cards that heighten gameplay impact.",
                         "This transformative {C:mult}multiplier{} is not just an advantage but a central aspect of strategic planning in {C:attention,E:1,s:1.5}Balatro{}.",
                         "It compels players to consider their hand composition carefully, aiming to incorporate {C:attention}High Cards{} and maximize benefits.",
                         "Delving into the history of gambling, card games have been a corner{C:tarot}stone{} of gaming culture for centuries.",
+                        "by {C:attention}activating for every card in hand and at play{}, this ability ensures you will gain a high score by merely playing a {C:attention}High Card{}.",
                         "From the ancient {C:white,X:red}Chinese{} who are credited with inventing playing cards in the {C:attention}9th century{} to the spread of card",
                         "games across Europe during the {C:chips}Middle Ages{}, gambling has evolved into a sophisticated form of entertainment and strategy.",
                         "The concept of {C:mult}multipliers{}, like the '{C:mult}+#1#{} Mult' in {C:attention,E:1,s:1.5}Balatro{}, echoes innovations in probability and risk-taking found",
@@ -151,7 +155,10 @@ return {
                 name = "Two-Factor Authentication",
                 text = { 
                     "{C:attention}All Played Cards'{} Rank",
-                    "and Suit are {C:attention}randomized{} after scoring"
+                    "and Suit are {C:attention}randomized{} after scoring",
+                    "and gains {C:chips} +#1# {} Chips per card played",
+                    "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
+                    "{C:inactive,s:0.8}PSA: Please enable 2FA on all your online accounts!",
                 }
             },
         },

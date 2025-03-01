@@ -1,5 +1,12 @@
 
 assert(SMODS.load_file("./modules/misc.lua"))() 
+
+AKYRS.LetterJoker = SMODS.Joker:extend{
+    in_pool = function (self, args)
+        return G.GAME.letters_enabled or false
+    end
+}
+
 -- repeater
 SMODS.Joker {
     atlas = 'AikoyoriJokers',
@@ -308,7 +315,7 @@ local function is_valid_enhancement(name)
     return false
 end
 -- maxwell's notebook
-SMODS.Joker {
+AKYRS.LetterJoker {
     atlas = 'AikoyoriJokers',
     pos = {
         x = 6,
@@ -409,7 +416,7 @@ SMODS.Joker {
     end,
     config = {
         extra = {
-            mult = 2,
+            mult = 1.5,
         }
     },
     calculate = function(self, card, context)
@@ -626,7 +633,7 @@ SMODS.Joker {
     end,
     config = {
         extra = {
-            mult = 4
+            mult = 1
         },
     },
     calculate = function(self, card, context)
@@ -713,21 +720,33 @@ SMODS.Joker {
     cost = 3,
     loc_vars = function(self, info_queue, card)
         return {
+            vars = {
+                card.ability.extra.extra,
+                card.ability.extra.chips
+            }
         }
     end,
     config = {
         extra = {
+            chips = 0,
+            extra = 2,
         },
     },
     calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                chips = card.ability.extra.chips
+            }
+        end
         if context.after and not context.blueprint then
             
-            for i, card in ipairs(G.play.cards) do
-
+            for i, _card in ipairs(G.play.cards) do
+                card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.extra
                 local percent = 1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3
                 G.E_MANAGER:add_event(Event{
                     trigger = 'after',
-                    delay = 0.5,
+                    blocking = false,
+                    delay = 0.2*i,
                     func = function ()
                         G.play.cards[i]:flip()
                         play_sound('card1', percent);
@@ -736,7 +755,8 @@ SMODS.Joker {
                 })
                 G.E_MANAGER:add_event(Event{
                     trigger = 'after',
-                    delay = 0.5,
+                    delay = 2+0.2*i,
+                    blocking = false,
                     func = function ()
                             
                         local _rank = nil
@@ -749,10 +769,12 @@ SMODS.Joker {
                         SMODS.change_base(G.play.cards[i],_suit.key,_rank.key)
                         
                         G.play.cards[i]:flip()
+                        
                         return true
                     end
                 })
             end
+            delay(4+0.2*#G.play.cards)
             return {
                 message = localize("k_akyrs_2fa_regen"),
                 

@@ -1,4 +1,4 @@
-
+AKYRS = {}
 assert(SMODS.load_file("./modules/atlasses.lua"))() 
 assert(SMODS.load_file("./modules/hooks.lua"))() 
 assert(SMODS.load_file("./modules/sounds.lua"))() 

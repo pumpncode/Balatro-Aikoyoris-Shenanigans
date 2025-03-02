@@ -21,7 +21,10 @@
 SMODS.Back{
     key = "letter_deck",
     atlas = 'deckBacks',
-    pos = {x = 0, y = 0},
+    pos = {x = 1, y = 0},
+    loc_vars = function (self, info_queue, card)
+        return { card.config.ante_scaling}
+    end,
     config = {
         all_nulls = true,
         starting_deck_size = 100,
@@ -30,6 +33,7 @@ SMODS.Back{
         letters_enabled = true,
         letters_mult_enabled = true,
         letters_xmult_enabled = true,
+        ante_scaling = 2,
         vouchers = {'v_akyrs_alphabet_soup','v_akyrs_crossing_field'}
     },
 }

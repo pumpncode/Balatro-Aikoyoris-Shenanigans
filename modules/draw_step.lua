@@ -6,9 +6,10 @@ if SMODS.DrawStep then
         order = 50,
         func = function (card, layer)
             AKYRS.aikoyori_draw_extras(card,layer)
-        end
+        end,
+        conditions = { vortex = false, facing = 'front' },
     }
-    local old_draw_step = SMODS.DrawSteps.front.func -- if you want to reference the old function
+    local old_draw_step = SMODS.DrawSteps.front.func
     SMODS.DrawStep:take_ownership('front', {
       func = function(self, layer)
         if not self.is_null then

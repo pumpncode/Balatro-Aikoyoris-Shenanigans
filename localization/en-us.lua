@@ -6,7 +6,13 @@ return {
         Back={
             b_akyrs_letter_deck = {
                 name = 'Letter Deck',
-                text = { 'Letters-Only Deck',"with Scrabble Distribution", "{C:mult}Mult{} and {C:white,X:mult}Xmult{} Enabled", "Play {C:playable}as many{}", "card as you want per hand" },
+                text = { 'Letters-Only Deck',
+                        "with Scrabble Distribution", 
+                        "{C:mult}Mult{} and {C:white,X:mult}Xmult{} Enabled", 
+                        "Play {C:playable}as many{} cards", 
+                        "as you want per hand",
+                        "{C:red}X#1#{} base Blind Size",
+                    },
             }
         },
         Blind={
@@ -316,7 +322,25 @@ return {
             xlettersWild = {name = 'Wild Card',text = { '{C:white,X:mult}No Extra{} XMult'},},
             letterNotScored = {name = '',text = { 'Allows Words','to be played'},},
         },
-            
+        Sleeve = {
+            sleeve_akyrs_letter = {
+                name = "Letter Sleeve",
+                text = { 
+                    "Start with {C:red}Letters{} Enabled",
+                    "Along with with its {C:white,X:mult}Xmult{}",
+             }
+            },
+            sleeve_akyrs_letter_alt = {
+                name = "Letter Sleeve",
+                text = { 
+                    "Start with",
+                    "{C:white,X:dark_edition}X#1#{} Deck Size",
+                    "{C:red}+#2#{} Discards",
+                    "{C:blue}+#3#{} Hand Size",
+                    "{C:red}X#4#{} base Blind Size",
+             }
+            },
+        }
     },
     misc = {
         achievement_descriptions={},

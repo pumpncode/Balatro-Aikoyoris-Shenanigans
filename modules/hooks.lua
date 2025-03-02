@@ -1,7 +1,7 @@
 
 
 assert(SMODS.load_file("./modules/misc.lua"))() 
-assert(SMODS.load_file("./modules/atlasses.lua"))() 
+
 assert(SMODS.load_file("./func/word_utils.lua"))() 
 
 SMODS.optional_features.cardareas.unscored = true
@@ -94,6 +94,7 @@ function Game:init_game_object()
     local ret = igo(self)
     ret.aiko_cards_playable = 5
     ret.starting_params.special_hook = false
+    ret.starting_params.deck_size_letter = 1
     ret.letters_enabled = false
     ret.letters_mult_enabled = false
     ret.letters_xmult_enabled = false
@@ -298,31 +299,35 @@ function Back:apply_to_run()
         G.E_MANAGER:add_event(Event({
             func = function()
                 G.playing_cards = {}
-                for i, letter in pairs(scrabble_letters) do
-                    G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                    local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:all_nulls'))
-                    local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
-                    car.is_null = true
-                        
-                    -- misprintize
-                    if G.GAME.modifiers and G.GAME.modifiers.cry_misprint_min and G.GAME.modifiers.cry_misprint_max then
-                        for k, v in pairs(G.playing_cards) do
-                            cry_misprintize(car)
+                local deckloop = G.GAME.starting_params.deck_size_letter or 1
+                for loops = 1, deckloop do
+                    for i, letter in pairs(scrabble_letters) do
+                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:all_nulls'))
+                        local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
+                        car.is_null = true
+                            
+                        -- misprintize
+                        if G.GAME.modifiers and G.GAME.modifiers.cry_misprint_min and G.GAME.modifiers.cry_misprint_max then
+                            for k, v in pairs(G.playing_cards) do
+                                cry_misprintize(car)
+                            end
                         end
-                    end
-
-                    car:set_letters(letter)
-                    G.deck:emplace(car)
-                    
-                    table.insert(G.playing_cards, car)
-                    G.GAME.starting_deck_size = #G.playing_cards
-                    -- for cryptid
-                    if G.GAME.modifiers and G.GAME.modifiers.cry_ccd then
-                        for k, v in pairs(G.playing_cards) do
-                            v:set_ability(get_random_consumable('cry_ccd',{"no_doe", "no_grc"}, nil, nil, true), true, nil)
+    
+                        car:set_letters(letter)
+                        G.deck:emplace(car)
+                        
+                        table.insert(G.playing_cards, car)
+                        -- for cryptid
+                        if G.GAME.modifiers and G.GAME.modifiers.cry_ccd then
+                            for k, v in pairs(G.playing_cards) do
+                                v:set_ability(get_random_consumable('cry_ccd',{"no_doe", "no_grc"}, nil, nil, true), true, nil)
+                            end
                         end
                     end
                 end
+                G.GAME.starting_deck_size = #G.playing_cards
+
                 
                 G.deck:shuffle('akyrsletterdeck')
                 return true

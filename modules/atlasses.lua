@@ -57,3 +57,10 @@ SMODS.Atlas {
     px = 71,
     py = 95
 }
+
+SMODS.Atlas {
+    key = "aikoyoriSleeves",
+    path = "aikoSleeves.png",
+    px = 73,
+    py = 95
+}

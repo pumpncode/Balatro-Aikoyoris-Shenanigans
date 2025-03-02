@@ -166,9 +166,9 @@ for i = 3, 31 do
                 return {}
             end
         end,
-        chips = 8 * i + (i-1.22) ^ (1 + i * 0.17),
-        mult = ((i - 2) ^ 1.07) + 0.75 * i,
-        l_chips = 5*i,
-        l_mult = 2*i,
+        chips = 3 * i + (i-1.8) ^ (1 + i * 0.25),
+        mult = ((i - 2) ^ 1.4) + i,
+        l_chips = 5*i^1.5 + 3,
+        l_mult = 2*i^1.5 + 3,
     }
 end

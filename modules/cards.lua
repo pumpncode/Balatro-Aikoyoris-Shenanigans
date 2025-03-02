@@ -21,9 +21,11 @@
 SMODS.Back{
     key = "letter_deck",
     atlas = 'deckBacks',
-    pos = {x = 1, y = 0},
+    pos = {x = 0, y = 0},
     loc_vars = function (self, info_queue, card)
-        return { card.config.ante_scaling}
+        return { vars = {
+            self.config.ante_scaling
+        } }
     end,
     config = {
         all_nulls = true,

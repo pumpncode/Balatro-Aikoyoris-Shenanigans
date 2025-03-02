@@ -668,6 +668,7 @@ SMODS.Joker {
     rarity = 1,
     cost = 3,
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_2fa_example"]
         return {
             vars = {
                 card.ability.extra.extra,

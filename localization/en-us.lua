@@ -34,6 +34,11 @@ return {
                 },
             },
             dd_akyrs_yona_yona_ex={
+                name="Visual Example",
+                text={
+                },
+            },
+            dd_akyrs_2fa_example={
                 name="Example Hand",
                 text={
                 },

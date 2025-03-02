@@ -320,3 +320,14 @@ AKYRS.create_random_card = function(seed)
 end
 
 
+function AKYRS.change_base_skip(card, suit, rank)
+    if not card then return false end
+    local _suit = SMODS.Suits[suit or card.base.suit]
+    local _rank = SMODS.Ranks[rank or card.base.value]
+    if not _suit or not _rank then
+        sendWarnMessage(('Tried to call SMODS.change_base with invalid arguments: suit="%s", rank="%s"'):format(suit, rank), 'Util')
+        return false
+    end
+    card:set_base(G.P_CARDS[('%s_%s'):format(_suit.card_key, _rank.card_key)], true)
+    return card
+end

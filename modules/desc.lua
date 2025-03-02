@@ -74,7 +74,7 @@ AKYRS.DescriptionDummy{
     generate_ui = function(self, info_queue, cardd, desc_nodes, specific_vars, full_UI_table)
         local cards = {}
         local card = AKYRS.create_random_card("yona")
-        card:set_base(G.P_CARDS["S_2"], true)
+        card:set_base(G.P_CARDS["S_4"], true)
         table.insert(cards,card)
         local card = AKYRS.create_random_card("yona")
         card:set_base(G.P_CARDS["C_7"], true)

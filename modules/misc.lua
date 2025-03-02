@@ -232,17 +232,27 @@ function isBlindKeyAThing()
     return G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.key or nil
 end
 
+AKYRS.get_speed_mult = function(card)
+    return ((card and (card.area == G.jokers or
+        card.area == G.consumeables or
+        card.area == G.hand or 
+        card.area == G.play 
+    )) and G.SETTINGS.GAMESPEED) or 1
+end
 
 -- credit to nh6574 for helping with this bit
 AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
+    if not config then config = {} end
     local height = config.h or 1.25
     local width = config.w or 1
+    local original_card = config.original_card or AKYRS.current_hover_card or nil
+    local speed_mul = config.speed or AKYRS.get_speed_mult(original_card)
     local card_limit = config.card_limit or #config.cards or 1
     local override = config.override or false
     local cards = config.cards or {}
     local padding = config.padding or 0.07
     local func_after = config.func_after or nil
-    local init_delay = config.init_delay or 0.5
+    local init_delay = config.init_delay or 1
     local func_list = config.func_list or nil
     local func_delay = config.func_delay or 0.2
     local margin_left = config.ml or 0.2
@@ -272,7 +282,7 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
     end
     if func_after then 
         G.E_MANAGER:add_event(Event{
-            delay = init_delay,
+            delay = init_delay * speed_mul,
             trigger = "after",
             func = function ()
                 func_after(cardArea)
@@ -284,7 +294,7 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
     if func_list then 
         for i, k in ipairs(func_list) do
             G.E_MANAGER:add_event(Event{
-                delay = func_delay * i,
+                delay = func_delay * i * speed_mul,
                 blockable = false,
                 trigger = "after",
                 func = function ()

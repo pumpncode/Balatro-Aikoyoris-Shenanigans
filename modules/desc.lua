@@ -35,7 +35,7 @@ AKYRS.DescriptionDummy{
                                 G.E_MANAGER:add_event(Event{
                                     trigger = "after",
                                     blockable = false,
-                                    delay = 0.5 + 0.1*i,
+                                    delay = (0.5 + 0.1*i) * AKYRS.get_speed_mult(AKYRS.current_hover_card),
                                     func = function ()
                                         k.highlighted = true
                                         return true
@@ -48,17 +48,17 @@ AKYRS.DescriptionDummy{
                             trigger = "after",
                             blockable = false,
                             blocking = false,
-                            delay = 2.5,
+                            delay = 2.5 * AKYRS.get_speed_mult(AKYRS.current_hover_card),
                             func = function ()
 
                                 if ca and ca.cards then            
                                     for i,k in ipairs(ca.cards) do
                                         k:start_dissolve({G.C.RED}, true, 0)
                                     end
+                                    local cn = create_card("Spectral", ca, nil, nil, true, true, nil)
+                                    cn.T.scale = 0.5
+                                    ca:emplace(cn)
                                 end
-                                local cn = create_card("Spectral", ca, nil, nil, true, true, nil)
-                                cn.T.scale = 0.5
-                                ca:emplace(cn)
                                 return true
                             end
                         })

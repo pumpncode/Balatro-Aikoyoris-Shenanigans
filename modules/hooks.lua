@@ -736,3 +736,17 @@ function Moveable:a_cool_fucking_spin(time, radian)
         func = (function(t) self.VT.r = t self.T.r = t return t end)
     }))
 end
+
+local cardHoverHook = Card.hover
+function Card:hover()
+    AKYRS.current_hover_card = self
+    local ret = cardHoverHook(self)
+    return ret
+end
+
+
+local cardStopHoverHook = Card.stop_hover
+function Card:stop_hover()
+    local ret = cardStopHoverHook(self)
+    return ret
+end

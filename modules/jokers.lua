@@ -561,9 +561,14 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "tldr_joker",
+    atlas = 'AikoyoriJokers',
     pos = {
-        x = 0,
-        y = 0
+        x = 6,
+        y = 1
+    },
+    soul_pos = {
+        x = 7,
+        y = 1
     },
     rarity = 1,
     cost = 2,
@@ -594,7 +599,7 @@ SMODS.Joker {
     atlas = 'AikoyoriJokers',
     key = "reciprocal_joker",
     pos = {
-        x = 2,
+        x = 1,
         y = 1
     },
     rarity = 1,
@@ -627,7 +632,7 @@ SMODS.Joker {
     atlas = 'AikoyoriJokers',
     key = "kyoufuu_all_back",
     pos = {
-        x = 3,
+        x = 2,
         y = 1
     },
     rarity = 1,
@@ -657,7 +662,7 @@ SMODS.Joker {
     atlas = 'AikoyoriJokers',
     key = "2fa",
     pos = {
-        x = 4,
+        x = 3,
         y = 1
     },
     rarity = 1,
@@ -708,9 +713,14 @@ SMODS.Joker {
                     blocking = false,
                     delay = 0.2*i,
                     func = function ()
-                        G.play.cards[i]:flip()
-                        --G.play.cards[i]:a_cool_fucking_spin(1,math.pi * 100)
-                        play_sound('card1', percent);
+                        if G.play and G.play.cards then
+                            local percent = 1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3
+                            if G.play.cards[i] then
+                                G.play.cards[i]:flip()
+                            end
+                            --G.play.cards[i]:a_cool_fucking_spin(1,math.pi * 100)
+                            play_sound('card1', percent);
+                        end
                         return true
                     end
                 })
@@ -720,19 +730,24 @@ SMODS.Joker {
                     blocking = false,
                     func = function ()
                             
-                        local _rank = nil
-                        local _suit = nil
-                        while _rank == nil or _suit == nil do
-                            _rank = pseudorandom_element(SMODS.Ranks, pseudoseed('akyrs2far'))
-                            _suit = pseudorandom_element(SMODS.Suits, pseudoseed('akyrs2fas'))
+                        if G.play and G.play.cards then
+                            local _rank = nil
+                            local _suit = nil
+                            while _rank == nil or _suit == nil do
+                                _rank = pseudorandom_element(SMODS.Ranks, pseudoseed('akyrs2far'))
+                                _suit = pseudorandom_element(SMODS.Suits, pseudoseed('akyrs2fas'))
+                            end
+                            
+                            
+                            --G.play.cards[i]:a_cool_fucking_spin(1,10)
+                            
+                            if G.play.cards[i] then
+                                SMODS.change_base(G.play.cards[i],_suit.key,_rank.key)
+                                G.play.cards[i]:flip()
+                            end
+                            
                         end
-                        
-                        SMODS.change_base(G.play.cards[i],_suit.key,_rank.key)
-                        
-                        --G.play.cards[i]:a_cool_fucking_spin(1,10)
-                        
-                        G.play.cards[i]:flip()
-                        
+
                         return true
                     end
                 })
@@ -753,7 +768,7 @@ SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "gaslighting",
     pos = {
-        x = 5,
+        x = 4,
         y = 1
     },
     rarity = 3,

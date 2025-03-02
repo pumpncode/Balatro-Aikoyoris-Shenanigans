@@ -256,10 +256,13 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
     local func_list = config.func_list or nil
     local func_delay = config.func_delay or 0.2
     local margin_left = config.ml or 0.2
+    local margin_top = config.mt or 0
+    local alignment = config.alignment or "cm"
     local scale = config.scale or 1
+    local box_height = config.box_height or 0
     if override or not cardArea then
         cardArea = CardArea(
-            G.ROOM.T.x + margin_left * G.ROOM.T.w, G.ROOM.T.h
+            G.ROOM.T.x + margin_left * G.ROOM.T.w, G.ROOM.T.h + margin_top
             , width * G.CARD_W, height * G.CARD_H,
             {card_limit = card_limit, type = 'title', highlight_limit = 0, collection = true}
         )
@@ -273,7 +276,7 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
         desc_nodes[#desc_nodes+1] = {
             {
                 n = G.UIT.R,
-                config = { align = "cm" , padding = padding, no_fill = true},
+                config = { align = alignment , padding = padding, no_fill = true, minh = box_height },
                 nodes = {
                     {n = G.UIT.O, config = { object = cardArea }}
                 }
@@ -283,12 +286,13 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
     if func_after then 
         G.E_MANAGER:add_event(Event{
             delay = init_delay * speed_mul,
+            blockable = false,
             trigger = "after",
             func = function ()
                 func_after(cardArea)
                 return true
             end
-        })
+        },"other")
     end
     
     if func_list then 
@@ -301,7 +305,7 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
                     k(cardArea)
                     return true
                 end
-            })
+            },"other")
         end
     end
 end

@@ -24,8 +24,10 @@ AKYRS.DescriptionDummy{
                 cards = cards,
                 override = true,
                 w = 2.4,
-                h = 1.2,
+                h = 0.5,
                 ml = 0,
+                box_height = 2.5,
+                alignment = "bm",
                 scale = 0.5,
                 func_delay = 0,
                 func_after = function(ca) 
@@ -40,7 +42,7 @@ AKYRS.DescriptionDummy{
                                         k.highlighted = true
                                         return true
                                     end
-                                })
+                                },"other")
                             end
                         end
 
@@ -61,7 +63,7 @@ AKYRS.DescriptionDummy{
                                 end
                                 return true
                             end
-                        })
+                        },"other")
                     end
                 end,
             })            

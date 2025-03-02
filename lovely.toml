@@ -105,7 +105,7 @@ match_indent = true
 target = "card.lua"
 pattern = """                if self.greyed then"""
 position = "before"
-payload = """                aikoyori_draw_extras(self, layer)"""
+payload = """AKYRS.aikoyori_draw_extras(self, layer)"""
 overwrite = true
 match_indent = true
 

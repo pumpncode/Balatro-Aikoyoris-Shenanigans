@@ -139,7 +139,7 @@ end
 
 
 local drag_mod = {x = 0, y = 0, r = 0}
-function aikoyori_draw_extras(card, layer)
+function AKYRS.aikoyori_draw_extras(card, layer)
     --print("DRAWING EXTRAS")
     
     

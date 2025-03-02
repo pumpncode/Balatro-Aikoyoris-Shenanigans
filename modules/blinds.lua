@@ -86,13 +86,16 @@ SMODS.Blind{
                 table.insert(word_table, char)
             end
             for k,v in ipairs(G.hand.cards) do
-                local _card = copy_card(v, nil, nil, G.playing_card)
-                _card.ability.akyrs_self_destructs = true
-                _card.ability.aikoyori_letters_stickers = word_table[k]
-                G.deck.config.card_limit = G.deck.config.card_limit + 1
-                table.insert(G.playing_cards, _card)
-                G.deck:emplace(_card)
-                _card:add_to_deck()
+                if v.highlighted then
+                    local _card = copy_card(v, nil, nil, G.playing_card)
+                    _card.ability.akyrs_self_destructs = true
+                    _card.ability.aikoyori_letters_stickers = v.ability.aikoyori_letters_stickers
+                    G.deck.config.card_limit = G.deck.config.card_limit + 1
+                    table.insert(G.playing_cards, _card)
+                    G.deck:emplace(_card)
+                    _card:add_to_deck()
+                end
+
             end
             local todo_table = {}
             for char in G.GAME.word_todo:gmatch(".") do

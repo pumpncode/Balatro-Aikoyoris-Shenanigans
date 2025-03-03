@@ -168,7 +168,7 @@ for i = 3, 31 do
         end,
         chips = 3 * i + (i-1.8) ^ (1 + i * 0.25),
         mult = ((i - 2) ^ 1.4) + i,
-        l_chips = 5*i^1.5 + 3,
-        l_mult = 2*i^1.5 + 3,
+        l_chips = 5*1.5^i + 3,
+        l_mult = 2*1.5^i + 3,
     }
 end

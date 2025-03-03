@@ -30,7 +30,7 @@ AKYRS.DescriptionDummy{
                 box_height = 2.5,
                 alignment = "bm",
                 scale = 0.5,
-                func_delay = 0.1,
+                func_delay = 0.1* AKYRS.get_speed_mult(AKYRS.current_hover_card),
                 func_after = function(ca) 
                     if ca and ca.cards then
                         for i,k in ipairs(ca.cards) do
@@ -51,7 +51,7 @@ AKYRS.DescriptionDummy{
                             trigger = "after",
                             blockable = false,
                             blocking = false,
-                            delay = (1+0.5 * AKYRS.get_speed_mult(AKYRS.current_hover_card)),
+                            delay = (1+0.5) * AKYRS.get_speed_mult(AKYRS.current_hover_card),
                             func = function ()
 
                                 if ca and ca.cards then            

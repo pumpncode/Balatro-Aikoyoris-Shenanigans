@@ -11,7 +11,7 @@ if CardSleeves then
             --print(self.get_current_deck_key())
             if self.get_current_deck_key() == "b_akyrs_letter_deck" then
                 key = self.key .. "_alt"
-                self.config = { deck_size = 2, discards = 3, hand_size = 2, ante_scaling = 6 }
+                self.config = { deck_size = 2, discards = 6, hand_size = 6, ante_scaling = 6 }
                 vars = { self.config.deck_size, self.config.discards, self.config.hand_size, self.config.ante_scaling  }
             else
                 key = self.key

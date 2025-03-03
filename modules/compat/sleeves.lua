@@ -16,7 +16,7 @@ if CardSleeves then
             else
                 key = self.key
                 self.config = { vouchers = {'v_akyrs_alphabet_soup' } }
-                vars = {  }
+                vars = { deck_size = 1, ante_scaling = 2 }
             end
             return { key = key, vars = vars }
         end,

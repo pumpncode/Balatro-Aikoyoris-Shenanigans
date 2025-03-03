@@ -23,7 +23,6 @@ if CardSleeves then
         apply = function(self, sleeve)
             CardSleeves.Sleeve.apply(sleeve)
             G.GAME.starting_params.deck_size_letter = sleeve.config.deck_size
-            G.GAME.starting_params.ante_scaling = sleeve.config.ante_scaling
         end
     }
 end

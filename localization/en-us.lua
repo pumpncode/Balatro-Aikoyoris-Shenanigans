@@ -122,9 +122,9 @@ return {
             j_akyrs_tsunagite = {
                 name = "Tsunagite",
                 text = { 
-                    "Gives value listed in 'Gives'",
+                    "Gives value listed",
                     "if played hand sum does not exceed {C:attention}#1#{}",
-                    "Joker gain the value listed in 'Joker Gains'",
+                    "Joker gain the value listed",
                     "When a {C:planet}Planet{} card is used",
                     "{C:attention}Resets{} at the end of the ante.",
                 }

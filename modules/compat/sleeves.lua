@@ -15,17 +15,15 @@ if CardSleeves then
                 vars = { self.config.deck_size, self.config.discards, self.config.hand_size, self.config.ante_scaling  }
             else
                 key = self.key
-                self.config = { vouchers = {'v_akyrs_alphabet_soup' } }
-                vars = { deck_size = 1, ante_scaling = 2 }
+                self.config = { vouchers = {'v_akyrs_alphabet_soup' }, ante_scaling = 2, deck_size = 1 }
+                vars = {}
             end
             return { key = key, vars = vars }
         end,
         apply = function(self, sleeve)
             CardSleeves.Sleeve.apply(sleeve)
-            if self.get_current_deck_key() == "b_akyrs_letter_deck" then
-                G.GAME.starting_params.deck_size_letter = sleeve.config.deck_size
-                G.GAME.starting_params.ante_scaling = sleeve.config.ante_scaling
-            end
+            G.GAME.starting_params.deck_size_letter = sleeve.config.deck_size
+            G.GAME.starting_params.ante_scaling = sleeve.config.ante_scaling
         end
     }
 end

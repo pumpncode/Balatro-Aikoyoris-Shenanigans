@@ -236,7 +236,10 @@ AKYRS.get_speed_mult = function(card)
     return ((card and (card.area == G.jokers or
         card.area == G.consumeables or
         card.area == G.hand or 
-        card.area == G.play 
+        card.area == G.play or
+        card.area == G.shop_jokers or 
+        card.area == G.shop_booster or
+        card.area == G.load_shop_vouchers
     )) and G.SETTINGS.GAMESPEED) or 1
 end
 

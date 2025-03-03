@@ -708,14 +708,14 @@ SMODS.Joker {
         if context.after and not context.blueprint then
             
             for i, _card in ipairs(G.play.cards) do
-                local percent = 1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3
+                local percent = math.abs(1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3)
                 G.E_MANAGER:add_event(Event{
                     trigger = 'after',
                     blocking = false,
                     delay = 0.2*i,
                     func = function ()
                         if G.play and G.play.cards then
-                            local percent = 1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3
+                            local percent = math.abs(1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3)
                             if G.play.cards[i] then
                                 G.play.cards[i]:flip()
                             end

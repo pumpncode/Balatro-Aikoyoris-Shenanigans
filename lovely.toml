@@ -501,3 +501,13 @@ payload = '''
 SMODS.score_card(card, context)
 '''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '''engine/event.lua'''
+pattern = '''        other = {}'''
+position = "after"
+payload = ''',
+akyrs_desc = {}
+'''
+match_indent = true

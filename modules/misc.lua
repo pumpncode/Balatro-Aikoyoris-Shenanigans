@@ -283,6 +283,9 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
             }
         }
     end
+    if func_after or func_list then 
+        G.E_MANAGER:clear_queue("akyrs_desc")
+    end
     if func_after then 
         G.E_MANAGER:add_event(Event{
             delay = init_delay * speed_mul,
@@ -292,7 +295,7 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
                 func_after(cardArea)
                 return true
             end
-        },"other")
+        },"akyrs_desc")
     end
     
     if func_list then 
@@ -305,7 +308,7 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
                     k(cardArea)
                     return true
                 end
-            },"other")
+            },"akyrs_desc")
         end
     end
 end

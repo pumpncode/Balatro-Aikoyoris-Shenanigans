@@ -30,7 +30,7 @@ AKYRS.DescriptionDummy{
                 box_height = 2.5,
                 alignment = "bm",
                 scale = 0.5,
-                func_delay = 0,
+                func_delay = 0.1,
                 func_after = function(ca) 
                     if ca and ca.cards then
                         for i,k in ipairs(ca.cards) do
@@ -38,12 +38,12 @@ AKYRS.DescriptionDummy{
                                 G.E_MANAGER:add_event(Event{
                                     trigger = "after",
                                     blockable = false,
-                                    delay = (0.5 + 0.1*i) * AKYRS.get_speed_mult(AKYRS.current_hover_card),
+                                    delay = (0.1*i) * AKYRS.get_speed_mult(AKYRS.current_hover_card),
                                     func = function ()
                                         k.highlighted = true
                                         return true
                                     end
-                                },"other")
+                                },"akyrs_desc")
                             end
                         end
 
@@ -51,7 +51,7 @@ AKYRS.DescriptionDummy{
                             trigger = "after",
                             blockable = false,
                             blocking = false,
-                            delay = 2.5 * AKYRS.get_speed_mult(AKYRS.current_hover_card),
+                            delay = (1+0.5 * AKYRS.get_speed_mult(AKYRS.current_hover_card)),
                             func = function ()
 
                                 if ca and ca.cards then            
@@ -64,7 +64,7 @@ AKYRS.DescriptionDummy{
                                 end
                                 return true
                             end
-                        },"other")
+                        },"akyrs_desc")
                     end
                 end,
             })            
@@ -144,10 +144,10 @@ AKYRS.DescriptionDummy{
                                                 end
                                                 return true
                                             end
-                                        },"other")
+                                        },"akyrs_desc")
                                         return true
                                     end
-                                },"other")
+                                },"akyrs_desc")
                             end
                         end
 
@@ -176,7 +176,7 @@ AKYRS.DescriptionDummy{
                                 end
                                 return true
                             end
-                        },"other")
+                        },"akyrs_desc")
                     end
                 end,
             })            

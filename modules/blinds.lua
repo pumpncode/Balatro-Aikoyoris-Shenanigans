@@ -199,36 +199,99 @@ SMODS.Blind{
 SMODS.Blind{
     key = "the_picker",
     dollars = 5,
-    mult = 2,
-    boss_colour = HEX('a74ce8'),
+    mult = 1,
+    boss_colour = HEX('67e38b'),
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 1, max = 10},
-    pos = { x = 0, y = 5 },
+    pos = { x = 0, y = 6 },
+    primed_action = function ()
+        
+        G.E_MANAGER:add_event(Event({
+            trigger = "after",
+            func = function ()
+                G.GAME.blind.chips = G.GAME.blind.chips * G.GAME.blind.debuff.score_change
+                G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                play_sound('timpani')
+                return true
+            end
+        }))
+    end,
+    initial_action = function() 
+        G.E_MANAGER:add_event(Event({
+            trigger = "before",
+            func = function ()
+                G.hand:unhighlight_all()
+                
+                G.E_MANAGER:add_event(Event({
+                    trigger = "after",
+                    delay = 0.2,
+                    func = function ()
+                        local i=1
+                        while i <= G.hand.config.highlighted_limit do
+                            if i > #G.hand.cards then
+                                break
+                            end
+                            local card = pseudorandom_element(G.hand.cards,pseudoseed("akyrpickerseed"))
+                            if card and not card.highlighted then
+                                card:highlight(true)
+                                G.hand:add_to_highlighted(card)
+                                i = i + 1
+                            end
+                        end
+                        
+                        G.E_MANAGER:add_event(Event({
+                            trigger = "after",
+                            func = function ()
+                                G.GAME.blind.debuff.primed = true
+                                return true
+                            end
+                        }))
+                        return true
+                    end
+                }))
+                return true
+            end
+        },"base",true))
+    end,
     debuff = {
+        primed = false,
+        acted = false,
+        initial_action_acted = false,
+        initial_action_act_set = false,
         hand_per_hand = 3,
-        score_change = 1.5
+        score_change = 1.2
     },
     loc_vars = function(self)
         return { vars = {G.hand.config.highlighted_limit, self.debuff.score_change}, key = self.key }
     end,
     collection_loc_vars = function(self)
-        return { vars = { "Up to selection limit amount", 1.5 }, key = self.key }
+        return { vars = { "Up to selection limit amount of", 1.2 }, key = self.key }
     end,
     set_blind = function(self)
+        G.GAME.blind.debuff.orig_chips = G.GAME.blind.chips
+        G.GAME.blind.primed_action = self.primed_action
+        G.GAME.blind.initial_action = self.initial_action
     end,
     drawn_to_hand = function(self)
-        
     end,
     in_pool = function(self)
         return true
     end,
     disable = function(self)
-            
+        G.GAME.blind.chips = G.GAME.blind.debuff.orig_chips * 2
     end,
     defeat = function(self)
-        
     end,
     press_play = function(self)
+        G.GAME.blind.debuff.primed = false
+        G.GAME.blind.debuff.acted = false
+        G.E_MANAGER:add_event(Event{
+            trigger = "after",
+            func = function ()
+                G.GAME.blind.debuff.initial_action_act_set = false
+                return true
+            end
+        })
     end
 
 }

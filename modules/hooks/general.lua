@@ -71,6 +71,18 @@ function EventManager:update(dt, forced)
             end
         end
     end
+    if G.STATE == G.STATES.SELECTING_HAND then
+        if not G.GAME.blind.debuff.initial_action_act_set then
+            G.GAME.blind.debuff.initial_action_acted = false
+            G.GAME.blind.debuff.initial_action_act_set = true
+        end
+        if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled then
+            if G.GAME.blind.initial_action and not G.GAME.blind.debuff.initial_action_acted then
+                G.GAME.blind.initial_action()
+                G.GAME.blind.debuff.initial_action_acted = true
+            end
+        end
+    end
     return s
 end
 
@@ -180,7 +192,7 @@ end
 local updateSelectHandHook = Game.update_selecting_hand
 function Game:update_selecting_hand(dt)
     local ret = updateSelectHandHook(self, dt)
-    if not self.aiko_wordle and isBlindKeyAThing() == "bl_akyrs_the_thought" then
+    if not self.aiko_wordle and AKYRS.isBlindKeyAThing() == "bl_akyrs_the_thought" then
         self.aiko_wordle = UIBox {
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
             config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
@@ -248,4 +260,48 @@ function Moveable:a_cool_fucking_spin(time, radian)
             return t
         end)
     }))
+end
+
+local add2highlightHook = CardArea.add_to_highlighted
+function CardArea:add_to_highlighted(card, silent)
+    local ret = add2highlightHook(self,card,silent)
+    if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled and self == G.hand then
+        if G.GAME.blind.debuff.primed and G.GAME.blind.primed_action and not G.GAME.blind.debuff.acted and G.STATE == G.STATES.SELECTING_HAND then
+            G.GAME.blind.primed_action()
+            G.GAME.blind.debuff.acted = true
+        end
+    end
+    return ret
+end
+
+local removeFhighlightHook = CardArea.remove_from_highlighted
+function CardArea:remove_from_highlighted(card, force)
+    local ret = removeFhighlightHook(self,card, force)
+    if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled and self == G.hand then
+        if G.GAME.blind.debuff.primed and G.GAME.blind.primed_action and not G.GAME.blind.debuff.acted and G.STATE == G.STATES.SELECTING_HAND then
+            G.GAME.blind.primed_action()
+            G.GAME.blind.debuff.acted = true
+        end
+    end
+    return ret
+end
+local unhighlightallHook = CardArea.unhighlight_all
+function CardArea:unhighlight_all()
+    local ret = unhighlightallHook(self)
+    if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled and self == G.hand then
+        if G.GAME.blind.debuff.primed and G.GAME.blind.primed_action and not G.GAME.blind.debuff.acted and G.STATE == G.STATES.SELECTING_HAND then
+            G.GAME.blind.primed_action()
+            G.GAME.blind.debuff.acted = true
+        end
+    end
+    return ret
+end
+
+local dcfhHook = G.FUNCS.discard_cards_from_highlighted 
+G.FUNCS.discard_cards_from_highlighted = function (e,hook)
+    if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled then
+        G.GAME.blind.debuff.primed = false
+    end
+    local r = dcfhHook(e,hook)
+    return r
 end

@@ -32,7 +32,7 @@ return {
             bl_akyrs_the_picker= {
                 name = "The Picker",
                 text = {
-                    "#1# Cards randomly selected every hand",
+                    "#1# cards randomly selected every hand",
                     "X#2# Score Req. on change once per hand",
                 }
             },

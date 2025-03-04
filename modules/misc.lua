@@ -228,8 +228,15 @@ function getGameOverBlindText()
     end
 end
 
-function isBlindKeyAThing()
+function AKYRS.isBlindKeyAThing()
     return G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.key or nil
+end
+
+function AKYRS.checkBlindKey(blind_key)
+    if AKYRS.isBlindKeyAThing() and blind_key == G.GAME.blind.config.blind.key then
+        return true
+    end
+    return false
 end
 
 AKYRS.get_speed_mult = function(card)

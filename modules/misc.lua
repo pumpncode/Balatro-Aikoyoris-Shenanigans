@@ -228,8 +228,13 @@ function getGameOverBlindText()
     end
 end
 
-function AKYRS.isBlindKeyAThing()
-    return G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.key or nil
+function AKYRS.isBlindKeyAThing(inta)
+    local comp = inta or G.GAME.blind
+    return comp and comp.config and comp.config.blind and comp.config.blind.key and true or nil
+end
+function AKYRS.getBlindKeySafe(inta)
+    local comp = inta or G.GAME.blind
+    return comp and comp.config and comp.config.blind and comp.config.blind.key or ""
 end
 
 function AKYRS.checkBlindKey(blind_key)

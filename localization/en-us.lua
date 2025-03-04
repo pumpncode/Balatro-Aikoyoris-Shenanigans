@@ -33,7 +33,8 @@ return {
                 name = "The Picker",
                 text = {
                     "#1# cards randomly selected every hand",
-                    "X#2# Score Req. on change once per hand",
+                    "X#2# Score Requirement on deselect",
+                    "Activates once per hand",
                 }
             },
         },

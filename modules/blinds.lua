@@ -196,6 +196,55 @@ SMODS.Blind{
     end
 
 }
+AKYRS.picker_primed_action = function ()
+    
+    G.E_MANAGER:add_event(Event({
+        trigger = "after",
+        func = function ()
+            G.GAME.blind.chips = G.GAME.blind.chips * G.GAME.blind.debuff.score_change
+            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+            play_sound('timpani')
+            return true
+        end
+    }))
+end
+AKYRS.picker_initial_action = function() 
+    G.E_MANAGER:add_event(Event({
+        trigger = "before",
+        func = function ()
+            G.hand:unhighlight_all()
+            
+            G.E_MANAGER:add_event(Event({
+                trigger = "after",
+                delay = 0.2,
+                func = function ()
+                    local i=1
+                    while i <= G.hand.config.highlighted_limit do
+                        if i > #G.hand.cards then
+                            break
+                        end
+                        local card = pseudorandom_element(G.hand.cards,pseudoseed("akyrpickerseed"))
+                        if card and not card.highlighted then
+                            card:highlight(true)
+                            G.hand:add_to_highlighted(card)
+                            i = i + 1
+                        end
+                    end
+                    
+                    G.E_MANAGER:add_event(Event({
+                        trigger = "after",
+                        func = function ()
+                            G.GAME.blind.debuff.primed = true
+                            return true
+                        end
+                    }))
+                    return true
+                end
+            }))
+            return true
+        end
+    },"base",true))
+end
 SMODS.Blind{
     key = "the_picker",
     dollars = 5,
@@ -204,55 +253,6 @@ SMODS.Blind{
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 1, max = 10},
     pos = { x = 0, y = 6 },
-    primed_action = function ()
-        
-        G.E_MANAGER:add_event(Event({
-            trigger = "after",
-            func = function ()
-                G.GAME.blind.chips = G.GAME.blind.chips * G.GAME.blind.debuff.score_change
-                G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
-                play_sound('timpani')
-                return true
-            end
-        }))
-    end,
-    initial_action = function() 
-        G.E_MANAGER:add_event(Event({
-            trigger = "before",
-            func = function ()
-                G.hand:unhighlight_all()
-                
-                G.E_MANAGER:add_event(Event({
-                    trigger = "after",
-                    delay = 0.2,
-                    func = function ()
-                        local i=1
-                        while i <= G.hand.config.highlighted_limit do
-                            if i > #G.hand.cards then
-                                break
-                            end
-                            local card = pseudorandom_element(G.hand.cards,pseudoseed("akyrpickerseed"))
-                            if card and not card.highlighted then
-                                card:highlight(true)
-                                G.hand:add_to_highlighted(card)
-                                i = i + 1
-                            end
-                        end
-                        
-                        G.E_MANAGER:add_event(Event({
-                            trigger = "after",
-                            func = function ()
-                                G.GAME.blind.debuff.primed = true
-                                return true
-                            end
-                        }))
-                        return true
-                    end
-                }))
-                return true
-            end
-        },"base",true))
-    end,
     debuff = {
         primed = false,
         acted = false,
@@ -269,8 +269,6 @@ SMODS.Blind{
     end,
     set_blind = function(self)
         G.GAME.blind.debuff.orig_chips = G.GAME.blind.chips
-        G.GAME.blind.primed_action = self.primed_action
-        G.GAME.blind.initial_action = self.initial_action
     end,
     drawn_to_hand = function(self)
     end,

@@ -77,8 +77,8 @@ function EventManager:update(dt, forced)
             G.GAME.blind.debuff.initial_action_act_set = true
         end
         if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled then
-            if G.GAME.blind.initial_action and not G.GAME.blind.debuff.initial_action_acted then
-                G.GAME.blind.initial_action()
+            if AKYRS.picker_initial_action and not G.GAME.blind.debuff.initial_action_acted then
+                AKYRS.picker_initial_action()
                 G.GAME.blind.debuff.initial_action_acted = true
             end
         end
@@ -266,8 +266,8 @@ local add2highlightHook = CardArea.add_to_highlighted
 function CardArea:add_to_highlighted(card, silent)
     local ret = add2highlightHook(self,card,silent)
     if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled and self == G.hand then
-        if G.GAME.blind.debuff.primed and G.GAME.blind.primed_action and not G.GAME.blind.debuff.acted and G.STATE == G.STATES.SELECTING_HAND then
-            G.GAME.blind.primed_action()
+        if G.GAME.blind.debuff.primed and AKYRS.picker_primed_action and not G.GAME.blind.debuff.acted and G.STATE == G.STATES.SELECTING_HAND then
+            AKYRS.picker_primed_action()
             G.GAME.blind.debuff.acted = true
         end
     end
@@ -278,8 +278,8 @@ local removeFhighlightHook = CardArea.remove_from_highlighted
 function CardArea:remove_from_highlighted(card, force)
     local ret = removeFhighlightHook(self,card, force)
     if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled and self == G.hand then
-        if G.GAME.blind.debuff.primed and G.GAME.blind.primed_action and not G.GAME.blind.debuff.acted and G.STATE == G.STATES.SELECTING_HAND then
-            G.GAME.blind.primed_action()
+        if G.GAME.blind.debuff.primed and AKYRS.picker_primed_action and not G.GAME.blind.debuff.acted and G.STATE == G.STATES.SELECTING_HAND then
+            AKYRS.picker_primed_action()
             G.GAME.blind.debuff.acted = true
         end
     end
@@ -289,8 +289,8 @@ local unhighlightallHook = CardArea.unhighlight_all
 function CardArea:unhighlight_all()
     local ret = unhighlightallHook(self)
     if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled and self == G.hand then
-        if G.GAME.blind.debuff.primed and G.GAME.blind.primed_action and not G.GAME.blind.debuff.acted and G.STATE == G.STATES.SELECTING_HAND then
-            G.GAME.blind.primed_action()
+        if G.GAME.blind.debuff.primed and AKYRS.picker_primed_action and not G.GAME.blind.debuff.acted and G.STATE == G.STATES.SELECTING_HAND then
+            AKYRS.picker_primed_action()
             G.GAME.blind.debuff.acted = true
         end
     end
@@ -303,5 +303,14 @@ G.FUNCS.discard_cards_from_highlighted = function (e,hook)
         G.GAME.blind.debuff.primed = false
     end
     local r = dcfhHook(e,hook)
+    return r
+end
+
+local loadBlind = Blind.load
+function Blind:load(blindTable)
+    local r = loadBlind(self,blindTable)
+    if AKYRS.getBlindKeySafe(isBlindKeyAThing) == "bl_akyrs_the_picker" and not G.GAME.blind.disabled then
+        self.debuff.primed = true
+    end
     return r
 end

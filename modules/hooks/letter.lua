@@ -60,6 +60,7 @@ local cardSave = Card.save
 function Card:save()
     local c = cardSave(self)
     c.is_null = self.is_null
+    c.highlighted = self.highlighted
     return c
 end
 
@@ -67,6 +68,7 @@ local cardLoad = Card.load
 function Card:load(cardTable, other_card)
     local c = cardLoad(self, cardTable, other_card)
     self.is_null = cardTable.is_null
+    self.highlighted = self.highlighted
     return c
 end
 

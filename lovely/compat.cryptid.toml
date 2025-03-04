@@ -1,0 +1,31 @@
+[manifest]
+version = "1.2"
+dump_lua = true
+priority = 0
+
+
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Cryptid "lib/content.lua"]'
+pattern = '''			if true then --card.ability.name ~= "Gold Card"
+				eligible_cards[#eligible_cards + 1] = card
+			end'''
+position = "before"
+payload = """if not card.is_null then"""
+overwrite = true
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS Cryptid "lib/content.lua"]'
+pattern = '''			if true then --card.ability.name ~= "Gold Card"
+				eligible_cards[#eligible_cards + 1] = card
+			end'''
+position = "after"
+payload = """end"""
+overwrite = true
+match_indent = true
+

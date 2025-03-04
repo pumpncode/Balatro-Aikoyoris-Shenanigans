@@ -1,0 +1,251 @@
+-- This file contains general hooks that has a bunch of things in them
+
+local igo = Game.init_game_object
+function Game:init_game_object()
+    local ret = igo(self)
+    ret.aiko_cards_playable = 5
+    ret.starting_params.special_hook = false
+    ret.starting_params.deck_size_letter = 1
+    ret.letters_enabled = false
+    ret.letters_mult_enabled = false
+    ret.letters_xmult_enabled = false
+    ret.aiko_last_mult = 0
+    ret.aiko_last_chips = 0
+    ret.aiko_has_quasi = false
+    ret.aiko_current_word = nil
+    ret.aiko_words_played = {}
+    ret.letters_to_give = {}
+    ret.aiko_letters_consumable_rate = 0
+    AKYRS.replenishLetters()
+    ret.current_round.aiko_round_played_words = {}
+    ret.current_round.aiko_round_correct_letter = {}
+    ret.current_round.aiko_round_misaligned_letter = {}
+    ret.current_round.aiko_round_incorrect_letter = {}
+    ret.current_round.discards_sub = 0
+    ret.current_round.hands_sub = 0
+    ret.current_round.aiko_infinite_hack = "8"
+    ret.current_round.advanced_blind = false
+    return ret
+end
+
+function SMODS.current_mod.reset_game_globals(run_start)
+    G.GAME.current_round.discards_sub = 0
+    G.GAME.current_round.hands_sub = 0
+end
+
+function CardArea:aiko_change_playable(delta)
+    self.config.highlighted_limit = self.config.highlight_limit or G.GAME.aiko_cards_playable or 5
+    G.GAME.modifiers.cry_highlight_limit = G.GAME.aiko_cards_playable
+    if delta ~= 0 then
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                G.hand:unhighlight_all()
+                return true
+            end
+        }))
+    end
+end
+
+local gameUpdate = EventManager.update
+
+function EventManager:update(dt, forced)
+    local s = gameUpdate(self, dt, forced)
+    if G.GAME.letters_enabled and G.GAME.alphabet_rate == 0 then
+        G.GAME.alphabet_rate = 1
+    end
+    if not G.GAME.letters_enabled and G.GAME.alphabet_rate > 0 then
+        G.GAME.alphabet_rate = 0
+    end
+    if G.STATE == G.STATES.HAND_PLAYED then
+        if G.GAME.aiko_last_chips ~= G.GAME.current_round.current_hand.chips or G.GAME.aiko_last_mult ~=
+            G.GAME.current_round.current_hand.mult then
+            G.GAME.aiko_last_mult = G.GAME.current_round.current_hand.mult
+            G.GAME.aiko_last_chips = G.GAME.current_round.current_hand.chips
+            for i = 1, #G.jokers.cards do
+                if true then
+                    if (G.jokers.cards[i].aiko_trigger_external) and not G.jokers.cards[i].debuff then
+                        G.jokers.cards[i]:aiko_trigger_external(G.jokers.cards[i])
+                        --G.E_MANAGER:add_event(Event({trigger = "immediate",func = (function()return true end)}), 'base')
+                    end
+                end
+            end
+        end
+    end
+    return s
+end
+
+function customDeckHooks(self, card_protos)
+    if self.GAME.starting_params.special_hook then
+        return {}
+    end
+    return card_protos
+end
+
+local startRunHook = Game.start_run
+function Game:start_run(args)
+    local ret = startRunHook(self, args)
+    recalculateHUDUI()
+    recalculateBlindUI()
+    return ret
+end
+
+local cardSetCostHook = Card.set_cost
+function Card:set_cost()
+    local ret = cardSetCostHook(self)
+    if self.ability.akyrs_self_destructs then
+        self.sell_cost = -1
+    end
+    return ret
+end
+
+local discardAbilityHook = G.FUNCS.can_discard
+G.FUNCS.can_discard = function(e)
+    local ret = discardAbilityHook(e)
+    if #G.hand.highlighted > 0 and G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.debuff and G.GAME.blind.config.blind.debuff.infinite_discards then
+        e.config.colour = G.C.RED
+        e.config.button = 'discard_cards_from_highlighted'
+    end
+end
+
+
+
+local endRoundHook = end_round
+function end_round()
+    if (G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win) and (G.GAME.current_round.hands_left > 0)
+    then
+        G.STATE_COMPLETE = true
+        G.STATE = G.STATES.SELECTING_HAND
+    else
+        local ret = endRoundHook()
+        for i, card in ipairs(G.consumeables.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({ G.C.RED }, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
+        end
+        for i, card in ipairs(G.deck.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({ G.C.RED }, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
+        end
+        for i, card in ipairs(G.discard.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({ G.C.RED }, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
+        end
+        for i, card in ipairs(G.play.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({ G.C.RED }, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
+        end
+        for i, card in ipairs(G.hand.cards) do
+            if card.ability.akyrs_self_destructs then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        card:start_dissolve({ G.C.RED }, nil, 1.6)
+                        return true
+                    end,
+                    delay = 0.5,
+                }), 'base')
+            end
+        end
+        return ret
+    end
+end
+
+
+local updateSelectHandHook = Game.update_selecting_hand
+function Game:update_selecting_hand(dt)
+    local ret = updateSelectHandHook(self, dt)
+    if not self.aiko_wordle and isBlindKeyAThing() == "bl_akyrs_the_thought" then
+        self.aiko_wordle = UIBox {
+            definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
+            config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
+        }
+    end
+
+    return ret
+end
+
+local updateHandPlayedHook = Game.update_hand_played
+function Game:update_hand_played(dt)
+    local ret = updateHandPlayedHook(self, dt)
+    if self.aiko_wordle then
+        self.aiko_wordle:remove(); self.aiko_wordle = nil
+    end
+    if not self.aiko_wordle then
+        self.aiko_wordle = UIBox {
+            definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
+            config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
+        }
+    end
+    return ret
+end
+
+local updateNewRoundHook = Game.update_new_round
+function Game:update_new_round(dt)
+    local ret = updateNewRoundHook(self, dt)
+    if self.aiko_wordle then
+        self.aiko_wordle:remove(); self.aiko_wordle = nil
+    end
+
+    return ret
+end
+
+local deleteRunHook = Game.delete_run
+function Game:delete_run()
+    local ret = deleteRunHook(self)
+
+    if self.aiko_wordle then
+        self.aiko_wordle:remove(); self.aiko_wordle = nil
+    end
+    return ret
+end
+
+
+function Card:a_cool_fucking_spin(time, radian)
+    Moveable.a_cool_fucking_spin(self, time, radian)
+end
+
+function Moveable:a_cool_fucking_spin(time, radian)
+    if G.SETTINGS.reduced_motion then return end
+    local radian = radian or math.pi * 2
+
+    G.E_MANAGER:add_event(Event({
+        trigger = 'ease',
+        blockable = false,
+        type = 'lerp',
+        ref_table = self.VT,
+        ref_value = 'r',
+        ease_to = radian,
+        delay = time,
+        func = (function(t)
+            self.VT.r = t
+            self.T.r = t
+            return t
+        end)
+    }))
+end

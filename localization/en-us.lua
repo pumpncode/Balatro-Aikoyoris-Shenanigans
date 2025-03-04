@@ -22,6 +22,20 @@ return {
                     "Solve 5-letter puzzle to win!",
                 }
             },
+            bl_akyrs_the_libre= {
+                name = "The Libre",
+                text = {
+                    "Disabling this boss",
+                    "Sets Blind Req. to #1#",
+                }
+            },
+            bl_akyrs_the_picker= {
+                name = "The Picker",
+                text = {
+                    "#1# Cards randomly selected every hand",
+                    "X#2# Score Req. on change once per hand",
+                }
+            },
         },
         Edition={},
         Enhanced={},

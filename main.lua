@@ -1,11 +1,17 @@
 AKYRS = SMODS.current_mod
 
+SMODS.optional_features.cardareas.unscored = true
 
 assert(SMODS.load_file("./modules/pre.lua"))() 
 assert(SMODS.load_file("./modules/atlasses.lua"))() 
-assert(SMODS.load_file("./modules/hooks.lua"))() 
-assert(SMODS.load_file("./modules/sounds.lua"))() 
+assert(SMODS.load_file("./func/word_utils.lua"))() 
 assert(SMODS.load_file("./modules/misc.lua"))() 
+assert(SMODS.load_file("./modules/hooks/general.lua"))() -- misc hook
+assert(SMODS.load_file("./modules/hooks/letter.lua"))() -- for letter & null cards mechanics
+assert(SMODS.load_file("./modules/hooks/scoring.lua"))() -- pure scoring
+assert(SMODS.load_file("./modules/hooks/debug.lua"))() -- debug
+assert(SMODS.load_file("./modules/hooks/ui.lua"))() -- debug
+assert(SMODS.load_file("./modules/sounds.lua"))() 
 assert(SMODS.load_file("./modules/desc.lua"))() 
 assert(SMODS.load_file("./modules/draw_step.lua"))() 
 assert(SMODS.load_file("./modules/consumables.lua"))() 

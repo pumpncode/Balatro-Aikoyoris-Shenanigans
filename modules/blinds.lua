@@ -155,3 +155,81 @@ SMODS.Blind{
     end
 
 }
+SMODS.Blind{
+    key = "the_libre",
+    dollars = 5,
+    mult = 1,
+    boss_colour = HEX('a74ce8'),
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10},
+    pos = { x = 0, y = 5 },
+    debuff = {
+        disable_chip_x = 3
+    },
+    loc_vars = function(self)
+        local orig_chips = get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling
+        return { vars = {orig_chips ^ self.debuff.disable_chip_x}, key = self.key }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = {"^3 of current"}, key = self.key }
+    end,
+    set_blind = function(self)
+    end,
+    drawn_to_hand = function(self)
+        
+    end,
+    in_pool = function(self)
+        return true
+    end,
+    disable = function(self)
+        if Talisman then
+            G.GAME.blind.chips = to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling) ^ to_big(self.debuff.disable_chip_x)
+        else
+            G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling ^ self.debuff.disable_chip_x
+        end
+        G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+            
+    end,
+    defeat = function(self)
+        
+    end,
+    press_play = function(self)
+    end
+
+}
+SMODS.Blind{
+    key = "the_picker",
+    dollars = 5,
+    mult = 2,
+    boss_colour = HEX('a74ce8'),
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10},
+    pos = { x = 0, y = 5 },
+    debuff = {
+        hand_per_hand = 3,
+        score_change = 1.5
+    },
+    loc_vars = function(self)
+        return { vars = {G.hand.config.highlighted_limit, self.debuff.score_change}, key = self.key }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = { "Up to selection limit amount", 1.5 }, key = self.key }
+    end,
+    set_blind = function(self)
+    end,
+    drawn_to_hand = function(self)
+        
+    end,
+    in_pool = function(self)
+        return true
+    end,
+    disable = function(self)
+            
+    end,
+    defeat = function(self)
+        
+    end,
+    press_play = function(self)
+    end
+
+}

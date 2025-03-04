@@ -248,7 +248,7 @@ end
 SMODS.Blind{
     key = "the_picker",
     dollars = 5,
-    mult = 1,
+    mult = 1.5,
     boss_colour = HEX('67e38b'),
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 1, max = 10},
@@ -260,7 +260,7 @@ SMODS.Blind{
         initial_action_act_set = false,
         hand_per_hand = 3,
         lock = false,
-        score_change = 1.2
+        score_change = 1.25
     },
     loc_vars = function(self)
         return { vars = {G.hand.config.highlighted_limit, self.debuff.score_change}, key = self.key }

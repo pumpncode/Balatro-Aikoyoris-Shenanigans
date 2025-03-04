@@ -1,0 +1,24 @@
+[manifest]
+version = "1.2"
+dump_lua = true
+priority = 0
+
+
+[[patches]]
+[patches.pattern]
+target = "globals.lua"
+pattern = """DARK_EDITION = {0,0,0,1},"""
+position = "after"
+payload = """PLAYABLE = HEX("ee36ff"),"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = """    inactive = G.C.UI.TEXT_INACTIVE,"""
+position = "after"
+payload = """playable = G.C.PLAYABLE,"""
+overwrite = true
+match_indent = true
+

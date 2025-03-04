@@ -96,6 +96,13 @@ end
 local startRunHook = Game.start_run
 function Game:start_run(args)
     local ret = startRunHook(self, args)
+    if not self.aiko_wordle and AKYRS.checkBlindKey("bl_akyrs_the_thought") then
+        --print("CHECK SUCCESS")
+        self.aiko_wordle = UIBox {
+            definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
+            config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
+        }
+    end
     recalculateHUDUI()
     recalculateBlindUI()
     return ret
@@ -309,7 +316,7 @@ end
 local loadBlind = Blind.load
 function Blind:load(blindTable)
     local r = loadBlind(self,blindTable)
-    if AKYRS.getBlindKeySafe(isBlindKeyAThing) == "bl_akyrs_the_picker" and not G.GAME.blind.disabled then
+    if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled then
         self.debuff.lock = true
         G.E_MANAGER:add_event(Event{
             trigger = "before",
@@ -337,3 +344,12 @@ function Blind:load(blindTable)
     end
     return r
 end
+
+
+local eval_hook = G.FUNCS.evaluate_play
+G.FUNCS.evaluate_play = function()
+    local ret = eval_hook()
+    G.GAME.aiko_current_word = nil
+    return ret
+end
+

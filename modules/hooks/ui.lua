@@ -70,14 +70,6 @@ function Card:generate_UIBox_ability_table()
     return ret
 end
 
-local eval_hook = G.FUNCS.evaluate_play
-G.FUNCS.evaluate_play = function()
-    local ret = eval_hook()
-    G.GAME.aiko_current_word = nil
-    return ret
-end
-
-
 function recalculateBlindUI()
     if G.HUD_blind then
         G.HUD_blind.definition = nil

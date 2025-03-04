@@ -176,7 +176,7 @@ SMODS.Booster{
             },
         }
     end,
-    atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
+    atlas = 'aikoyoriBoosterPack', pos = { x = 1, y = 0 },
     group_key = "k_alphabets",
     cost = 4,
     draw_hand = true,
@@ -211,7 +211,7 @@ SMODS.Booster{
             },
         }
     end,
-    atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
+    atlas = 'aikoyoriBoosterPack', pos = { x = 2, y = 0 },
     group_key = "k_alphabets",
     cost = 4,
     draw_hand = true,
@@ -245,7 +245,7 @@ SMODS.Booster{
             },
         }
     end,
-    atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
+    atlas = 'aikoyoriBoosterPack', pos = { x = 3, y = 0 },
     group_key = "k_alphabets",
     cost = 4,
     draw_hand = true,
@@ -262,8 +262,8 @@ SMODS.Booster{
     key = "letter_pack_jumbo_1",
     set = "Booster",
     loc_txt = { 
-        name = "Letter Pack",
-        group_name = "Jumbo Alphabet Card",
+        name = "Jumbo Letter Pack",
+        group_name = "Alphabet Card",
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
@@ -279,7 +279,7 @@ SMODS.Booster{
             },
         }
     end,
-    atlas = 'aikoyoriBoosterPack', pos = { x = 1, y = 0 },
+    atlas = 'aikoyoriBoosterPack', pos = { x = 4, y = 0 },
     group_key = "k_alphabets",
     cost = 6,
     draw_hand = true,
@@ -296,8 +296,8 @@ SMODS.Booster{
     key = "letter_pack_jumbo_2",
     set = "Booster",
     loc_txt = { 
-        name = "Letter Pack",
-        group_name = "Jumbo Alphabet Card",
+        name = "Jumbo Letter Pack",
+        group_name = "Alphabet Card",
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
@@ -313,7 +313,7 @@ SMODS.Booster{
             },
         }
     end,
-    atlas = 'aikoyoriBoosterPack', pos = { x = 1, y = 0 },
+    atlas = 'aikoyoriBoosterPack', pos = { x = 5, y = 0 },
     group_key = "k_alphabets",
     cost = 6,
     draw_hand = true,
@@ -330,8 +330,8 @@ SMODS.Booster{
     key = "letter_pack_mega_1",
     set = "Booster",
     loc_txt = { 
-        name = "Letter Pack",
-        group_name = "Mega Alphabet Card",
+        name = "Mega Letter Pack",
+        group_name = "Alphabet Card",
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
@@ -347,7 +347,7 @@ SMODS.Booster{
             },
         }
     end,
-    atlas = 'aikoyoriBoosterPack', pos = { x = 2, y = 0 },
+    atlas = 'aikoyoriBoosterPack', pos = { x = 6, y = 0 },
     group_key = "k_alphabets",
     cost = 8,
     draw_hand = true,
@@ -364,8 +364,8 @@ SMODS.Booster{
     key = "letter_pack_mega_2",
     set = "Booster",
     loc_txt = { 
-        name = "Letter Pack",
-        group_name = "Mega Alphabet Card",
+        name = "Mega Letter Pack",
+        group_name = "Alphabet Card",
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
@@ -381,7 +381,7 @@ SMODS.Booster{
             },
         }
     end,
-    atlas = 'aikoyoriBoosterPack', pos = { x = 2, y = 0 },
+    atlas = 'aikoyoriBoosterPack', pos = { x = 7, y = 0 },
     group_key = "k_alphabets",
     cost = 8,
     draw_hand = true,

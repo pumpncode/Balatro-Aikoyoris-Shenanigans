@@ -259,6 +259,7 @@ SMODS.Blind{
         initial_action_acted = false,
         initial_action_act_set = false,
         hand_per_hand = 3,
+        lock = false,
         score_change = 1.2
     },
     loc_vars = function(self)

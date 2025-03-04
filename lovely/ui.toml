@@ -25,11 +25,7 @@ match_indent = true
 [patches.pattern]
 target = "game.lua"
 pattern = """
-        if G.GAME.chips - G.GAME.blind.chips >= 0 or G.GAME.current_round.hands_left < 1 then
             G.STATE = G.STATES.NEW_ROUND
-        else
-            G.STATE = G.STATES.DRAW_TO_HAND
-        end
 """
 position = "before"
 payload = """
@@ -41,11 +37,7 @@ match_indent = true
 [patches.pattern]
 target = "game.lua"
 pattern = """
-        if G.GAME.chips - G.GAME.blind.chips >= 0 or G.GAME.current_round.hands_left < 1 then
             G.STATE = G.STATES.NEW_ROUND
-        else
-            G.STATE = G.STATES.DRAW_TO_HAND
-        end
 """
 position = "after"
 payload = """

@@ -5,7 +5,7 @@
 	"description": "Adds a bunch of stuff I want to add to the game.",
 	"prefix": "akyrs",
 	"main_file": "main.lua",
-	"priority": 0,
+	"priority": 300,
 	"badge_colour": "ff475a",
 	"badge_text_colour": "edefff",
 	"display_name": "AikoShenanigan",

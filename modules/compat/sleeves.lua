@@ -21,8 +21,8 @@ if CardSleeves then
             return { key = key, vars = vars }
         end,
         apply = function(self, sleeve)
-            CardSleeves.Sleeve.apply(sleeve)
             G.GAME.starting_params.deck_size_letter = sleeve.config.deck_size
+            CardSleeves.Sleeve.apply(sleeve)
         end
     }
 end

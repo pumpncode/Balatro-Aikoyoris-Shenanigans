@@ -1,7 +1,3 @@
-assert(SMODS.load_file("./func/numbers.lua"))()
-assert(SMODS.load_file("./func/words/words.lua"))()
-assert(SMODS.load_file("./func/word_utils.lua"))()
-assert(SMODS.load_file("./modules/misc.lua"))()
 
 local example_words = {
     "cry",

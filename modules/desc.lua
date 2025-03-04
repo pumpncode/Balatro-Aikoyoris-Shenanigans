@@ -1,6 +1,3 @@
-
-assert(SMODS.load_file("./modules/misc.lua"))() 
-
 AKYRS.DescriptionDummy{
     key = "maxwell_example",
     generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)

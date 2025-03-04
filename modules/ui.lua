@@ -1,6 +1,3 @@
-
-assert(SMODS.load_file("./modules/misc.lua"))() 
-
 local function numberToColor(num)
   if num == 1 then
     return G.C.GREEN

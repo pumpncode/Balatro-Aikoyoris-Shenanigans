@@ -1,5 +1,4 @@
 
-assert(SMODS.load_file("./modules/misc.lua"))() 
 SMODS.ConsumableType{
     atlas = "consumablesAlphabetPacks",
     key = "Alphabet",
@@ -191,40 +190,6 @@ SMODS.Booster{
     end,
 }
 
-SMODS.Booster{
-    key = "letter_pack_2",
-    set = "Booster",
-    loc_txt = { 
-        name = "Letter Pack",
-        group_name = "Alphabet Card",
-        text={
-            "Choose {C:attention}#1#{} of up to",
-            "{C:attention}#2#{C:attention} Alphabets{} cards to",
-            "be used immediately",
-        },
-    },
-    config = { extra = 3, choose = 1 },
-    loc_vars = function(self, info_queue, card)
-        return {
-            vars = {
-                card.ability.choose,
-                card.ability.extra,
-            },
-        }
-    end,
-    atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
-    group_key = "k_alphabets",
-    cost = 4,
-    draw_hand = true,
-    weight = 1,
-    kind = "letter_pack",
-    create_card = function (self, card, i) 
-        return create_card("Alphabet", G.pack_cards, nil, nil, true, true, nil, "_letter")
-    end,
-    in_pool = function(self, args)
-        return G.GAME.letters_enabled
-    end,
-}
 SMODS.Booster{
     key = "letter_pack_3",
     set = "Booster",

@@ -1,7 +1,3 @@
-
-assert(SMODS.load_file("./modules/misc.lua"))() 
-assert(SMODS.load_file("./modules/desc.lua"))() 
-
 AKYRS.LetterJoker = SMODS.Joker:extend{
     in_pool = function (self, args)
         return G.GAME.letters_enabled or false

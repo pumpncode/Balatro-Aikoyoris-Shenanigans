@@ -1,6 +1,3 @@
-
-assert(SMODS.load_file("./modules/misc.lua"))() 
-
 local all_sets = {}
 for i,k in pairs(G.P_CENTER_POOLS) do
     all_sets[i] = true

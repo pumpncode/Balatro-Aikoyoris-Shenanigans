@@ -4,6 +4,8 @@ SMODS.optional_features.cardareas.unscored = true
 
 assert(SMODS.load_file("./modules/pre.lua"))() 
 assert(SMODS.load_file("./modules/atlasses.lua"))() 
+assert(SMODS.load_file("./func/numbers.lua"))()
+assert(SMODS.load_file("./func/words/words.lua"))()
 assert(SMODS.load_file("./func/word_utils.lua"))() 
 assert(SMODS.load_file("./modules/misc.lua"))() 
 assert(SMODS.load_file("./modules/hooks/general.lua"))() -- misc hook

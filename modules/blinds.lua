@@ -1,5 +1,4 @@
-assert(SMODS.load_file("./modules/atlasses.lua"))()
-assert(SMODS.load_file("./modules/misc.lua"))()
+
 assert(SMODS.load_file("./func/words/puzzle_words.lua"))()
 
 SMODS.Blind{

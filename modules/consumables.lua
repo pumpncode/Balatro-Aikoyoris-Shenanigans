@@ -18,9 +18,9 @@ SMODS.ConsumableType{
 }
 
 local word_letter = {
-    "Apple", "Bee", "Cat", "Dog", "Earth", "Fire", "Goat", "Heart", "Ice Cream", "Jam", 
-    "Kite", "Lemon", "Magic", "Night", "Orange", "Pineapple", "Quit", "Rat", "Spoon", "Tea", 
-    "Umbrella", "Vine", "Water", "Xylophone", "Yarn", "Zebra"
+    "Apple", "Bee", "Cat", "Dog", "Earth", "Fire", "Ghost", "Hat", "Ice", "Jar", 
+    "Kite", "Lemon", "Mushroom", "Night", "Onion", "Pie", "Quill", "Rat", "Spoon", "Tea", 
+    "Umbrella", "Vase", "Water", "Xylophone", "Yarn", "Zoom"
 }
 
 

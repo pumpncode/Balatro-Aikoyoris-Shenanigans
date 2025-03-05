@@ -14,3 +14,14 @@ SMODS.Sound({
 
     
 })
+
+SMODS.Sound({
+    key = "noire_sfx",
+    path = "noire.ogg",
+    
+})
+
+SMODS.Sound({
+    key = "texelated_sfx",
+    path = "texelated.ogg",
+})

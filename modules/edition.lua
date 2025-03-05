@@ -23,6 +23,7 @@ SMODS.Edition{
             }
         }
     end,
+    sound = { sound = "akyrs_texelated_sfx", per = 1.2, vol = 0.4 },
     in_shop = true,
     weight = 2,
 }
@@ -43,6 +44,7 @@ SMODS.Edition{
             }
         }
     end,
+    sound = { sound = "akyrs_noire_sfx", per = 0.8, vol = 0.3 },
     in_shop = true,
     weight = 14,
 }

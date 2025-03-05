@@ -16,6 +16,7 @@ if G.FUNCS.njy_endround then
                     local r = notjustyetCanEndRoundHook(e)
                 end
             end
+            return true
         end
     })
 end

@@ -22,7 +22,9 @@ SMODS.Edition{
                 self.config.x_mult,
             }
         }
-    end
+    end,
+    in_shop = true,
+    weight = 2,
 }
 
 SMODS.Edition{
@@ -41,4 +43,6 @@ SMODS.Edition{
             }
         }
     end,
+    in_shop = true,
+    weight = 14,
 }

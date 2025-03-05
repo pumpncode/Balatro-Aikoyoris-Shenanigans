@@ -7,15 +7,13 @@ priority = 0
 [[patches]]
 [patches.pattern]
 target = "card.lua"
-pattern = """        loc_vars = { playing_card = not not self.base.colour, value = self.base.value, suit = self.base.suit, colour = self.base.colour,
-                    nominal_chips = self.base.nominal > 0 and self.base.nominal or nil,
-                    bonus_chips = (self.ability.bonus + (self.ability.perma_bonus or 0)) > 0 and (self.ability.bonus + (self.ability.perma_bonus or 0)) or nil,
-                }   """
+pattern = """    local badges = {}"""
 position = "after"
 payload = """
-            if self.is_null then
+            if self.is_null or SMODS.has_enhancement(self, "m_akyrs_scoreless") then
                 loc_vars.nominal_chips = nil
             end
 """
 overwrite = true
 match_indent = true
+

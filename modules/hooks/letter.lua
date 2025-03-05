@@ -204,7 +204,9 @@ local getChipBonusHook = Card.get_chip_bonus
 function Card:get_chip_bonus()
     if self.is_null then self.base.nominal = 0 end
     local c = getChipBonusHook(self)
-
+    if SMODS.has_enhancement(self, "m_akyrs_scoreless") then
+        c = c - self.base.nominal
+    end
     return c
 end
 

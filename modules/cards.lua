@@ -39,3 +39,37 @@ SMODS.Back{
         vouchers = {'v_akyrs_alphabet_soup','v_akyrs_crossing_field'}
     },
 }
+
+
+SMODS.Enhancement{
+    key = "brick_card",
+    atlas = 'cardUpgrades',
+    pos = {x = 1, y = 0},
+    loc_vars = function (self, info_queue, card)
+        return { vars = {
+            card.ability.mult
+        } }
+    end,
+    config = {
+        mult = 10
+    },
+    no_rank = true,
+    no_suit = true,
+    always_scores = true,
+    replace_base_card = true,
+}
+
+
+SMODS.Enhancement{
+    key = "scoreless",
+    atlas = 'cardUpgrades',
+    pos = {x = 0, y = 0},
+    loc_vars = function (self, info_queue, card)
+        return { vars = {
+        } }
+    end,
+    never_scores = true,
+    replace_base_card = false,
+    overrides_base_rank = true
+}
+

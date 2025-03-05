@@ -292,5 +292,37 @@ SMODS.Blind{
             end
         })
     end
+}
 
+SMODS.Blind {
+    key = "the_height",
+    dollars = 7,
+    mult = 0.5,
+    boss_colour = HEX('36adff'),
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10},
+    pos = { x = 0, y = 7 },
+    debuff = {
+        requirement_scale = 2
+    },
+    loc_vars = function(self)
+        return { vars = {self.debuff.requirement_scale}, key = self.key }
+    end,
+    collection_loc_vars = function(self)
+        return { vars = { "2"}, key = self.key }
+    end,
+}
+SMODS.Blind {
+    key = "the_expiry",
+    dollars = 5,
+    mult = 2,
+    boss_colour = HEX('ca60ff'),
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10},
+    pos = { x = 0, y = 8 },
+    set_blind = function (self)
+        for i,k in ipairs(G.consumeables.cards) do
+            k.ability.akyrs_perma_debuff = true
+        end
+    end
 }

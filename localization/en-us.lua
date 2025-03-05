@@ -37,9 +37,21 @@ return {
                     "Activates once per hand",
                 }
             },
+            bl_akyrs_the_height= {
+                name = "The Height",
+                text = {
+                    "Score Requirement becomes X#1#",
+                    "your round score on non-final hands",
+                }
+            },
+            bl_akyrs_the_expiry= {
+                name = "The Expiry",
+                text = {
+                    "All consumables are",
+                    "debuffed forever.",
+                }
+            },
         },
-        Edition={},
-        Enhanced={},
         DescriptionDummy={
             dd_akyrs_maxwell_example={
                 name="Example",
@@ -58,6 +70,22 @@ return {
                 text={
                 },
             },
+        },
+        Edition={},
+        Enhanced={
+            m_akyrs_brick_card = {
+                name="Brick Card",
+                text={
+                    "{C:mult}+#1#{} Mult",
+                    "No Rank or Suit"
+                },
+            },
+            m_akyrs_scoreless = {
+                name="Scoreless",
+                text={
+                    "Does not score"
+                },
+            }
         },
         Joker={
             j_akyrs_utage_charts = {

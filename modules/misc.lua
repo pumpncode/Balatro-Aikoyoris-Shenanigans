@@ -279,7 +279,7 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
         cardArea = CardArea(
             G.ROOM.T.x + margin_left * G.ROOM.T.w, G.ROOM.T.h + margin_top
             , width * G.CARD_W, height * G.CARD_H,
-            {card_limit = card_limit, type = 'title', highlight_limit = 0, collection = true}
+            {card_limit = card_limit, type = 'title', highlight_limit = 0, collection = true,temporary = true}
         )
         for i, card in ipairs(cards) do
             card.T.scale = scale

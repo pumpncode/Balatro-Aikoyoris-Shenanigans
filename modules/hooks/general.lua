@@ -56,6 +56,11 @@ function EventManager:update(dt, forced)
     if not G.GAME.letters_enabled and G.GAME.alphabet_rate > 0 then
         G.GAME.alphabet_rate = 0
     end
+    if G.GAME.blind and G.GAME.blind.debuff.requirement_scale then
+        if G.GAME.current_round.hands_left >= 1 and G.GAME.current_round.hands_played > 0 then
+            G.GAME.blind.chips = G.GAME.chips * G.GAME.blind.debuff.requirement_scale
+        end
+    end
     if G.STATE == G.STATES.HAND_PLAYED then
         if G.GAME.aiko_last_chips ~= G.GAME.current_round.current_hand.chips or G.GAME.aiko_last_mult ~=
             G.GAME.current_round.current_hand.mult then
@@ -83,6 +88,25 @@ function EventManager:update(dt, forced)
             end
         end
     end
+    
+    -- permanent debuff shenanigans
+    if AKYRS.all_card_areas then 
+        for i,k in ipairs(AKYRS.all_card_areas) do
+            if (k and k.cards) then
+                for j,l in ipairs(k.cards) do
+                    if l.ability.akyrs_undebuffable then
+                        l:set_debuff(false)
+                    end
+                    if l.ability.akyrs_perma_debuff and not l.ability.akyrs_undebuffable then
+                        l:set_debuff(true)
+                    end
+                end
+            end
+
+        end
+    end
+
+
     return s
 end
 
@@ -353,3 +377,15 @@ G.FUNCS.evaluate_play = function()
     return ret
 end
 
+
+local cardAreaInitHook = CardArea.init
+function CardArea:init(X, Y, W, H, config)
+    local r = cardAreaInitHook(self,X,Y,W,H,config)
+    if not config.temporary then
+        if not AKYRS.all_card_areas then
+            AKYRS.all_card_areas = {}
+        end
+        table.insert(AKYRS.all_card_areas,self)
+    end
+    return r
+end

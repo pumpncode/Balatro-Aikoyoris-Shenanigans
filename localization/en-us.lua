@@ -71,7 +71,22 @@ return {
                 },
             },
         },
-        Edition={},
+        Edition={
+            e_akyrs_texelated = {
+                name = "Texelated",
+                text = {
+                    "{C:mult}+#1#{} Mult",
+                    "{C:white,X:mult}X#2#{} Mult"
+                }
+            },
+            e_akyrs_noire = {
+                name = "Noire",
+                text = {
+                    "{C:dark_edition}+#1#{} Card Limit for Current Area",
+                    "{C:white,X:mult}X#2#{} Mult"
+                }
+            },
+        },
         Enhanced={
             m_akyrs_brick_card = {
                 name="Brick Card",
@@ -419,6 +434,8 @@ return {
         labels={
             akyrs_self_destructs="Self Destructs",
             akyrs_debuff_seal="Seal-Debuffed",
+            akyrs_texelated = "Texelated",
+            akyrs_noire = "Noire"
         },
         poker_hand_descriptions={},
         poker_hands={},

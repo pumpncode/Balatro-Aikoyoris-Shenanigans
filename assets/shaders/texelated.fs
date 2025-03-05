@@ -4,7 +4,7 @@
 	#define MY_HIGHP_OR_MEDIUMP mediump
 #endif
 
-extern MY_HIGHP_OR_MEDIUMP vec2 tint;
+extern MY_HIGHP_OR_MEDIUMP vec2 texelated;
 extern MY_HIGHP_OR_MEDIUMP number dissolve;
 extern MY_HIGHP_OR_MEDIUMP number time;
 extern MY_HIGHP_OR_MEDIUMP vec4 texture_details;
@@ -51,88 +51,56 @@ vec4 dissolve_mask(vec4 tex, vec2 texture_coords, vec2 uv)
     return vec4(shadow ? vec3(0.,0.,0.) : tex.xyz, res > adjusted_dissolve ? (shadow ? tex.a*0.3: tex.a) : .0);
 }
 
-number hue(number s, number t, number h)
-{
-	number hs = mod(h, 1.)*6.;
-	if (hs < 1.) return (t-s) * hs + s;
-	if (hs < 3.) return t;
-	if (hs < 4.) return (t-s) * (4.-hs) + s;
-	return s;
+
+vec2 skew (vec2 st) {
+    vec2 r = vec2(0.0);
+    r.x = 1.1547*st.x;
+    r.y = st.y+0.5*r.x;
+    return r;
 }
 
-vec4 RGB(vec4 c)
-{
-	if (c.y < 0.0001)
-		return vec4(vec3(c.z), c.a);
+vec3 simplexGrid (vec2 st) {
+    vec3 xyz = vec3(0.0);
 
-	number t = (c.z < .5) ? c.y*c.z + c.z : -c.y*c.z + (c.y+c.z);
-	number s = 2.0 * c.z - t;
-	return vec4(hue(s,t,c.x + 1./3.), hue(s,t,c.x), hue(s,t,c.x - 1./3.), c.w);
+    vec2 p = fract(skew(st));
+    if (p.x > p.y) {
+        xyz.xy = 1.0-vec2(p.x,p.y-p.x);
+        xyz.z = p.y;
+    } else {
+        xyz.yz = 1.0-vec2(p.x-p.y,p.y);
+        xyz.x = p.x;
+    }
+
+    return fract(xyz);
 }
 
-vec4 HSL(vec4 c)
-{
-	number low = min(c.r, min(c.g, c.b));
-	number high = max(c.r, max(c.g, c.b));
-	number delta = high - low;
-	number sum = high+low;
-
-	vec4 hsl = vec4(.0, .0, .5 * sum, c.a);
-	if (delta == .0)
-		return hsl;
-
-	hsl.y = (hsl.z < .5) ? delta / sum : delta / (2.0 - sum);
-
-	if (high == c.r)
-		hsl.x = (c.g - c.b) / delta;
-	else if (high == c.g)
-		hsl.x = (c.b - c.r) / delta + 2.0;
-	else
-		hsl.x = (c.r - c.g) / delta + 4.0;
-
-	hsl.x = mod(hsl.x / 6., 1.);
-	return hsl;
-}
-
-number useless(number numin){
-    return min(max(numin,1),1);
-}
 
 vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords )
-{    vec4 tex = Texel(texture, texture_coords);
-	vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
-    vec4 hsl = HSL(0.5*tex + 0.5*vec4(0.,0.,1.,tex.a));
+{
+    vec4 tex = Texel( texture, texture_coords);
+    vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
 
-	float t = tint.y*7.221 + time;
-	vec2 floored_uv = (floor((uv*texture_details.ba)))/texture_details.ba;
-    vec2 uv_scaled_centered = (floored_uv - 0.5) * 250.;
-	
-	vec2 field_part1 = uv_scaled_centered + 50.*vec2(sin(-t / 143.6340), cos(-t / 99.4324));
-	vec2 field_part2 = uv_scaled_centered + 50.*vec2(cos( t / 53.1532),  cos( t / 61.4532));
-	vec2 field_part3 = uv_scaled_centered + 50.*vec2(sin(-t / 87.53218), sin(-t / 49.0000));
-
-    float field = (1.+ (
-        cos(length(field_part1) / 19.483) + sin(length(field_part2) / 33.155) * cos(field_part2.y / 15.73) +
-        cos(length(field_part3) / 27.193) * sin(field_part3.x / 21.92) ))/2.;
-	
-	float res = (.5 + .5* cos( (tint.x) * 2.612 + ( field + -.5 ) *3.14));
-
-	number low = min(tex.r, min(tex.g, tex.b));
+    number low = min(tex.r, min(tex.g, tex.b));
     number high = max(tex.r, max(tex.g, tex.b));
-	number delta = 0.2+0.3*(high- low) + 0.1*high;
+	number delta = high-low -0.1;
 
-	number gridsize = 0.79;
-    number fac = 0.5*max(max(max(0., 7.*abs(cos(uv.x*gridsize*20.))-6.),max(0., 7.*cos(uv.y*gridsize*45. + uv.x*gridsize*20.)-6.)), max(0., 7.*cos(uv.y*gridsize*45. - uv.x*gridsize*20.)-6.));
-	
-	hsl.x = hsl.x + res + fac;
-	hsl.y = hsl.y*1.3;	
-	hsl.z = hsl.z*0.6+0.4;
+    number fac = 0.8 + 0.9*sin(11.*uv.x+4.32*uv.y + texelated.r*12. + cos(texelated.r*5.3 + uv.y*4.2 - uv.x*4.));
+    number fac2 = 0.5 + 0.5*sin(8.*uv.x+2.32*uv.y + texelated.r*5. - cos(texelated.r*2.3 + uv.x*8.2));
+    number fac3 = 0.5 + 0.5*sin(10.*uv.x+5.32*uv.y + texelated.r*6.111 + sin(texelated.r*5.3 + uv.y*3.2));
+    number fac4 = 0.5 + 0.5*sin(3.*uv.x+2.32*uv.y + texelated.r*8.111 + sin(texelated.r*1.3 + uv.y*11.2));
+    number fac5 = sin(0.9*16.*uv.x+5.32*uv.y + texelated.r*12. + cos(texelated.r*5.3 + uv.y*4.2 - uv.x*4.));
 
-    tex =(1.-delta)*tex + delta*RGB(hsl)*vec4(0.9,0.8,1.2,tex.a);
-	
-	if (tex[3] < 0.7)
-		tex[3] = tex[3]/3.;
-	return dissolve_mask(tex*colour, texture_coords, uv);
+    number maxfac = 0.7*max(max(fac, max(fac2, max(fac3,0.0))) + (fac+fac2+fac3*fac4*fac5), 0.);
+
+    // modify tex.rgb for output
+	// maxfac is probably max factor for like shine or something idk
+	vec2 uv2 = uv*10.0;
+	vec3 gridval = simplexGrid(uv2);
+	vec3 outgrid = tex.xyz * (vec3(max(gridval.x,max(gridval.y,gridval.z))))*0.7;
+	tex.xyz = outgrid * (maxfac  + 2) * (gridval * 0.8 + 0.6);
+
+
+    return dissolve_mask(tex*colour, texture_coords, uv);
 }
 
 extern MY_HIGHP_OR_MEDIUMP vec2 mouse_screen_pos;

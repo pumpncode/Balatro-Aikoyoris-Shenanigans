@@ -59,7 +59,7 @@ SMODS.Edition{
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
-                card.edition.extra.card_limit,
+                card.edition.card_limit,
                 card.edition.extra.x_mult,
             }
         }

@@ -195,7 +195,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     // modify tex.rgb for output
 	// maxfac is probably max factor for like shine or something idk
     // ok fac 5 is the shine when you move mouse -> <- and it does the woosh thing
-    float rand = pnoise(vec3(uv * 0.2 + noire.x*noire.y*0.1, time),vec3(1.3,4.45,2.13)) * 0.6;
+    float rand = pnoise(vec3(uv * 0.2 + noire.x*noire.y*0.000001, time),vec3(1.3,4.45,2.13)) * 0.6;
 	tex.xyz = vec3(1.)-tex.xyz;
 
     tex.xyz += (should_highlight*((max(0.6,maxfac*4)+1.1)));

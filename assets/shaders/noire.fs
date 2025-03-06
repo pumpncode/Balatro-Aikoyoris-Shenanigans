@@ -52,34 +52,12 @@ vec4 dissolve_mask(vec4 tex, vec2 texture_coords, vec2 uv)
 }
 
 
-vec2 skew (vec2 st) {
-    vec2 r = vec2(0.0);
-    r.x = 1.1547*st.x;
-    r.y = st.y+0.5*r.x;
-    return r;
-}
-
-vec3 simplexGrid (vec2 st) {
-    vec3 xyz = vec3(0.0);
-
-    vec2 p = fract(skew(st));
-    if (p.x > p.y) {
-        xyz.xy = 1.0-vec2(p.x,p.y-p.x);
-        xyz.z = p.y;
-    } else {
-        xyz.yz = 1.0-vec2(p.x-p.y,p.y);
-        xyz.x = p.x;
-    }
-
-    return fract(xyz);
-}
-
 
 vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords )
 {
     vec4 tex = Texel( texture, texture_coords);
     vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
-    vec3 should_highlight = (1-step(vec3(0.1),tex.xyz));
+    vec3 should_highlight = (1-step(vec3(0.3),tex.xyz));
 
     number low = min(tex.r, min(tex.g, tex.b));
     number high = max(tex.r, max(tex.g, tex.b));
@@ -95,10 +73,12 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 
     // modify tex.rgb for output
 	// maxfac is probably max factor for like shine or something idk
-	vec2 uv2 = uv*20.0;
-	tex.xyz = tex.xyz + ( vec3(delta)*maxfac +  vec3(delta)*simplexGrid(uv2)*(fac5*0.3) -  vec3(0.15))*2.1;
+    // ok fac 5 is the shine when you move mouse -> <- and it does the woosh thing
 
-    tex.xyz += (should_highlight*(maxfac));
+	tex.xyz = vec3(1.)-tex.xyz;
+
+    tex.xyz += (should_highlight*((max(0.6,maxfac*4)+1.1)));
+	tex.xyz += min(max(0.3,smoothstep(0.35,1.1,fac5 + 0.7)+0.3),0.5);
 
     return dissolve_mask(tex*colour, texture_coords, uv);
 }

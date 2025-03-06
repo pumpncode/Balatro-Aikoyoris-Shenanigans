@@ -47,12 +47,21 @@ SMODS.Enhancement{
     pos = {x = 1, y = 0},
     loc_vars = function (self, info_queue, card)
         return { vars = {
-            card.ability.mult
+            card.ability.extra.mult
         } }
     end,
     config = {
-        mult = 10
+        extra = {
+            mult = 10
+        }
     },
+    calculate = function (self, card, context)
+        if context.main_scoring and context.cardarea == G.play then
+            return {
+                mult = card.ability.extra.mult
+            }
+        end
+    end,
     no_rank = true,
     no_suit = true,
     always_scores = true,

@@ -48,7 +48,7 @@ return {
                 name = "The Expiry",
                 text = {
                     "All consumables are",
-                    "debuffed forever.",
+                    "permanently debuffed",
                 }
             },
         },

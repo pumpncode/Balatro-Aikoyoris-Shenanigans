@@ -11,15 +11,26 @@ SMODS.Edition{
     key = "texelated",
     shader = "akyrs_texelated",
     config = {
-        mult = 20,
-        x_mult = 0.9;
+        extra = {
+            mult = 20,
+            x_mult = 0.9;
+        }
     },
+    
+    calculate =  function (self, card, context)
+        if context.main_scoring and context.cardarea == G.play then
+            return {
+                mult = card.edition.extra.mult,
+                Xmult = card.edition.extra.x_mult
+            }
+        end
+    end,
     badge_colour = G.C.PLAYABLE,
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
-                self.config.mult,
-                self.config.x_mult,
+                self.config.extra.mult,
+                self.config.extra.x_mult,
             }
         }
     end,
@@ -32,15 +43,24 @@ SMODS.Edition{
     key = "noire",
     shader = "akyrs_noire",
     config = {
-        x_mult = 0.3;
+        extra ={
+            x_mult = 0.75,
+        },
         card_limit = 2
     },
+    calculate =  function (self, card, context)
+        if context.main_scoring and context.cardarea == G.play then
+            return {
+                Xmult = card.edition.extra.x_mult
+            }
+        end
+    end,
     badge_colour = G.C.PLAYABLE,
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
-                self.config.card_limit,
-                self.config.x_mult,
+                self.config.extra.card_limit,
+                self.config.extra.x_mult,
             }
         }
     end,

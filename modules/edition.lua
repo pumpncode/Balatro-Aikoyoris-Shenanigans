@@ -29,8 +29,8 @@ SMODS.Edition{
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
-                self.config.extra.mult,
-                self.config.extra.x_mult,
+                card.edition.extra.mult,
+                card.edition.extra.x_mult,
             }
         }
     end,
@@ -59,8 +59,8 @@ SMODS.Edition{
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
-                self.config.extra.card_limit,
-                self.config.extra.x_mult,
+                card.edition.extra.card_limit,
+                card.edition.extra.x_mult,
             }
         }
     end,

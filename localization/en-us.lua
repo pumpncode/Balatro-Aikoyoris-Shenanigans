@@ -48,7 +48,7 @@ return {
                 name = "The Expiry",
                 text = {
                     "All consumables are",
-                    "{E:1}permanently debuffed{}",
+                    "permanently debuffed",
                 }
             },
             bl_akyrs_the_nature= {

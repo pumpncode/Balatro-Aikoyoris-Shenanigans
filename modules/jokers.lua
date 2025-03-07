@@ -846,7 +846,7 @@ AKYRS.LetterJoker {
     cost = 4,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_maxwell_example"]
-        info_queue[#info_queue+1] = { key = "akyrs_art_by_larantula_l", set = "Other" }
+        info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_credit_larantula"]
         return {
             vars = {  }
         }

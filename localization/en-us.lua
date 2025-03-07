@@ -91,6 +91,12 @@ return {
                 text={
                 },
             },
+            dd_akyrs_credit_larantula={
+                name="Art Credit",
+                text={
+                    "{X:dark_edition,C:white}@larantula_l{}"
+                },
+            },
         },
         Edition={
             e_akyrs_texelated = {
@@ -289,12 +295,6 @@ return {
                 text={
                     "{C:red}Debuffs itself{}",
                     "when drawn to hand",
-                },
-            },
-            akyrs_art_by_larantula_l={
-                name="Art",
-                text={
-                    "larantula_l",
                 },
             },
             akyrs_chip_mult_xchip_xmult={

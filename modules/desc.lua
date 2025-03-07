@@ -64,11 +64,12 @@ AKYRS.DescriptionDummy{
                         },"akyrs_desc")
                     end
                 end,
-            })            
+            })
         end
 
     end,
 }
+
 AKYRS.DescriptionDummy{
     key = "yona_yona_ex",
     generate_ui = function(self, info_queue, cardd, desc_nodes, specific_vars, full_UI_table)
@@ -179,5 +180,13 @@ AKYRS.DescriptionDummy{
             })            
         end
 
+    end,
+}
+AKYRS.DescriptionDummy{
+    key = "credit_larantula",
+    generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+        SMODS.Center.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
+
+        -- TODO: ask larantula for the thing
     end,
 }

@@ -349,3 +349,33 @@ function AKYRS.change_base_skip(card, suit, rank)
     card:set_base(G.P_CARDS[('%s_%s'):format(_suit.card_key, _rank.card_key)], true)
     return card
 end
+
+function AKYRS.embedded_ui_sprite( sprite_atlas, sprite_pos, desc_nodes, config )
+    if not config then config = {} end
+    local sprite_atli = G.ASSET_ATLAS[sprite_atlas]
+    local height = config.h or sprite_atli.py
+    local width = config.w or sprite_atli.px
+    local scale = config.scale or 1
+    local padding = config.padding or 0.07
+    local margin_left = config.ml or 0.2
+    local margin_top = config.mt or 0
+    local alignment = config.alignment or "cm"
+    local box_height = config.box_height or 0
+    local aspect_ratio = sprite_atli.px / sprite_atli.py
+    local longer_value = math.max(sprite_atli.px, sprite_atli.py)
+    local sprt = Sprite(
+        G.ROOM.T.x + margin_left * G.ROOM.T.w, G.ROOM.T.h + margin_top
+        ,width*scale/(aspect_ratio*longer_value), height*scale/(aspect_ratio*longer_value),
+        sprite_atli, sprite_pos
+    )
+
+    desc_nodes[#desc_nodes+1] = {
+        {
+            n = G.UIT.R,
+            config = { align = alignment , padding = padding, no_fill = true, minh = box_height },
+            nodes = {
+                {n = G.UIT.O, config = { object = sprt }}
+            }
+        }
+    }
+end

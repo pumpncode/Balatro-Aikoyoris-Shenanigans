@@ -9,7 +9,7 @@ SMODS.Sound({
         ['music5'] = true,
     },
     select_music_track = function(self) 
-        return G.booster_pack and not G.booster_pack.REMOVED and SMODS.OPENED_BOOSTER and SMODS.OPENED_BOOSTER.config.center.key == 'p_akyrs_letter_pack' and 100 or nil
+        return G.booster_pack and not G.booster_pack.REMOVED and SMODS.OPENED_BOOSTER and SMODS.OPENED_BOOSTER.config.center.kind == 'letter_pack' and 100 or nil
     end
 
     

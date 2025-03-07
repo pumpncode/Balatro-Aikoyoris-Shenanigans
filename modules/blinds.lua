@@ -356,3 +356,57 @@ SMODS.Blind {
         end
     end
 }
+
+SMODS.Blind {
+    key = "the_nature",
+    dollars = 5,
+    mult = 2,
+    boss_colour = HEX('3d8a55'),
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10},
+    debuff = {
+        dec_mult = 0.5,
+        akyrs_score_face_with_my_dec_mult = true
+    },
+    
+    loc_vars = function (self)
+        return {
+            vars = { self.debuff.dec_mult }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = { 0.5 }
+        }
+    end,
+    pos = { x = 0, y = 9 },
+    set_blind = function (self)
+        for i,k in ipairs(G.consumeables.cards) do
+            k.ability.akyrs_perma_debuff = true
+        end
+    end
+}
+SMODS.Blind {
+    key = "final_periwinkle_pinecone",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('7da8f0'),
+    atlas = 'aikoyoriBlindsChips', 
+    debuff = {
+        akyrs_all_seals_perma_debuff = true
+    },
+    boss = {min = 1, max = 10, showdown = true},
+    pos = { x = 0, y = 10 },
+}
+SMODS.Blind {
+    key = "final_razzle_raindrop",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('ff40ac'),
+    debuff = {
+        akyrs_suit_debuff_hand = true
+    },
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10, showdown = true},
+    pos = { x = 0, y = 11 },
+}

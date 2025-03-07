@@ -46,3 +46,17 @@ function Card:aiko_trigger_external(card)
         card.ability.extra.chip_change = chips
     end
 end
+
+
+local hookCalFx = SMODS.calculate_effect
+SMODS.calculate_effect = function(effect, scored_card, from_edition, pre_jokers)
+    local r = hookCalFx(effect, scored_card, from_edition, pre_jokers)
+    if G.GAME.blind and G.GAME.blind.debuff.akyrs_score_face_with_my_dec_mult and G.GAME.blind.debuff.dec_mult then
+        if scored_card:is_face(true) then
+            G.E_MANAGER:add_event(Event({trigger = 'immediate', func = function () scored_card:juice_up(0.1); return true end}))
+            r = SMODS.calculate_individual_effect(effect, scored_card, "xmult", G.GAME.blind.debuff.dec_mult, false, false)
+            percent = (percent or 0) + (percent_delta or 0.08)
+        end
+    end
+    return r
+end

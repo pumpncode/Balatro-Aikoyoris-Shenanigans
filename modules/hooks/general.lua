@@ -21,6 +21,7 @@ function Game:init_game_object()
     ret.current_round.aiko_round_correct_letter = {}
     ret.current_round.aiko_round_misaligned_letter = {}
     ret.current_round.aiko_round_incorrect_letter = {}
+    ret.current_round.aiko_played_suits = {}
     ret.current_round.discards_sub = 0
     ret.current_round.hands_sub = 0
     ret.current_round.aiko_infinite_hack = "8"
@@ -31,6 +32,7 @@ end
 function SMODS.current_mod.reset_game_globals(run_start)
     G.GAME.current_round.discards_sub = 0
     G.GAME.current_round.hands_sub = 0
+    G.GAME.current_round.aiko_played_suits = {}
 end
 
 function CardArea:aiko_change_playable(delta)
@@ -62,6 +64,17 @@ function EventManager:update(dt, forced)
         end
     end
     if G.STATE == G.STATES.HAND_PLAYED then
+        G.GAME.current_round.akyrs_executed_debuff = false
+        for suitkey, suit in pairs(SMODS.Suits) do
+            for _, card in ipairs(G.play.cards) do
+                if(card:is_suit(suitkey) and G.GAME.current_round.aiko_played_suits) then
+                    G.GAME.current_round.aiko_played_suits[suitkey] = true
+                    goto akyrs_suit_check_continue
+                end
+            end
+            ::akyrs_suit_check_continue::
+        end
+
         if G.GAME.aiko_last_chips ~= G.GAME.current_round.current_hand.chips or G.GAME.aiko_last_mult ~=
             G.GAME.current_round.current_hand.mult then
             G.GAME.aiko_last_mult = G.GAME.current_round.current_hand.mult
@@ -69,7 +82,16 @@ function EventManager:update(dt, forced)
             for i = 1, #G.jokers.cards do
                 if true then
                     if (G.jokers.cards[i].aiko_trigger_external) and not G.jokers.cards[i].debuff then
-                        G.jokers.cards[i]:aiko_trigger_external(G.jokers.cards[i])
+                        G.E_MANAGER:add_event(
+                            Event{
+                                trigger = "before",
+                                delay = 0,
+                                function ()
+                                    G.jokers.cards[i]:aiko_trigger_external(G.jokers.cards[i])
+                                    return true;
+                                end
+                            }
+                        ,'base',true)
                         --G.E_MANAGER:add_event(Event({trigger = "immediate",func = (function()return true end)}), 'base')
                     end
                 end
@@ -81,6 +103,42 @@ function EventManager:update(dt, forced)
             G.GAME.blind.debuff.initial_action_acted = false
             G.GAME.blind.debuff.initial_action_act_set = true
         end
+        if not G.GAME.current_round.akyrs_executed_debuff and AKYRS.all_card_areas and G.GAME.blind then
+            if G.GAME.blind.debuff.akyrs_suit_debuff_hand then
+                if AKYRS.all_card_areas then 
+                    for suit, _ in pairs(G.GAME.current_round.aiko_played_suits) do
+                        for _,area in ipairs(AKYRS.all_card_areas) do
+                            if (area and area.cards) then
+                                for j,c in ipairs(area.cards) do
+                                    if c:is_suit(suit) then
+                                        c:set_debuff(true)
+                                    end
+                                end
+                            end
+                
+                        end
+                        
+                    end
+                end
+            end
+            if G.GAME.blind.debuff.akyrs_all_seals_perma_debuff then
+                if AKYRS.all_card_areas then 
+                    for _,area in ipairs(AKYRS.all_card_areas) do
+                        if (area and area.cards) then
+                            for j,c in ipairs(area.cards) do
+                                if c.seal and not c.ability.akyrs_undebuffable then
+                                    c.ability.akyrs_perma_debuff = true
+                                end
+                            end
+                        end
+            
+                    end
+                        
+                end
+            end
+            G.GAME.current_round.akyrs_executed_debuff = true
+        end
+
         if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled then
             if AKYRS.picker_initial_action and not G.GAME.blind.debuff.initial_action_acted then
                 AKYRS.picker_initial_action()
@@ -95,6 +153,8 @@ function EventManager:update(dt, forced)
             if (k and k.cards) then
                 for j,l in ipairs(k.cards) do
                     if l.ability.akyrs_undebuffable then
+                        l.ability.akyrs_perma_debuff = false
+                        l.ability.perma_debuff = false
                         l:set_debuff(false)
                     end
                     if l.ability.akyrs_perma_debuff and not l.ability.akyrs_undebuffable then

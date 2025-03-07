@@ -48,7 +48,28 @@ return {
                 name = "The Expiry",
                 text = {
                     "All consumables are",
+                    "{E:1}permanently debuffed{}",
+                }
+            },
+            bl_akyrs_the_nature= {
+                name = "The Nature",
+                text = {
+                    "Face cards all",
+                    "give X#1# each",
+                }
+            },
+            bl_akyrs_final_periwinkle_pinecone= {
+                name = "Periwinkle Pinecone",
+                text = {
+                    "Sealed cards are",
                     "permanently debuffed",
+                }
+            },
+            bl_akyrs_final_razzle_raindrop = {
+                name = "Razzle Raindrop",
+                text = {
+                    "Played suits are",
+                    "debuffed",
                 }
             },
         },

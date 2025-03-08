@@ -178,7 +178,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 {
     vec4 tex = Texel( texture, texture_coords);
     vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
-    vec3 should_highlight = (1-smoothstep(vec3(0.1),vec3(0.6),tex.xyz));
+    vec3 should_highlight = (1-smoothstep(vec3(0),vec3(0.5),tex.xyz));
 
     number low = min(tex.r, min(tex.g, tex.b));
     number high = max(tex.r, max(tex.g, tex.b));
@@ -195,7 +195,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     // modify tex.rgb for output
 	// maxfac is probably max factor for like shine or something idk
     // ok fac 5 is the shine when you move mouse -> <- and it does the woosh thing
-    float rand = pnoise(vec3(uv * 0.2 + noire.x*noire.y*0.000001, sin(time*0.01)*10),vec3(1.3,4.45,2.13)) * 0.6;
+    float rand = pnoise(vec3(uv * 0.2 + noire.x*noire.y*0.000001, sin(noire.y*0.01)*10),vec3(1.3,4.45,2.13)) * 0.6;
 	tex.xyz = vec3(1.)-tex.xyz;
 
     tex.xyz += (should_highlight*((max(0.6,maxfac*4)+1.1)));
@@ -206,13 +206,13 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     tex.z *= 0.7;
 
     vec4 newCol = HSL(vec4(tex.xyz,1.0));
-    newCol.x += (screen_coords.x/200 + screen_coords.y/200+ (noire.y*0.0111))* 0.7 + sin(time*10)*0.00002;
-    newCol.x *= min(max(0.3,pnoise(vec3(uv * 0.3 + noire.x, sin(time*100)*10),vec3(1.1,2.4,3.3))),0.7);
+    newCol.x += (screen_coords.x/200 + screen_coords.y/200+ sin(noire.y*0.0111)) + sin(noire.y*10)*0.00002;
+    newCol.x *= min(max(0.3,pnoise(vec3(uv * 0.3 + noire.x, sin(noire.y*0.1)*10),vec3(1.1,2.4,3.3))),0.7) * (sin(time)+3)*0.25;
     newCol.y *=0.5; // sat
-    newCol.y +=0.3 * (noire.y*0.01);
+    newCol.y +=0.7 * ((sin(noire.y)+4) * 0.25);
     newCol.z *=0.5; // light
     newCol.z +=0.6 * (noire.x*0.1);
-    tex.xyz = mix(RGB(newCol).xyz,tex.xyz,0.9);
+    tex.xyz = mix(RGB(newCol).xyz,tex.xyz,0.8);
 
     return dissolve_mask(tex*colour, texture_coords, uv);
 }

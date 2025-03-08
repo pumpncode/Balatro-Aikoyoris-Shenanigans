@@ -30,7 +30,7 @@ SMODS.Back{
     config = {
         all_nulls = true,
         starting_deck_size = 100,
-        selection = 2000000000,
+        selection = 1e100,
         special_hook = true,
         letters_enabled = true,
         letters_mult_enabled = true,

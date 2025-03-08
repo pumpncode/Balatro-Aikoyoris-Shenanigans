@@ -155,9 +155,12 @@ SMODS.Blind{
 
 }
 
-local function talismanCheck(v,big,omega)
+local function talismanCheck(v,big,omega,jen)
     if Talisman then
         if Talisman.config_file.break_infinity == "omeganum" then
+            if Jen then
+                return jen
+            end
             return omega
         end
         return big
@@ -182,8 +185,12 @@ SMODS.Blind{
         
         if Talisman then
             if Talisman.config_file.break_infinity == "omeganum" then
+                local val = orig_chips:tetrate(self.debuff.disable_chip_x)
+                if Jen and G.GAME.blind.chips then
+                    val = val:tetrate(self.debuff.disable_chip_x)
+                end
                 
-                return { vars = {orig_chips:tetrate(self.debuff.disable_chip_x)}, key = self.key }
+                return { vars = {}, key = self.key }
             else
                 
                 return { vars = {orig_chips^self.debuff.disable_chip_x}, key = self.key }
@@ -193,7 +200,7 @@ SMODS.Blind{
         end
     end,
     collection_loc_vars = function(self)
-        local s = talismanCheck("3","3333","^333")
+        local s = talismanCheck("3","3333","^333","^333 and another ^^333")
         return { vars = {"^"..s.." of current"}, key = self.key }
     end,
     set_blind = function(self)
@@ -208,7 +215,11 @@ SMODS.Blind{
         local to_big = not to_big and function(x) return x end or to_big
         if Talisman then
             if Talisman.config_file.break_infinity == "omeganum" then 
-                G.GAME.blind.chips = to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling):tetrate(to_big(self.debuff.disable_chip_x))
+                local val = to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling):tetrate(to_big(self.debuff.disable_chip_x))
+                if Jen and G.GAME.blind.chips then
+                    val = val:tetrate(to_big(self.debuff.disable_chip_x))
+                end
+                G.GAME.blind.chips = val
             else
                 G.GAME.blind.chips = to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling) ^ to_big(self.debuff.disable_chip_x)
 

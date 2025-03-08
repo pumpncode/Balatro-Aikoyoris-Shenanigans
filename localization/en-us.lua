@@ -113,6 +113,13 @@ return {
                     "{C:white,X:mult}X#2#{} Mult"
                 }
             },
+            e_akyrs_sliced = {
+                name = "Sliced",
+                text = {
+                    "Triggers twice",
+                    "All values are halved"
+                }
+            },
         },
         Enhanced={
             m_akyrs_brick_card = {
@@ -456,7 +463,8 @@ return {
             akyrs_self_destructs="Self Destructs",
             akyrs_debuff_seal="Seal-Debuffed",
             akyrs_texelated = "Texelated",
-            akyrs_noire = "Noire"
+            akyrs_noire = "Noire",
+            akyrs_sliced = "Sliced"
         },
         poker_hand_descriptions={},
         poker_hands={},

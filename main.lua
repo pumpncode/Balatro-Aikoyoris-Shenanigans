@@ -1,6 +1,7 @@
 AKYRS = SMODS.current_mod
 
 SMODS.optional_features.cardareas.unscored = true
+SMODS.optional_features.retrigger_joker = true
 
 assert(SMODS.load_file("./modules/pre.lua"))() 
 assert(SMODS.load_file("./modules/atlasses.lua"))() 

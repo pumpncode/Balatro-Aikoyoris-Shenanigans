@@ -208,6 +208,7 @@ G.FUNCS.can_discard = function(e)
         e.config.colour = G.C.RED
         e.config.button = 'discard_cards_from_highlighted'
     end
+    return ret
 end
 
 
@@ -447,5 +448,12 @@ function CardArea:init(X, Y, W, H, config)
         end
         table.insert(AKYRS.all_card_areas,self)
     end
+    return r
+end
+
+local setCardAbilityHook = Card.set_ability
+
+function Card:set_ability(c,i,d)
+    local r = setCardAbilityHook(self,c,i,d)
     return r
 end

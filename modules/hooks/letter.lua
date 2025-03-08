@@ -49,9 +49,19 @@ local cardBaseHooker = Card.set_base
 function Card:set_base(card, initial)
     local ret = cardBaseHooker(self, card, initial)
     self.aiko_draw_delay = math.random() * 1.75 + 0.25
+    self.akyrs_upgrade_sliced = false
     if self.base.name and not self.ability.aikoyori_letters_stickers then
         self:set_letters_random()
         self.ability.forced_letter_render = false
+    end
+    return ret
+end
+local cardInitHook = Card.init
+function Card:init(X, Y, W, H, card, center, params)
+    local ret = cardInitHook(self, X, Y, W, H, card, center, params)
+    
+    if(not self.akyrs_old_ability) then
+        self.akyrs_old_ability = AKYRS.deep_copy(self.ability)
     end
     return ret
 end
@@ -61,6 +71,8 @@ function Card:save()
     local c = cardSave(self)
     c.is_null = self.is_null
     c.highlighted = self.highlighted
+    c.akyrs_old_ability = self.akyrs_old_ability
+    --c.akyrs_upgrade_sliced = self.akyrs_upgrade_sliced
     return c
 end
 
@@ -68,7 +80,9 @@ local cardLoad = Card.load
 function Card:load(cardTable, other_card)
     local c = cardLoad(self, cardTable, other_card)
     self.is_null = cardTable.is_null
-    self.highlighted = self.highlighted
+    self.highlighted = cardTable.highlighted
+    self.akyrs_old_ability = cardTable.akyrs_old_ability
+    --self.akyrs_upgrade_sliced = cardTable.akyrs_upgrade_sliced
     return c
 end
 
@@ -153,7 +167,7 @@ function Back:apply_to_run()
                         -- misprintize
                         if G.GAME.modifiers and G.GAME.modifiers.cry_misprint_min and G.GAME.modifiers.cry_misprint_max then
                             for k, v in pairs(G.playing_cards) do
-                                cry_misprintize(car)
+                                Cryptid.misprintize(car)
                             end
                         end
 
@@ -236,6 +250,7 @@ local copyCardHook = copy_card
 function copy_card(other, new_card, card_scale, playing_card, strip_edition)
     local c = copyCardHook(other, new_card, card_scale, playing_card, strip_edition)
     c.is_null = other.is_null
+    c.akyrs_old_ability = other.ability
     return c
 end
 

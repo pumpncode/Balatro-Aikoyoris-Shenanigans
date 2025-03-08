@@ -49,7 +49,7 @@ end
 
 
 local hookCalFx = SMODS.calculate_effect
-SMODS.calculate_effect = function(effect, scored_card, from_edition, pre_jokers)
+AKYRS.repetable_fx_calc = function(effect, scored_card, from_edition, pre_jokers)
     local r = hookCalFx(effect, scored_card, from_edition, pre_jokers)
     if G.GAME.blind and G.GAME.blind.debuff.akyrs_score_face_with_my_dec_mult and G.GAME.blind.debuff.dec_mult then
         if scored_card:is_face(true) then
@@ -60,3 +60,31 @@ SMODS.calculate_effect = function(effect, scored_card, from_edition, pre_jokers)
     end
     return r
 end
+SMODS.calculate_effect = function(effect, scored_card, from_edition, pre_jokers)
+    local r = AKYRS.repetable_fx_calc(effect, scored_card, from_edition, pre_jokers)
+    local extratrigs = scored_card.ability and scored_card.ability.akyrs_card_extra_triggers or 0
+    extratrigs = extratrigs + (scored_card.edition and scored_card.edition.akyrs_card_extra_triggers or 0)
+    if extratrigs > 0 then
+        for i = 1, extratrigs do
+            --print("RE-actual-TRIGGERED")
+            r = AKYRS.repetable_fx_calc(effect, scored_card, from_edition, pre_jokers)
+        end
+    end
+    return r
+end
+--[[
+local evalCardHook = eval_card
+function eval_card(card,context)
+    
+    local r,s = evalCardHook(card,context)
+    local extratrigs = card.ability and card.ability.akyrs_card_extra_triggers or 0
+    extratrigs = extratrigs + (card.edition and card.edition.akyrs_card_extra_triggers or 0)
+    if extratrigs > 0 then
+        for i = 1, extratrigs do
+            print("RE-actual-TRIGGERED")
+            r,s = evalCardHook(card,context)
+        end
+    end
+    return r,s
+end
+]]

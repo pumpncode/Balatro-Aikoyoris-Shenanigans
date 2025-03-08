@@ -6,6 +6,11 @@ SMODS.Shader{
     key = "noire",
     path = "noire.fs"
 }
+SMODS.Shader{
+    key = "sliced",
+    path = "sliced.fs",
+    
+}
 
 SMODS.Edition{
     key = "texelated",
@@ -25,7 +30,6 @@ SMODS.Edition{
             }
         end
     end,
-    badge_colour = G.C.PLAYABLE,
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
@@ -36,7 +40,7 @@ SMODS.Edition{
     end,
     sound = { sound = "akyrs_texelated_sfx", per = 1.2, vol = 0.4 },
     in_shop = true,
-    weight = 2,
+    weight = 7,
 }
 
 SMODS.Edition{
@@ -55,7 +59,6 @@ SMODS.Edition{
             }
         end
     end,
-    badge_colour = G.C.PLAYABLE,
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
@@ -66,5 +69,28 @@ SMODS.Edition{
     end,
     sound = { sound = "akyrs_noire_sfx", per = 0.8, vol = 0.3 },
     in_shop = true,
-    weight = 14,
+    weight = 3,
+}
+
+SMODS.Edition{
+    key = "sliced",
+    shader = "akyrs_sliced",
+    config = {
+        extra = {
+            mod_mult = 0.5,
+        },
+        akyrs_card_extra_triggers = 1
+    },
+    disable_base_shader = true,
+    sound = { sound = "akyrs_noire_sfx", per = 0.8, vol = 0.3 },
+    in_shop = true,
+    on_apply = function (card)
+        AKYRS.mod_card_values(card.ability,{multiply = 0.5, reference = card.akyrs_old_ability})
+        card.akyrs_upgrade_sliced = true
+    end,
+    on_remove = function (card)
+        card.ability = card.akyrs_old_ability
+        card.akyrs_upgrade_sliced = false
+    end,
+    weight = 5,
 }

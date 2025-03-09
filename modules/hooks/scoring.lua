@@ -63,8 +63,8 @@ AKYRS.repetable_fx_calc = function(effect, scored_card, from_edition, pre_jokers
 end
 SMODS.calculate_effect = function(effect, scored_card, from_edition, pre_jokers)
     local r = AKYRS.repetable_fx_calc(effect, scored_card, from_edition, pre_jokers)
-    local extratrigs = scored_card.ability and scored_card.ability.akyrs_card_extra_triggers or 0
-    extratrigs = extratrigs + (scored_card.edition and scored_card.edition.akyrs_card_extra_triggers or 0)
+    local extratrigs = (scored_card and scored_card.ability and scored_card.ability.akyrs_card_extra_triggers) and scored_card.ability.akyrs_card_extra_triggers or 0
+    extratrigs = extratrigs + (scored_card and scored_card.edition and scored_card.edition.akyrs_card_extra_triggers or 0)
     if extratrigs > 0 then
         for i = 1, extratrigs do
             --print("RE-actual-TRIGGERED")

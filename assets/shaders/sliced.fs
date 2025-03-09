@@ -153,35 +153,16 @@ extern MY_HIGHP_OR_MEDIUMP float hovering;
 extern MY_HIGHP_OR_MEDIUMP float screen_scale;
 
 #ifdef VERTEX
-vec4 position( mat4 transformation_matrix, vec4 vertex_position )
+vec4 position( mat4 transform_projection, vec4 vertex_position )
 {
-    
-    float factorY = 1;
-    vec2 uv = (vertex_position.xy / love_ScreenSize.xy);
     if (hovering <= 0.){
-        return transformation_matrix * vertex_position;
+        return transform_projection * vertex_position;
     }
-    
-    // Calculate how "centered" we are in the texture (0.0 at edges, 1.0 at center)
-    vec2 normalizedPos = vertex_position.xy / love_ScreenSize.xy;
-    float centerFactor = 4.0 * normalizedPos.x * (1.0 - normalizedPos.x) * 
-                         4.0 * normalizedPos.y * (1.0 - normalizedPos.y);
-    
-    // Only apply rotation when we're near the center of the texture
-    float angle = sin(sliced.y) * 0.01 * smoothstep(0.5, 0.8, centerFactor);
-    mat4 rotation = mat4(
-        cos(angle), -sin(angle), 0.0, 0.0,
-        -sin(angle), cos(angle), 0.0, 0.0,
-        0.0,         0.0,        1.0, 0.0,
-        0.0,         0.0,        0.0, 1.0
-    );
-
-    vec4 pos = rotation * vertex_position;
     float mid_dist = length(vertex_position.xy - 0.5*love_ScreenSize.xy)/length(love_ScreenSize.xy);
     vec2 mouse_offset = (vertex_position.xy - mouse_screen_pos.xy)/screen_scale;
     float scale = 0.2*(-0.03 - 0.3*max(0., 0.3-mid_dist))
                 *hovering*(length(mouse_offset)*length(mouse_offset))/(2. -mid_dist);
 
-    return transformation_matrix * pos + vec4(0,0,0,scale);
+    return transform_projection * vertex_position + vec4(0,0,0,scale);
 }
 #endif

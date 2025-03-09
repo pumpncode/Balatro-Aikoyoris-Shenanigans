@@ -61,7 +61,7 @@ return {
             bl_akyrs_the_key= {
                 name = "The Key",
                 text = {
-                    "Selected cards",
+                    "[WIP] Selected cards",
                     "cannot be deselected",
                 }
             },

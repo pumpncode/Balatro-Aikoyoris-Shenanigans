@@ -58,6 +58,13 @@ return {
                     "give X#1# each",
                 }
             },
+            bl_akyrs_the_key= {
+                name = "The Key",
+                text = {
+                    "Selected cards",
+                    "cannot be deselected",
+                }
+            },
             bl_akyrs_final_periwinkle_pinecone= {
                 name = "Periwinkle Pinecone",
                 text = {

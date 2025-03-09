@@ -397,6 +397,23 @@ SMODS.Blind {
         end
     end
 }
+
+SMODS.Blind {
+    key = "the_key",
+    dollars = 5,
+    mult = 2,
+    boss_colour = HEX('8c7d36'),
+    debuff = {
+        akyrs_perma_selection = true
+    },
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10},
+    pos = { x = 0, y = 12 },
+}
+
+
+
+-- Showdown Bosses
 SMODS.Blind {
     key = "final_periwinkle_pinecone",
     dollars = 8,
@@ -408,6 +425,12 @@ SMODS.Blind {
     },
     boss = {min = 1, max = 10, showdown = true},
     pos = { x = 0, y = 10 },
+    disable = function (self)
+        
+        for k, v in ipairs(G.playing_cards) do
+            v.ability.akyrs_forced_selection = nil
+        end
+    end
 }
 SMODS.Blind {
     key = "final_razzle_raindrop",

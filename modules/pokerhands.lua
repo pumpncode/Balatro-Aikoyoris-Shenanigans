@@ -83,6 +83,7 @@ for i = 3, 31 do
         table.insert(exampler,{
             AKYRS.randomCard(),
             true,
+            nil,
             c
         })
     end

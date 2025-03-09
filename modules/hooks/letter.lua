@@ -45,61 +45,11 @@ function aiko_mod_startup(self)
         G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 9, y = 2 })
 end
 
-local cardBaseHooker = Card.set_base
-function Card:set_base(card, initial)
-    local ret = cardBaseHooker(self, card, initial)
-    self.aiko_draw_delay = math.random() * 1.75 + 0.25
-    self.akyrs_upgrade_sliced = false
-    if self.base.name and not self.ability.aikoyori_letters_stickers then
-        self:set_letters_random()
-        self.ability.forced_letter_render = false
-    end
-    return ret
-end
-local cardInitHook = Card.init
-function Card:init(X, Y, W, H, card, center, params)
-    local ret = cardInitHook(self, X, Y, W, H, card, center, params)
-    
-    if(not self.akyrs_old_ability) then
-        self.akyrs_old_ability = AKYRS.deep_copy(self.ability)
-    end
-    return ret
-end
-
-local cardSave = Card.save
-function Card:save()
-    local c = cardSave(self)
-    c.is_null = self.is_null
-    c.highlighted = self.highlighted
-    c.akyrs_old_ability = self.akyrs_old_ability
-    --c.akyrs_upgrade_sliced = self.akyrs_upgrade_sliced
-    return c
-end
-
-local cardLoad = Card.load
-function Card:load(cardTable, other_card)
-    local c = cardLoad(self, cardTable, other_card)
-    self.is_null = cardTable.is_null
-    self.highlighted = cardTable.highlighted
-    self.akyrs_old_ability = cardTable.akyrs_old_ability
-    --self.akyrs_upgrade_sliced = cardTable.akyrs_upgrade_sliced
-    return c
-end
-
-local getNominalHook = Card.get_nominal
-function Card:get_nominal(mod)
-    if self.is_null and self.ability.aikoyori_letters_stickers then
-        return -10 - aiko_alphabets_to_num[self.ability.aikoyori_letters_stickers]
-    end
-    local ret = getNominalHook(self, mod)
-    return ret
-end
-
 -- Rendering Letters
 local drag_mod = { x = 0, y = 0, r = 0 }
 function AKYRS.aikoyori_draw_extras(card, layer)
     if G.aikoyori_letters_stickers and (G.GAME.letters_enabled or card.ability.forced_letter_render) then
-        if card.ability.aikoyori_letters_stickers then
+        if card.ability.aikoyori_letters_stickers and G.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers] then
             local movement_mod = 0.05 * math.sin(1.1 * (G.TIMERS.REAL + card.aiko_draw_delay)) - 0.07
             local rot_mod = 0.02 * math.sin(0.72 * (G.TIMERS.REAL + card.aiko_draw_delay)) + 0.03
             if not card then return color end

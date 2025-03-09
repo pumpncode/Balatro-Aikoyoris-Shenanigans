@@ -85,8 +85,10 @@ SMODS.Edition{
     sound = { sound = "akyrs_noire_sfx", per = 0.8, vol = 0.3 },
     in_shop = true,
     on_apply = function (card)
-        AKYRS.mod_card_values(card.ability,{multiply = 0.5, reference = card.akyrs_old_ability})
-        card.akyrs_upgrade_sliced = true
+        if not card.akyrs_upgrade_sliced then
+            AKYRS.mod_card_values(card.ability,{multiply = 0.5, reference = card.akyrs_old_ability})
+            card.akyrs_upgrade_sliced = true
+        end
     end,
     on_remove = function (card)
         card.ability = card.akyrs_old_ability

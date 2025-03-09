@@ -405,7 +405,7 @@ AKYRS.mod_card_values = function(table_in, config)
     modify_values(table_in, reference)
 end
 
-function AKYRS.deep_copy(orig)
+AKYRS.deep_copy = function(orig)
     local orig_type = type(orig)
     local copy
     if orig_type == 'table' then
@@ -417,4 +417,8 @@ function AKYRS.deep_copy(orig)
         copy = orig
     end
     return copy
+end
+
+AKYRS.get_default_ability = function(key)
+    return G.P_CENTERS[key] and G.P_CENTERS[key].config or {}
 end

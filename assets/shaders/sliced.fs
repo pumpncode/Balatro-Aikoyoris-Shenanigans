@@ -101,7 +101,7 @@ float random(float min, float max, vec2 uv) {
 }
 
 float randReal(float x){
-    return fract(sin(x*12)*500);
+    return fract(tan(sin(x*0.1)*10.01)*10.3541);
 }
 
 vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords )
@@ -109,33 +109,43 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     
 	vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
     // -- start
+    
+    float random1 = randReal(floor(uv.x*7.445)+time)*0.05;
+    float random2 = randReal(floor(uv.x*7.445)+1+time)*0.05;
+    float random = mix(random1, random2, fract(sin(uv.x*7.445)+time));
+    float factor = 0.5 + random;
+    float factorY = 1;
+    float width = 0.044 + fract(fract(random)*1.72);
+    float widthRed = 0.2;
     vec4 tex = Texel(texture, texture_coords);
     
 
     vec4 COLHSL = HSL(tex);
     COLHSL.g = COLHSL.g + 0.000001*sliced.r;
     //COLHSL.b = 1 - COLHSL.b;
-    float random1 = randReal(floor(uv.x*10)+time)*0.05;
-    float random2 = randReal(floor(uv.x*10)+1.5+time)*0.05;
-    float random = mix(random1, random2, fract(sin(uv.x*10)+time));
-    float factor = 0.5 + random;
-    float factorY = 1;
-    float width = 0.07;
-    float widthRed = 0.12;
     // -- end
 	tex = RGB(COLHSL);
-    if ((uv.x*factor)+uv.y*factorY > (1-widthRed/2)-factor/2 && (uv.x*factor)+uv.y*factorY < (1+widthRed/2)-(factor/2)){
-        tex.r *= 5.0;
-        tex.r += 1.0;
-        tex.g *= 0.010;
-        tex.b *= 0.010;
+    vec2 newuv = uv;
+    if ((uv.x*factor)+uv.y*factorY > (1)-factor/2 && (uv.x*factor)+uv.y*factorY < (1+widthRed/2)-(factor/2)){
+        //tex.r *= 5.0;
+        //tex.r += 1.0;
+        //tex.g *= 0.010;
+        //tex.b *= 0.010;
+        COLHSL.r *=0.8;
+        COLHSL.b *=0.8;
+        COLHSL.g *=0.2;
+	    tex = RGB(COLHSL);
+        tex.r -= 0.2;
+        tex.g -= 0.2;
+        tex.b -= 0.2;
+
     }
     if ((uv.x*factor)+uv.y*factorY > (1-width/2)-(factor/2) && uv.x*factor+uv.y*factorY < (1+width/2)-(factor/2)){
         tex.w = 0;
         colour.w = 0;
     }
 
-	return dissolve_mask(tex*colour, texture_coords, uv);
+	return dissolve_mask(tex*colour, texture_coords, newuv);
 }
 
 extern MY_HIGHP_OR_MEDIUMP vec2 mouse_screen_pos;
@@ -143,16 +153,35 @@ extern MY_HIGHP_OR_MEDIUMP float hovering;
 extern MY_HIGHP_OR_MEDIUMP float screen_scale;
 
 #ifdef VERTEX
-vec4 position( mat4 transform_projection, vec4 vertex_position )
+vec4 position( mat4 transformation_matrix, vec4 vertex_position )
 {
+    
+    float factorY = 1;
+    vec2 uv = (vertex_position.xy / love_ScreenSize.xy);
     if (hovering <= 0.){
-        return transform_projection * vertex_position;
+        return transformation_matrix * vertex_position;
     }
+    
+    // Calculate how "centered" we are in the texture (0.0 at edges, 1.0 at center)
+    vec2 normalizedPos = vertex_position.xy / love_ScreenSize.xy;
+    float centerFactor = 4.0 * normalizedPos.x * (1.0 - normalizedPos.x) * 
+                         4.0 * normalizedPos.y * (1.0 - normalizedPos.y);
+    
+    // Only apply rotation when we're near the center of the texture
+    float angle = sin(sliced.y) * 0.01 * smoothstep(0.5, 0.8, centerFactor);
+    mat4 rotation = mat4(
+        cos(angle), -sin(angle), 0.0, 0.0,
+        -sin(angle), cos(angle), 0.0, 0.0,
+        0.0,         0.0,        1.0, 0.0,
+        0.0,         0.0,        0.0, 1.0
+    );
+
+    vec4 pos = rotation * vertex_position;
     float mid_dist = length(vertex_position.xy - 0.5*love_ScreenSize.xy)/length(love_ScreenSize.xy);
     vec2 mouse_offset = (vertex_position.xy - mouse_screen_pos.xy)/screen_scale;
     float scale = 0.2*(-0.03 - 0.3*max(0., 0.3-mid_dist))
                 *hovering*(length(mouse_offset)*length(mouse_offset))/(2. -mid_dist);
 
-    return transform_projection * vertex_position + vec4(0,0,0,scale);
+    return transformation_matrix * pos + vec4(0,0,0,scale);
 }
 #endif

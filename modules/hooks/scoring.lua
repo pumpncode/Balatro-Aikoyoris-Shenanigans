@@ -47,7 +47,8 @@ function Card:aiko_trigger_external(card)
     end
 end
 
-
+--[[
+]]
 local hookCalFx = SMODS.calculate_effect
 AKYRS.repetable_fx_calc = function(effect, scored_card, from_edition, pre_jokers)
     local r = hookCalFx(effect, scored_card, from_edition, pre_jokers)

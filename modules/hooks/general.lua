@@ -61,7 +61,7 @@ function EventManager:update(dt, forced)
     if G.GAME.blind and G.GAME.blind.debuff.requirement_scale then
         if G.GAME.current_round.hands_left >= 1 and G.GAME.current_round.hands_played > 0 then
             G.GAME.blind.chips = G.GAME.chips * G.GAME.blind.debuff.requirement_scale
-            G.GAME.blind.chip_text = G.GAME.chips
+            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
         end
     end
     if G.STATE == G.STATES.HAND_PLAYED then

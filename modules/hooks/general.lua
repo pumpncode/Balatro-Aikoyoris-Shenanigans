@@ -474,6 +474,7 @@ local cardBaseHooker = Card.set_base
 function Card:set_base(card, initial)
     local ret = cardBaseHooker(self, card, initial)
     self.aiko_draw_delay = math.random() * 1.75 + 0.25
+    self.akyrs_impostor_card = false
     if self.base.name and not self.ability.aikoyori_letters_stickers then
         self:set_letters_random()
         self.ability.forced_letter_render = false
@@ -495,6 +496,7 @@ function Card:save()
     c.highlighted = self.highlighted
     c.akyrs_old_ability = self.akyrs_old_ability
     c.akyrs_upgrade_sliced = self.akyrs_upgrade_sliced
+    c.akyrs_impostor_card = self.akyrs_impostor_card
     return c
 end
 
@@ -505,6 +507,7 @@ function Card:load(cardTable, other_card)
     self.highlighted = cardTable.highlighted
     self.akyrs_old_ability = cardTable.akyrs_old_ability
     self.akyrs_upgrade_sliced = cardTable.akyrs_upgrade_sliced
+    self.akyrs_impostor_card = cardTable.akyrs_impostor_card
     return c
 end
 

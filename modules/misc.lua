@@ -357,6 +357,7 @@ function AKYRS.embedded_ui_sprite( sprite_atlas, sprite_pos, desc_nodes, config 
     local width = config.w or sprite_atli.px
     local scale = config.scale or 1
     local padding = config.padding or 0.07
+    local rounded = config.rounded or 0.1
     local margin_left = config.ml or 0.2
     local margin_top = config.mt or 0
     local alignment = config.alignment or "cm"
@@ -372,7 +373,7 @@ function AKYRS.embedded_ui_sprite( sprite_atlas, sprite_pos, desc_nodes, config 
     desc_nodes[#desc_nodes+1] = {
         {
             n = G.UIT.R,
-            config = { align = alignment , padding = padding, no_fill = true, minh = box_height },
+            config = { align = alignment , padding = padding, no_fill = true, minh = box_height, r = rounded },
             nodes = {
                 {n = G.UIT.O, config = { object = sprt }}
             }

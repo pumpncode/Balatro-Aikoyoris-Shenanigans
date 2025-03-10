@@ -187,6 +187,10 @@ AKYRS.DescriptionDummy{
     generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
         SMODS.Center.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
 
-        -- TODO: ask larantula for the thing
+        AKYRS.embedded_ui_sprite("akyrs_larantula_l_credits",{x = 0, y = 0}, desc_nodes, {
+            w = 800,
+            h = 800,
+            rounded = 0.5
+        })
     end,
 }

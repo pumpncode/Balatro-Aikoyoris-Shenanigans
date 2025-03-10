@@ -64,3 +64,10 @@ SMODS.Atlas {
     px = 73,
     py = 95
 }
+
+SMODS.Atlas {
+    key = "larantula_l_credits",
+    path = "credits/larantula_l.png",
+    px = 400,
+    py = 400
+}

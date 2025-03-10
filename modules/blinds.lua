@@ -190,7 +190,7 @@ SMODS.Blind{
                     val = val:tetrate(self.debuff.disable_chip_x)
                 end
                 
-                return { vars = {}, key = self.key }
+                return { vars = {val}, key = self.key }
             else
                 
                 return { vars = {orig_chips^self.debuff.disable_chip_x}, key = self.key }

@@ -71,3 +71,9 @@ SMODS.Atlas {
     px = 400,
     py = 400
 }
+SMODS.Atlas {
+    key = "aikoyori_credits",
+    path = "aikoyoriP.png",
+    px = 320,
+    py = 320
+}

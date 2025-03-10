@@ -464,6 +464,9 @@ return {
             k_akyrs_2fa_reset = "2FA Reset!",
             k_akyrs_extinguish = "Extinguished...",
             k_akyrs_burn = "Burn!",
+
+            k_akyrs_credits = "Credits",
+            k_akyrs_created_by = "Created by",
         },
         high_scores={},
         labels={

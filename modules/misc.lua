@@ -282,21 +282,31 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
             {card_limit = card_limit, type = 'title', highlight_limit = 0, collection = true,temporary = true}
         )
         for i, card in ipairs(cards) do
-            card.T.scale = scale
+            card.T.scale = card.T.scale * scale
+            --[[
+            card.T.w = card.T.w * scale
+            card.T.h = card.T.h * scale
+            card.VT.h = card.T.h
+            card.VT.h = card.T.h
+            ]]
+            -- TODO: PROPER SCALING
             local area = cardArea
             area:emplace(card)
         end
     end
-    if cardArea then
-        desc_nodes[#desc_nodes+1] = {
-            {
-                n = G.UIT.R,
-                config = { align = alignment , padding = padding, no_fill = true, minh = box_height },
-                nodes = {
-                    {n = G.UIT.O, config = { object = cardArea }}
-                }
-            }
+    local uiEX = {
+        n = G.UIT.R,
+        config = { align = alignment , padding = padding, no_fill = true, minh = box_height },
+        nodes = {
+            {n = G.UIT.O, config = { object = cardArea }}
         }
+    }
+    if cardArea then
+        if desc_nodes then
+            desc_nodes[#desc_nodes+1] = {
+                uiEX
+            }
+        end
     end
     if func_after or func_list then 
         G.E_MANAGER:clear_queue("akyrs_desc")
@@ -326,6 +336,7 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
             },"akyrs_desc")
         end
     end
+    return uiEX
 end
 
 AKYRS.temp_card_area = CardArea(
@@ -369,16 +380,18 @@ function AKYRS.embedded_ui_sprite( sprite_atlas, sprite_pos, desc_nodes, config 
         ,width*scale/(aspect_ratio*longer_value), height*scale/(aspect_ratio*longer_value),
         sprite_atli, sprite_pos
     )
-
-    desc_nodes[#desc_nodes+1] = {
-        {
-            n = G.UIT.R,
-            config = { align = alignment , padding = padding, no_fill = true, minh = box_height, r = rounded },
-            nodes = {
-                {n = G.UIT.O, config = { object = sprt }}
-            }
+    local uiEX = 
+    {
+        n = G.UIT.R,
+        config = { align = alignment , padding = padding, no_fill = true, minh = box_height, r = rounded },
+        nodes = {
+            {n = G.UIT.O, config = { object = sprt }}
         }
     }
+    if desc_nodes then
+        desc_nodes[#desc_nodes+1] = {uiEX}
+    end
+    return uiEX
 end
 
 AKYRS.mod_card_values = function(table_in, config)

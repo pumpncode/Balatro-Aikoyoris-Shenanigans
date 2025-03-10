@@ -36,8 +36,14 @@ function SMODS.current_mod.reset_game_globals(run_start)
 end
 
 function CardArea:aiko_change_playable(delta)
-    self.config.highlighted_limit = self.config.highlight_limit or G.GAME.aiko_cards_playable or 5
-    G.GAME.modifiers.cry_highlight_limit = G.GAME.aiko_cards_playable
+    
+    self.config.highlighted_limit = self.config.highlighted_limit + delta
+    G.GAME.aiko_cards_playable = self.config.highlighted_limit
+    if Cryptid then
+        G.GAME.modifiers.cry_highlight_limit = self.config.highlighted_limit
+        
+    end
+
     if delta ~= 0 then
         G.E_MANAGER:add_event(Event({
             func = function()

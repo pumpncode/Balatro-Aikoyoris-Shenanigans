@@ -390,7 +390,7 @@ AKYRS.mod_card_values = function(table_in, config)
         for k, v in pairs(table_in) do
             if type(v) == "number" then
                 if keywords[k] or #keywords < 1 then
-                    if ref[k] then
+                    if ref and ref[k] then
                         table_in[k] = (ref[k] + add) * multiply
                     end
                 end

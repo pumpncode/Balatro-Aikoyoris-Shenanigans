@@ -143,8 +143,10 @@ function Back:apply_to_run()
     local c = applyToRunBackHook(self)
 
     if self.effect.config.selection then
-        G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable + self.effect.config.selection
-        G.GAME.modifiers.cry_highlight_limit = G.GAME.aiko_cards_playable
+        G.GAME.aiko_cards_playable = math.max(G.GAME.aiko_cards_playable, self.effect.config.selection)
+        if Cryptid and G.GAME.modifiers.cry_highlight_limit then
+            G.GAME.modifiers.cry_highlight_limit = math.max(G.GAME.modifiers.cry_highlight_limit, self.effect.config.selection)
+        end
     end
     if self.effect.config.special_hook then
         G.GAME.starting_params.special_hook = true

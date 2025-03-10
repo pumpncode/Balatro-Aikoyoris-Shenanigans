@@ -54,7 +54,7 @@ AKYRS.repetable_fx_calc = function(effect, scored_card, from_edition, pre_jokers
     local r = hookCalFx(effect, scored_card, from_edition, pre_jokers)
     if G.GAME.blind and G.GAME.blind.debuff.akyrs_score_face_with_my_dec_mult and G.GAME.blind.debuff.dec_mult then
         if scored_card:is_face(true) then
-            G.E_MANAGER:add_event(Event({trigger = 'immediate', func = function () scored_card:juice_up(0.1); return true end}))
+            G.E_MANAGER:add_event(Event({trigger = 'immediate', blocking = false, blockable = true, func = function () scored_card:juice_up(0.1); return true end}))
             r = SMODS.calculate_individual_effect(effect, scored_card, "xmult", G.GAME.blind.debuff.dec_mult, false, false)
             percent = (percent or 0) + (percent_delta or 0.08)
         end
@@ -68,7 +68,15 @@ SMODS.calculate_effect = function(effect, scored_card, from_edition, pre_jokers)
     if extratrigs > 0 then
         for i = 1, extratrigs do
             --print("RE-actual-TRIGGERED")
-            r = AKYRS.repetable_fx_calc(effect, scored_card, from_edition, pre_jokers)
+            G.E_MANAGER:add_event(Event(
+            {trigger = 'before', 
+            blocking = false, 
+            blockable = false, 
+            func = function () 
+                scored_card:juice_up(0.1); 
+                AKYRS.repetable_fx_calc(effect, scored_card, from_edition, pre_jokers)
+                return true
+            end}))
         end
     end
     return r

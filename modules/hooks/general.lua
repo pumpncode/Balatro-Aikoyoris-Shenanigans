@@ -228,59 +228,20 @@ function end_round()
         G.STATE = G.STATES.SELECTING_HAND
     else
         local ret = endRoundHook()
-        for i, card in ipairs(G.consumeables.cards) do
-            if card.ability.akyrs_self_destructs then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card:start_dissolve({ G.C.RED }, nil, 1.6)
-                        return true
-                    end,
-                    delay = 0.5,
-                }), 'base')
-            end
-        end
-        for i, card in ipairs(G.deck.cards) do
-            if card.ability.akyrs_self_destructs then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card:start_dissolve({ G.C.RED }, nil, 1.6)
-                        return true
-                    end,
-                    delay = 0.5,
-                }), 'base')
-            end
-        end
-        for i, card in ipairs(G.discard.cards) do
-            if card.ability.akyrs_self_destructs then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card:start_dissolve({ G.C.RED }, nil, 1.6)
-                        return true
-                    end,
-                    delay = 0.5,
-                }), 'base')
-            end
-        end
-        for i, card in ipairs(G.play.cards) do
-            if card.ability.akyrs_self_destructs then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card:start_dissolve({ G.C.RED }, nil, 1.6)
-                        return true
-                    end,
-                    delay = 0.5,
-                }), 'base')
-            end
-        end
-        for i, card in ipairs(G.hand.cards) do
-            if card.ability.akyrs_self_destructs then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        card:start_dissolve({ G.C.RED }, nil, 1.6)
-                        return true
-                    end,
-                    delay = 0.5,
-                }), 'base')
+        for _, cardarea in ipairs(AKYRS.all_card_areas) do
+            if cardarea and cardarea.cards then
+                for i, card in ipairs(cardarea.cards) do
+
+                    if card.ability.akyrs_self_destructs then
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                card:start_dissolve({ G.C.RED }, nil, 1.6)
+                                return true
+                            end,
+                            delay = 0.5,
+                        }), 'base')
+                    end
+                end
             end
         end
         return ret

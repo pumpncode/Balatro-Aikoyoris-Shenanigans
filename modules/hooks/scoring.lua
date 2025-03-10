@@ -70,13 +70,13 @@ SMODS.calculate_effect = function(effect, scored_card, from_edition, pre_jokers)
             --print("RE-actual-TRIGGERED")
             G.E_MANAGER:add_event(Event(
             {trigger = 'before', 
-            blocking = false, 
-            blockable = false, 
+            blocking = true, 
+            blockable = true, 
             func = function () 
                 scored_card:juice_up(0.1); 
                 AKYRS.repetable_fx_calc(effect, scored_card, from_edition, pre_jokers)
                 return true
-            end}))
+            end}),'other')
         end
     end
     return r

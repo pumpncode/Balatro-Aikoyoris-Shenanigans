@@ -207,8 +207,6 @@ SMODS.current_mod.extra_tabs = function()
           new_c.is_null = true
           new_c.ability.aikoyori_letters_stickers = k
           new_c.ability.forced_letter_render = true
-          --new_c:set_seal("akyrs_debuff")
-          --new_c.pinned = true
           table.insert(cards, new_c)
         end
         return {
@@ -230,21 +228,32 @@ SMODS.current_mod.extra_tabs = function()
                   n = G.UIT.R,
                   config = { w = 4 },
                   nodes = {
-                    -- TODO : FIX UI
-                    AKYRS.embedded_ui_sprite("akyrs_aikoyori_credits", { x = 0, y = 0 }, nil, {
-                      w = 320,
-                      h = 320,
-                      rounded = 0.5
-                    }),
-                    AKYRS.card_area_preview(G.creditCardArea, nil, {
-                      cards = cards,
-                      h = 0.75,
-                      w = 2.5,
-                      override = true,
-                      box_heigh = 1,
-                      scale = 0.5,
-                      type = "joker",
-                    })
+                    {
+                      n = G.UIT.C,
+                      config = { w = 4, align = "tm" },
+                      nodes = {
+                        AKYRS.embedded_ui_sprite("akyrs_aikoyori_credits", { x = 0, y = 0 }, nil, {
+                          w = 480,
+                          h = 480,
+                          rounded = 0.5
+                        }),
+                      }
+                    },
+                    {
+                      n = G.UIT.C,
+                      config = { w = 4, align = "tm" },
+                      nodes = {
+                        AKYRS.card_area_preview(G.creditCardArea, nil, {
+                          cards = cards,
+                          h = 0.75,
+                          w = 2.5,
+                          override = true,
+                          box_heigh = 1,
+                          scale = 0.5,
+                          type = "akyrs_credits",
+                        })
+                      }
+                    },
                   }
                 }
               }

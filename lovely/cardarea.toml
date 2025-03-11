@@ -1,0 +1,16 @@
+[manifest]
+version = "1.2"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "cardarea.lua"
+pattern = """    self.ARGS.invisible_area_types = self.ARGS.invisible_area_types or {discard=1, voucher=1, play=1, consumeable=1, title = 1, title_2 = 1}"""
+position = "after"
+payload = """
+self.ARGS.invisible_area_types["akyrs_credits"] = 1
+"""
+overwrite = true
+match_indent = true
+

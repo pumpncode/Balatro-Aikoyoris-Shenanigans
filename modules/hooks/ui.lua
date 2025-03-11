@@ -40,7 +40,7 @@ function Card:generate_UIBox_ability_table()
         end
 
 
-        if (G.GAME.letters_enabled and letter) then
+        if ((G.GAME.letters_enabled or self.ability.forced_letter_render) and letter) then
             generate_card_ui({ key = 'letters' .. letter, set = 'AikoyoriExtraBases', vars = loc_vars }, newRetTable)
         else
             generate_card_ui({ key = 'aiko_x_akyrs_null', set = 'AikoyoriExtraBases', vars = loc_vars }, newRetTable)
@@ -63,7 +63,7 @@ function Card:generate_UIBox_ability_table()
 
         ret = newRetTable
     else
-        if (G.GAME.letters_enabled and letter) then
+        if ((G.GAME.letters_enabled or self.ability.forced_letter_render) and letter) then
             generate_card_ui({ key = 'letters' .. letter, set = 'AikoyoriExtraBases', vars = loc_vars }, ret)
         end
     end

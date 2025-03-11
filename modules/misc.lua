@@ -287,10 +287,9 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
             card.T.h = card.T.h * scale
             card.VT.h = card.T.h
             card.VT.h = card.T.h
-            -- TODO: PROPER SCALING
             local area = cardArea
             if(card.config.center) then
-                
+                -- this properly sets the sprite size <3
                 card:set_sprites(card.config.center)
             end
             area:emplace(card)

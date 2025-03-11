@@ -196,8 +196,7 @@ SMODS.current_mod.extra_tabs = function()
       label = localize("k_akyrs_credits"),
       tab_definition_function = function()
         local cards1 = AKYRS.word_to_cards("aikoyori")
-        local cards2 = AKYRS.word_to_cards("additional art by")
-        local cards3 = AKYRS.word_to_cards("@larantula_l")
+        local cards2 = AKYRS.word_to_cards("@larantula_l")
         return {
           n = G.UIT.ROOT,
           config = { w = 8, align = "tm", r = 0.1 , h = 6, padding = 0.2},
@@ -206,6 +205,23 @@ SMODS.current_mod.extra_tabs = function()
               n = G.UIT.C,
               config = {padding = 0.2},
               nodes = {
+                {
+                  n = G.UIT.R,
+                  config = { align = "tm" },
+                  nodes = {
+                    { n = G.UIT.O, config = { object = 
+                    DynaText{
+                      string = localize("k_akyrs_title"), 
+                      scale = 1, 
+                      colours = {SMODS.Gradients["akyrs_mod_title"]},
+                      pop_in = 0.1,
+                      float = 1,
+                      bump_rate = 10,
+                      bump_amount = 5,
+                    }
+                   } }
+                  }
+                },
                 {
                   n = G.UIT.R,
                   config = {},
@@ -235,21 +251,43 @@ SMODS.current_mod.extra_tabs = function()
                         AKYRS.card_area_preview(G.creditCardArea, nil, {
                           cards = cards1,
                           h = 0.6,
-                          w = 4.5,
+                          w = 3.5,
                           override = true,
-                          scale = 0.5,
+                          scale = 0.7,
                           type = "akyrs_credits",
                         }),
+                      }
+                    },
+                  }
+                },
+                {
+                  n = G.UIT.R,
+                  config = {},
+                  nodes = {
+                    { n = G.UIT.T, config = { text = localize("k_akyrs_additional_art_by"), scale = 0.5, colour = G.C.WHITE } }
+                  }
+                },
+                {
+                  n = G.UIT.R,
+                  config = { w = 4 },
+                  nodes = {
+                    {
+                      n = G.UIT.C,
+                      config = { w = 4, align = "tm" },
+                      nodes = {
+                        AKYRS.embedded_ui_sprite("akyrs_larantula_l_credits", { x = 0, y = 0 }, nil, {
+                          w = 480,
+                          h = 480,
+                          rounded = 0.5
+                        }),
+                      }
+                    },
+                    {
+                      n = G.UIT.C,
+                      config = { w = 4, align = "tm" },
+                      nodes = {
                         AKYRS.card_area_preview(G.creditCardArea, nil, {
                           cards = cards2,
-                          h = 0.6,
-                          w = 4.5,
-                          override = true,
-                          scale = 0.5,
-                          type = "akyrs_credits",
-                        }),
-                        AKYRS.card_area_preview(G.creditCardArea, nil, {
-                          cards = cards3,
                           h = 0.6,
                           w = 4.5,
                           override = true,

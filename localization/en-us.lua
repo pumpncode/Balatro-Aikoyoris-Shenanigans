@@ -499,7 +499,9 @@ return {
             k_akyrs_burn = "Burn!",
 
             k_akyrs_credits = "Credits",
+            k_akyrs_title = "Aikoyori's Shenanigans",
             k_akyrs_created_by = "Created by",
+            k_akyrs_additional_art_by = "Additional Art by",
         },
         high_scores={},
         labels={

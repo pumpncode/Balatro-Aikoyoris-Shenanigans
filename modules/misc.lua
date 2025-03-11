@@ -494,3 +494,13 @@ AKYRS.word_to_cards = function(word)
     end
     return cards
 end
+
+SMODS.Gradient{
+    key = "akyrs_mod_title",
+    colours = {
+        HEX("ef4444"),
+        HEX("eab308"),
+        HEX("2dd4bf"),
+    },
+    cycle = 5
+}

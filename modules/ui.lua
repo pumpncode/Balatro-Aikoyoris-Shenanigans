@@ -197,7 +197,7 @@ SMODS.current_mod.extra_tabs = function()
       tab_definition_function = function()
         local cards1 = AKYRS.word_to_cards("aikoyori")
         local cards2 = AKYRS.word_to_cards("additional art by")
-        local cards3 = AKYRS.word_to_cards("@larantula_t")
+        local cards3 = AKYRS.word_to_cards("@larantula_l")
         return {
           n = G.UIT.ROOT,
           config = { w = 8, align = "tm", r = 0.1 , h = 6, padding = 0.2},

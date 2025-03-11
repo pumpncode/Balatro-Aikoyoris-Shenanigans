@@ -274,23 +274,25 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
     local margin_top = config.mt or 0
     local alignment = config.alignment or "cm"
     local scale = config.scale or 1
+    local type = config.type or "title"
     local box_height = config.box_height or 0
     if override or not cardArea then
         cardArea = CardArea(
             G.ROOM.T.x + margin_left * G.ROOM.T.w, G.ROOM.T.h + margin_top
             , width * G.CARD_W, height * G.CARD_H,
-            {card_limit = card_limit, type = 'title', highlight_limit = 0, collection = true,temporary = true}
+            {card_limit = card_limit, type = type, highlight_limit = 0, collection = true,temporary = true}
         )
         for i, card in ipairs(cards) do
-            card.T.scale = card.T.scale * scale
-            --[[
             card.T.w = card.T.w * scale
             card.T.h = card.T.h * scale
             card.VT.h = card.T.h
             card.VT.h = card.T.h
-            ]]
             -- TODO: PROPER SCALING
             local area = cardArea
+            if(card.config.center) then
+                
+                card:set_sprites(card.config.center)
+            end
             area:emplace(card)
         end
     end
@@ -340,7 +342,7 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
 end
 
 AKYRS.temp_card_area = CardArea(
-    0,0,0,0,
+    -99990,-99990,0,0,
     {card_limit = 999999, type = 'title', highlight_limit = 0, collection = true}
 )
 

@@ -207,6 +207,8 @@ SMODS.current_mod.extra_tabs = function()
           new_c.is_null = true
           new_c.ability.aikoyori_letters_stickers = k
           new_c.ability.forced_letter_render = true
+          --new_c:set_seal("akyrs_debuff")
+          --new_c.pinned = true
           table.insert(cards, new_c)
         end
         return {
@@ -241,6 +243,7 @@ SMODS.current_mod.extra_tabs = function()
                       override = true,
                       box_heigh = 1,
                       scale = 0.5,
+                      type = "joker",
                     })
                   }
                 }

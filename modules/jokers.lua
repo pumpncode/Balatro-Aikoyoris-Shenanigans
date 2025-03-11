@@ -227,15 +227,20 @@ SMODS.Joker {
     },
     generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
         local cards = {}
-        table.insert(cards, SMODS.create_card({key = 'm_stone', area = AKYRS.temp_card_area}) )
+        for i = 1,5 do
+            local carder = AKYRS.create_random_card("netheritepick")
+            carder:set_ability(G.P_CENTERS["m_stone"])
+            table.insert(cards, carder)
+        end
         SMODS.Center.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
         AKYRS.card_area_preview(G.akyrsCardsPrev, desc_nodes, {
             cards = cards,
             override = true,
-            w = 0.2,
+            w = 2.2,
             h = 0.6,
             ml = 0,
             scale = 0.5,
+            func_delay = 1.0,
             func_after = function(ca) 
                 if ca and ca.cards then
                     for i,k in ipairs(ca.cards) do

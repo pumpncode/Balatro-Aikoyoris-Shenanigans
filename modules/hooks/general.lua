@@ -495,7 +495,7 @@ function CardArea:align_cards()
 
                 local highlight_height = G.HIGHLIGHT_H
                 if not card.highlighted then highlight_height = 0 end
-                card.T.y = self.T.y - highlight_height + (G.SETTINGS.reduced_motion and 0 or 1)*0.04*math.sin(2.*G.TIMERS.REAL + k) + 0.5 -- + math.abs(1.3*(-#self.cards/2 + k-0.5)/(#self.cards))^2
+                card.T.y = self.T.y - highlight_height + (G.SETTINGS.reduced_motion and 0 or 1)*0.04*math.sin(2.*G.TIMERS.REAL + k) -- + math.abs(1.3*(-#self.cards/2 + k-0.5)/(#self.cards))^2
                 card.T.x = card.T.x + card.shadow_parrallax.x/30
             end
         end

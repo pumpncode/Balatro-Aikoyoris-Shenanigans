@@ -4,8 +4,8 @@ aikoyori_mod_config.x_of_a_kind_limit = 100
 
 
 
-function table_contains(tbl, x)
-    found = false
+function AKYRS.table_contains(tbl, x)
+    local found = false
     for _, v in pairs(tbl) do
         if v == x then
             found = true
@@ -15,7 +15,7 @@ function table_contains(tbl, x)
 end
 
 
-aiko_pickRandomInTable = function(t)
+AKYRS.aiko_pickRandomInTable = function(t)
     return t[math.random(1, #t)]
 end
 
@@ -30,7 +30,7 @@ end
 table.insert(aiko_alphabets,"#")
 aiko_alphabets_to_num["#"] = 27
 
-function alphabet_delta(alpha, delta) 
+function AKYRS.alphabet_delta(alpha, delta) 
     local numero = aiko_alphabets_to_num[alpha] + delta
     while numero < 1 do
         numero = numero + #aiko_alphabets
@@ -47,6 +47,8 @@ card_suits_with_meta = {}
 card_ranks = {}
 card_rank_numbers = {}
 card_ranks_with_meta = {}
+
+
 for k, v in pairs(SMODS.Ranks) do
     table.insert(card_ranks_with_meta,v)
 end
@@ -68,7 +70,7 @@ for k, v in pairs(SMODS.Suits) do
     table.insert(card_suits_with_meta, v)
 end
 
-function getNextIDs(id)
+function AKYRS.getNextIDs(id)
     nexts = {}
     if(card_ranks_with_meta[id]) then
             --print(table_to_string(card_ranks_with_meta[id]))
@@ -81,7 +83,7 @@ function getNextIDs(id)
 end
 
 
-function aiko_intersect_table(a,b)
+function AKYRS.aiko_intersect_table(a,b)
     local ai = {}
     for _,v in ipairs(a) do
         ai[v] = true
@@ -96,20 +98,20 @@ function aiko_intersect_table(a,b)
 end
 
 
-function concat_table(t1, t2)
+function AKYRS.concat_table(t1, t2)
     for i = 1, #t2 do
         t1[#t1 + 1] = t2[i]
     end
     return t1
 end
 
-function getFirstElementOfTable(t)
+function AKYRS.getFirstElementOfTable(t)
     for k, v in pairs(t) do
         return v
     end
 end
 
-function getFirstKeyOfTable(t)
+function AKYRS.getFirstKeyOfTable(t)
     for k, v in pairs(t) do
         return k
     end
@@ -127,20 +129,52 @@ function AKYRS.concat_table(t1, t2)
     return t1
 end
 
+-- symbols
+AKYRS.non_letter_symbols = {
+    "_", "-", "@", "!", "?", "+", "/", "\\", "*", ".", "'", '"', "&", " ", ":", ";"
+}
+AKYRS.non_letter_symbols_reverse = {}
+for _, symbol in ipairs(AKYRS.non_letter_symbols) do
+    AKYRS.non_letter_symbols_reverse[symbol] = true
+end
+
+
+function AKYRS.aiko_mod_startup(self)
+    if not self then return end
+    if not AKYRS.aikoyori_letters_stickers then
+        AKYRS.aikoyori_letters_stickers = {}
+    end
+    for i, v in ipairs(aiko_alphabets) do
+        --print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
+        AKYRS.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS
+            ["akyrs_lettersStickers"], { x = (i - 1) % 10, y = math.floor((i - 1) / 10) })
+    end
+    AKYRS.aikoyori_letters_stickers["correct"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
+        G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 7, y = 2 })
+    AKYRS.aikoyori_letters_stickers["misalign"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
+        G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 8, y = 2 })
+    AKYRS.aikoyori_letters_stickers["incorrect"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
+        G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 9, y = 2 })
+    for i, v in ipairs(AKYRS.non_letter_symbols) do
+        --print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
+        AKYRS.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS
+            ["akyrs_lettersStickers"], { x = (i - 1) % 10, y = 3 + math.floor((i - 1) / 10) })
+    end
+end
 
 
 function AKYRS.randomCard()
-    local suit = aiko_pickRandomInTable(AKYRS.pickableSuit)
-    local rank = aiko_pickRandomInTable(AKYRS.pickableRank)
+    local suit =AKYRS.aiko_pickRandomInTable(AKYRS.pickableSuit)
+    local rank =AKYRS.aiko_pickRandomInTable(AKYRS.pickableRank)
     return suit .. "_" .. rank
 end
 
 function AKYRS.randomSameRank(cardCode)
     local suit = string.sub(cardCode, 1, 1)
     local rank = string.sub(cardCode, 3, 3)
-    local newSuit = aiko_pickRandomInTable(AKYRS.pickableSuit)
+    local newSuit =AKYRS.aiko_pickRandomInTable(AKYRS.pickableSuit)
     while newSuit == suit do
-        newSuit = aiko_pickRandomInTable(AKYRS.pickableSuit)
+        newSuit =AKYRS.aiko_pickRandomInTable(AKYRS.pickableSuit)
     end
     return newSuit .. "_" .. rank
 end
@@ -148,7 +182,7 @@ end
 function AKYRS.randomSameSuit(cardCode)
     local suit = string.sub(cardCode, 1, 1)
     local rank = string.sub(cardCode, 3, 3)
-    local newRank = aiko_pickRandomInTable(AKYRS.pickableRank)
+    local newRank =AKYRS.aiko_pickRandomInTable(AKYRS.pickableRank)
     while newRank == rank do
         newRank = AKYRS.pickableRank[math.random(1, 13)]
     end
@@ -161,9 +195,9 @@ function AKYRS.randomConsecutiveRank(cardCode, up, randomSuit)
     local newRank = rank
     newRank = AKYRS.pickableRank[math.fmod(AKYRS.rankToNumber[rank] - 1, #AKYRS.pickableRank) + 1]
     if randomSuit then
-        local newSuit = aiko_pickRandomInTable(AKYRS.pickableSuit)
+        local newSuit =AKYRS.aiko_pickRandomInTable(AKYRS.pickableSuit)
         while newSuit == suit do
-            newSuit = aiko_pickRandomInTable(AKYRS.pickableSuit)
+            newSuit =AKYRS.aiko_pickRandomInTable(AKYRS.pickableSuit)
         end
         return newSuit .. "_" .. newRank
     else
@@ -436,4 +470,27 @@ end
 
 AKYRS.get_default_ability = function(key)
     return G.P_CENTERS[key] and G.P_CENTERS[key].config or {}
+end
+
+AKYRS.word_splitter = function(word)
+    
+    local wordArray = {}
+    for i = 1, #word do
+      table.insert(wordArray, word:sub(i, i))
+    end
+    return wordArray
+
+end
+AKYRS.word_to_cards = function(word)
+    
+    local wordArray = AKYRS.word_splitter(word)
+    local cards = {}
+    for i, k in ipairs(wordArray) do
+      local new_c = AKYRS.create_random_card("maxwellui")
+      new_c.is_null = true
+      new_c.ability.aikoyori_letters_stickers = k
+      new_c.ability.forced_letter_render = true
+      table.insert(cards, new_c)
+    end
+    return cards
 end

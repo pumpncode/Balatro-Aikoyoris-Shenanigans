@@ -16,7 +16,7 @@ function Card:set_letters_random()
         local index = pseudorandom(pseudoseed('aiko:letters'), 1, #G.GAME.letters_to_give)
         self.ability.aikoyori_letters_stickers = table.remove(G.GAME.letters_to_give, index)
     else
-        self.ability.aikoyori_letters_stickers = pseudorandom_element(scrabble_letters, pseudoseed('aiko:letters'))
+        self.ability.aikoyori_letters_stickers = pseudorandom_element(AKYRS.scrabble_letters, pseudoseed('aiko:letters'))
     end
 end
 
@@ -26,23 +26,6 @@ end
 
 function Card:remove_letters()
     self.ability.aikoyori_letters_stickers = nil
-end
-
-function aiko_mod_startup(self)
-    if not AKYRS.aikoyori_letters_stickers then
-        AKYRS.aikoyori_letters_stickers = {}
-    end
-    for i, v in ipairs(aiko_alphabets) do
-        --print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
-        AKYRS.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS
-            ["akyrs_lettersStickers"], { x = (i - 1) % 10, y = math.floor((i - 1) / 10) })
-    end
-    AKYRS.aikoyori_letters_stickers["correct"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
-        G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 7, y = 2 })
-    AKYRS.aikoyori_letters_stickers["misalign"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
-        G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 8, y = 2 })
-    AKYRS.aikoyori_letters_stickers["incorrect"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
-        G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 9, y = 2 })
 end
 
 -- Rendering Letters
@@ -104,7 +87,7 @@ function Back:apply_to_run()
                 G.playing_cards = {}
                 local deckloop = G.GAME.starting_params.deck_size_letter or 1
                 for loops = 1, deckloop do
-                    for i, letter in pairs(scrabble_letters) do
+                    for i, letter in pairs(AKYRS.scrabble_letters) do
                         G.playing_card = (G.playing_card and G.playing_card + 1) or 1
                         local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:all_nulls'))
                         local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'],
@@ -179,7 +162,7 @@ function Card:get_chip_mult()
 
     if self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled then
         c = c +
-            scrabble_scores[self.ability.aikoyori_letters_stickers]
+        AKYRS.get_scrabble_score(self.ability.aikoyori_letters_stickers)
     end
     return c
 end
@@ -190,7 +173,7 @@ function Card:get_chip_x_mult()
 
     if self.ability.aikoyori_letters_stickers and G.GAME.letters_xmult_enabled then
         c = c +
-            (1 + (scrabble_scores[self.ability.aikoyori_letters_stickers] / 10))
+            (1 + (AKYRS.get_scrabble_score(self.ability.aikoyori_letters_stickers) / 10))
     end
     return c
 end

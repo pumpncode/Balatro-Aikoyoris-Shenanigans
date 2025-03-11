@@ -40,7 +40,12 @@ payload = """
             end
         else
             if not _c.is_null then
-                localize{type = 'descriptions', key = "letterNotScored", set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
+                local last_letter = string.sub(_c.key, -1):lower()
+                local key = "letterNotScored"
+                if(AKYRS.non_letter_symbols_reverse[last_letter]) then
+                    key = key.."Symbols"
+                end
+                localize{type = 'descriptions', key = key , set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
             else 
                 localize{type = 'descriptions', key = "aiko_x_akyrs_null", set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
             end

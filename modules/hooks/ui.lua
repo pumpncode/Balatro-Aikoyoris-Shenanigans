@@ -17,8 +17,8 @@ function Card:generate_UIBox_ability_table()
     local loc_vars = {}
     if (letter) then
         loc_vars = {
-            (scrabble_scores[self.ability.aikoyori_letters_stickers]),
-            1 + (scrabble_scores[self.ability.aikoyori_letters_stickers] / 10),
+            (AKYRS.get_scrabble_score(self.ability.aikoyori_letters_stickers)),
+            1 + (AKYRS.get_scrabble_score(self.ability.aikoyori_letters_stickers) / 10),
         }
     end
     if self.is_null then

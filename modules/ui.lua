@@ -195,20 +195,9 @@ SMODS.current_mod.extra_tabs = function()
     {
       label = localize("k_akyrs_credits"),
       tab_definition_function = function()
-        local name = "aikoyori"
-        local nameArray = {}
-        for i = 1, #name do
-          table.insert(nameArray, name:sub(i, i))
-        end
-
-        local cards = {}
-        for i, k in ipairs(nameArray) do
-          local new_c = AKYRS.create_random_card("maxwellui")
-          new_c.is_null = true
-          new_c.ability.aikoyori_letters_stickers = k
-          new_c.ability.forced_letter_render = true
-          table.insert(cards, new_c)
-        end
+        local cards1 = AKYRS.word_to_cards("aikoyori")
+        local cards2 = AKYRS.word_to_cards("additional art by")
+        local cards3 = AKYRS.word_to_cards("@larantula_t")
         return {
           n = G.UIT.ROOT,
           config = { w = 8, align = "tm", r = 0.1 , h = 6, padding = 0.2},
@@ -244,14 +233,29 @@ SMODS.current_mod.extra_tabs = function()
                       config = { w = 4, align = "tm" },
                       nodes = {
                         AKYRS.card_area_preview(G.creditCardArea, nil, {
-                          cards = cards,
-                          h = 0.75,
-                          w = 2.5,
+                          cards = cards1,
+                          h = 0.6,
+                          w = 4.5,
                           override = true,
-                          box_heigh = 1,
                           scale = 0.5,
                           type = "akyrs_credits",
-                        })
+                        }),
+                        AKYRS.card_area_preview(G.creditCardArea, nil, {
+                          cards = cards2,
+                          h = 0.6,
+                          w = 4.5,
+                          override = true,
+                          scale = 0.5,
+                          type = "akyrs_credits",
+                        }),
+                        AKYRS.card_area_preview(G.creditCardArea, nil, {
+                          cards = cards3,
+                          h = 0.6,
+                          w = 4.5,
+                          override = true,
+                          scale = 0.5,
+                          type = "akyrs_credits",
+                        }),
                       }
                     },
                   }

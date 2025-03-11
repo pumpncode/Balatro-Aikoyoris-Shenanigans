@@ -17,7 +17,7 @@ SMODS.Blind{
     set_blind = function(self)
         G.GAME.aiko_puzzle_win = false
         G.GAME.current_round.advanced_blind = true
-        G.GAME.word_todo = aiko_pickRandomInTable(puzzle_words)
+        G.GAME.word_todo = AKYRS.aiko_pickRandomInTable(puzzle_words)
         
         G.hand:change_size(3)
         G.FUNCS.draw_from_deck_to_hand(3)

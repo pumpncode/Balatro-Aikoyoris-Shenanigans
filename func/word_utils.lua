@@ -24,5 +24,8 @@ AKYRS.get_scrabble_score = function(letter)
     if AKYRS.scrabble_scores[letter] then
         return AKYRS.scrabble_scores[letter]
     end
+    if AKYRS.scrabble_scores[letter:lower()] then
+        return AKYRS.scrabble_scores[letter:lower()]
+    end
     return 0
 end

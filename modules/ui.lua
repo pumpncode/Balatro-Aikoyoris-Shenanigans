@@ -195,7 +195,7 @@ SMODS.current_mod.extra_tabs = function()
     {
       label = localize("k_akyrs_credits"),
       tab_definition_function = function()
-        local cards1 = AKYRS.word_to_cards("aikoyori")
+        local cards1 = AKYRS.word_to_cards("Aikoyori (https://aikoyori.xyz)")
         local cards2 = AKYRS.word_to_cards("@larantula_l")
         return {
           n = G.UIT.ROOT,
@@ -251,7 +251,7 @@ SMODS.current_mod.extra_tabs = function()
                         AKYRS.card_area_preview(G.creditCardArea, nil, {
                           cards = cards1,
                           h = 0.6,
-                          w = 3.5,
+                          w = 5.5,
                           override = true,
                           scale = 0.7,
                           type = "akyrs_credits",
@@ -289,7 +289,7 @@ SMODS.current_mod.extra_tabs = function()
                         AKYRS.card_area_preview(G.creditCardArea, nil, {
                           cards = cards2,
                           h = 0.6,
-                          w = 4.5,
+                          w = 3.5,
                           override = true,
                           scale = 0.5,
                           type = "akyrs_credits",

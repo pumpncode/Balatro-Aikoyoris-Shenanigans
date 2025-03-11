@@ -110,7 +110,7 @@ for i = 3, 31 do
             table.sort(hand, function(a,b) return a.T.x < b.T.x end)
             for _, v in pairs(hand) do
                 
-                table.insert(word_hand, v.ability.aikoyori_letters_stickers)
+                table.insert(word_hand, v.ability.aikoyori_letters_stickers:lower())
                     
             end
             if #word_hand ~= i then

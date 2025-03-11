@@ -198,7 +198,7 @@ function Card:get_id()
     if self.is_null then
         if self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled then
             --print(self.ability.aikoyori_letters_stickers)
-            return -10 - aiko_alphabets_to_num[self.ability.aikoyori_letters_stickers]
+            return -10 - string.byte(self.ability.aikoyori_letters_stickers)
         else
             return -math.random(100, 1000000)
         end

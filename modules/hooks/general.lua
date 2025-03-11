@@ -421,13 +421,13 @@ end
 
 local cardAreaRemoveHook = CardArea.remove
 function CardArea:remove()
-    
+    local r = cardAreaRemoveHook(self)
+    if not AKYRS.all_card_areas then return end
     for k, v in pairs(AKYRS.all_card_areas) do
         if v == self then
             table.remove(AKYRS.all_card_areas, k)
         end
     end
-    local r = cardAreaRemoveHook(self)
     return r
 end
 
@@ -487,7 +487,7 @@ end
 local getNominalHook = Card.get_nominal
 function Card:get_nominal(mod)
     if self.is_null and self.ability.aikoyori_letters_stickers then
-        return -10 - aiko_alphabets_to_num[self.ability.aikoyori_letters_stickers]
+        return -10 - string.byte(self.ability.aikoyori_letters_stickers)
     end
     local ret = getNominalHook(self, mod)
     return ret

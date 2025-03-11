@@ -30,16 +30,15 @@ end
 table.insert(aiko_alphabets,"#")
 aiko_alphabets_to_num["#"] = 27
 
-function AKYRS.alphabet_delta(alpha, delta) 
-    local numero = aiko_alphabets_to_num[alpha] + delta
-    while numero < 1 do
-        numero = numero + #aiko_alphabets
+function AKYRS.alphabet_delta(alpha, delta)
+    local numero = string.byte(alpha) + delta
+    while numero < string.byte(' ') do
+        numero = numero + 95
     end
-    if numero > #aiko_alphabets then
-        numero = math.fmod(numero, #aiko_alphabets)
+    if numero > string.byte('~') then
+        numero = (numero - string.byte(' ')) % 95 + string.byte(' ')
     end
-    --print(aiko_alphabets[numero])
-    return aiko_alphabets[numero]
+    return string.char(numero)
 end
 
 card_suits = {}
@@ -47,7 +46,6 @@ card_suits_with_meta = {}
 card_ranks = {}
 card_rank_numbers = {}
 card_ranks_with_meta = {}
-
 
 for k, v in pairs(SMODS.Ranks) do
     table.insert(card_ranks_with_meta,v)
@@ -131,7 +129,7 @@ end
 
 -- symbols
 AKYRS.non_letter_symbols = {
-    "_", "-", "@", "!", "?", "+", "/", "\\", "*", ".", "'", '"', "&", " ", ":", ";"
+    "_", "-", "@", "!", "?", "+", "/", "\\", "*", ".", "'", '"', "&", " ", ":", ";", "=", ",", "(",")","[","]","{","}","$","%","^", "`", "~", "|", "<", ">"
 }
 AKYRS.non_letter_symbols_reverse = {}
 for _, symbol in ipairs(AKYRS.non_letter_symbols) do
@@ -144,21 +142,30 @@ function AKYRS.aiko_mod_startup(self)
     if not AKYRS.aikoyori_letters_stickers then
         AKYRS.aikoyori_letters_stickers = {}
     end
-    for i, v in ipairs(aiko_alphabets) do
+    for i, v in ipairs(aiko_alphabets_no_wilds) do
         --print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
-        AKYRS.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS
+        AKYRS.aikoyori_letters_stickers[v:upper()] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS
             ["akyrs_lettersStickers"], { x = (i - 1) % 10, y = math.floor((i - 1) / 10) })
+        AKYRS.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS
+            ["akyrs_lettersStickers"], { x = (i - 1) % 10, y = 3 + math.floor((i - 1) / 10) })
     end
+    AKYRS.aikoyori_letters_stickers["#"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
+        G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 6, y = 2 })
     AKYRS.aikoyori_letters_stickers["correct"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
         G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 7, y = 2 })
     AKYRS.aikoyori_letters_stickers["misalign"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
         G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 8, y = 2 })
     AKYRS.aikoyori_letters_stickers["incorrect"] = Sprite(0, 0, self.CARD_W, self.CARD_H,
         G.ASSET_ATLAS["akyrs_lettersStickers"], { x = 9, y = 2 })
+    for v = 0, 9 do
+        --print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
+        AKYRS.aikoyori_letters_stickers[v..""] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS
+            ["akyrs_lettersStickers"], { x = (v) % 10, y = 6 + math.floor((v) / 10) })
+    end
     for i, v in ipairs(AKYRS.non_letter_symbols) do
         --print("PREPPING STICKERS "..v, " THE LETTER IS NUMBER "..i.. "should be index x y ",(i - 1) % 10 , math.floor((i-1) / 10))
         AKYRS.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS
-            ["akyrs_lettersStickers"], { x = (i - 1) % 10, y = 3 + math.floor((i - 1) / 10) })
+            ["akyrs_lettersStickers"], { x = (i - 1) % 10, y = 7 + math.floor((i - 1) / 10) })
     end
 end
 

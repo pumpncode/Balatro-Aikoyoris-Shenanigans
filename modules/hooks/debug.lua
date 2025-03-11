@@ -7,12 +7,12 @@ function Controller:key_press_update(key, dt)
     if not _RELEASE_MODE and _card then
         if key == ',' then
             if _card.playing_card then
-                _card:set_letters(alphabet_delta(_card.ability.aikoyori_letters_stickers, -1))
+                _card:set_letters(AKYRS.alphabet_delta(_card.ability.aikoyori_letters_stickers, -1))
             end
         end
         if key == '.' then
             if _card.playing_card then
-                _card:set_letters(alphabet_delta(_card.ability.aikoyori_letters_stickers, 1))
+                _card:set_letters(AKYRS.alphabet_delta(_card.ability.aikoyori_letters_stickers, 1))
             end
         end
         if key == ";" then

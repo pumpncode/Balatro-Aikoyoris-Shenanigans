@@ -37,14 +37,14 @@ for k, v in ipairs(aiko_alphabets_no_wilds) do
             text = { "Convert all selected cards'","letter to {C:red}#1#{}","{C:inactive,s:0.75}(up to #2# cards){}" },
         },
         loc_vars = function(self, info_queue, card)
-            info_queue[#info_queue+1] = {key = 'letters'..string.upper(card.ability.aikoyori_letters_stickers), set = 'AikoyoriExtraBases' ,vars = {
+            info_queue[#info_queue+1] = {key = 'letters'..string.upper(card.ability.extra.letter), set = 'AikoyoriExtraBases' ,vars = {
       
-                (AKYRS.get_scrabble_score(card.ability.aikoyori_letters_stickers)),
-                1 + (AKYRS.get_scrabble_score(card.ability.aikoyori_letters_stickers)/10),
+                (AKYRS.get_scrabble_score(card.ability.extra.letter)),
+                1 + (AKYRS.get_scrabble_score(card.ability.extra.letter)/10),
             }}
             return {
                 vars = {
-                    string.upper(card.ability.aikoyori_letters_stickers),
+                    string.upper(card.ability.extra.letter),
                     card.ability.extra.max_selected,
                 },
             }
@@ -66,7 +66,7 @@ for k, v in ipairs(aiko_alphabets_no_wilds) do
             for i=1, #G.hand.highlighted do
                 local percent = math.abs(0.85 + (i-0.999)/(#G.hand.highlighted-0.998)*0.3)
                 G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function()
-                    G.hand.highlighted[i].ability.aikoyori_letters_stickers = card.ability.aikoyori_letters_stickers G.hand.highlighted[i]:flip();play_sound('tarot2', percent, 0.6);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
+                    G.hand.highlighted[i].ability.aikoyori_letters_stickers = card.ability.extra.letter G.hand.highlighted[i]:flip();play_sound('tarot2', percent, 0.6);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
             end
         end,
         in_pool = function(self, args)
@@ -90,7 +90,7 @@ SMODS.Consumable{
         info_queue[#info_queue+1] = {key = 'lettersWild', set = 'AikoyoriExtraBases'}
         return {
             vars = {
-                string.upper(card.ability.aikoyori_letters_stickers),
+                string.upper(card.ability.extra.letter),
                 card.ability.extra.max_selected,
             },
         }
@@ -111,7 +111,7 @@ SMODS.Consumable{
         for i=1, #G.hand.highlighted do
             local percent = math.abs(0.85 + (i-0.999)/(#G.hand.highlighted-0.998)*0.3)
             G.E_MANAGER:add_event(Event({trigger = 'after',delay = 0.15,func = function()
-                G.hand.highlighted[i].ability.aikoyori_letters_stickers = card.ability.aikoyori_letters_stickers
+                G.hand.highlighted[i].ability.aikoyori_letters_stickers = card.ability.extra.letter
                 G.hand.highlighted[i]:flip();play_sound('tarot2', percent, 0.6);G.hand.highlighted[i]:juice_up(0.3, 0.3);return true end }))
         end
     end,

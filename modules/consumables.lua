@@ -399,10 +399,10 @@ local constellations = {
 function AKYRS.get_hand_in_game(_c)
     return (G.GAME and 
     G.GAME.hands and 
-    _c.config and 
-    _c.config.hand_type and 
-    G.GAME.hands[_c.config.hand_type]) 
-    and G.GAME.hands[_c.config.hand_type] or nil
+    _c.ability and 
+    _c.ability.hand_type and 
+    G.GAME.hands[_c.ability.hand_type]) 
+    and G.GAME.hands[_c.ability.hand_type] or nil
 end
 
 for i, k in ipairs(constellations) do

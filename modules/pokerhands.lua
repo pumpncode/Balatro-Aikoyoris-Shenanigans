@@ -76,6 +76,7 @@ WORD_CHECKED = {
 
 }
 
+AKYRS.words_hand = {}
 for i = 3, 31 do
     local exampler = {}
     for j = 1, #example_words[i-2] do
@@ -87,22 +88,12 @@ for i = 3, 31 do
             c
         })
     end
-        
-
+    
+    table.insert(AKYRS.words_hand, i.."-letter Word")
     SMODS.PokerHand {
         key = i.."-letter Word",
         visible = false,
         example = exampler,
-        loc_txt = {
-            ["en-us"]={
-                name =  i.."-letter Word",
-                description = { 'Create a valid '..i..'-letter English word', 'without extra letters' },
-            },
-            ["th_TH"]={
-                name =  "คำยาว "..i.." ตัวอักษร",
-                description = { 'สร้างคำภาษาอังกฤษที่มี '..i..'ตัวอักษร', 'โดยที่ตัวอักษรไม่ขาดไม่เกิน' },
-            },
-        },
         evaluate = function(parts, hand)
             if not G.GAME.letters_enabled then 
             return {} end

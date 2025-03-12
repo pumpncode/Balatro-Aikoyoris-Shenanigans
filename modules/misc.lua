@@ -317,11 +317,12 @@ AKYRS.card_area_preview = function(cardArea, desc_nodes, config)
     local scale = config.scale or 1
     local type = config.type or "title"
     local box_height = config.box_height or 0
+    local highlight_limit = config.highlight_limit or 0
     if override or not cardArea then
         cardArea = CardArea(
             G.ROOM.T.x + margin_left * G.ROOM.T.w, G.ROOM.T.h + margin_top
             , width * G.CARD_W, height * G.CARD_H,
-            {card_limit = card_limit, type = type, highlight_limit = 0, collection = true,temporary = true}
+            {card_limit = card_limit, type = type, highlight_limit = highlight_limit, collection = true,temporary = true}
         )
         for i, card in ipairs(cards) do
             card.T.w = card.T.w * scale

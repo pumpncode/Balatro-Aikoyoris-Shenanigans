@@ -286,4 +286,16 @@ if JokerDisplay then
             card.joker_display_values.add = card.ability.extra.extra
         end,
     }
+    jod["j_akyrs_hibana"] = {
+        text = {
+            { ref_table = "card.joker_display_values", ref_value = "display_state"},
+        },
+        text_config = { colour = G.C.YELLOW },
+        calc_function = function(card)
+            card.joker_display_values.table = card.ability.extra.possible_table
+            card.joker_display_values.cycle = card.ability.akyrs_cycler
+            card.joker_display_values.tab = card.joker_display_values.table[card.joker_display_values.cycle]
+            card.joker_display_values.display_state = localize(card.joker_display_values.tab[3][1],card.joker_display_values.tab[3][2])
+        end,
+    }
 end

@@ -876,6 +876,7 @@ SMODS.Joker{
     end,
     calculate = function (self, card, context)
         if context.end_of_round and context.cardarea == G.jokers then
+            card.ability.akyrs_cycler = math.floor(card.ability.akyrs_cycler)
             card.ability.akyrs_priority_draw_rank = nil
             card.ability.akyrs_priority_draw_suit = nil
             card.ability.akyrs_priority_draw_conditions = nil

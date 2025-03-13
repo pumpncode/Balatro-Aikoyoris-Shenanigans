@@ -603,6 +603,10 @@ function Back:apply_to_run()
     return c
 end
 
+local function compareFirstElement(a,b)
+    return a[1] < b[1]
+end
+
 local shufflingEverydayHook = CardArea.shuffle
 function CardArea:shuffle(_seed)
     local r = shufflingEverydayHook(self, _seed)
@@ -628,29 +632,25 @@ function CardArea:shuffle(_seed)
             end
         end
         for i, k in ipairs(self.cards) do
-            local priority = false
+            local priority = 0
             if priorityqueueRanks[k.base.value] then
-                cardsPrioritised[#cardsPrioritised+1] = k
-                --print(k.base.suit,k.base.value)
-                priority = true
+                priority = priority + 1
             end
-            if priorityqueueSuits[k.base.suit] and not priority then
-                cardsPrioritised[#cardsPrioritised+1] = k
-                --print(k.base.suit,k.base.value)
-                priority = true
+            if priorityqueueSuits[k.base.suit] then
+                priority = priority + 1
             end
-            if priorityqueueFace and not priority and k:is_face() then
-                cardsPrioritised[#cardsPrioritised+1] = k
-                --print(k.base.suit,k.base.value)
-                priority = true
-                
+            if priorityqueueFace and k:is_face() then
+                priority = priority + 1
             end
-            if not priority then
+            if priority > 0 then
+                cardsPrioritised[#cardsPrioritised+1] = {priority,k}
+            else
                 cardsOther[#cardsOther+1] = k
             end
+            table.sort(cardsPrioritised,compareFirstElement)
         end
         for _, card in ipairs(cardsPrioritised) do
-            table.insert(cardsOther, card)
+            table.insert(cardsOther, card[2])
         end
         self.cards = cardsOther
     end

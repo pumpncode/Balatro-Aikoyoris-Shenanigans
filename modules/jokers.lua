@@ -844,15 +844,19 @@ SMODS.Joker{
         x = 5,
         y = 1
     },
+    soul_pos = {
+        x = 8,
+        y = 1
+    },
     rarity = 3,
-    cost = 5,
+    cost = 7,
     config = {
         extra = {
             possible_table = {
-                {"Ace", "with Rank","Rank"},
-                {"Face Cards", "that are","Condition"},
-                {"Hearts", "with Suit","Suit"},
-                {"5", "with Rank","Rank"}
+                {"Ace", "Rank", {"k_aces", "dictionary"}},
+                {"Face Cards", "Condition", {"k_face_cards","dictionary"}},
+                {"Hearts", "Suit", {"Hearts", 'suits_plural'}},
+                {"5", "Rank", {"5", "ranks"}}
             },
         },
         akyrs_cycler = 1,
@@ -861,12 +865,12 @@ SMODS.Joker{
         akyrs_priority_draw_conditions = nil,
     },
     loc_vars = function(self, info_queue, card)
+        local table = card.ability.extra.possible_table[card.ability.akyrs_cycler]
         info_queue[#info_queue+1] = { key = "dd_akyrs_hibana_conditions", set = "DescriptionDummy"}
         return {
             vars = {
-                card.ability.extra.possible_table[card.ability.akyrs_cycler][2],
-                card.ability.extra.possible_table[card.ability.akyrs_cycler][1],
-                card.ability.akyrs_cycler
+                localize(table[3][1],table[3][2]),
+                card.ability.akyrs_cycler,
             }
         }
     end,
@@ -877,13 +881,13 @@ SMODS.Joker{
             card.ability.akyrs_priority_draw_conditions = nil
             card.ability.akyrs_cycler = math.fmod(card.ability.akyrs_cycler,#(card.ability.extra.possible_table)) + 1
             local curr = card.ability.extra.possible_table[card.ability.akyrs_cycler]
-            if curr[3] == "Rank" then
+            if curr[2] == "Rank" then
                 card.ability.akyrs_priority_draw_rank = curr[1]
             end
-            if curr[3] == "Suit" then
+            if curr[2] == "Suit" then
                 card.ability.akyrs_priority_draw_suit = curr[1]
             end
-            if curr[3] == "Condition" then
+            if curr[2] == "Condition" then
                 card.ability.akyrs_priority_draw_conditions = curr[1]
             end
             return {

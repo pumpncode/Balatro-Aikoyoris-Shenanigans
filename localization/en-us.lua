@@ -307,9 +307,9 @@ return {
             j_akyrs_hibana = {
                 name = "Hibana",
                 text = { 
-                    "Cards #1# {C:attention}#2#{} are drawn first",
+                    "{C:attention}#1#{} are first to be drawn",
                     "{C:attention}Cycles{} through a list every round",
-                    "{C:inactive}(Current Option : {C:white,X:dark_edition} #3# {C:inactive})"
+                    "{C:inactive}(Current Option : {C:white,X:dark_edition} #2# {C:inactive})"
                 }
             },
         },
@@ -665,7 +665,7 @@ return {
             k_akyrs_constellation = "Constellation",
             k_words_long = "12+-letter Words",
             k_akyrs_hibana_change = "Nanana...",
-
+            k_akyrs_with = "with",
             k_akyrs_credits = "Credits",
             k_akyrs_title = "Aikoyori's Shenanigans",
             k_akyrs_created_by = "Created by",

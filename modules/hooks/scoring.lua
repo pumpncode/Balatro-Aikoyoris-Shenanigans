@@ -68,6 +68,7 @@ SMODS.calculate_effect = function(effect, scored_card, from_edition, pre_jokers)
     if extratrigs > 0 then
         for i = 1, extratrigs do
             --print("RE-actual-TRIGGERED")
+            --[[
             G.E_MANAGER:add_event(Event(
             {trigger = 'before', 
             blocking = true, 
@@ -76,7 +77,11 @@ SMODS.calculate_effect = function(effect, scored_card, from_edition, pre_jokers)
                 scored_card:juice_up(0.1); 
                 AKYRS.repetable_fx_calc(effect, scored_card, from_edition, pre_jokers)
                 return true
-            end}),'other')
+            end}),'base')
+            
+            ]]
+            scored_card:juice_up(0.1); 
+            AKYRS.repetable_fx_calc(effect, scored_card, from_edition, pre_jokers)
         end
     end
     return r

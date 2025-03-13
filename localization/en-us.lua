@@ -598,7 +598,7 @@ return {
             ['letters6'] = {name = 'Six',text = { '{C:mult}No Extra{} Mult'},},
             ['letters7'] = {name = 'Seven',text = { '{C:mult}No Extra{} Mult'},},
             ['letters8'] = {name = 'Eight',text = { '{C:mult}No Extra{} Mult'},},
-            ['letters9'] = {name = 'NineTilde',text = { '{C:mult}No Extra{} Mult'},},
+            ['letters9'] = {name = 'Nine',text = { '{C:mult}No Extra{} Mult'},},
             ['xletters0'] = {name = 'Zero',text = { '{C:white,X:mult}No Extra{} XMult'},},
             ['xletters1'] = {name = 'One',text = { '{C:white,X:mult}No Extra{} XMult'},},
             ['xletters2'] = {name = 'Two',text = { '{C:white,X:mult}No Extra{} XMult'},},

@@ -409,6 +409,9 @@ SMODS.Blind {
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 1, max = 10},
     pos = { x = 0, y = 12 },
+    calculate = function (self, card, context)
+        
+    end
 }
 
 

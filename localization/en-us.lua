@@ -295,6 +295,12 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
                 }
             },
+            j_akyrs_hibana = {
+                name = "Hibana",
+                text = { 
+                    "{C:attention} #1#s {} are drawn first",
+                }
+            },
         },
         Other={
             akyrs_self_destructs={

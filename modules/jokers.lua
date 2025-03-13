@@ -836,8 +836,32 @@ SMODS.Joker{
     end
 }
 
+-- hibana 
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "hibana",
+    pos = {
+        x = 5,
+        y = 1
+    },
+    rarity = 3,
+    cost = 5,
+    config = {
+        akyrs_priority_draw_rank = "Ace",
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.akyrs_priority_draw_rank,
+            }
+        }
+    end,
+    
+}
+
 
 -- HOLY SHIT NEW PAGE this one is dedicated to the letters
+-- update nevermind i add whatever the fuck i wanna
 
 -- maxwell's notebook
 AKYRS.LetterJoker {

@@ -602,3 +602,46 @@ function Back:apply_to_run()
     end
     return c
 end
+
+local shufflingEverydayHook = CardArea.shuffle
+function CardArea:shuffle(_seed)
+    local r = shufflingEverydayHook(self, _seed)
+    if self == G.deck then
+        print("everyday shuffling")
+        local priorityqueueRanks = {}
+        local priorityqueueSuits = {}
+        local cardsPrioritised = {}
+        local cardsOther = {}
+        for d, joker in ipairs(G.jokers.cards) do
+            if (joker.ability.akyrs_priority_draw_suit) then
+                priorityqueueSuits[joker.ability.akyrs_priority_draw_suit] = true
+                --print(joker.ability.akyrs_priority_draw_suit)
+            end
+            if joker.ability.akyrs_priority_draw_rank then
+                priorityqueueRanks[joker.ability.akyrs_priority_draw_rank] = true
+                --print(joker.ability.akyrs_priority_draw_rank)
+            end
+        end
+        for i, k in ipairs(self.cards) do
+            local priority = false
+            if priorityqueueRanks[k.base.value] then
+                cardsPrioritised[#cardsPrioritised+1] = k
+                --print(k.base.suit,k.base.value)
+                priority = true
+            end
+            if priorityqueueSuits[k.base.suit] and not priority then
+                cardsPrioritised[#cardsPrioritised+1] = k
+                --print(k.base.suit,k.base.value)
+                priority = true
+            end
+            if not priority then
+                cardsOther[#cardsOther+1] = k
+            end
+        end
+        for _, card in ipairs(cardsPrioritised) do
+            table.insert(cardsOther, card)
+        end
+        self.cards = cardsOther
+    end
+    return r
+end

@@ -53,7 +53,12 @@ SMODS.Edition{
         card_limit = 2
     },
     calculate =  function (self, card, context)
-        if context.main_scoring and context.cardarea == G.play then
+        if context.main_scoring and (context.cardarea == G.hand or context.cardarea == G.play)  then
+            return {
+                Xmult = card.edition.extra.x_mult
+            }
+        end
+        if context.pre_joker and (context.cardarea == G.jokers)  then
             return {
                 Xmult = card.edition.extra.x_mult
             }

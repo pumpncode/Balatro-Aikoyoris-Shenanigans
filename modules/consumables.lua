@@ -436,7 +436,9 @@ for i, k in ipairs(constellations) do
                     SMODS.PokerHands[hand].l_mult or 1, 
                     SMODS.PokerHands[hand].l_chips or 1,
                     colours = {
-                        handlevelcol
+                        (to_number(level) == 1 and 
+                        G.C.UI.TEXT_DARK or 
+                        handlevelcol)
                     }
                 },
             }

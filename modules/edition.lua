@@ -87,7 +87,8 @@ SMODS.Edition{
     on_apply = function (card)
         if not card.akyrs_upgrade_sliced then
             AKYRS.mod_card_values(card.ability,{multiply = 0.5, reference = card.akyrs_old_ability, unkeywords = {
-                ["cry_prob"] = true
+                ["cry_prob"] = true,
+                ["akyrs_cycler"] = true,
             }})
             card.akyrs_upgrade_sliced = true
         end

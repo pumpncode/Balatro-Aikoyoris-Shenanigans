@@ -104,6 +104,15 @@ return {
                     "{X:dark_edition,C:white}@larantula_l{}"
                 },
             },
+            dd_akyrs_hibana_conditions={
+                name="Cycle Option",
+                text={
+                    "{X:dark_edition,C:white}1{} - Aces",
+                    "{X:dark_edition,C:white}2{} - Face Cards",
+                    "{X:dark_edition,C:white}3{} - Hearts",
+                    "{X:dark_edition,C:white}4{} - 5",
+                },
+            }
         },
         Edition={
             e_akyrs_texelated = {
@@ -298,7 +307,9 @@ return {
             j_akyrs_hibana = {
                 name = "Hibana",
                 text = { 
-                    "{C:attention} #1#s {} are drawn first",
+                    "Cards #1# {C:attention}#2# {} are drawn first",
+                    "{C:attention}Cycles{} through a list every round",
+                    "{C:inactive}(Current Option : {C:white,X:dark_edition} #3# {C:inactive})"
                 }
             },
         },
@@ -653,6 +664,7 @@ return {
             k_akyrs_burn = "Burn!",
             k_akyrs_constellation = "Constellation",
             k_words_long = "12+-letter Words",
+            k_akyrs_hibana_change = "Nanana...",
 
             k_akyrs_credits = "Credits",
             k_akyrs_title = "Aikoyori's Shenanigans",

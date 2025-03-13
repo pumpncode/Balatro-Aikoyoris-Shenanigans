@@ -847,16 +847,50 @@ SMODS.Joker{
     rarity = 3,
     cost = 5,
     config = {
+        extra = {
+            possible_table = {
+                {"Ace", "with Rank","Rank"},
+                {"Face Cards", "that are","Condition"},
+                {"Hearts", "with Suit","Suit"},
+                {"5", "with Rank","Rank"}
+            },
+        },
+        akyrs_cycler = 1,
         akyrs_priority_draw_rank = "Ace",
+        akyrs_priority_draw_suit = nil,
+        akyrs_priority_draw_conditions = nil,
     },
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = { key = "dd_akyrs_hibana_conditions", set = "DescriptionDummy"}
         return {
             vars = {
-                card.ability.akyrs_priority_draw_rank,
+                card.ability.extra.possible_table[card.ability.akyrs_cycler][2],
+                card.ability.extra.possible_table[card.ability.akyrs_cycler][1],
+                card.ability.akyrs_cycler
             }
         }
     end,
-    
+    calculate = function (self, card, context)
+        if context.end_of_round and context.cardarea == G.jokers then
+            card.ability.akyrs_priority_draw_rank = nil
+            card.ability.akyrs_priority_draw_suit = nil
+            card.ability.akyrs_priority_draw_conditions = nil
+            card.ability.akyrs_cycler = math.fmod(card.ability.akyrs_cycler,#(card.ability.extra.possible_table)) + 1
+            local curr = card.ability.extra.possible_table[card.ability.akyrs_cycler]
+            if curr[3] == "Rank" then
+                card.ability.akyrs_priority_draw_rank = curr[1]
+            end
+            if curr[3] == "Suit" then
+                card.ability.akyrs_priority_draw_suit = curr[1]
+            end
+            if curr[3] == "Condition" then
+                card.ability.akyrs_priority_draw_conditions = curr[1]
+            end
+            return {
+                message = localize('k_akyrs_hibana_change')
+            }
+        end
+    end
 }
 
 

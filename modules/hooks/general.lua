@@ -607,9 +607,10 @@ local shufflingEverydayHook = CardArea.shuffle
 function CardArea:shuffle(_seed)
     local r = shufflingEverydayHook(self, _seed)
     if self == G.deck then
-        print("everyday shuffling")
+        --print("everyday shuffling")
         local priorityqueueRanks = {}
         local priorityqueueSuits = {}
+        local priorityqueueFace = false
         local cardsPrioritised = {}
         local cardsOther = {}
         for d, joker in ipairs(G.jokers.cards) do
@@ -619,6 +620,10 @@ function CardArea:shuffle(_seed)
             end
             if joker.ability.akyrs_priority_draw_rank then
                 priorityqueueRanks[joker.ability.akyrs_priority_draw_rank] = true
+                --print(joker.ability.akyrs_priority_draw_rank)
+            end
+            if joker.ability.akyrs_priority_draw_conditions == "Face Cards" then
+                priorityqueueFace = true
                 --print(joker.ability.akyrs_priority_draw_rank)
             end
         end
@@ -633,6 +638,12 @@ function CardArea:shuffle(_seed)
                 cardsPrioritised[#cardsPrioritised+1] = k
                 --print(k.base.suit,k.base.value)
                 priority = true
+            end
+            if priorityqueueFace and not priority and k:is_face() then
+                cardsPrioritised[#cardsPrioritised+1] = k
+                --print(k.base.suit,k.base.value)
+                priority = true
+                
             end
             if not priority then
                 cardsOther[#cardsOther+1] = k

@@ -425,6 +425,10 @@ for i, k in ipairs(constellations) do
         end,
         loc_vars = function (self,iq,_c)
             local level = AKYRS.get_hand_in_game(_c) and AKYRS.get_hand_in_game(_c).level or 1
+            local handlevelcol = G.C.HAND_LEVELS[math.min(7, level)]
+            if Talisman then
+                handlevelcol = G.C.HAND_LEVELS[math.min(7, to_number(level))]
+            end
             return {
                 vars = {
                     level,
@@ -432,10 +436,7 @@ for i, k in ipairs(constellations) do
                     SMODS.PokerHands[hand].l_mult or 1, 
                     SMODS.PokerHands[hand].l_chips or 1,
                     colours = {
-                        (level == 1 and 
-                        G.C.UI.TEXT_DARK or 
-                        G.C.HAND_LEVELS[math.min(7, level)
-                        ])
+                        handlevelcol
                     }
                 },
             }

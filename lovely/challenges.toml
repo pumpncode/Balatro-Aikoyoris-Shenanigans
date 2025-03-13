@@ -1,0 +1,28 @@
+[manifest]
+version = "1.2"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """                if _ch.restrictions.banned_other then
+                    for k, v in ipairs(_ch.restrictions.banned_other) do
+                        G.GAME.banned_keys[v.id] = true
+                    end
+                end
+            end"""
+position = "before"
+payload = """
+            if _ch.akyrs_events_after then
+                for i, k in ipairs(_ch.akyrs_events_after) do
+                    G.E_MANAGER:add_event(Event{trigger = "after", func = k})
+                end
+            end
+"""
+overwrite = true
+match_indent = true
+
+
+
+

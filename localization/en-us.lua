@@ -623,7 +623,9 @@ return {
         achievement_descriptions={},
         achievement_names={},
         blind_states={},
-        challenge_names={},
+        challenge_names={
+            c_akyrs_space_oddity = "Space Oddity"
+        },
         collabs={},
         dictionary={
             b_akyrs_alphabets="Alphabet Cards",
@@ -727,6 +729,9 @@ return {
         suits_singular={},
         tutorial={},
         v_dictionary={},
-        v_text={},
+        v_text={
+            ch_c_sliced_space={
+                "Start run with a {C:dark_edition}Sliced{} Space Joker",
+            },},
     },
 }

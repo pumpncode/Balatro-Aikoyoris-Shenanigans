@@ -307,7 +307,7 @@ return {
             j_akyrs_hibana = {
                 name = "Hibana",
                 text = { 
-                    "Cards #1# {C:attention}#2# {} are drawn first",
+                    "Cards #1# {C:attention}#2#{} are drawn first",
                     "{C:attention}Cycles{} through a list every round",
                     "{C:inactive}(Current Option : {C:white,X:dark_edition} #3# {C:inactive})"
                 }

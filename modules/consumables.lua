@@ -455,6 +455,9 @@ for i, k in ipairs(constellations) do
                 }
             end
         end,
+        in_pool = function(self, args)
+            return G.GAME.letters_enabled
+        end,
 
     }
 end
@@ -553,6 +556,9 @@ SMODS.Planet{
                 Xmult_mod = value,
             }
         end
+    end,
+    in_pool = function(self, args)
+        return G.GAME.letters_enabled
     end,
 
 }

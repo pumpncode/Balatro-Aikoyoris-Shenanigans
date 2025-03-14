@@ -641,7 +641,8 @@ return {
         achievement_names={},
         blind_states={},
         challenge_names={
-            c_akyrs_space_oddity = "Space Oddity"
+            c_akyrs_space_oddity = "Space Oddity",
+            c_akyrs_4_hibanas = "Hibana for Eternity"
         },
         collabs={},
         dictionary={

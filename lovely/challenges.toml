@@ -23,6 +23,34 @@ payload = """
 overwrite = true
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """                            if v.pinned then _joker.pinned = true end"""
+position = "after"
+payload = """if v.akyrs_card_ability then 
+    for i,k in pairs(v.akyrs_card_ability) do
+        _joker.ability[i] = k
+    end
+end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """      if v.pinned then card.pinned = true end"""
+position = "after"
+payload = """if v.akyrs_card_ability then 
+    for i,k in pairs(v.akyrs_card_ability) do
+        card.ability[i] = k
+    end
+end
+"""
+overwrite = true
+match_indent = true
+
 
 
 

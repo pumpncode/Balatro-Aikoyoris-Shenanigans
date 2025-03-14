@@ -78,6 +78,9 @@ function Card:stop_drag()
     if G.hand and self.area and self.area == G.hand and G.STATE == G.STATES.SELECTING_HAND then
         self.area:parse_highlighted()
     end
+    if G.deck and self.area and self.area == G.jokers and self.config.center_key == "j_akyrs_hibana" then
+        G.deck:shuffle()
+    end
     return c
 end
 

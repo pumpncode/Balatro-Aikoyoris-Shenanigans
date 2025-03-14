@@ -612,47 +612,49 @@ function CardArea:shuffle(_seed)
     local r = shufflingEverydayHook(self, _seed)
     if self == G.deck then
         --print("everyday shuffling")
-        local priorityqueueRanks = {}
-        local priorityqueueSuits = {}
-        local priorityqueueFace = false
+        local priorityqueue = {}
         local cardsPrioritised = {}
         local cardsOther = {}
         for d, joker in ipairs(G.jokers.cards) do
             if (joker.ability.akyrs_priority_draw_suit) then
-                priorityqueueSuits[joker.ability.akyrs_priority_draw_suit] = true
+                priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "suit",joker.ability.akyrs_priority_draw_suit}
                 --print(joker.ability.akyrs_priority_draw_suit)
             end
             if joker.ability.akyrs_priority_draw_rank then
-                priorityqueueRanks[joker.ability.akyrs_priority_draw_rank] = true
+                priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "rank",joker.ability.akyrs_priority_draw_rank}
                 --print(joker.ability.akyrs_priority_draw_rank)
             end
             if joker.ability.akyrs_priority_draw_conditions == "Face Cards" then
-                priorityqueueFace = true
+                priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "face",true}
                 --print(joker.ability.akyrs_priority_draw_rank)
             end
         end
+        table.sort(priorityqueue,compareFirstElement)
         for i, k in ipairs(self.cards) do
             local priority = 0
-            if priorityqueueRanks[k.base.value] then
-                priority = priority + 1
+            
+            for j, l in ipairs(priorityqueue) do
+                if 
+                (l[2] == "suit" and k.base.suit == l[3]) or
+                (l[2] == "rank" and k.base.rank == l[3]) or
+                (l[2] == "face" and k:is_face() == l[3])
+                 then
+                    priority = priority + l[1]
+                end
             end
-            if priorityqueueSuits[k.base.suit] then
-                priority = priority + 1
-            end
-            if priorityqueueFace and k:is_face() then
-                priority = priority + 1
-            end
+
             if priority > 0 then
                 cardsPrioritised[#cardsPrioritised+1] = {priority,k}
             else
                 cardsOther[#cardsOther+1] = k
             end
-            table.sort(cardsPrioritised,compareFirstElement)
         end
+        table.sort(cardsPrioritised,compareFirstElement)
         for _, card in ipairs(cardsPrioritised) do
             table.insert(cardsOther, card[2])
         end
         self.cards = cardsOther
+        self:set_ranks()
     end
     return r
 end

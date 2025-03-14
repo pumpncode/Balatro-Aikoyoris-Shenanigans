@@ -895,6 +895,16 @@ SMODS.Joker{
                 message = localize('k_akyrs_hibana_change')
             }
         end
+    end,
+    add_to_deck = function (self, card, from_debuff)
+        if G.deck then
+            G.deck:shuffle()
+        end
+    end,
+    remove_from_deck = function (self, card, from_debuff)
+        if G.deck then
+            G.deck:shuffle()
+        end
     end
 }
 

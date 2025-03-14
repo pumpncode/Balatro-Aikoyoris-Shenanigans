@@ -626,19 +626,21 @@ function CardArea:shuffle(_seed)
             end
             if joker.ability.akyrs_priority_draw_conditions == "Face Cards" then
                 priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "face",true}
-                --print(joker.ability.akyrs_priority_draw_rank)
+                --print(joker.ability.akyrs_priority_draw_conditions)
             end
         end
         table.sort(priorityqueue,compareFirstElement)
-        for i, k in ipairs(self.cards) do
+        local cards = self.cards
+        for i, k in ipairs(cards) do
             local priority = 0
             
             for j, l in ipairs(priorityqueue) do
                 if 
                 (l[2] == "suit" and k.base.suit == l[3]) or
-                (l[2] == "rank" and k.base.rank == l[3]) or
+                (l[2] == "rank" and k.base.value == l[3]) or
                 (l[2] == "face" and k:is_face() == l[3])
                  then
+                    --print(k.base.name, l[1], l[2], l[3])
                     priority = priority + l[1]
                 end
             end

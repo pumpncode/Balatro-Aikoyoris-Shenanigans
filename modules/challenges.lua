@@ -58,5 +58,13 @@ SMODS.Challenge{
                 akyrs_priority_draw_rank = "Ace"
             }
         },
+    },
+    rules = {
+        modifiers = {
+            { id = "discards", value = 1 },
+            { id = "hands", value = 3 },
+            { id = "dollars", value = 5 },
+            { id = "hand_size", value = 7 }
+        }
     }
 }

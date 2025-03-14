@@ -301,7 +301,8 @@ SMODS.Blind{
         initial_action_act_set = false,
         hand_per_hand = 3,
         lock = false,
-        score_change = 1.25
+        score_change = 1.25,
+        akyrs_pick_cards = true,
     },
     loc_vars = function(self)
         return { vars = {G.hand.config.highlighted_limit, self.debuff.score_change}, key = self.key }
@@ -365,6 +366,13 @@ SMODS.Blind {
         for i,k in ipairs(G.consumeables.cards) do
             k.ability.akyrs_perma_debuff = true
         end
+    end,
+    
+    disable = function (self)
+        for i,k in ipairs(G.consumeables.cards) do
+            k.ability.akyrs_perma_debuff = false
+            k.debuff = false
+        end
     end
 }
 
@@ -391,11 +399,6 @@ SMODS.Blind {
         }
     end,
     pos = { x = 0, y = 9 },
-    set_blind = function (self)
-        for i,k in ipairs(G.consumeables.cards) do
-            k.ability.akyrs_perma_debuff = true
-        end
-    end
 }
 
 SMODS.Blind {
@@ -429,9 +432,18 @@ SMODS.Blind {
     boss = {min = 1, max = 10, showdown = true},
     pos = { x = 0, y = 10 },
     disable = function (self)
-        
-        for k, v in ipairs(G.playing_cards) do
-            v.ability.akyrs_forced_selection = nil
+        if AKYRS.all_card_areas then 
+            for _,area in ipairs(AKYRS.all_card_areas) do
+                if (area and area.cards) then
+                    for j,c in ipairs(area.cards) do
+                        if c.seal then
+                            c.ability.akyrs_perma_debuff = false
+                        end
+                    end
+                end
+    
+            end
+                
         end
     end
 }
@@ -443,7 +455,25 @@ SMODS.Blind {
     debuff = {
         akyrs_suit_debuff_hand = true
     },
+    
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 1, max = 10, showdown = true},
     pos = { x = 0, y = 11 },
+    
+    disable = function (self)
+        if AKYRS.all_card_areas then 
+            for _,area in ipairs(AKYRS.all_card_areas) do
+                if (area and area.cards) then
+                    for j,c in ipairs(area.cards) do
+                        if c.seal then
+                            c.ability.akyrs_perma_debuff = false
+                            c.debuff = false
+                        end
+                    end
+                end
+    
+            end
+                
+        end
+    end
 }

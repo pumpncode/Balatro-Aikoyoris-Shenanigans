@@ -64,7 +64,7 @@ function EventManager:update(dt, forced)
     if not G.GAME.letters_enabled and G.GAME.alphabet_rate > 0 then
         G.GAME.alphabet_rate = 0
     end
-    if G.GAME.blind and G.GAME.blind.debuff.requirement_scale then
+    if G.GAME.blind and G.GAME.blind.debuff.requirement_scale and not G.GAME.blind.disabled then
         if G.GAME.current_round.hands_left >= 1 and G.GAME.current_round.hands_played > 0 then
             G.GAME.blind.chips = G.GAME.chips * G.GAME.blind.debuff.requirement_scale
             G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
@@ -74,7 +74,7 @@ function EventManager:update(dt, forced)
         G.GAME.current_round.akyrs_executed_debuff = false
         for suitkey, suit in pairs(SMODS.Suits) do
             for _, card in ipairs(G.play.cards) do
-                if(card:is_suit(suitkey) and G.GAME.current_round.aiko_played_suits) then
+                if(suitkey ~= nil and card:is_suit(suitkey) and G.GAME.current_round.aiko_played_suits) then
                     G.GAME.current_round.aiko_played_suits[suitkey] = true
                     goto akyrs_suit_check_continue
                 end
@@ -106,11 +106,11 @@ function EventManager:update(dt, forced)
         end
     end
     if G.STATE == G.STATES.SELECTING_HAND then
-        if not G.GAME.blind.debuff.initial_action_act_set then
+        if not G.GAME.blind.debuff.initial_action_act_set and not G.GAME.blind.disabled then
             G.GAME.blind.debuff.initial_action_acted = false
             G.GAME.blind.debuff.initial_action_act_set = true
         end
-        if not G.GAME.current_round.akyrs_executed_debuff and AKYRS.all_card_areas and G.GAME.blind then
+        if not G.GAME.current_round.akyrs_executed_debuff and AKYRS.all_card_areas and G.GAME.blind and not G.GAME.blind.disabled  then
             if G.GAME.blind.debuff.akyrs_suit_debuff_hand then
                 if AKYRS.all_card_areas then 
                     for suit, _ in pairs(G.GAME.current_round.aiko_played_suits) do
@@ -128,7 +128,7 @@ function EventManager:update(dt, forced)
                     end
                 end
             end
-            if G.GAME.blind.debuff.akyrs_all_seals_perma_debuff then
+            if G.GAME.blind.debuff.akyrs_all_seals_perma_debuff and not G.GAME.blind.disabled then
                 if AKYRS.all_card_areas then 
                     for _,area in ipairs(AKYRS.all_card_areas) do
                         if (area and area.cards) then
@@ -146,7 +146,7 @@ function EventManager:update(dt, forced)
             G.GAME.current_round.akyrs_executed_debuff = true
         end
 
-        if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled then
+        if  G.GAME.blind.debuff.akyrs_pick_cards and not G.GAME.blind.disabled then
             if AKYRS.picker_initial_action and not G.GAME.blind.debuff.initial_action_acted then
                 AKYRS.picker_initial_action()
                 G.GAME.blind.debuff.initial_action_acted = true

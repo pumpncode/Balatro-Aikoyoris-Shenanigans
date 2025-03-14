@@ -55,7 +55,7 @@ return {
                 name = "The Nature",
                 text = {
                     "Face cards all",
-                    "give X#1# each",
+                    "give X#1# Mult each",
                 }
             },
             bl_akyrs_the_key= {

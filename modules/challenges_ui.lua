@@ -208,7 +208,8 @@ end
 
 G.FUNCS.akys_start_hc_challenge_run = function(e)
     if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
-    G.FUNCS.start_run(e, {stake = 1, challenge = AKYRS.HC_CHALLENGES[e.config.id]})
+    local stake = e.config.stake or 1
+    G.FUNCS.start_run(e, {stake = stake, challenge = AKYRS.HC_CHALLENGES[e.config.id]})
   end
   
 

@@ -549,3 +549,12 @@ AKYRS.HardcoreChallenge = SMODS.Challenge:extend {
     end,
     inject = function(self) end,
 }
+
+function AKYRS.find_stake_from_level(level)
+    for i, k in pairs(G.P_STAKES) do 
+        if k.stake_level == level then
+            return i, k
+        end
+    end
+    return nil, nil
+end

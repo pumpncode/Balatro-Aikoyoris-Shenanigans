@@ -103,5 +103,6 @@ AKYRS.HardcoreChallenge{
     rules = {
         modifiers = {
         }
-    }
+    },
+    stake = 8
 }

@@ -1,16 +1,9 @@
 function AKYRS.UIDEF.hc_challenges(from_game_over)
-    if G.PROFILES[G.SETTINGS.profile].all_unlocked then
-        G.PROFILES[G.SETTINGS.profile].akyrs_hc_challenges_unlocked = #
-            AKYRS.HC_CHALLENGES
+    if G.PROFILES[G.SETTINGS.profile].all_unlocked or #G.PROFILES[G.SETTINGS.profile].challenge_progress.completed then
+        G.PROFILES[G.SETTINGS.profile].akyrs_hc_challenges_unlocked = true
     end
-
+    
     if not G.PROFILES[G.SETTINGS.profile].akyrs_hc_challenges_unlocked then
-        local deck_wins = 0
-        for k, v in pairs(G.PROFILES[G.SETTINGS.profile].deck_usage) do
-            if v.wins and v.wins[1] then
-                deck_wins = deck_wins + 1
-            end
-        end
         local loc_nodes = {}
         localize { type = 'descriptions', key = 'akyrs_hardcore_challenge_locked', set = 'Other', nodes = loc_nodes, vars = {}, default_col = G.C.WHITE }
 

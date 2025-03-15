@@ -616,17 +616,19 @@ function CardArea:shuffle(_seed)
         local cardsPrioritised = {}
         local cardsOther = {}
         for d, joker in ipairs(G.jokers.cards) do
-            if (joker.ability.akyrs_priority_draw_suit) then
-                priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "suit",joker.ability.akyrs_priority_draw_suit}
-                --print(joker.ability.akyrs_priority_draw_suit)
-            end
-            if joker.ability.akyrs_priority_draw_rank then
-                priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "rank",joker.ability.akyrs_priority_draw_rank}
-                --print(joker.ability.akyrs_priority_draw_rank)
-            end
-            if joker.ability.akyrs_priority_draw_conditions == "Face Cards" then
-                priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "face",true}
-                --print(joker.ability.akyrs_priority_draw_conditions)
+            if (not joker.debuff) then
+                if (joker.ability.akyrs_priority_draw_suit) then
+                    priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "suit",joker.ability.akyrs_priority_draw_suit}
+                    --print(joker.ability.akyrs_priority_draw_suit)
+                end
+                if joker.ability.akyrs_priority_draw_rank then
+                    priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "rank",joker.ability.akyrs_priority_draw_rank}
+                    --print(joker.ability.akyrs_priority_draw_rank)
+                end
+                if joker.ability.akyrs_priority_draw_conditions == "Face Cards" then
+                    priorityqueue[#priorityqueue+1] = {#G.jokers.cards - d + 1, "face",true}
+                    --print(joker.ability.akyrs_priority_draw_conditions)
+                end
             end
         end
         table.sort(priorityqueue,compareFirstElement)

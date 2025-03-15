@@ -1,17 +1,15 @@
 SMODS.Challenge{
     key = "space_oddity",
     jokers = {
-        {
+        AKYRS.crypternity{
             id = "j_space",
             edition = "akyrs_sliced",
             akyrs_sell_cost = 0,
-            eternal = true,
         },
-        {
+        AKYRS.crypternity{
             id = "j_oops",
             edition = "akyrs_noire",
             akyrs_sell_cost = 0,
-            eternal = true,
         },
     }
 }
@@ -19,10 +17,9 @@ SMODS.Challenge{
 SMODS.Challenge{
     key = "4_hibanas",
     jokers = {
-        {
+        AKYRS.crypternity{
             id = "j_akyrs_hibana",
             edition = "negative",
-            eternal = true,
             pinned = true,
             akyrs_sell_cost = 0,
             akyrs_card_ability = {
@@ -31,10 +28,9 @@ SMODS.Challenge{
 
             }
         },
-        {
+        AKYRS.crypternity{
             id = "j_akyrs_hibana",
             edition = "negative",
-            eternal = true,
             pinned = true,
             akyrs_sell_cost = 0,
             akyrs_card_ability = {
@@ -42,10 +38,9 @@ SMODS.Challenge{
                 akyrs_priority_draw_suit = "Hearts"
             }
         },
-        {
+        AKYRS.crypternity{
             id = "j_akyrs_hibana",
             edition = "negative",
-            eternal = true,
             pinned = true,
             akyrs_sell_cost = 0,
             akyrs_card_ability = {
@@ -53,7 +48,7 @@ SMODS.Challenge{
                 akyrs_priority_draw_conditions = "Face Cards"
             }
         },
-        {
+        AKYRS.crypternity{
             id = "j_akyrs_hibana",
             edition = "negative",
             eternal = true,
@@ -76,9 +71,8 @@ SMODS.Challenge{
 AKYRS.HardcoreChallenge{
     key = "spark",
     jokers = {
-        {
+        AKYRS.crypternity{
             id = "j_akyrs_hibana",
-            eternal = true,
             pinned = true,
             akyrs_sell_cost = 0,
             
@@ -94,9 +88,8 @@ AKYRS.HardcoreChallenge{
 AKYRS.HardcoreChallenge{
     key = "secured_two_factor",
     jokers = {
-        {
+        AKYRS.crypternity{
             id = "j_akyrs_2fa",
-            eternal = true,
             akyrs_sell_cost = 0,
         }
     },

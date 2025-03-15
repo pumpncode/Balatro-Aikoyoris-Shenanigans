@@ -558,3 +558,12 @@ function AKYRS.find_stake_from_level(level)
     end
     return nil, nil
 end
+
+AKYRS.crypternity = function (e)
+    if Cryptid then 
+        e.stickers = {"cry_absolute"}
+    else
+        e.eternal = true
+    end
+    return e
+end

@@ -659,7 +659,8 @@ return {
         },
         hardcore_challenge_names={
             hc_akyrs_spark = "Sparks",
-            hc_akyrs_secured_two_factor = "Secured by 2FA"
+            hc_akyrs_secured_two_factor = "Secured by 2FA",
+            hc_akyrs_detroit = "Detroit"
         },
         collabs={},
         dictionary={

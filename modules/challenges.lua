@@ -72,3 +72,36 @@ SMODS.Challenge{
         }
     }
 }
+
+AKYRS.HardcoreChallenge{
+    key = "spark",
+    jokers = {
+        {
+            id = "j_akyrs_hibana",
+            eternal = true,
+            pinned = true,
+            akyrs_sell_cost = 0,
+            
+        }
+    },
+    rules = {
+        modifiers = {
+            { id = "discards", value = 1 },
+            { id = "dollars", value = 10 },
+        }
+    }
+}
+AKYRS.HardcoreChallenge{
+    key = "secured_two_factor",
+    jokers = {
+        {
+            id = "j_akyrs_2fa",
+            eternal = true,
+            akyrs_sell_cost = 0,
+        }
+    },
+    rules = {
+        modifiers = {
+        }
+    }
+}

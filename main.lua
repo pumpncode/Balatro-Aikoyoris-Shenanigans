@@ -3,6 +3,9 @@ AKYRS = SMODS.current_mod
 SMODS.optional_features.cardareas.unscored = true
 SMODS.optional_features.retrigger_joker = true
 
+AKYRS.HC_CHALLENGES = {}
+AKYRS.UIDEF = {}
+
 assert(SMODS.load_file("./modules/pre.lua"))() 
 assert(SMODS.load_file("./modules/atlasses.lua"))() 
 assert(SMODS.load_file("./func/numbers.lua"))()
@@ -24,6 +27,7 @@ assert(SMODS.load_file("./modules/cards.lua"))()
 assert(SMODS.load_file("./modules/vouchers.lua"))() 
 assert(SMODS.load_file("./modules/edition.lua"))() 
 assert(SMODS.load_file("./modules/ui.lua"))() 
+assert(SMODS.load_file("./modules/challenges_ui.lua"))() 
 assert(SMODS.load_file("./modules/jokers.lua"))() 
 assert(SMODS.load_file("./modules/compat/sleeves.lua"))() 
 assert(SMODS.load_file("./modules/compat/talisman.lua"))() 

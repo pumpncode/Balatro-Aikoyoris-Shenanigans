@@ -26,8 +26,14 @@ function Card:generate_UIBox_ability_table()
         local newRetTable = table.aiko_shallow_copy(ret)
 
         newRetTable.name = {}
-        localize({ type = 'name_text', key = 'aiko_x_akyrs_null', set = 'AikoyoriExtraBases', vars = { colours = { G.C.BLUE } }, nodes =
-        newRetTable.name })
+        localize({
+            type = 'name_text',
+            key = 'aiko_x_akyrs_null',
+            set = 'AikoyoriExtraBases',
+            vars = { colours = { G.C.BLUE } },
+            nodes =
+                newRetTable.name
+        })
         newRetTable.name = newRetTable.name[1]
         newRetTable.main = {}
         newRetTable.info = {}
@@ -112,5 +118,28 @@ end
 local cardStopHoverHook = Card.stop_hover
 function Card:stop_hover()
     local ret = cardStopHoverHook(self)
+    return ret
+end
+
+local chalUnlock = set_challenge_unlock
+function set_challenge_unlock()
+    local ret = chalUnlock()
+
+    if G.PROFILES[G.SETTINGS.profile].all_unlocked then return end
+
+    if not G.PROFILES[G.SETTINGS.profile].akyrs_hc_challenges_unlocked then
+        if G.PROFILES[G.SETTINGS.profile].challenges_unlocked then
+            local challenges_unlocked, challenge_alls = 0, #G.CHALLENGES
+            for k, v in ipairs(G.CHALLENGES) do
+                if v.id and G.PROFILES[G.SETTINGS.profile].challenge_progress.completed[v.id or ''] then
+                    challenges_unlocked = challenges_unlocked + 1
+                end
+            end
+            if (challenges_unlocked >= 1) then
+                G.PROFILES[G.SETTINGS.profile].akyrs_hc_challenges_unlocked = true
+                notify_alert('b_akyrs_hardcore_challenges', "Back")
+            end
+        end
+    end
     return ret
 end

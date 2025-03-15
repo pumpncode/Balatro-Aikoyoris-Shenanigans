@@ -513,3 +513,39 @@ SMODS.Gradient{
     },
     cycle = 5
 }
+
+AKYRS.HardcoreChallenge = SMODS.Challenge:extend {
+    obj_table = AKYRS.HC_CHALLENGES,
+    obj_buffer = {},
+    get_obj = function(self, key)
+        for _, v in ipairs(AKYRS.HC_CHALLENGES) do
+            if v.id == key then return v end
+        end
+    end,
+    set = "Challenge",
+    required_params = {
+        'key',
+    },
+    deck = { type = "Hardcore Challenge Deck" },
+    rules = { custom = {}, modifiers = {} },
+    jokers = {},
+    consumeables = {},
+    vouchers = {},
+    restrictions = { banned_cards = {}, banned_tags = {}, banned_other = {} },
+    unlocked = function(self) return true end,
+    class_prefix = 'hc',
+    process_loc_text = function(self)
+        SMODS.process_loc_text(G.localization.misc.hardcore_challenge_names, self.key, self.loc_txt, 'name')
+    end,
+    register = function(self)
+        if self.registered then
+            sendWarnMessage(('Detected duplicate register call on object %s'):format(self.key), self.set)
+            return
+        end
+        self.id = self.key
+        -- only needs to be called once
+        SMODS.insert_pool(AKYRS.HC_CHALLENGES, self)
+        SMODS.Challenge.super.register(self)
+    end,
+    inject = function(self) end,
+}

@@ -41,6 +41,17 @@ SMODS.Back{
 }
 
 
+SMODS.Back{
+    key = "hardcore_challenges",
+    name = "Hardcore Challenge Deck",
+    atlas = 'deckBacks',
+    pos = {x = 1, y = 0},
+    omit = true,
+    config = {
+    },
+}
+
+
 SMODS.Enhancement{
     key = "brick_card",
     atlas = 'cardUpgrades',

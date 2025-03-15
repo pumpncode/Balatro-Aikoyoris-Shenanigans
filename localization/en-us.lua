@@ -13,7 +13,13 @@ return {
                         "as you want per hand",
                         "{C:red}X#1#{} base Blind Size",
                     },
-            }
+            },
+            b_akyrs_hardcore_challenges={
+                name="Hardcore Challenge Deck",
+                text={
+                    "",
+                },
+            },
         },
         Blind={
             bl_akyrs_the_thought= {
@@ -351,6 +357,13 @@ return {
                     "Face Cards count as 10",
                 },
             },
+            akyrs_hardcore_challenge_locked = {
+                name = "Locked",
+                text={
+                    "Win a challenge run to unlock",
+                    "Hardcore Challenge mode",
+                },
+            }
         },
         Planet={
             c_akyrs_p_ara={
@@ -642,7 +655,11 @@ return {
         blind_states={},
         challenge_names={
             c_akyrs_space_oddity = "Space Oddity",
-            c_akyrs_4_hibanas = "Hibana for Eternity"
+            c_akyrs_4_hibanas = "Hibana for Eternity",
+        },
+        hardcore_challenge_names={
+            hc_akyrs_spark = "Sparks",
+            hc_akyrs_secured_two_factor = "Secured by 2FA"
         },
         collabs={},
         dictionary={
@@ -671,6 +688,10 @@ return {
             k_akyrs_title = "Aikoyori's Shenanigans",
             k_akyrs_created_by = "Created by",
             k_akyrs_additional_art_by = "Additional Art by",
+
+            k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
+            b_akyrs_hc_challenges = "Hardcore",
+            b_akyrs_hc_challenges_full_txt = "Hardcore Challenges"
         },
         high_scores={},
         labels={

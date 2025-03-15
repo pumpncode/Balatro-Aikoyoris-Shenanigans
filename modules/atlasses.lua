@@ -84,9 +84,24 @@ SMODS.Atlas {
     px = 400,
     py = 400
 }
+
 SMODS.Atlas {
     key = "aikoyori_credits",
     path = "aikoyoriP.png",
     px = 320,
     py = 320
 }
+
+local s = SMODS.Atlas {
+    key = "aikoyoriTags",
+    path = "aikoyoriTags.png",
+    px = 34,
+    py = 34
+}
+
+SMODS.Atlas({
+    key = "modicon",
+    path = "aikoyoriModIcon.png",
+    px = 32,
+    py = 32
+})

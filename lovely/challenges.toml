@@ -56,3 +56,184 @@ match_indent = true
 
 
 
+
+[[patches]]
+[patches.pattern]
+target = "back.lua"
+pattern = """    return 
+    {n=G.UIT.ROOT, config={align = "cm", minw = min_dims*5, minh = min_dims*2.5, id = self.name, colour = G.C.CLEAR}, nodes={
+        name_to_check == 'Challenge Deck' and UIBox_button({button = 'deck_view_challenge', label = {localize(challenge.id, 'challenge_names')},  minw = 2.2, minh = 1, scale = 0.6, id = challenge})
+        or desc_from_rows(loc_nodes, true, min_dims*5)
+    }}"""
+position = "before"
+payload = """
+if name_to_check == "Hardcore Challenge Deck" then
+    return 
+    {n=G.UIT.ROOT, config={align = "cm", minw = min_dims*5, minh = min_dims*2.5, id = self.name, colour = G.C.CLEAR}, nodes={
+        UIBox_button({button = 'akyrs_hc_challenge_deck_view_challenge', label = {localize(challenge.id, 'hardcore_challenge_names')},  minw = 2.2, minh = 1, scale = 0.6, id = challenge})
+    }}
+end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "back.lua"
+pattern = """challenge = G.CHALLENGES[get_challenge_int_from_id(challenge or '') or ''] or {name = 'ERROR'}"""
+position = "after"
+payload = """
+if name_to_check == "Hardcore Challenge Deck" then
+    challenge = AKYRS.HC_CHALLENGES[AKYRS.get_hc_challenge_int_from_id(old_challenge or '')] or {name = 'ERROR'}
+end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "back.lua"
+pattern = """challenge = G.CHALLENGES[get_challenge_int_from_id(challenge or '') or ''] or {name = 'ERROR'}"""
+position = "before"
+payload = """
+local old_challenge = challenge
+"""
+overwrite = true
+match_indent = true
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """            } or nil,"""
+position = "at"
+payload = """            } or {
+              label = localize('b_akyrs_hc_challenges'),
+              tab_definition_function = AKYRS.UIDEF.hc_challenges,
+              tab_definition_function_args = from_game_over,
+              chosen = _challenge_chosen
+            },
+            G.STAGE == G.STAGES.MAIN_MENU and {
+              label = localize('b_akyrs_hc_challenges'),
+              tab_definition_function = AKYRS.UIDEF.hc_challenges,
+              tab_definition_function_args = from_game_over,
+              chosen = _challenge_chosen
+            } or nil,
+            
+            
+            """
+overwrite = true
+match_indent = true
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """  if _achievement == 'b_challenge' then subtext = localize('k_challenges') end"""
+position = "after"
+payload = """  if _achievement == 'b_akyrs_hardcore_challenges' then subtext = localize('b_akyrs_hc_challenges_full_txt') end"""
+overwrite = true
+match_indent = true
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """  local challenge = G.CHALLENGES[_id]"""
+position = "after"
+payload = """if is_hardcore then challenge = AKYRS.HC_CHALLENGES[_id] end"""
+overwrite = true
+match_indent = true
+
+
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """function G.UIDEF.challenge_description(_id, daily, is_row)"""
+position = "at"
+payload = """function G.UIDEF.challenge_description(_id, daily, is_row, is_hardcore)"""
+overwrite = true
+match_indent = true
+
+
+
+# so it passes is_hardcore to the descriptions
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """                tab_definition_function_args = {_id = _id, _tab = 'Rules'}"""
+position = "at"
+payload = """                tab_definition_function_args = {_id = _id, _tab = 'Rules', _hc = is_hardcore}"""
+overwrite = true
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """                tab_definition_function_args = {_id = _id, _tab = 'Restrictions'}"""
+position = "at"
+payload = """                tab_definition_function_args = {_id = _id, _tab = 'Restrictions', _hc = is_hardcore}"""
+overwrite = true
+match_indent = true
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """                tab_definition_function_args = {_id = _id, _tab = 'Deck'}"""
+position = "at"
+payload = """                tab_definition_function_args = {_id = _id, _tab = 'Deck', _hc = is_hardcore}"""
+overwrite = true
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """local challenge = G.CHALLENGES[args._id]"""
+position = "after"
+payload = """if args._hc then challenge = AKYRS.HC_CHALLENGES[args._id] end"""
+overwrite = true
+match_indent = true
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """      {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 0.7, minw = 9, r = 0.1, hover = true, colour = G.C.BLUE, button = "start_challenge_run", shadow = true, id = _id}, nodes={"""
+position = "at"
+payload = """      {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 0.7, minw = 9, r = 0.1, hover = true, colour = G.C.BLUE, button = is_hardcore and "akys_start_hc_challenge_run" or "start_challenge_run", shadow = true, id = _id}, nodes={"""
+overwrite = true
+match_indent = true
+
+
+
+
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """
+        challenge_progress = {"""
+position = "before"
+payload = """
+akyrs_hc_challenge_progress = {
+            completed = {},
+            unlocked = {}
+        },"""
+overwrite = true
+match_indent = true
+
+
+

@@ -123,7 +123,7 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
         {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
         {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
         }},
-        UIBox_button({id = k, col = true, label = {localize(v.id, 'hardcore_challenge_names'),}, button = 'akyrs_change_hc_challenge_description', colour = G.C.RED, minw = 4, scale = 0.4, minh = 0.6, focus_args = {snap_to = not snapped}}),
+        UIBox_button({id = k, col = true, label = {localize(v.id, 'hardcore_challenge_names'),}, button = 'akyrs_change_hc_challenge_description', colour = G.C.RED, minw = 4, scale = 0.4, minh = 0.6, func = v.difficult and "akyrs_difficult_blind_alert" or "akyrs_do_nothing", focus_args = {snap_to = not snapped}}),
         {n=G.UIT.C, config={align = 'cm', padding = 0.05, minw = 0.6}, nodes = {
         {n=G.UIT.C, config={minh = 0.4, minw = 0.4, emboss = 0.05, r = 0.1, colour = challenge_completed and G.C.GREEN or G.C.BLACK}, nodes = {
             challenge_completed and {n=G.UIT.O, config={object = Sprite(0,0,0.4,0.4, G.ASSET_ATLAS["icons"], {x=1, y=0})}} or nil

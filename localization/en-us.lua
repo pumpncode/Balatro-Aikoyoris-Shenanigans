@@ -660,7 +660,8 @@ return {
         hardcore_challenge_names={
             hc_akyrs_spark = "Sparks",
             hc_akyrs_secured_two_factor = "Secured by 2FA",
-            hc_akyrs_detroit = "Detroit"
+            hc_akyrs_detroit = "Detroit",
+            hc_akyrs_half_life = "Half-Life"
         },
         collabs={},
         dictionary={
@@ -689,6 +690,7 @@ return {
             k_akyrs_title = "Aikoyori's Shenanigans",
             k_akyrs_created_by = "Created by",
             k_akyrs_additional_art_by = "Additional Art by",
+            k_akyrs_difficult = "Difficult",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
             b_akyrs_hc_challenges = "Hardcore",
@@ -773,6 +775,10 @@ return {
         v_text={
             ch_c_sliced_space={
                 "Start run with a {C:dark_edition}Sliced{} Space Joker",
-            },},
+            },
+            ch_c_akyrs_half_debuff={
+                "{C:attention}Half{} of your undebuffed cards are permanently debuffed every round",
+            },
+        },
     },
 }

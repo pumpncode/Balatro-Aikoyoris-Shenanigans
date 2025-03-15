@@ -153,4 +153,20 @@ AKYRS.HardcoreChallenge{
             {id = 'bl_final_leaf', type = 'blind'}
         }
     },
+    difficult = true,
+}
+
+AKYRS.HardcoreChallenge{
+    key = "half_life",
+    jokers = {
+    },
+    rules = {
+        modifiers = {
+        },
+        custom = {
+            {id = 'akyrs_half_debuff'},
+        }
+    },
+    difficult = true,
+    stake = 8
 }

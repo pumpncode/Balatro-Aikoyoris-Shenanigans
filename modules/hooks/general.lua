@@ -662,3 +662,39 @@ function CardArea:shuffle(_seed)
     end
     return r
 end
+
+
+local evalRnd = G.FUNCS.evaluate_round
+G.FUNCS.evaluate_round = function()
+    if G.GAME.modifiers.akyrs_half_debuff then
+        local undbf = {}
+        for i,k in ipairs(G.deck.cards) do
+            if not k.debuff then
+                table.insert(undbf, k)
+            end
+            if pseudorandom("akyrsdbfhcchal") < 0.5 then
+                k.ability.akyrs_perma_debuff = true
+            end
+        end
+    end
+    local ret = evalRnd()
+    return ret
+end
+
+
+G.FUNCS.akyrs_difficult_blind_alert = function(e)
+    if not e.children.alert then
+        e.children.alert = UIBox{
+          definition = create_UIBox_card_alert({no_bg = true,text = localize('k_akyrs_difficult'), scale = 0.3}),
+          config = {
+            instance_type = 'ALERT',
+            align="tri",
+            offset = {x = 0.3, y = -0.18},
+            major = e, parent = e}
+        }
+        e.children.alert.states.collide.can = false
+    end
+end
+
+G.FUNCS.akyrs_do_nothing = function(e)
+end

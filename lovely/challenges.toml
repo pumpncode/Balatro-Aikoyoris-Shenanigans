@@ -32,6 +32,7 @@ payload = """if v.akyrs_card_ability then
     for i,k in pairs(v.akyrs_card_ability) do
         _joker.ability[i] = k
     end
+    if v.akyrs_sell_cost then _joker.sell_cost = v.akyrs_sell_cost end
 end
 """
 overwrite = true
@@ -46,6 +47,7 @@ payload = """if v.akyrs_card_ability then
     for i,k in pairs(v.akyrs_card_ability) do
         card.ability[i] = k
     end
+    if v.akyrs_sell_cost then card.sell_cost = v.akyrs_sell_cost end
 end
 """
 overwrite = true

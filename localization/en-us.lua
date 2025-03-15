@@ -289,7 +289,7 @@ return {
                 text = { 
                     "{C:attention}All Played Cards'{} Rank",
                     "and Suit are {C:attention}randomized{} after scoring",
-                    "and gains {C:chips} +#1# {} Chips per card played",
+                    "and gains {C:chips}+#1#{} Chips per card played",
                     "{C:attention}Resets{} at the end of the round.",
                     "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
                     "{C:inactive,s:0.8}PSA: Please enable 2FA on all your online accounts!",

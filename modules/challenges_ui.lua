@@ -1,5 +1,5 @@
 function AKYRS.UIDEF.hc_challenges(from_game_over)
-    if G.PROFILES[G.SETTINGS.profile].all_unlocked or #G.PROFILES[G.SETTINGS.profile].challenge_progress.completed then
+    if G.PROFILES[G.SETTINGS.profile].all_unlocked or #G.PROFILES[G.SETTINGS.profile].challenge_progress.completed > 0 then
         G.PROFILES[G.SETTINGS.profile].akyrs_hc_challenges_unlocked = true
     end
     

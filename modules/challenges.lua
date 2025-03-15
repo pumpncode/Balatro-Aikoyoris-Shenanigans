@@ -68,9 +68,7 @@ SMODS.Challenge{
     rules = {
         modifiers = {
             { id = "discards", value = 1 },
-            { id = "hands", value = 3 },
-            { id = "dollars", value = 5 },
-            { id = "hand_size", value = 7 }
+            { id = "dollars", value = 10 },
         }
     }
 }

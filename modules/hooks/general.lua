@@ -672,20 +672,32 @@ G.FUNCS.evaluate_round = function()
             if not k.debuff then
                 table.insert(undbf, k)
             end
-            if pseudorandom("akyrsdbfhcchal") < 0.5 then
-                k.ability.akyrs_perma_debuff = true
+        end
+        for i,k in ipairs(undbf) do
+            if not k.debuff then
+                if pseudorandom("akyrsdbfhcchal") < 0.5 then
+                    k.ability.akyrs_perma_debuff = true
+                end
             end
         end
     end
     local ret = evalRnd()
     if G.GAME.modifiers.akyrs_half_self_destruct then
-        local undbf = {}
-        for i,k in ipairs(G.deck.cards) do
-            if not k.debuff then
-                table.insert(undbf, k)
+        local slf = {}
+        for x,ca in ipairs(AKYRS.all_card_areas) do
+            if ca and ca.cards then
+                for i,k in ipairs(ca.cards) do
+                    if not k.akyrs_self_destructs then
+                        table.insert(slf, k)
+                    end
+                end
             end
-            if pseudorandom("akyrsdbfhcchal") < 0.5 then
-                k.ability.akyrs_self_destructs = true
+        end
+        for i,k in ipairs(slf) do
+            if not k.debuff then
+                if pseudorandom("akyrsdbfhcchal") < 0.5 then
+                    k.ability.akyrs_self_destructs = true
+                end
             end
         end
     end

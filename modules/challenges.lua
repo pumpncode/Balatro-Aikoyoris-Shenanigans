@@ -248,8 +248,15 @@ AKYRS.HardcoreChallenge{
     key = "half_life_2",
     jokers = {
     },
+    vouchers = {
+        {id = 'v_magic_trick'},
+        {id = 'v_illusion'},
+        {id = 'v_overstock_norm'},
+        {id = 'v_overstock_plus'},
+    },
     rules = {
         modifiers = {
+            {id = 'dollars', value = 30},
         },
         custom = {
             {id = 'akyrs_half_self_destruct'},

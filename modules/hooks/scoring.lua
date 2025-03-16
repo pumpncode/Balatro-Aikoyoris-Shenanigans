@@ -1,18 +1,4 @@
 -- this file focuses on PURE scoring/joker calculation hooks
-
-local mod_mult_ref = mod_mult
-local mod_chips_ref = mod_chips
-
-function mod_mult(_mult)
-    local m = mod_mult_ref(_mult)
-    return m
-end
-
-function mod_chips(_chips)
-    local c = mod_chips_ref(_chips)
-    return c
-end
-
 function Card:aiko_trigger_external(card)
     if (card.ability.name == "Observer") then
         card.ability.extra.times = card.ability.extra.times - 1
@@ -52,7 +38,7 @@ end
 local hookCalFx = SMODS.calculate_effect
 AKYRS.repetable_fx_calc = function(effect, scored_card, from_edition, pre_jokers)
     local r = hookCalFx(effect, scored_card, from_edition, pre_jokers)
-    if G.GAME.blind and G.GAME.blind.debuff.akyrs_score_face_with_my_dec_mult and G.GAME.blind.debuff.dec_mult then
+    if G.GAME.blind and mult and G.GAME.blind.debuff.akyrs_score_face_with_my_dec_mult and G.GAME.blind.debuff.dec_mult then
         if scored_card:is_face(true) then
             G.E_MANAGER:add_event(Event({trigger = 'immediate', blocking = false, blockable = true, func = function () scored_card:juice_up(0.1); return true end}))
             r = SMODS.calculate_individual_effect(effect, scored_card, "xmult", G.GAME.blind.debuff.dec_mult, false, false)

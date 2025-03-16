@@ -26,6 +26,7 @@ function Game:init_game_object()
     ret.current_round.hands_sub = 0
     ret.current_round.aiko_infinite_hack = "8"
     ret.current_round.advanced_blind = false
+
     return ret
 end
 
@@ -193,6 +194,13 @@ function Game:start_run(args)
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
             config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
         }
+    end
+    if self.GAME.modifiers.akyrs_no_tarot_except_twof then
+        for k, v in ipairs(G.P_CENTER_POOLS.Tarot) do
+            if v.key ~= "c_wheel_of_fortune" then
+                G.GAME.banned_keys[v.key] = true
+            end
+        end
     end
     recalculateHUDUI()
     recalculateBlindUI()

@@ -1,3 +1,4 @@
+
 SMODS.Challenge{
     key = "space_oddity",
     jokers = {
@@ -228,6 +229,57 @@ AKYRS.HardcoreChallenge{
         }
     },
     difficulty = 7,
+}
+AKYRS.HardcoreChallenge{
+    key = "detroit_3",
+
+    rules = {
+        custom = {
+            {id = 'no_shop_jokers'},
+            {id = 'akyrs_no_tarot_except_twof'},
+            {id = 'akyrs_allow_duplicates'},
+            {id = 'akyrs_idea_by_astrapboy'},
+        },
+        modifiers = {
+            {id = 'joker_slots', value = -1e200},
+            {id = 'consumable_slots', value = -1e200},
+        }
+    },
+    stake = 8,
+    jokers = {
+    },
+    consumeables = {
+    },
+    vouchers = {
+    },
+    restrictions = {
+        banned_cards = {
+            {id = 'c_wraith'},
+            {id = 'c_soul'},
+            {id = 'v_blank'},
+            {id = 'v_antimatter'},
+            {id = 'p_buffoon_normal_1', ids = {
+                'p_buffoon_normal_1','p_buffoon_normal_2','p_buffoon_jumbo_1','p_buffoon_mega_1',
+            }},
+        },
+        banned_tags = {
+            {id = 'tag_rare'},
+            {id = 'tag_uncommon'},
+            {id = 'tag_holo'},
+            {id = 'tag_polychrome'},
+            {id = 'tag_negative'},
+            {id = 'tag_foil'},
+            {id = 'tag_buffoon'},
+            {id = 'tag_top_up'},
+
+        },
+        banned_other = {
+            {id = 'bl_final_acorn', type = 'blind'},
+            {id = 'bl_final_heart', type = 'blind'},
+            {id = 'bl_final_leaf', type = 'blind'}
+        }
+    },
+    difficulty = 10,
 }
 
 AKYRS.HardcoreChallenge{

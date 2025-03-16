@@ -662,6 +662,7 @@ return {
             hc_akyrs_secured_two_factor = "Secured by 2FA",
             hc_akyrs_detroit = "Detroit",
             hc_akyrs_detroit_2 = "Detroit II",
+            hc_akyrs_detroit_3 = "Detroit III",
             hc_akyrs_half_life = "Half-Life",
             hc_akyrs_half_life_2 = "Half-Life 2"
         },
@@ -783,6 +784,15 @@ return {
             },
             ch_c_akyrs_half_self_destruct={
                 "{C:attention}Half{} of everything you have gain {C:red,T:self_destructs}Self-Destruct Sticker{} every round"
+            },
+            ch_c_akyrs_no_tarot_except_twof={
+                "No {C:tarot}Tarot{} Cards will spawn except {C:tarot,T:c_wheel_of_fortune}Wheel of Fortune{}",
+            },
+            ch_c_akyrs_allow_duplicates={
+                "{C:attention}Duplicates{} can spawn",
+            },
+            ch_c_akyrs_idea_by_astrapboy={
+                "Idea by {C:attention}astrapboy",
             },
         },
     },

@@ -2,8 +2,6 @@ aikoyori_mod_config = SMODS.current_mod.config
 
 aikoyori_mod_config.x_of_a_kind_limit = 100
 
-
-
 function AKYRS.table_contains(tbl, x)
     local found = false
     for _, v in pairs(tbl) do
@@ -127,6 +125,7 @@ function AKYRS.concat_table(t1, t2)
     return t1
 end
 
+AKYRS.allTarotExceptWheel = {}
 -- symbols
 AKYRS.non_letter_symbols = {
     "_", "-", "@", "!", "?", "+", "/", "\\", "*", ".", "'", '"', "&", " ", ":", ";", "=", ",", "(",")","[","]","{","}","$","%","^", "`", "~", "|", "<", ">"
@@ -167,6 +166,7 @@ function AKYRS.aiko_mod_startup(self)
         AKYRS.aikoyori_letters_stickers[v] = Sprite(0, 0, self.CARD_W, self.CARD_H, G.ASSET_ATLAS
             ["akyrs_lettersStickers"], { x = (i - 1) % 10, y = 7 + math.floor((i - 1) / 10) })
     end
+    
 end
 
 

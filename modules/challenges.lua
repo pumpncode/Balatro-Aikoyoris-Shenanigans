@@ -86,6 +86,7 @@ AKYRS.HardcoreChallenge{
         }
     },
     deck = {
+        deck = "Hardcore Challenge Deck",
         no_ranks = {
             ['A'] = true,
             ['5'] = true,

@@ -678,6 +678,17 @@ G.FUNCS.evaluate_round = function()
         end
     end
     local ret = evalRnd()
+    if G.GAME.modifiers.akyrs_half_self_destruct then
+        local undbf = {}
+        for i,k in ipairs(G.deck.cards) do
+            if not k.debuff then
+                table.insert(undbf, k)
+            end
+            if pseudorandom("akyrsdbfhcchal") < 0.5 then
+                k.ability.akyrs_self_destructs = true
+            end
+        end
+    end
     return ret
 end
 

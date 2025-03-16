@@ -107,35 +107,84 @@ function G.UIDEF.akyrs_hc_challenge_list_page(_page)
 local snapped = false
 local challenge_list = {}
 for k, v in ipairs(AKYRS.HC_CHALLENGES) do
-    if k > G.CHALLENGE_PAGE_SIZE*(_page or 0) and k <= G.CHALLENGE_PAGE_SIZE*((_page or 0) + 1) then
+    if k > G.AKYRS_HC_CHALLENGE_PAGE_SIZE*(_page or 0) and k <= G.AKYRS_HC_CHALLENGE_PAGE_SIZE*((_page or 0) + 1) then
     if G.CONTROLLER.focused.target and G.CONTROLLER.focused.target.config.id == 'challenge_page' then snapped = true end
     local challenge_completed =  G.PROFILES[G.SETTINGS.profile].challenge_progress.completed[v.id or '']
-
-    challenge_list[#challenge_list+1] = 
-    {n=G.UIT.R, config={align = "cm"}, nodes={
-        {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
-        {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
-        }},
-        UIBox_button({id = k, col = true, label = {localize(v.id, 'hardcore_challenge_names'),}, button = 'akyrs_change_hc_challenge_description', colour = G.C.RED, minw = 4, scale = 0.4, minh = 0.6, func = v.difficult and "akyrs_difficult_blind_alert" or "akyrs_do_nothing", focus_args = {snap_to = not snapped}}),
-        {n=G.UIT.C, config={align = 'cm', padding = 0.05, minw = 0.6}, nodes = {
-        {n=G.UIT.C, config={minh = 0.4, minw = 0.4, emboss = 0.05, r = 0.1, colour = challenge_completed and G.C.GREEN or G.C.BLACK}, nodes = {
-            challenge_completed and {n=G.UIT.O, config={object = Sprite(0,0,0.4,0.4, G.ASSET_ATLAS["icons"], {x=1, y=0})}} or nil
-        }},
-        }},
-    }}      
-    snapped = true
+    local difficultyString = ''
+    if v.difficulty and v.difficulty > 0 then
+        for i = 1, v.difficulty do
+            difficultyString = difficultyString.."⭐"
+        end
     end
+    
+    local difficultyDynaText = DynaText{
+        scale = 0.3,
+        colours = {G.C.UI.TEXT_LIGHT},
+        string = {"Difficulty "},
+    }
+    local dynaTextObject = DynaText{
+        scale = 0.3,
+        colours = {G.C.UI.TEXT_LIGHT},
+        string = {difficultyString},
+        font = AKYRS.Fonts["akyrs_NotoEmoji"]
+    }
+            challenge_list[#challenge_list + 1] =
+            {
+                n = G.UIT.R,
+                config = { align = "cm" },
+                nodes = {
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm" },
+                        nodes = {
+                            {
+                                n = G.UIT.C,
+                                config = { align = 'cl', minw = 0.8 },
+                                nodes = {
+                                    { n = G.UIT.T, config = { text = k .. '', scale = 0.4, colour = G.C.WHITE } },
+                                }
+                            },
+                            UIBox_button({ id = k, col = true, label = { localize(v.id, 'hardcore_challenge_names'), }, button =
+                            'akyrs_change_hc_challenge_description', colour = G.C.RED, minw = 4, scale = 0.4, minh = 0.6, focus_args = { snap_to = not snapped } }),
+                            {
+                                n = G.UIT.C,
+                                config = { align = 'cm', padding = 0.05, minw = 0.6 },
+                                nodes = {
+                                    {
+                                        n = G.UIT.C,
+                                        config = { minh = 0.4, minw = 0.4, emboss = 0.05, r = 0.1, colour = challenge_completed and G.C.GREEN or G.C.BLACK },
+                                        nodes = {
+                                            challenge_completed and
+                                            { n = G.UIT.O, config = { object = Sprite(0, 0, 0.4, 0.4, G.ASSET_ATLAS["icons"], { x = 1, y = 0 }) } } or
+                                            nil
+                                        }
+                                    },
+                                }
+                            }
+                        }
+                    }
+                }
+            }            
+            challenge_list[#challenge_list + 1] =
+            {n=G.UIT.R, config={align = '', padding = 0.2, colour = G.C.UI.TRANSPARENT_DARK, r = 0.2, minw = 0.8}, nodes = {
+                {n=G.UIT.C, config={align = '', minw = 0.8}, nodes = {
+                    {n=G.UIT.O, config={object = difficultyDynaText}},
+                    {n=G.UIT.O, config={object = dynaTextObject}},
+                }}
+            }}
+            snapped = true
+        end
 end
 
 return {n=G.UIT.ROOT, config={align = "cm", padding = 0.1, colour = G.C.CLEAR}, nodes=challenge_list}
 end
 
 function AKYRS.UIDEF.hc_challenge_list(from_game_over)
-    G.CHALLENGE_PAGE_SIZE = 10
+    G.AKYRS_HC_CHALLENGE_PAGE_SIZE = 5
     local challenge_pages = {}
-    for i = 1, math.ceil(#AKYRS.HC_CHALLENGES / G.CHALLENGE_PAGE_SIZE) do
+    for i = 1, math.ceil(#AKYRS.HC_CHALLENGES / G.AKYRS_HC_CHALLENGE_PAGE_SIZE) do
         table.insert(challenge_pages,
-            localize('k_page') .. ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#AKYRS.HC_CHALLENGES / G.CHALLENGE_PAGE_SIZE)))
+            localize('k_page') .. ' ' .. tostring(i) .. '/' .. tostring(math.ceil(#AKYRS.HC_CHALLENGES / G.AKYRS_HC_CHALLENGE_PAGE_SIZE)))
     end
     G.E_MANAGER:add_event(Event({
         func = (function()
@@ -203,6 +252,17 @@ G.FUNCS.akys_start_hc_challenge_run = function(e)
     if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
     local stake = e.config.stake or 1
     G.FUNCS.start_run(e, {stake = stake, challenge = AKYRS.HC_CHALLENGES[e.config.id]})
+end
+
+local startChallengeRunHook = G.FUNCS.start_challenge_run
+G.FUNCS.start_challenge_run = function(e)
+    if not e.config.stake then 
+        local ret = startChallengeRunHook(e)
+    else
+        if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+        local stake = e.config.stake or 1
+        G.FUNCS.start_run(e, {stake = 1, challenge = G.CHALLENGES[e.config.id]})
+    end
   end
   
 

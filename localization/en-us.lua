@@ -661,7 +661,9 @@ return {
             hc_akyrs_spark = "Sparks",
             hc_akyrs_secured_two_factor = "Secured by 2FA",
             hc_akyrs_detroit = "Detroit",
-            hc_akyrs_half_life = "Half-Life"
+            hc_akyrs_detroit_2 = "Detroit II",
+            hc_akyrs_half_life = "Half-Life",
+            hc_akyrs_half_life_2 = "Half-Life 2"
         },
         collabs={},
         dictionary={
@@ -778,6 +780,9 @@ return {
             },
             ch_c_akyrs_half_debuff={
                 "{C:attention}Half{} of your undebuffed cards are permanently debuffed every round",
+            },
+            ch_c_akyrs_half_self_destruct={
+                "{C:attention}Half{} of everything you have gain {C:red,T:self_destructs}Self-Destruct Sticker{} every round"
             },
         },
     },

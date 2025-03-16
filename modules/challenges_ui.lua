@@ -129,17 +129,17 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
         font = AKYRS.Fonts["akyrs_NotoEmoji"]
     }
             challenge_list[#challenge_list + 1] =
-            {
+            {n=G.UIT.R, config={align = '', padding = 0.08, colour = G.C.UI.TRANSPARENT_DARK, r = 0.2, minw = 0.8}, nodes = {{
                 n = G.UIT.R,
                 config = { align = "cm" },
                 nodes = {
                     {
                         n = G.UIT.R,
-                        config = { align = "cm" },
+                        config = { align = "cm", padding = 0.05, minw = 6 },
                         nodes = {
                             {
                                 n = G.UIT.C,
-                                config = { align = 'cl', minw = 0.8 },
+                                config = { align = 'cl', padding = 0.05, minw = 1 },
                                 nodes = {
                                     { n = G.UIT.T, config = { text = k .. '', scale = 0.4, colour = G.C.WHITE } },
                                 }
@@ -148,7 +148,7 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
                             'akyrs_change_hc_challenge_description', colour = G.C.RED, minw = 4, scale = 0.4, minh = 0.6, focus_args = { snap_to = not snapped } }),
                             {
                                 n = G.UIT.C,
-                                config = { align = 'cm', padding = 0.05, minw = 0.6 },
+                                config = { align = 'cm', padding = 0.1, minw = 0.6 },
                                 nodes = {
                                     {
                                         n = G.UIT.C,
@@ -164,10 +164,8 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
                         }
                     }
                 }
-            }            
-            challenge_list[#challenge_list + 1] =
-            {n=G.UIT.R, config={align = '', padding = 0.2, colour = G.C.UI.TRANSPARENT_DARK, r = 0.2, minw = 0.8}, nodes = {
-                {n=G.UIT.C, config={align = '', minw = 0.8}, nodes = {
+            },
+                {n=G.UIT.R, config={align = '', minw = 0.8, padding = 0.05}, nodes = {
                     {n=G.UIT.O, config={object = difficultyDynaText}},
                     {n=G.UIT.O, config={object = dynaTextObject}},
                 }}

@@ -693,7 +693,7 @@ G.FUNCS.evaluate_round = function()
     if G.GAME.modifiers.akyrs_half_self_destruct then
         local slf = {}
         for x,ca in ipairs(AKYRS.all_card_areas) do
-            if ca and ca.cards then
+            if ca and ca.cards and ca ~= G.vouchers then
                 for i,k in ipairs(ca.cards) do
                     if not k.akyrs_self_destructs then
                         table.insert(slf, k)

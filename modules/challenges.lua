@@ -309,7 +309,7 @@ AKYRS.HardcoreChallenge{
     },
     rules = {
         modifiers = {
-            {id = 'dollars', value = 30},
+            {id = 'dollars', value = 500},
         },
         custom = {
             {id = 'akyrs_half_self_destruct'},

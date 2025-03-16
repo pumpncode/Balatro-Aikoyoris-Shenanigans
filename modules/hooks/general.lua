@@ -87,21 +87,11 @@ function EventManager:update(dt, forced)
             G.GAME.current_round.current_hand.mult then
             G.GAME.aiko_last_mult = G.GAME.current_round.current_hand.mult
             G.GAME.aiko_last_chips = G.GAME.current_round.current_hand.chips
+
             for i = 1, #G.jokers.cards do
-                if true then
-                    if (G.jokers.cards[i].aiko_trigger_external) and not G.jokers.cards[i].debuff then
-                        G.E_MANAGER:add_event(
-                            Event{
-                                trigger = "before",
-                                delay = 0,
-                                function ()
-                                    G.jokers.cards[i]:aiko_trigger_external(G.jokers.cards[i])
-                                    return true;
-                                end
-                            }
-                        ,'base',true)
-                        --G.E_MANAGER:add_event(Event({trigger = "immediate",func = (function()return true end)}), 'base')
-                    end
+                if (G.jokers.cards[i].aiko_trigger_external) and not G.jokers.cards[i].debuff then
+                    G.jokers.cards[i]:aiko_trigger_external()
+                    --print("CHANGED !!!")
                 end
             end
         end
@@ -675,37 +665,55 @@ end
 local evalRnd = G.FUNCS.evaluate_round
 G.FUNCS.evaluate_round = function()
     if G.GAME.modifiers.akyrs_half_debuff then
-        local undbf = {}
-        for i,k in ipairs(G.deck.cards) do
-            if not k.debuff then
-                table.insert(undbf, k)
-            end
-        end
-        for i,k in ipairs(undbf) do
-            if not k.debuff then
-                if pseudorandom("akyrsdbfhcchal") < 0.5 then
-                    k.ability.akyrs_perma_debuff = true
-                end
-            end
-        end
-    end
-    local ret = evalRnd()
-    if G.GAME.modifiers.akyrs_half_self_destruct then
         local slf = {}
-        for x,ca in ipairs(AKYRS.all_card_areas) do
+        for x, ca in ipairs(AKYRS.all_card_areas) do
             if ca and ca.cards and ca ~= G.vouchers then
-                for i,k in ipairs(ca.cards) do
+                for i, k in ipairs(ca.cards) do
                     if not k.akyrs_self_destructs then
                         table.insert(slf, k)
                     end
                 end
             end
         end
-        for i,k in ipairs(slf) do
+        -- Randomly sort slf
+        for i = #slf, 2, -1 do
+            local j = math.random(i)
+            slf[i], slf[j] = slf[j], slf[i]
+        end
+        -- Only apply to half the cards
+        local half_count = math.floor(#slf / 2)
+        for i = 1, half_count do
+            local k = slf[i]
             if not k.debuff then
-                if pseudorandom("akyrsdbfhcchal") < 0.5 then
-                    k.ability.akyrs_self_destructs = true
+                k.ability.akyrs_perma_debuff = true
+                k:juice_up(0.9, 0.5)
+            end
+        end
+    end
+    local ret = evalRnd()
+    if G.GAME.modifiers.akyrs_half_self_destruct then
+        local slf = {}
+        for x, ca in ipairs(AKYRS.all_card_areas) do
+            if ca and ca.cards and ca ~= G.vouchers then
+                for i, k in ipairs(ca.cards) do
+                    if not k.akyrs_self_destructs then
+                        table.insert(slf, k)
+                    end
                 end
+            end
+        end
+        -- Randomly sort slf
+        for i = #slf, 2, -1 do
+            local j = math.random(i)
+            slf[i], slf[j] = slf[j], slf[i]
+        end
+        -- Only apply to half the cards
+        local half_count = math.floor(#slf / 2)
+        for i = 1, half_count do
+            local k = slf[i]
+            if not k.debuff then
+                k.ability.akyrs_self_destructs = true
+                k:juice_up(0.9, 0.5)
             end
         end
     end
@@ -728,4 +736,17 @@ G.FUNCS.akyrs_difficult_blind_alert = function(e)
 end
 
 G.FUNCS.akyrs_do_nothing = function(e)
+end
+
+local XmainMenuHook = Game.main_menu
+function Game:main_menu(ctx)
+    local r = XmainMenuHook(self,ctx)
+    local card = AKYRS.word_to_cards("A")[1]
+    card.T.w = card.T.w * 1.4
+    card.T.h = card.T.h * 1.4
+    card:set_sprites(card.config.center)
+    card:start_materialize({G.C.BLUE,G.C.WHITE}, true, 2.5)
+    self.title_top:emplace(card)
+
+    return r
 end

@@ -1,5 +1,19 @@
 -- this file focuses on PURE scoring/joker calculation hooks
-function Card:aiko_trigger_external(card)
+
+local mod_mult_ref = mod_mult
+local mod_chips_ref = mod_chips
+
+function mod_mult(_mult)
+    local m = mod_mult_ref(_mult)
+    return m
+end
+
+function mod_chips(_chips)
+    local c = mod_chips_ref(_chips)
+    return c
+end
+
+function Card.aiko_trigger_external(card)
     if (card.ability.name == "Observer") then
         card.ability.extra.times = card.ability.extra.times - 1
 

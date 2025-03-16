@@ -744,9 +744,28 @@ function Game:main_menu(ctx)
     local card = AKYRS.word_to_cards("A")[1]
     card.T.w = card.T.w * 1.4
     card.T.h = card.T.h * 1.4
+    
+    G.title_top.T.w = G.title_top.T.w * 1.7675
+    G.title_top.T.x = G.title_top.T.x - 0.8
     card:set_sprites(card.config.center)
-    card:start_materialize({G.C.BLUE,G.C.WHITE}, true, 2.5)
+    card.no_ui = true
+    card.states.visible = false
     self.title_top:emplace(card)
+    G.E_MANAGER:add_event(
+        Event{
+            delay = 0.5,
+            func = function ()
+				if ctx == "splash" then
+					card.states.visible = true
+					card:start_materialize({ G.C.WHITE, G.C.WHITE }, true, 2.5)
+				else
+					card.states.visible = true
+					card:start_materialize({ G.C.WHITE, G.C.WHITE }, nil, 1.2)
+				end
+				return true
+            end
+        }
+    )
 
     return r
 end

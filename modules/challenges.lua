@@ -317,3 +317,55 @@ AKYRS.HardcoreChallenge{
     },
     difficulty = 8,
 }
+
+local fullDeckTenTimesBig = {}
+local fullDeckTwentyTimesBig = {}
+for a = 1, 10 do
+    for i, k in pairs(G.P_CARDS) do
+        local card_id_parts = {}
+        for part in string.gmatch(i, "([^_]+)") do
+            table.insert(card_id_parts, part)
+        end
+        table.insert(fullDeckTenTimesBig,{ s = card_id_parts[1],r = card_id_parts[2] })
+    end
+end
+
+for a = 1, 20 do
+    for i, k in pairs(G.P_CARDS) do
+        local card_id_parts = {}
+        for part in string.gmatch(i, "([^_]+)") do
+            table.insert(card_id_parts, part)
+        end
+        table.insert(fullDeckTwentyTimesBig,{ s = card_id_parts[1],r = card_id_parts[2] })
+    end
+end
+
+
+AKYRS.HardcoreChallenge{
+    key = "thin_yo_deck",
+    jokers = {
+    },
+    vouchers = {
+    },
+    deck = {
+        type = "Hardcore Challenge Deck",
+        cards = fullDeckTenTimesBig
+    },
+    rules = {
+    },
+    difficulty = 2,
+}
+AKYRS.HardcoreChallenge{
+    key = "thin_yo_deck_2",
+    jokers = {
+    },
+    vouchers = {
+    },
+    deck = {
+        type = "Hardcore Challenge Deck",
+        cards = fullDeckTwentyTimesBig
+    },
+    rules = {
+    },
+    difficulty = 3,
+}

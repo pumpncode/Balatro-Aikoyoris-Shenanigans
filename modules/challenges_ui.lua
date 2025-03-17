@@ -347,6 +347,19 @@ function AKYRS.get_hc_challenge_int_from_id(_id)
     return 0
 end
 
+AKYRS.colours_from_difficulty = function(diffInt)
+    if diffInt == nil or diffInt == 0 then
+        return {colour = HEX('FFA500'), accent = HEX('FFFFFF')}
+    elseif diffInt >= 10 then
+        return {colour = HEX('8833ff'), accent = HEX('7420a8')}
+    else
+        local ratio = diffInt / 10
+        local r = math.floor(255 * (1 - ratio) + 136 * ratio)
+        local g = math.floor(165 * (1 - ratio) + 51 * ratio)
+        local b = math.floor(0 * (1 - ratio) + 255 * ratio)
+        return {colour = {r / 255, g / 255, b / 255, 1}, accent = {r / 255, g / 255, b / 255, 1}}
+    end
+end
 
 G.FUNCS.akyrs_challenge_flame_handler = function(e)
     G.C.AKYRS_UI_HC_LICK = G.C.AKYRS_UI_HC_LICK or {1, 1, 1, 1}
@@ -376,7 +389,8 @@ G.FUNCS.akyrs_challenge_flame_handler = function(e)
             x = 0,
             y = 12.5,
             intensity = 1,
-            intensity_controlled_by_diff = true
+            intensity_controlled_by_diff = true,
+            colour_controlled_by_diff = true,
         },
     }
     for k, v in pairs(G.ARGS.akyrs_flame_handler) do
@@ -399,7 +413,6 @@ G.FUNCS.akyrs_challenge_flame_handler = function(e)
                 offset = {x=v.x,y=v.y},
                 xy_bond = 'Weak'
             })
-            
             e.config.object:define_draw_steps({{
             shader = 'akyrs_trimmed_flame',
             send = {
@@ -421,6 +434,13 @@ G.FUNCS.akyrs_challenge_flame_handler = function(e)
             _F.intensity = AKYRS.current_hc_difficulty * 2 or v.intensity
         end
 
+        if v.colour_controlled_by_diff and AKYRS.current_hc_difficulty then
+            local x = AKYRS.colours_from_difficulty(AKYRS.current_hc_difficulty)
+            for i = 1, 4 do
+            _F.colour_1[i] = _F.colour_1[i] * 0.9 + x.colour[i] * 0.1
+            _F.colour_2[i] = _F.colour_2[i] * 0.9 + x.accent[i] * 0.1
+            end
+        end
         _F.timer = _F.timer + G.real_dt*(1 + _F.intensity*0.05)
         if _F.intensity_vel < 0 then _F.intensity_vel = _F.intensity_vel*(1 - 10*G.real_dt) end
             _F.intensity_vel = (1-exptime)*(_F.intensity - _F.real_intensity)*G.real_dt*40 + exptime*(_F.intensity_vel)

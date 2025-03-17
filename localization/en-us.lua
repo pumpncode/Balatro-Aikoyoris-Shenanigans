@@ -666,7 +666,8 @@ return {
             hc_akyrs_half_life = "Half-Life",
             hc_akyrs_half_life_2 = "Half-Life 2",
             hc_akyrs_thin_yo_deck = "thin yo deck bro",
-            hc_akyrs_thin_yo_deck_2 = "for the love of god thin your deck"
+            hc_akyrs_thin_yo_deck_2 = "for the love of god thin your deck",
+            hc_akyrs_national_debt = "National Debt"
         },
         collabs={},
         dictionary={

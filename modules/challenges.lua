@@ -369,3 +369,19 @@ AKYRS.HardcoreChallenge{
     },
     difficulty = 3,
 }
+AKYRS.HardcoreChallenge{
+    key = "national_debt",
+    jokers = {
+    },
+    vouchers = {
+    },
+    deck = {
+        type = "Hardcore Challenge Deck",
+    },
+    rules = {
+        modifiers = {
+            { id = "dollars", value = -36560000000000 },
+        }
+    },
+    difficulty = 6,
+}

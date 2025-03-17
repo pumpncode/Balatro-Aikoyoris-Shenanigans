@@ -128,7 +128,7 @@ SMODS.Booster{
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
-            "be used immediately",
+            "keep for later use",
         },
     },
     config = { extra = 3, choose = 1 },
@@ -143,7 +143,7 @@ SMODS.Booster{
     atlas = 'aikoyoriBoosterPack', pos = { x = 0, y = 0 },
     group_key = "k_alphabets",
     cost = 4,
-    draw_hand = true,
+    select_card = 'consumeables',
     weight = 1,
     kind = "letter_pack",
     create_card = function (self, card, i) 
@@ -162,7 +162,7 @@ SMODS.Booster{
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
-            "be used immediately",
+            "keep for later use",
         },
     },
     config = { extra = 3, choose = 1 },
@@ -177,7 +177,7 @@ SMODS.Booster{
     atlas = 'aikoyoriBoosterPack', pos = { x = 1, y = 0 },
     group_key = "k_alphabets",
     cost = 4,
-    draw_hand = true,
+    select_card = 'consumeables',
     weight = 1,
     kind = "letter_pack",
     create_card = function (self, card, i) 
@@ -196,7 +196,7 @@ SMODS.Booster{
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
-            "be used immediately",
+            "keep for later use",
         },
     },
     config = { extra = 3, choose = 1 },
@@ -211,7 +211,7 @@ SMODS.Booster{
     atlas = 'aikoyoriBoosterPack', pos = { x = 2, y = 0 },
     group_key = "k_alphabets",
     cost = 4,
-    draw_hand = true,
+    select_card = 'consumeables',
     weight = 1,
     kind = "letter_pack",
     create_card = function (self, card, i) 
@@ -230,7 +230,7 @@ SMODS.Booster{
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
-            "be used immediately",
+            "keep for later use",
         },
     },
     config = { extra = 3, choose = 1 },
@@ -245,7 +245,7 @@ SMODS.Booster{
     atlas = 'aikoyoriBoosterPack', pos = { x = 3, y = 0 },
     group_key = "k_alphabets",
     cost = 4,
-    draw_hand = true,
+    select_card = 'consumeables',
     weight = 1,
     kind = "letter_pack",
     create_card = function (self, card, i) 
@@ -264,7 +264,7 @@ SMODS.Booster{
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
-            "be used immediately",
+            "keep for later use",
         },
     },
     config = { extra = 5, choose = 1 },
@@ -279,7 +279,7 @@ SMODS.Booster{
     atlas = 'aikoyoriBoosterPack', pos = { x = 4, y = 0 },
     group_key = "k_alphabets",
     cost = 6,
-    draw_hand = true,
+    select_card = 'consumeables',
     weight = 1,
     kind = "letter_pack",
     create_card = function (self, card, i) 
@@ -298,7 +298,7 @@ SMODS.Booster{
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
-            "be used immediately",
+            "keep for later use",
         },
     },
     config = { extra = 5, choose = 1 },
@@ -313,7 +313,7 @@ SMODS.Booster{
     atlas = 'aikoyoriBoosterPack', pos = { x = 5, y = 0 },
     group_key = "k_alphabets",
     cost = 6,
-    draw_hand = true,
+    select_card = 'consumeables',
     weight = 1,
     kind = "letter_pack",
     create_card = function (self, card, i) 
@@ -332,7 +332,7 @@ SMODS.Booster{
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
-            "be used immediately",
+            "keep for later use",
         },
     },
     config = { extra = 5, choose = 2 },
@@ -347,7 +347,7 @@ SMODS.Booster{
     atlas = 'aikoyoriBoosterPack', pos = { x = 6, y = 0 },
     group_key = "k_alphabets",
     cost = 8,
-    draw_hand = true,
+    select_card = 'consumeables',
     weight = 0.25,
     kind = "letter_pack",
     create_card = function (self, card, i) 
@@ -366,7 +366,7 @@ SMODS.Booster{
         text={
             "Choose {C:attention}#1#{} of up to",
             "{C:attention}#2#{C:attention} Alphabets{} cards to",
-            "be used immediately",
+            "keep for later use",
         },
     },
     config = { extra = 5, choose = 2 },
@@ -381,7 +381,7 @@ SMODS.Booster{
     atlas = 'aikoyoriBoosterPack', pos = { x = 7, y = 0 },
     group_key = "k_alphabets",
     cost = 8,
-    draw_hand = true,
+    select_card = 'consumeables',
     weight = 0.25,
     kind = "letter_pack",
     create_card = function (self, card, i) 

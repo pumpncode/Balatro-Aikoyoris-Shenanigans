@@ -706,7 +706,8 @@ return {
             k_akyrs_hardcore_challenge_mode_tip_1  = "Probably also a funny way to",
             k_akyrs_hardcore_challenge_mode_tip_2  = "test how overpowered a joker is",
             b_akyrs_hc_challenges = "Hardcore",
-            b_akyrs_hc_challenges_full_txt = "Hardcore Challenges"
+            b_akyrs_hc_challenges_full_txt = "Hardcore Challenges",
+            k_akyrs_hardcore_challenge_difficulty = "Difficulty",
         },
         high_scores={},
         labels={

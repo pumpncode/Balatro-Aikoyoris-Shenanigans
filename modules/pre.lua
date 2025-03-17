@@ -24,3 +24,7 @@ AKYRS.DescriptionDummy = SMODS.Center:extend{
         return self.obj_table[key]
     end
 }
+
+AKYRS.C = {
+    DARKER_TRANS = HEX('22222299')
+}

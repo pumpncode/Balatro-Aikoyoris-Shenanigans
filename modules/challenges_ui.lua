@@ -179,7 +179,7 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
     local difficultyDynaText = DynaText{
         scale = 0.3,
         colours = {G.C.UI.TEXT_LIGHT},
-        string = {"Difficulty "},
+        string = {localize("k_akyrs_hardcore_challenge_difficulty").." "},
     }
     local dynaTextObject = DynaText{
         scale = 0.3,
@@ -188,7 +188,7 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
         font = AKYRS.Fonts["akyrs_NotoEmoji"]
     }
             challenge_list[#challenge_list + 1] =
-            {n=G.UIT.R, config={align = '', padding = 0.08, colour = G.C.UI.TRANSPARENT_DARK, r = 0.2, minw = 0.8}, nodes = {{
+            {n=G.UIT.R, config={align = '', padding = 0.08, colour = AKYRS.C.DARKER_TRANS, r = 0.2, minw = 0.8}, nodes = {{
                 n = G.UIT.R,
                 config = { align = "cm" },
                 nodes = {

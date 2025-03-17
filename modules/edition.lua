@@ -1,17 +1,3 @@
-SMODS.Shader{
-    key = "texelated",
-    path = "texelated.fs"
-}
-SMODS.Shader{
-    key = "noire",
-    path = "noire.fs"
-}
-SMODS.Shader{
-    key = "sliced",
-    path = "sliced.fs",
-    
-}
-
 SMODS.Edition{
     key = "texelated",
     shader = "akyrs_texelated",

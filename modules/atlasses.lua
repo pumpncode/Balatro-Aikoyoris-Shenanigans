@@ -105,3 +105,23 @@ SMODS.Atlas({
     px = 32,
     py = 32
 })
+
+
+SMODS.Shader{
+    key = "texelated",
+    path = "texelated.fs"
+}
+SMODS.Shader{
+    key = "noire",
+    path = "noire.fs"
+}
+SMODS.Shader{
+    key = "sliced",
+    path = "sliced.fs",
+    
+}
+SMODS.Shader{
+    key = "trimmed_flame",
+    path = "trimmed_flame.fs",
+    
+}

@@ -153,6 +153,7 @@ target = "functions/UI_definitions.lua"
 pattern = """  local challenge = G.CHALLENGES[_id]"""
 position = "after"
 payload = """if is_hardcore then challenge = AKYRS.HC_CHALLENGES[_id] end
+if challenge and challenge.difficulty then AKYRS.current_hc_difficulty = challenge.difficulty else AKYRS.current_hc_difficulty = nil end
 """
 overwrite = true
 match_indent = true

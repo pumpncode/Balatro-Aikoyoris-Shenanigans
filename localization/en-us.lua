@@ -698,6 +698,13 @@ return {
             k_akyrs_difficult = "Difficult",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
+            k_akyrs_hardcore_challenge_mode_flavour = "Tough and completely optional Challenges",
+            k_akyrs_hardcore_challenge_mode_flavour_2 = "Unfair and unbalanced on purpose",
+            k_akyrs_hardcore_challenge_mode_flavour_3  = "Not for the faint of heart",
+            k_akyrs_hardcore_challenge_mode_wish_1  = "May luck be on your side should you",
+            k_akyrs_hardcore_challenge_mode_wish_2  = "choose to try these.",
+            k_akyrs_hardcore_challenge_mode_tip_1  = "Probably also a funny way to",
+            k_akyrs_hardcore_challenge_mode_tip_2  = "test how overpowered a joker is",
             b_akyrs_hc_challenges = "Hardcore",
             b_akyrs_hc_challenges_full_txt = "Hardcore Challenges"
         },

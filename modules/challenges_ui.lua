@@ -24,17 +24,74 @@ function AKYRS.UIDEF.hc_challenges(from_game_over)
 
     return {
         n = G.UIT.ROOT,
-        config = { align = "cm", padding = 0.1, colour = G.C.CLEAR, minh = 8, minw = 7 },
+        config = { align = "cm", padding = 0.1, colour = G.C.CLEAR, minh = 8, minw = 7},
         nodes = {
             {
                 n = G.UIT.R,
-                config = { align = "cm", padding = 0.1, r = 0.1, colour = G.C.BLACK },
+                config = { align = "cm", padding = 0.1, r = 0.1, colour = G.C.BLACK  },
                 nodes = {
+                    {
+                        n = G.UIT.O,
+                        config = {
+                            func = 'akyrs_challenge_flame_handler',
+                            id = 'akyrs_flame_challenge', 
+                            object = Moveable(100,0,0,0), w = 0, h = 0,no_role = true,
+                        }
+                    },
                     {
                         n = G.UIT.R,
                         config = { align = "cm", padding = 0.1 },
                         nodes = {
                             { n = G.UIT.T, config = { text = localize('k_akyrs_hardcore_challenge_mode'), scale = 0.6, colour = G.C.UI.TEXT_LIGHT, shadow = true } },
+                        }
+                    },
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = 0.05 },
+                        nodes = {
+                            { n = G.UIT.T, config = { text = localize('k_akyrs_hardcore_challenge_mode_flavour'), scale = 0.3, colour = G.C.UI.TEXT_LIGHT, shadow = true } },
+                        }
+                    },
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = 0.05 },
+                        nodes = {
+                            { n = G.UIT.T, config = { text = localize('k_akyrs_hardcore_challenge_mode_flavour_2'), scale = 0.3, colour = G.C.UI.TEXT_LIGHT, shadow = true } },
+                        }
+                    },
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = 0.05 },
+                        nodes = {
+                            { n = G.UIT.T, config = { text = localize('k_akyrs_hardcore_challenge_mode_flavour_3'), scale = 0.3, colour = G.C.UI.TEXT_LIGHT, shadow = true } },
+                        }
+                    },
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = 0.05 },
+                        nodes = {
+                            { n = G.UIT.T, config = { text = localize('k_akyrs_hardcore_challenge_mode_wish_1'), scale = 0.4, colour = G.C.UI.TEXT_LIGHT, shadow = true } },
+                        }
+                    },
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = 0.05 },
+                        nodes = {
+                            { n = G.UIT.T, config = { text = localize('k_akyrs_hardcore_challenge_mode_wish_2'), scale = 0.4, colour = G.C.UI.TEXT_LIGHT, shadow = true } },
+                        }
+                    },
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = 0 },
+                        nodes = {
+                            { n = G.UIT.T, config = { text = localize('k_akyrs_hardcore_challenge_mode_tip_1'), scale = 0.3, colour = G.C.UI.TEXT_INACTIVE, shadow = true } },
+                        }
+                    },
+                    {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = 0 },
+                        nodes = {
+                            { n = G.UIT.T, config = { text = localize('k_akyrs_hardcore_challenge_mode_tip_2'), scale = 0.3, colour = G.C.UI.TEXT_INACTIVE, shadow = true } },
                         }
                     },
                     {
@@ -57,6 +114,8 @@ function AKYRS.UIDEF.hc_challenges(from_game_over)
         }
     }
 end
+
+
 
 G.FUNCS.akyrs_hc_challenge_list = function(e)
     G.SETTINGS.paused = true
@@ -204,6 +263,14 @@ function AKYRS.UIDEF.hc_challenge_list(from_game_over)
         back_id = 'hc_challenge_list',
         contents = {
             {
+                n = G.UIT.O,
+                config = {
+                    func = 'akyrs_challenge_flame_handler',
+                    id = 'akyrs_flame_challenge_list', 
+                    object = Moveable(100,0,0,0), w = 0, h = 0,no_role = true,
+                }
+            },
+            {
                 n = G.UIT.C,
                 config = { align = "cm", padding = 0.0 },
                 nodes = {
@@ -279,3 +346,86 @@ function AKYRS.get_hc_challenge_int_from_id(_id)
     end
     return 0
 end
+
+
+G.FUNCS.akyrs_challenge_flame_handler = function(e)
+    G.C.AKYRS_UI_HC_LICK = G.C.AKYRS_UI_HC_LICK or {1, 1, 1, 1}
+    for i=1, 3 do
+        G.C.AKYRS_UI_HC_LICK[i] = math.min(math.max(((G.C.AKYRS_UI_HC_LICK[i]*0.5+G.C.PURPLE[i]*0.5) + 0.1)^2, 0.1), 1)
+    end
+
+    G.ARGS.akyrs_flame_handler = G.ARGS.akyrs_flame_handler or {
+        challenge_entry = {
+            id = 'akyrs_flame_challenge', 
+            arg_tab = 'akyrs_flame_challenge',
+            colour = HEX('8833ff'),
+            accent = HEX('7420a8'),
+            w = G.ROOM.T.w/2,
+            h = G.ROOM.T.h,
+            x = 0,
+            y = 5.75,
+            intensity = 7
+        },
+        challenge_list = {
+            id = 'akyrs_flame_challenge_list', 
+            arg_tab = 'akyrs_flame_challenge',
+            colour = HEX('8833ff'),
+            accent = HEX('7420a8'),
+            w = 22,
+            h = 25,
+            x = 0,
+            y = 12.5,
+            intensity = 1,
+            intensity_controlled_by_diff = true
+        },
+    }
+    for k, v in pairs(G.ARGS.akyrs_flame_handler) do
+        if e.config.id == v.id then 
+        if not e.config.object:is(Sprite) or e.config.object.ID ~= v.ID then 
+            e.config.object:remove()
+            e.config.object = Sprite(0, 0, v.w, v.h, G.ASSET_ATLAS["akyrs_aikoyori_credits"], {x = 0, y = 0})
+            v.ID = e.config.object.ID
+            G.ARGS[v.arg_tab] = {
+                intensity = 0,
+                real_intensity = 0,
+                intensity_vel = 0,
+                colour_1 = v.colour,
+                colour_2 = v.accent,
+                timer = G.TIMERS.REAL
+            }      
+            e.config.object:set_alignment({
+                major = e.parent,
+                type = 'bmi',
+                offset = {x=v.x,y=v.y},
+                xy_bond = 'Weak'
+            })
+            
+            e.config.object:define_draw_steps({{
+            shader = 'akyrs_trimmed_flame',
+            send = {
+                {name = 'time', ref_table = G.ARGS[v.arg_tab], ref_value = 'timer'},
+                {name = 'amount', ref_table = G.ARGS[v.arg_tab], ref_value = 'real_intensity'},
+                {name = 'image_details', ref_table = e.config.object, ref_value = 'image_dims'},
+                {name = 'texture_details', ref_table = e.config.object.RETS, ref_value = 'get_pos_pixel'},
+                {name = 'colour_1', ref_table =  G.ARGS[v.arg_tab], ref_value = 'colour_1'},
+                {name = 'colour_2', ref_table =  G.ARGS[v.arg_tab], ref_value = 'colour_2'},
+                {name = 'id', val =  e.config.object.ID},
+            }}})
+            e.config.object:get_pos_pixel()
+        end
+        local _F = G.ARGS[v.arg_tab]
+        local exptime = math.exp(-0.6*G.real_dt)
+        
+        _F.intensity = v.intensity
+        if v.intensity_controlled_by_diff and AKYRS.current_hc_difficulty then
+            _F.intensity = AKYRS.current_hc_difficulty * 2 or v.intensity
+        end
+
+        _F.timer = _F.timer + G.real_dt*(1 + _F.intensity*0.05)
+        if _F.intensity_vel < 0 then _F.intensity_vel = _F.intensity_vel*(1 - 10*G.real_dt) end
+            _F.intensity_vel = (1-exptime)*(_F.intensity - _F.real_intensity)*G.real_dt*40 + exptime*(_F.intensity_vel)
+            _F.real_intensity = math.max(0, _F.real_intensity + _F.intensity_vel)
+            _F.change = (_F.change or 0)*(1 - 4.*G.real_dt) + ( 4.*G.real_dt)*(_F.real_intensity < _F.intensity - 0.0 and 1 or 0)*_F.real_intensity
+        end
+    end
+    end

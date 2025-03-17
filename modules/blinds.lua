@@ -206,7 +206,7 @@ SMODS.Blind{
         localize("k_akyrs_current_req").."^3",
         "33^"..localize("k_akyrs_current_req"),
         "33^^"..localize("k_akyrs_current_req"),
-        "33333{"..localize("k_akyrs_current_req").."}".."33333")
+        "33333{log("..localize("k_akyrs_current_req")..")}".."33333")
         return { vars = {""..s}, key = self.key }
     end,
     set_blind = function(self)

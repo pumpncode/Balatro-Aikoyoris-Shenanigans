@@ -405,6 +405,8 @@ function AKYRS.get_hand_in_game(_c)
     and G.GAME.hands[_c.ability.hand_type] or nil
 end
 
+local to_number = to_number or function(x) return x end
+
 for i, k in ipairs(constellations) do
     local raw_hand =  (i+2).."-letter Word"
     local hand =  AKYRS.prefix.."_"..raw_hand

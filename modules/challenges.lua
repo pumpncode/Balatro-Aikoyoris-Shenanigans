@@ -98,7 +98,7 @@ AKYRS.HardcoreChallenge{
             ['H'] = true,
         }
     },
-    difficulty = 3,
+    difficulty = 2,
 }
 AKYRS.HardcoreChallenge{
     key = "secured_two_factor",

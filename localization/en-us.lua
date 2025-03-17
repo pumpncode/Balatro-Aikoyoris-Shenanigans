@@ -673,6 +673,7 @@ return {
             b_akyrs_alphabets="Alphabet Cards",
             k_aikoyoriextrabases = "Extra Base",
             k_akyrs_alphabets = "Alphabet",
+            k_akyrs_current_req = "current",
             k_akyrs_alphabets_pack = "Alphabet Pack",
             k_alphabets = "Alphabet Pack",
             k_created = "Created!",

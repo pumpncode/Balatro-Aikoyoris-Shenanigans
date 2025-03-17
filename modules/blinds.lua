@@ -169,8 +169,6 @@ local function talismanCheck(v,big,omega,jen)
 end
 
 local to_big = not to_big and function(x) return x end or to_big
-local l = to_big(1e300)
-local num = Talisman and l and l.tetrate and (l:tetrate(1e300)) or 1
 SMODS.Blind{
     key = "the_libre",
     dollars = 5,
@@ -180,27 +178,36 @@ SMODS.Blind{
     boss = {min = 1, max = 10},
     pos = { x = 0, y = 5 },
     debuff = {
-        disable_chip_x = talismanCheck(3,3333,333,num)
+        disable_chip_x = talismanCheck(3,3333,333,1e300)
     },
     loc_vars = function(self)
         local orig_chips = to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling)
         
         if Talisman then
             if Talisman.config_file.break_infinity == "omeganum" then
-                local val = orig_chips:tetrate(self.debuff.disable_chip_x)
+                local val = 1
+                if Jen then
+                    val = to_big(33):arrow(to_big(self.debuff.disable_chip_x):log10():ceil(),33)
+                else
+                    val = to_big(self.debuff.disable_chip_x):tetrate(orig_chips)
+                end
                 
                 return { vars = {val}, key = self.key }
             else
                 
-                return { vars = {orig_chips^self.debuff.disable_chip_x}, key = self.key }
+                return { vars = {self.debuff.disable_chip_x ^ orig_chips}, key = self.key }
             end
         else
             return { vars = {orig_chips ^ self.debuff.disable_chip_x}, key = self.key }
         end
     end,
     collection_loc_vars = function(self)
-        local s = talismanCheck("3","3333","^333","^(1e300^^1e300)")
-        return { vars = {"^"..s.." of current"}, key = self.key }
+        local s = talismanCheck(
+        localize("k_akyrs_current_req").."^3",
+        "33^"..localize("k_akyrs_current_req"),
+        "33^^"..localize("k_akyrs_current_req"),
+        "33{log("..localize("k_akyrs_current_req")..")}".."33")
+        return { vars = {""..s}, key = self.key }
     end,
     set_blind = function(self)
     end,
@@ -216,7 +223,7 @@ SMODS.Blind{
             if Talisman.config_file.break_infinity == "omeganum" then 
                 local val = to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling):tetrate(to_big(self.debuff.disable_chip_x))
                 if Jen and G.GAME.blind.chips then
-                    val = val:tetrate(to_big(self.debuff.disable_chip_x))
+                    val = to_big(33):arrow(to_big(self.debuff.disable_chip_x):log10():ceil(),33)
                 end
                 G.GAME.blind.chips = val
             else

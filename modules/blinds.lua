@@ -223,7 +223,7 @@ SMODS.Blind{
             if Talisman.config_file.break_infinity == "omeganum" then 
                 local val = to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling):tetrate(to_big(self.debuff.disable_chip_x))
                 if Jen and G.GAME.blind.chips then
-                    val = to_big(33333):arrow(to_big(G.GAME.blind.chips):ceil(),33333)
+                    val = to_big(33333):arrow(to_big(G.GAME.blind.chips):log10():ceil(),33333)
                 end
                 G.GAME.blind.chips = val
             else

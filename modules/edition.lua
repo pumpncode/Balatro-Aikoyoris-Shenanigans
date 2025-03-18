@@ -3,8 +3,8 @@ SMODS.Edition{
     shader = "akyrs_texelated",
     config = {
         extra = {
-            mult = 20,
-            x_mult = 0.9;
+            mult = -50,
+            x_mult = 2;
         }
     },
     

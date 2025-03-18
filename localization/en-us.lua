@@ -131,7 +131,7 @@ return {
             e_akyrs_noire = {
                 name = "Noire",
                 text = {
-                    "{C:dark_edition}+#1#{} Card Limit for Current Area",
+                    "{C:dark_edition}+#1#{} Card Limit for where this card is",
                     "{C:white,X:mult}X#2#{} Mult"
                 }
             },

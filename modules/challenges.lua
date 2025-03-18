@@ -384,4 +384,5 @@ AKYRS.HardcoreChallenge{
         }
     },
     difficulty = 6,
+    stake = 8,
 }

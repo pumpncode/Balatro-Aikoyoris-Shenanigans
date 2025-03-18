@@ -637,7 +637,7 @@ function CardArea:shuffle(_seed)
             for j, l in ipairs(priorityqueue) do
                 if 
                 (l[2] == "suit" and k:is_suit(l[3])) or
-                (l[2] == "rank" and k:get_id() == l[3]) or
+                (l[2] == "rank" and k.base.value == l[3] and not SMODS.has_no_suit(k)) or
                 (l[2] == "face" and k:is_face() == l[3])
                  then
                     --print(k.base.name, l[1], l[2], l[3])

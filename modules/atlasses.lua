@@ -118,10 +118,12 @@ SMODS.Shader{
 SMODS.Shader{
     key = "sliced",
     path = "sliced.fs",
-    
 }
 SMODS.Shader{
     key = "trimmed_flame",
     path = "trimmed_flame.fs",
-    
+}
+SMODS.Shader{
+    key = "magenta_tint",
+    path = "magenta_letter_tint.fs",
 }

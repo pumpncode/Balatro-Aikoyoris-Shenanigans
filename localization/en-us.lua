@@ -709,6 +709,15 @@ return {
             b_akyrs_hc_challenges = "Hardcore",
             b_akyrs_hc_challenges_full_txt = "Hardcore Challenges",
             k_akyrs_hardcore_challenge_difficulty = "Difficulty",
+
+            
+            k_akyrs_wildcard_behaviours={
+                'Always Manual', 
+                'Warn on Unset', 
+                'Unset does Nothing', 
+                'Automatic set Unset', 
+                'Always Automatic'
+            },
         },
         high_scores={},
         labels={

@@ -306,3 +306,51 @@ SMODS.current_mod.extra_tabs = function()
     }
   }
 end
+
+AKYRS.save_config = function(e)
+  local status, err = pcall(SMODS.save_mod_config,AKYRS)
+  if status == false then
+      sendErrorMessage("Failed to perform a manual mod config save.", 'SystemClock')
+  end
+end
+
+G.FUNCS.akyrs_change_wildcard_behaviour = function (e)
+  AKYRS.config.wildcard_behaviour = e.to_key
+  AKYRS.save_config(e)
+end
+
+
+SMODS.current_mod.config_tab = function ()
+  return {
+    n = G.UIT.ROOT, config = { minw = 10, minh = 6 ,align = "tm", r = 0.1 },
+    nodes = {
+    { n = G.UIT.R, config = { colour = G.C.UI.TRANSPARENT_DARK}, nodes = {
+      { n = G.UIT.C, config = {
+        align = "cm", padding = 0.2,
+      }, nodes = {
+        {n = G.UIT.T, config = {
+          text = "Wildcards Behaviour",
+          scale = 0.5,
+          colour = G.C.UI.TEXT_LIGHT
+        }}
+        }
+      },          
+      { n = G.UIT.C, config = {
+        align = "cm", padding = 0.2,
+      }, nodes = {
+          create_option_cycle({
+            options = localize('k_akyrs_wildcard_behaviours'),
+            scale = 0.7,
+            w = 4.5,
+            opt_callback = "akyrs_change_wildcard_behaviour",
+            ref_table = AKYRS.config,
+            ref_value = "wildcard_behaviour"
+
+          })
+        }
+      },        
+
+    } }
+  }
+  }
+end

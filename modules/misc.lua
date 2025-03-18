@@ -1,6 +1,6 @@
-aikoyori_mod_config = SMODS.current_mod.config
+local aikoyori_mod_config = SMODS.current_mod.config
 
-aikoyori_mod_config.x_of_a_kind_limit = 100
+aikoyori_mod_config.wildcard_behaviour = aikoyori_mod_config.wildcard_behaviour or 1
 
 function AKYRS.table_contains(tbl, x)
     local found = false

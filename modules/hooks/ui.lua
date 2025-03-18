@@ -143,3 +143,100 @@ function set_challenge_unlock()
     end
     return ret
 end
+
+G.FUNCS.akyrs_wildcard_check = function(e)
+    if e.config.ref_table.ability.aikoyori_letters_stickers == "#" then 
+        e.config.colour = G.C.RED
+        e.config.button = 'use_card'
+    else
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    end
+end
+
+G.FUNCS.akyrs_wildcard_open_wildcard_ui = function(e)
+    if e.config.ref_table.ability.aikoyori_letters_stickers == "#" then 
+        print("SUCCESS!")
+    else
+        print("FAILURE!")
+    end
+end
+
+function AKYRS.UIDEF.wildcards_ui(card)
+    if card.area and card.area == G.hand then
+        return {
+            n = G.UIT.ROOT,
+            config = { padding = 0, colour = G.C.CLEAR },
+            nodes = {
+                {
+                    n = G.UIT.C,
+                    config = { padding = 0.15, align = 'cl' },
+                    nodes = {
+                        {
+                            n = G.UIT.R,
+                            config = { align = 'cl' },
+                            nodes = {
+                                {
+
+                                    n = G.UIT.C,
+                                    config = { align = "cl" },
+                                    nodes = {
+                                        {
+                                            n = G.UIT.C,
+                                            config = { ref_table = card, align = "cl", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = 0, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = "akyrs_wildcard_open_wildcard_ui", func = 'akyrs_wildcard_check' },
+                                            nodes = {
+                                                { n = G.UIT.T, config = { text = "!", colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+                                            }
+                                        }
+                                    }
+                                },
+                                { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
+                                { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
+                                { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
+                            }
+                        },
+                    }
+                },
+            }
+        }
+    end
+end
+
+local cardhighlighthook = Card.highlight
+function Card:highlight(is_higlighted)
+    local ret = cardhighlighthook(self, is_higlighted)
+
+    if self.base and (self.area and self.area == G.hand) and self.ability.aikoyori_letters_stickers == "#" then
+        if self.highlighted and self.area and self.area.config.type ~= 'shop' then
+
+            self.children.use_button = UIBox {
+                definition = AKYRS.UIDEF.wildcards_ui(self),
+                config = { align =
+                    "cl"
+                , offset =
+                    { x = 1, y = 0 } ,
+                    parent = self }
+            }
+        elseif self.children.use_button then
+            self.children.use_button:remove()
+            self.children.use_button = nil
+        end
+    end
+    return ret
+end
+
+local useCardHook = G.FUNCS.use_card
+G.FUNCS.use_card = function (e,m,ns)
+    local card = e.config.ref_table
+    local area = card.area
+    local prev_state = G.STATE
+    local dont_dissolve = nil
+    local delay_fac = 1
+    if area == G.hand and card.ability.aikoyori_letters_stickers == "#" then
+        G.FUNCS.akyrs_wildcard_open_wildcard_ui(e)
+        return true
+    end
+    local r = useCardHook(e,m,ns)
+    return r
+    
+end

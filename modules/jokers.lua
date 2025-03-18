@@ -503,6 +503,7 @@ SMODS.Joker {
                 }, card)
             end
         end
+        --[[
         if context.end_of_round then
             if G.GAME.blind.boss and (
                 card.ability.extra.chips ~= card.ability.extra.base_chips or
@@ -518,7 +519,7 @@ SMODS.Joker {
                     message= localize('k_reset')
                 }, card)
             end
-        end
+        end]]
     end,
     blueprint_compat = true,
 }

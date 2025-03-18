@@ -240,7 +240,6 @@ return {
                     "if played hand sum does not exceed {C:attention}#1#{}",
                     "Joker gain the value listed",
                     "When a {C:planet}Planet{} card is used",
-                    "{C:attention}Resets{} at the end of the ante.",
                 }
             },
             j_akyrs_yona_yona_dance = {

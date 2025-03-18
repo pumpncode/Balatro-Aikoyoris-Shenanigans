@@ -59,12 +59,23 @@ function AKYRS.aikoyori_draw_extras(card, layer)
                 AKYRS.aikoyori_letters_stickers["incorrect"]:draw_shader('dissolve', nil, nil, nil, card.children.center, nil,
                     nil, nil, -0.02 + movement_mod * 0.9, nil)
             end
-            AKYRS.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers].role.draw_major = card
-            AKYRS.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers].VT = card.VT
-            AKYRS.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers]:draw_shader('dissolve', 0, nil, nil,
+            local letter_to_render = card.ability.aikoyori_letters_stickers
+            local tint = false
+            if (card.ability.aikoyori_letters_stickers == "#" and card.ability.aikoyori_pretend_letter) then
+                letter_to_render = card.ability.aikoyori_pretend_letter
+                tint = true
+            end
+            AKYRS.aikoyori_letters_stickers[letter_to_render].role.draw_major = card
+            AKYRS.aikoyori_letters_stickers[letter_to_render].VT = card.VT
+            AKYRS.aikoyori_letters_stickers[letter_to_render]:draw_shader('dissolve', 0, nil, nil,
                 card.children.center, 0.1, nil, nil, nil)
-            AKYRS.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers]:draw_shader('dissolve', nil, nil, nil,
-                card.children.center, nil, nil, nil, -0.02 + movement_mod * 0.9, nil)
+            if tint then
+                AKYRS.aikoyori_letters_stickers[letter_to_render]:draw_shader('akyrs_magenta_tint', nil, nil, nil,
+                    card.children.center, nil, nil, nil, -0.02 + movement_mod * 0.9, nil)
+            else 
+                AKYRS.aikoyori_letters_stickers[letter_to_render]:draw_shader('dissolve', nil, nil, nil,
+                    card.children.center, nil, nil, nil, -0.02 + movement_mod * 0.9, nil)
+            end
         end
     end
 end

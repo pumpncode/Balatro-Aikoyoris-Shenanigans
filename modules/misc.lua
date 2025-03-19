@@ -514,6 +514,16 @@ SMODS.Gradient{
     cycle = 5
 }
 
+SMODS.Gradient{
+    key = "akyrs_unset_letter",
+    colours = {
+        G.C.GREEN,
+        G.C.BLUE,
+        G.C.RED,
+    },
+    cycle = 1
+}
+
 AKYRS.HardcoreChallenge = SMODS.Challenge:extend {
     obj_table = AKYRS.HC_CHALLENGES,
     obj_buffer = {},

@@ -403,3 +403,10 @@ SMODS.current_mod.config_tab = function ()
     }
   }
 end
+
+  
+G.FUNCS.akyrs_letter_dialog = function(e)
+  G.FUNCS.overlay_menu{
+    definition = create_UIBox_options(),
+  }
+end

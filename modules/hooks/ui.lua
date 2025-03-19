@@ -145,24 +145,167 @@ function set_challenge_unlock()
 end
 
 G.FUNCS.akyrs_wildcard_check = function(e)
-    if e.config.ref_table.ability.aikoyori_letters_stickers == "#" then 
-        e.config.colour = G.C.RED
-        e.config.button = 'use_card'
+    G.FUNCS.set_button_pip(e)
+    local colour = G.C.GREEN
+    local button = nil
+    if e.config.ref_table.ability.aikoyori_letters_stickers == "#" then
+        button = 'akyrs_wildcard_open_wildcard_ui'
+        if not e.config.ref_table.ability.aikoyori_pretend_letter then
+            colour = AKYRS.config.wildcard_behaviour == 3 and SMODS.Gradients["akyrs_unset_letter"] or G.C.RED
+        elseif e.config.ref_table.ability.aikoyori_pretend_letter == "#" then
+            colour = G.C.YELLOW
+        end
     else
-        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-        e.config.button = nil
+        colour = G.C.UI.BACKGROUND_INACTIVE
+        button = nil
     end
+    e.config.button = button
+    e.config.colour = colour
 end
 
 G.FUNCS.akyrs_wildcard_open_wildcard_ui = function(e)
     if e.config.ref_table.ability.aikoyori_letters_stickers == "#" then 
-        print("SUCCESS!")
+        --print("SUCCESS!")
+        local card = e.config.ref_table
+        G.FUNCS.overlay_menu{
+            definition = AKYRS.UIDEF.wildcards_set_letter_ui(card)
+        }
+        --print(inspect(e.config.ref_table))
     else
-        print("FAILURE!")
+        
     end
 end
 
+
+G.FUNCS.akyrs_wildcard_set_letter_wildcard = function(e)
+    
+    local card = AKYRS.wildcard_current
+    card:flip()
+    G.E_MANAGER:add_event(
+        Event{
+            trigger = "before",
+            delay = 1.0,
+            func = function ()
+                delay(0.5)
+                card:flip()
+                play_sound('card1')
+                card:set_pretend_letters(AKYRS.wildcard_current_data.letter ~= "" and AKYRS.wildcard_current_data.letter or nil)
+                return true
+            end
+        }
+    )
+    card.area:remove_from_highlighted(card, true)
+    G.FUNCS.exit_overlay_menu()
+    AKYRS.wildcard_current = nil
+end
+
+G.FUNCS.akyrs_wildcard_set_letter_wildcard_auto = function(e)
+    
+    local card = AKYRS.wildcard_current
+    card:flip()
+    G.E_MANAGER:add_event(
+        Event{
+            trigger = "before",
+            delay = 1.0,
+            func = function ()
+                delay(0.5)
+                card:flip()
+                play_sound('card1')
+                card:set_pretend_letters("#")
+                card:highlight(false)
+                return true
+            end
+        }
+    )
+    card.area:remove_from_highlighted(card, true)
+    G.FUNCS.exit_overlay_menu()
+    AKYRS.wildcard_current = nil
+end
+
+G.FUNCS.akyrs_wildcard_quit_set_letter_wildcard_menu = function(e)
+    G.FUNCS.exit_overlay_menu()
+    AKYRS.wildcard_current = nil
+end
+
+
+function AKYRS.UIDEF.wildcards_set_letter_ui(card)
+    AKYRS.wildcard_current_data = { letter = card.ability.aikoyori_pretend_letter or "" }
+    AKYRS.wildcard_current = card
+    return create_UIBox_generic_options({
+        back_func = 'akyrs_wildcard_quit_set_letter_wildcard_menu',
+        contents = {
+                {
+                    n = G.UIT.R,
+                    config = { padding = 0.05,  w = 6, colour = G.C.CLEAR, align = 'cl' },
+                    nodes = {
+                        {
+                            n = G.UIT.R,
+                            config = { padding = 0.05, w = 4.5, align = 'cl' },
+                            nodes = {
+                                create_text_input({
+                                    w = 4.5,
+                                    h = 1,
+                                    max_length = 1,
+                                    extended_corpus = true, 
+                                    prompt_text = localize("k_akyrs_type_in_letter"),
+                                    ref_table = AKYRS.wildcard_current_data,
+                                    ref_value = "letter",
+                                    keyboard_offset = 4,
+                                })
+                            }
+                        },
+                        {
+                            n = G.UIT.R,
+                            config = { align = "cm" },
+                            nodes = {
+                                UIBox_button({
+                                    colour = G.C.GREEN,
+                                    button = "akyrs_wildcard_set_letter_wildcard",
+                                    label = { localize("k_akyrs_letter_btn_set") },
+                                    minw = 4.5,
+                                    func = 'set_button_pip',
+                                    focus_args = { button = 'leftshoulder', orientation = 'rm', snap_to = true },
+                                }),
+                            },
+                        },
+                        {
+                            n = G.UIT.R,
+                            config = { align = "cm" },
+                            nodes = {
+                                UIBox_button({
+                                    colour = G.C.YELLOW,
+                                    text_colour = G.C.BLACK,
+                                    func = 'set_button_pip',
+                                    button = "akyrs_wildcard_set_letter_wildcard_auto",
+                                    label = { localize("k_akyrs_letter_btn_auto") },
+                                    minw = 4.5,
+                                    focus_args = { button = 'rightshoulder', orientation = 'rm' ,snap_to = true },
+                                }),
+                            },
+                        },
+                    }
+                },
+            }
+        }
+    )
+end
+
 function AKYRS.UIDEF.wildcards_ui(card)
+    local colour = G.C.GREEN
+    local text_colour = G.C.UI.TEXT_LIGHT
+    local text = ""
+    if card.ability.aikoyori_letters_stickers == "#" then
+        if not card.ability.aikoyori_pretend_letter then
+            text = localize("k_akyrs_letter_btn_unset")
+            colour = AKYRS.config.wildcard_behaviour == 3 and SMODS.Gradients["akyrs_unset_letter"] or G.C.RED
+        elseif card.ability.aikoyori_pretend_letter == "#" then
+            text = localize("k_akyrs_letter_btn_auto")
+            colour = G.C.YELLOW
+            text_colour = G.C.UI.TEXT_DARK
+        else
+            text = localize("k_akyrs_letter_btn_set")
+        end
+    end
     if card.area and card.area == G.hand then
         return {
             n = G.UIT.ROOT,
@@ -183,9 +326,26 @@ function AKYRS.UIDEF.wildcards_ui(card)
                                     nodes = {
                                         {
                                             n = G.UIT.C,
-                                            config = { ref_table = card, align = "cl", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = 0, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = "akyrs_wildcard_open_wildcard_ui", func = 'akyrs_wildcard_check' },
+                                            config = { 
+                                                    ref_table = card, 
+                                                    align = "cl", 
+                                                    maxw = 1.25, 
+                                                    padding = 0.1, 
+                                                    r = 0.08, 
+                                                    minw = 1.9, 
+                                                    minh = 1, 
+                                                    hover = true, 
+                                                    shadow = true, 
+                                                    colour = colour, 
+                                                    button = "akyrs_wildcard_open_wildcard_ui", 
+                                                    func = 'akyrs_wildcard_check',
+                                                    focus_args = {
+                                                        button = 'leftshoulder', 
+                                                        orientation = 'bm',
+                                                    },
+                                                },
                                             nodes = {
-                                                { n = G.UIT.T, config = { text = "!", colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+                                                { n = G.UIT.T, config = { text = text, colour = text_colour, scale = 0.4, shadow = true } }
                                             }
                                         }
                                     }
@@ -212,9 +372,8 @@ function Card:highlight(is_higlighted)
             self.children.use_button = UIBox {
                 definition = AKYRS.UIDEF.wildcards_ui(self),
                 config = { align =
-                    "cl"
-                , offset =
-                    { x = 1, y = 0 } ,
+                    "cl",
+                    offset = { x = 1, y = 0 },
                     parent = self }
             }
         elseif self.children.use_button then
@@ -239,4 +398,26 @@ G.FUNCS.use_card = function (e,m,ns)
     local r = useCardHook(e,m,ns)
     return r
     
+end
+
+local canPlayHook = G.FUNCS.can_play
+G.FUNCS.can_play = function(e)
+    local hasUnsetLetters = false
+    if AKYRS.config.wildcard_behaviour == 2 and G.GAME.letters_enabled then
+        
+        for i,k in ipairs(G.hand.highlighted) do
+            if k.ability.aikoyori_letters_stickers == "#" and not k.ability.aikoyori_pretend_letter then
+                hasUnsetLetters = true
+                break
+            end
+        end
+        if hasUnsetLetters then
+            e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+            e.config.button = nil
+        else
+            return canPlayHook(e)
+        end
+    else
+        return canPlayHook(e)
+    end
 end

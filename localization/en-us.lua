@@ -710,16 +710,21 @@ return {
             b_akyrs_hc_challenges_full_txt = "Hardcore Challenges",
             k_akyrs_hardcore_challenge_difficulty = "Difficulty",
 
+            k_akyrs_type_in_letter = "Type in A letter",
+            k_akyrs_letter_btn_unset = "Unset",
+            k_akyrs_letter_btn_auto = "Auto",
+            k_akyrs_letter_btn_set = "Set",
+
             
             k_akyrs_wildcard_behaviours={
                 'Automatic',
-                'Warn on Unset',
+                'Force No Unset',
                 'Always Manual',
                 'Auto Set', 
             },
             k_akyrs_wildcard_behaviours_description={
                 {'Automatically find a letter for wildcards','which do not have letters set. (Default).'},
-                {'A warning will pop up when you are trying to','play Wildcards with no letters assigned.',} ,
+                {'The play button will be disabled','if you selected an unset wild card.',} ,
                 {'Wildcards do not have letter assigned to them by default.','When played, will not attempt to find letters.',} ,
                 {'Automatically find a letter for wildcard and','also set the letter automatically to the target if it is unset.',} 
             },

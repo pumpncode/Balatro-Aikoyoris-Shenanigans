@@ -27,6 +27,12 @@ function Card:set_letters(letter)
     self.ability.aikoyori_letters_stickers = letter
 end
 
+function Card:set_pretend_letters(letter)
+    if self.ability.aikoyori_letters_stickers == "#" then
+        self.ability.aikoyori_pretend_letter = letter
+    end
+end
+
 function Card:remove_letters()
     self.ability.aikoyori_letters_stickers = nil
 end
@@ -65,17 +71,20 @@ function AKYRS.aikoyori_draw_extras(card, layer)
                 letter_to_render = card.ability.aikoyori_pretend_letter
                 tint = true
             end
-            AKYRS.aikoyori_letters_stickers[letter_to_render].role.draw_major = card
-            AKYRS.aikoyori_letters_stickers[letter_to_render].VT = card.VT
-            AKYRS.aikoyori_letters_stickers[letter_to_render]:draw_shader('dissolve', 0, nil, nil,
-                card.children.center, 0.1, nil, nil, nil)
-            if tint then
-                AKYRS.aikoyori_letters_stickers[letter_to_render]:draw_shader('akyrs_magenta_tint', nil, nil, nil,
-                    card.children.center, nil, nil, nil, -0.02 + movement_mod * 0.9, nil)
-            else 
-                AKYRS.aikoyori_letters_stickers[letter_to_render]:draw_shader('dissolve', nil, nil, nil,
-                    card.children.center, nil, nil, nil, -0.02 + movement_mod * 0.9, nil)
+            if AKYRS.aikoyori_letters_stickers[letter_to_render] then
+                AKYRS.aikoyori_letters_stickers[letter_to_render].role.draw_major = card
+                AKYRS.aikoyori_letters_stickers[letter_to_render].VT = card.VT
+                AKYRS.aikoyori_letters_stickers[letter_to_render]:draw_shader('dissolve', 0, nil, nil,
+                    card.children.center, 0.1, nil, nil, nil)
+                if tint then
+                    AKYRS.aikoyori_letters_stickers[letter_to_render]:draw_shader('akyrs_magenta_tint', nil, nil, nil,
+                        card.children.center, nil, nil, nil, -0.02 + movement_mod * 0.9, nil)
+                else 
+                    AKYRS.aikoyori_letters_stickers[letter_to_render]:draw_shader('dissolve', nil, nil, nil,
+                        card.children.center, nil, nil, nil, -0.02 + movement_mod * 0.9, nil)
+                end
             end
+
         end
     end
 end

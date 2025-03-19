@@ -624,6 +624,7 @@ return {
 
             lettersWild = {name = 'Wild Card',text = { '{C:mult}No Extra{} Mult'},},
             xlettersWild = {name = 'Wild Card',text = { '{C:white,X:mult}No Extra{} XMult'},},
+            lettersWildSet = {name = 'Wild Card',text = { 'Able to be set to specific letter'},},
             letterNotScored = {name = '',text = { 'Allows Words','to be played'},},
             letterNotScoredSymbols = {name = '',text = { 'Allows Words','to be played?'},},
             letterNotScoredNumbers = {name = '',text = { 'Allows Numerical','value to be played?'},},
@@ -725,7 +726,7 @@ return {
             k_akyrs_wildcard_behaviours_description={
                 {'Automatically find a letter for wildcards','which do not have letters set. (Default).'},
                 {'The play button will be disabled','if you selected an unset wild card.',} ,
-                {'Wildcards do not have letter assigned to them by default.','When played, will not attempt to find letters.',} ,
+                {'Wildcards do not have letter assigned to them by default.','When played, will not attempt to find letters. (Can help with performance)',} ,
                 {'Automatically find a letter for wildcard and','also set the letter automatically to the target if it is unset.',} 
             },
         },

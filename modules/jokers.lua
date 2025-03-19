@@ -467,9 +467,9 @@ SMODS.Joker {
             base_mult = 15,
             base_Xmult = 1.15,
             gain_chips = 15,
-            gain_Xchips = 0.15,
-            gain_mult = 1.5,
-            gain_Xmult = 0.15,
+            gain_Xchips = 1.5,
+            gain_mult = 5,
+            gain_Xmult = 0.1,
         }
     },
     calculate = function(self, card, context)

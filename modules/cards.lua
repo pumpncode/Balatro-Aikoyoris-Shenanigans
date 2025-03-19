@@ -24,13 +24,15 @@ SMODS.Back{
     pos = {x = 0, y = 0},
     loc_vars = function (self, info_queue, card)
         return { vars = {
-            self.config.ante_scaling
+            self.config.ante_scaling,
+            self.config.discards
         } }
     end,
     config = {
         all_nulls = true,
         starting_deck_size = 100,
         selection = 1e100,
+        discards = 2,
         special_hook = true,
         letters_enabled = true,
         letters_mult_enabled = true,

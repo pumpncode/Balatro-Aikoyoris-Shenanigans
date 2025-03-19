@@ -12,6 +12,7 @@ return {
                         "Play {C:playable}as many{} cards", 
                         "as you want per hand",
                         "{C:red}X#1#{} base Blind Size",
+                        "{C:red}+#2#{} Discards",
                     },
             },
             b_akyrs_hardcore_challenges={

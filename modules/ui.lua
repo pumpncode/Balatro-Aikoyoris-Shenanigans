@@ -310,47 +310,96 @@ end
 AKYRS.save_config = function(e)
   local status, err = pcall(SMODS.save_mod_config,AKYRS)
   if status == false then
-      sendErrorMessage("Failed to perform a manual mod config save.", 'SystemClock')
+      sendErrorMessage("Failed to perform a manual mod config save.", 'Aikoyori\'s Shenanigans') -- sorry 
   end
 end
 
 G.FUNCS.akyrs_change_wildcard_behaviour = function (e)
   AKYRS.config.wildcard_behaviour = e.to_key
   AKYRS.save_config(e)
+  AKYRS.config_dyna_desc_txt_1 = localize('k_akyrs_wildcard_behaviours_description')[AKYRS.config.wildcard_behaviour][1]
+  AKYRS.config_dyna_desc_txt_2 = localize('k_akyrs_wildcard_behaviours_description')[AKYRS.config.wildcard_behaviour][2]
+  AKYRS.config_wildcard_desc_dyna_1:update_text(true)
+  AKYRS.config_wildcard_desc_dyna_1:update()
+  AKYRS.config_wildcard_desc_dyna_2:update_text(true)
+  AKYRS.config_wildcard_desc_dyna_2:update()
 end
 
-
 SMODS.current_mod.config_tab = function ()
-  return {
-    n = G.UIT.ROOT, config = { minw = 10, minh = 6 ,align = "tm", r = 0.1 },
-    nodes = {
-    { n = G.UIT.R, config = { colour = G.C.UI.TRANSPARENT_DARK}, nodes = {
-      { n = G.UIT.C, config = {
-        align = "cm", padding = 0.2,
-      }, nodes = {
-        {n = G.UIT.T, config = {
-          text = "Wildcards Behaviour",
-          scale = 0.5,
-          colour = G.C.UI.TEXT_LIGHT
-        }}
-        }
-      },          
-      { n = G.UIT.C, config = {
-        align = "cm", padding = 0.2,
-      }, nodes = {
-          create_option_cycle({
-            options = localize('k_akyrs_wildcard_behaviours'),
-            scale = 0.7,
-            w = 4.5,
-            opt_callback = "akyrs_change_wildcard_behaviour",
-            ref_table = AKYRS.config,
-            ref_value = "wildcard_behaviour"
-
-          })
-        }
-      },        
-
-    } }
+  AKYRS.config_dyna_desc_txt_1 = localize('k_akyrs_wildcard_behaviours_description')[AKYRS.config.wildcard_behaviour][1]
+  AKYRS.config_dyna_desc_txt_2 = localize('k_akyrs_wildcard_behaviours_description')[AKYRS.config.wildcard_behaviour][2]
+  AKYRS.config_wildcard_desc_dyna_1 = DynaText{
+    scale = 0.4,
+    colours = {G.C.UI.TEXT_INACTIVE},
+    string = {{ref_table = AKYRS ,ref_value = "config_dyna_desc_txt_1"}},
+    shadow = true, float = true, silent = true
+  }  
+  AKYRS.config_wildcard_desc_dyna_2 = DynaText{
+    scale = 0.4,
+    colours = {G.C.UI.TEXT_INACTIVE},
+    string = {{ref_table = AKYRS ,ref_value = "config_dyna_desc_txt_2"}},
+    shadow = true, float = true, silent = true
   }
+  return {
+    n = G.UIT.ROOT, config = { minw = 18, minh = 6 ,align = "tm", r = 0.1 },
+      nodes = {
+        { n = G.UIT.R, config = { colour = G.C.UI.TRANSPARENT_DARK ,align = "tm"}, nodes = {
+          { n = G.UIT.C, config = {
+            align = "cm", padding = 0.2,
+          }, nodes = {
+            {n = G.UIT.T, config = {
+              text = "Wildcards Behaviour",
+              scale = 0.5,
+              colour = G.C.UI.TEXT_LIGHT
+            }}
+            }
+          },          
+          { n = G.UIT.C, config = {
+            align = "cm", padding = 0.2,
+            id = "akyrs_wildcard_behaviour_desc_dyna"
+          }, nodes = {
+              create_option_cycle({
+                options = localize('k_akyrs_wildcard_behaviours'),
+                scale = 0.7,
+                w = 4.5,
+                current_option = AKYRS.config.wildcard_behaviour,
+                opt_callback = "akyrs_change_wildcard_behaviour",
+                ref_table = AKYRS.config,
+                ref_value = "wildcard_behaviour"
+
+              })
+            }
+          },       
+        } 
+      },
+      {
+        n = G.UIT.R,{
+          align = "cm", padding = 0.2,
+        },
+        nodes = {
+          {
+            n = G.UIT.O,
+            config = {
+              align = "cm",
+              object = AKYRS.config_wildcard_desc_dyna_1
+            }
+          }
+        }
+      },
+      {
+        n = G.UIT.R,{
+          align = "cm", padding = 0.2,
+        },
+        nodes = {
+          {
+            n = G.UIT.O,
+            config = {
+              align = "cm",
+              object = AKYRS.config_wildcard_desc_dyna_2
+            }
+          }
+        }
+      },
+    }
   }
 end

@@ -712,11 +712,16 @@ return {
 
             
             k_akyrs_wildcard_behaviours={
-                'Always Manual', 
-                'Warn on Unset', 
-                'Unset does Nothing', 
-                'Automatic set Unset', 
-                'Always Automatic'
+                'Automatic',
+                'Warn on Unset',
+                'Always Manual',
+                'Auto Set', 
+            },
+            k_akyrs_wildcard_behaviours_description={
+                {'Automatically find a letter for wildcards','which do not have letters set. (Default).'},
+                {'A warning will pop up when you are trying to','play Wildcards with no letters assigned.',} ,
+                {'Wildcards do not have letter assigned to them by default.','When played, will not attempt to find letters.',} ,
+                {'Automatically find a letter for wildcard and','also set the letter automatically to the target if it is unset.',} 
             },
         },
         high_scores={},

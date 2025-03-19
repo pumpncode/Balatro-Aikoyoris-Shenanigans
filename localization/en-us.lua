@@ -240,7 +240,7 @@ return {
                     "Gives value listed",
                     "if played hand sum does not exceed {C:attention}#1#{}",
                     "Joker gain the value listed",
-                    "When a {C:planet}Planet{} card is used",
+                    "When a {C:tarot,T:c_wheel_of_fortune}Wheel of Fortune{} is used",
                 }
             },
             j_akyrs_yona_yona_dance = {

@@ -467,9 +467,9 @@ SMODS.Joker {
             base_mult = 15,
             base_Xmult = 1.15,
             gain_chips = 15,
-            gain_Xchips = 0.15,
+            gain_Xchips = 0.05,
             gain_mult = 5,
-            gain_Xmult = 0.1,
+            gain_Xmult = 0.05,
         }
     },
     calculate = function(self, card, context)
@@ -493,7 +493,7 @@ SMODS.Joker {
 
         end		
         if context.using_consumeable then
-            if context.consumeable.ability.set == 'Planet' then
+            if context.consumeable.key == 'c_wheel_of_fortune' then
                 card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.gain_chips 
                 card.ability.extra.Xchips = card.ability.extra.Xchips + card.ability.extra.gain_Xchips 
                 card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.gain_mult 

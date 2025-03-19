@@ -61,7 +61,7 @@ function AKYRS.aikoyori_draw_extras(card, layer)
             end
             local letter_to_render = card.ability.aikoyori_letters_stickers
             local tint = false
-            if (card.ability.aikoyori_letters_stickers == "#" and card.ability.aikoyori_pretend_letter) then
+            if (card.ability.aikoyori_letters_stickers == "#" and card.ability.aikoyori_pretend_letter) and AKYRS.aikoyori_letters_stickers[letter_to_render] then
                 letter_to_render = card.ability.aikoyori_pretend_letter
                 tint = true
             end

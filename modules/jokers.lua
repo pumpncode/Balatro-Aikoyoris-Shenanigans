@@ -1010,3 +1010,8 @@ AKYRS.LetterJoker {
     end,
     blueprint_compat = true,
 }
+--[[
+SMODS.Joker{
+    key = "centrifuge"
+}
+]]

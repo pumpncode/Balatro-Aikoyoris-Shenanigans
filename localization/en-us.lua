@@ -86,6 +86,13 @@ return {
                     "debuffed",
                 }
             },
+            bl_akyrs_final_lilac_lasso = {
+                name = "Lilac Lasso",
+                text = {
+                    "All but #1# Jokers randomly",
+                    "debuffed every hand",
+                }
+            },
         },
         DescriptionDummy={
             dd_akyrs_maxwell_example={

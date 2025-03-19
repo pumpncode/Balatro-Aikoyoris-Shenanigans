@@ -111,7 +111,8 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "functions/UI_definitions.lua"
-pattern = """            } or nil,"""
+pattern = """              chosen = _challenge_chosen
+            } or nil,"""
 position = "at"
 payload = """            } or {
               label = localize('b_akyrs_hc_challenges'),

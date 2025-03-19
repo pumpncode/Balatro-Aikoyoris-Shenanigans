@@ -483,3 +483,67 @@ SMODS.Blind {
         end
     end
 }
+SMODS.Blind {
+    key = "final_lilac_lasso",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('973fd5'),
+    debuff = {
+        jokers_not_debuffed = 4,
+    },
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10, showdown = true},
+    pos = { x = 0, y = 13 },
+    
+    loc_vars = function (self)
+        return {
+            vars = { self.debuff.jokers_not_debuffed }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = { 4 }
+        }
+    end,
+    set_blind =function (self)
+        self.prepped = true
+    end,
+    drawn_to_hand = function (self)
+        if self.prepped and G.jokers.cards[1] then
+            local jokers = {}
+            for i = 1, #G.jokers.cards do
+                G.jokers.cards[i]:set_debuff(false)
+                jokers[#jokers+1] = G.jokers.cards[i] 
+            end 
+            for i = 1, (self.debuff.jokers_not_debuffed or 4) do
+                if #jokers == 0 then break end
+                local _card = pseudorandom_element(jokers, pseudoseed('lilac_lasso'))
+                for l,j in ipairs(jokers) do
+                    if j == _card then
+                        table.remove(jokers, l)
+                        break
+                    end
+                end
+            end 
+            
+            for i, jkr in ipairs(jokers) do
+                jkr:set_debuff(true)
+            end
+        end
+        self.prepped = nil
+        
+    end,
+    press_play =function (self)
+        if G.jokers.cards[1] then
+            self.triggered = true
+            self.prepped = true
+        end
+    end,
+    disable = function (self)
+        
+        for i = 1, #G.jokers.cards do
+            G.jokers.cards[i]:set_debuff(true)
+        end 
+    end
+}

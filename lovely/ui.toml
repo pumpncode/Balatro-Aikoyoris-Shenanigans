@@ -124,6 +124,8 @@ end
 overwrite = true
 match_indent = true
 
+
+
 [[patches]]
 [patches.pattern]
 target = "functions/UI_definitions.lua"
@@ -135,3 +137,30 @@ payload = """
 """
 overwrite = true
 match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "engine/controller.lua"
+pattern = """caps = self.held_keys["lshift"] or self.held_keys["rshift"]"""
+position = "at"
+payload = """
+caps = AKYRS.shift_toggled or self.held_keys["lshift"] or self.held_keys["rshift"]
+"""
+overwrite = true
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "engine/node.lua"
+pattern = """            love.graphics.setLineWidth(3)"""
+position = "at"
+payload = """
+            love.graphics.setLineWidth(1)
+"""
+overwrite = true
+match_indent = true
+

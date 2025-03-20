@@ -6,4 +6,6 @@ Filtered using the Profanity List here : https://github.com/dsojevic/profanity-l
 
 Maxwell's Notebook sprite by larantula_l on Discord
 
-Assets (Music/Sounds/Graphics/etc.) are licensed under CC-BY-NC-SA 4.0, Code is licensed under GPL v3
+Art in guestJokerArts.png is copyrighted by and belong to their respective owners and I was given permission to use these.
+
+Assets (Music/Sounds/Graphics/etc.) unless stated otherwise are licensed under CC-BY-NC-SA 4.0, Code is licensed under GPL v3

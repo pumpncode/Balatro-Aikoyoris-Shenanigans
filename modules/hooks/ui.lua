@@ -183,20 +183,20 @@ G.FUNCS.akyrs_wildcard_set_letter_wildcard = function(e)
     card:flip()
     G.E_MANAGER:add_event(
         Event{
-            trigger = "before",
-            delay = 1.0,
+            trigger = "after",
+            delay = AKYRS.get_speed_mult(card) * 0.5,
             func = function ()
-                delay(0.5)
+                delay(AKYRS.get_speed_mult(card) * 0.5)
                 card:flip()
                 play_sound('card1')
                 card:set_pretend_letters(AKYRS.wildcard_current_data.letter ~= "" and AKYRS.wildcard_current_data.letter or nil)
+                card.area:remove_from_highlighted(card, true)
+                AKYRS.wildcard_current = nil
                 return true
             end
         }
     )
-    card.area:remove_from_highlighted(card, true)
     G.FUNCS.exit_overlay_menu()
-    AKYRS.wildcard_current = nil
 end
 
 G.FUNCS.akyrs_wildcard_set_letter_wildcard_auto = function(e)
@@ -205,21 +205,22 @@ G.FUNCS.akyrs_wildcard_set_letter_wildcard_auto = function(e)
     card:flip()
     G.E_MANAGER:add_event(
         Event{
-            trigger = "before",
-            delay = 1.0,
+            trigger = "after",
+            delay = AKYRS.get_speed_mult(card) * 0.5,
             func = function ()
-                delay(0.5)
+                delay(AKYRS.get_speed_mult(card) * 0.5)
                 card:flip()
                 play_sound('card1')
                 card:set_pretend_letters("#")
                 card:highlight(false)
+                card.area:remove_from_highlighted(card, true)
+                AKYRS.wildcard_current = nil
                 return true
             end
         }
     )
     card.area:remove_from_highlighted(card, true)
     G.FUNCS.exit_overlay_menu()
-    AKYRS.wildcard_current = nil
 end
     
 G.FUNCS.akyrs_wildcard_unset_letter_wildcard = function(e)
@@ -228,21 +229,43 @@ G.FUNCS.akyrs_wildcard_unset_letter_wildcard = function(e)
     card:flip()
     G.E_MANAGER:add_event(
         Event{
-            trigger = "before",
-            delay = 1.0,
+            trigger = "after",
+            delay = AKYRS.get_speed_mult(card) * 0.5,
             func = function ()
-                delay(0.5)
+                delay(AKYRS.get_speed_mult(card) * 0.5)
                 card:flip()
                 play_sound('card1')
                 card:set_pretend_letters(nil)
                 card:highlight(false)
+                card.area:remove_from_highlighted(card, true)
+                AKYRS.wildcard_current = nil
                 return true
             end
         }
     )
-    card.area:remove_from_highlighted(card, true)
     G.FUNCS.exit_overlay_menu()
-    AKYRS.wildcard_current = nil
+end
+G.FUNCS.akyrs_wildcard_switch_case_letter_wildcard = function(e)
+    
+    local card = AKYRS.wildcard_current
+    card:flip()
+    G.E_MANAGER:add_event(
+        Event{
+            trigger = "after",
+            delay = AKYRS.get_speed_mult(card) * 0.5,
+            func = function ()
+                delay(AKYRS.get_speed_mult(card) * 0.5)
+                card:flip()
+                play_sound('card1')
+                card:set_pretend_letters(AKYRS.swap_case(card.ability.aikoyori_pretend_letter))
+                card:highlight(false)
+                card.area:remove_from_highlighted(card, true)
+                AKYRS.wildcard_current = nil
+                return true
+            end
+        }
+    )
+    G.FUNCS.exit_overlay_menu()
 end
 
 G.FUNCS.akyrs_wildcard_quit_set_letter_wildcard_menu = function(e)
@@ -265,60 +288,64 @@ function AKYRS.UIDEF.wildcards_set_letter_ui(card)
                             n = G.UIT.R,
                             config = { padding = 0.05, w = 4.5, align = 'cm' },
                             nodes = {
-                                create_text_input({
+                                AKYRS.create_better_text_input({
                                     w = 4.5,
                                     h = 1,
-                                    max_length = 1,
+                                    max_length = 1, 
                                     extended_corpus = true, 
                                     prompt_text = localize("k_akyrs_type_in_letter"),
                                     ref_table = AKYRS.wildcard_current_data,
                                     current_prompt_text = AKYRS.wildcard_current_data.letter,
                                     ref_value = "letter",
-                                    keyboard_offset = 4,
+                                    keyboard_offset = 4.5,
                                 })
                             }
                         },
                         {
                             n = G.UIT.R,
-                            config = { align = "cm" },
+                            config = { align = "cm", padding = 0.1 },
                             nodes = {
-                                UIBox_button({
-                                    colour = G.C.GREEN,
-                                    button = "akyrs_wildcard_set_letter_wildcard",
-                                    label = { localize("k_akyrs_letter_btn_set") },
-                                    minw = 4.5,
-                                    func = 'set_button_pip',
-                                    focus_args = { button = 'leftshoulder', orientation = 'rm', snap_to = true },
-                                }),
-                            },
-                        },
-                        {
-                            n = G.UIT.R,
-                            config = { align = "cm" },
-                            nodes = {
-                                UIBox_button({
-                                    colour = G.C.YELLOW,
-                                    text_colour = G.C.BLACK,
-                                    func = 'set_button_pip',
-                                    button = "akyrs_wildcard_set_letter_wildcard_auto",
-                                    label = { localize("k_akyrs_letter_btn_auto") },
-                                    minw = 4.5,
-                                    focus_args = { button = 'rightshoulder', orientation = 'rm' ,snap_to = true },
-                                }),
-                            },
-                        },
-                        {
-                            n = G.UIT.R,
-                            config = { align = "cm" },
-                            nodes = {
-                                UIBox_button({
-                                    colour = G.C.RED,
-                                    text_colour = G.C.WHITE,
-                                    button = "akyrs_wildcard_unset_letter_wildcard",
-                                    label = { localize("k_akyrs_letter_btn_unset") },
-                                    minw = 4.5,
-                                    focus_args = { snap_to = true },
-                                }),
+                                {
+                                    n = G.UIT.C,
+                                    config = { align = "cm" },
+                                    nodes = {
+                                        UIBox_button({
+                                            colour = G.C.GREEN,
+                                            button = "akyrs_wildcard_set_letter_wildcard",
+                                            label = { localize("k_akyrs_letter_btn_set") },
+                                            minw = 2.5,
+                                            focus_args = { set_button_pip = true, button = 'leftshoulder', orientation = 'rm'},
+                                        }),
+                                    },
+                                },
+                                {
+                                    n = G.UIT.C,
+                                    config = { align = "cm" },
+                                    nodes = {
+                                        UIBox_button({
+                                            colour = G.C.YELLOW,
+                                            text_colour = G.C.UI.TEXT_DARK,
+                                            button = "akyrs_wildcard_set_letter_wildcard_auto",
+                                            label = { localize("k_akyrs_letter_btn_auto") },
+                                            minw = 2.5,
+                                            focus_args = { set_button_pip = true, button = 'rightshoulder', orientation = 'rm', snap_to = true },
+                                        }),
+                                    },
+                                },
+                                {
+                                    n = G.UIT.C,
+                                    config = { align = "cm" },
+                                    nodes = {
+                                        UIBox_button({
+                                            colour = G.C.RED,
+                                            text_colour = G.C.WHITE,
+                                            button = "akyrs_wildcard_unset_letter_wildcard",
+                                            label = { localize("k_akyrs_letter_btn_unset") },
+                                            minw = 2.5,
+                                            focus_args = {},
+                                        }),
+                                    },
+                                },
                             },
                         },
                         {
@@ -399,16 +426,11 @@ function AKYRS.UIDEF.wildcards_ui(card)
                                                     padding = 0.1, 
                                                     r = 0.08, 
                                                     minw = 1.9, 
-                                                    minh = 1, 
+                                                    minh = 1.5, 
                                                     hover = true, 
                                                     shadow = true, 
                                                     colour = colour, 
                                                     button = "akyrs_wildcard_open_wildcard_ui", 
-                                                    func = 'akyrs_wildcard_check',
-                                                    focus_args = {
-                                                        button = 'leftshoulder', 
-                                                        orientation = 'bm',
-                                                    },
                                                 },
                                             nodes = {
                                                 {
@@ -420,7 +442,11 @@ function AKYRS.UIDEF.wildcards_ui(card)
                                                 {
                                                     n = G.UIT.R,
                                                     nodes = {
-                                                        { n = G.UIT.T, config = { text = text, colour = text_colour, scale = 0.6, shadow = true } },
+                                                        { n = G.UIT.T, config = { text = text, colour = text_colour, scale = 0.6, shadow = true, func = 'set_button_pip', 
+                                                            focus_args = {
+                                                            button = 'leftshoulder', 
+                                                            orientation = 'bm',
+                                                        }, } },
                                                     }
                                                 },
                                             }
@@ -450,7 +476,7 @@ function Card:highlight(is_higlighted)
                 definition = AKYRS.UIDEF.wildcards_ui(self),
                 config = { align =
                     "cl",
-                    offset = { x = 1, y = -0.25 },
+                    offset = { x = 1, y = -0.75 },
                     parent = self }
             }
         elseif self.children.use_button then

@@ -929,9 +929,9 @@ SMODS.Joker{
 
 -- maxwell's notebook
 AKYRS.LetterJoker {
-    atlas = 'AikoyoriJokers',
+    atlas = 'guestJokerArts',
     pos = {
-        x = 6,
+        x = 0,
         y = 0
     },
     key = "maxwells_notebook",
@@ -1036,5 +1036,26 @@ SMODS.Joker{
             
         end
     end
+
+}
+
+AKYRS.LetterJoker{
+    atlas = 'AikoyoriJokers',
+    key = "henohenomoheji",
+    pos = {
+        x = 6, y = 0
+    },
+    rarity = 1,
+    cost = 2,
+    config = {
+        name = "Henohenomoheji",
+        extra = {
+            rank_delta = 1
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        return {
+        }
+    end,
 
 }

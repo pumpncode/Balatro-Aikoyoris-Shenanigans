@@ -104,6 +104,14 @@ function Card:stop_drag()
     return c
 end
 
+function Card:get_letter_with_pretend()
+    local letter = self.ability.aikoyori_letters_stickers
+    if letter == "#" and self.ability.aikoyori_pretend_letter and self.ability.aikoyori_pretend_letter ~= '' then
+        letter = self.ability.aikoyori_pretend_letter
+    end
+    return letter
+end
+
 local getChipBonusHook = Card.get_chip_bonus
 function Card:get_chip_bonus()
     if self.is_null then self.base.nominal = 0 end
@@ -167,6 +175,14 @@ end
 
 local isFaceHook = Card.is_face
 function Card:is_face(from_boss)
+    if find_joker("Henohenomoheji") then
+        if 
+        self:get_letter_with_pretend():lower() == "j" or 
+        self:get_letter_with_pretend():lower() == "q" or 
+        self:get_letter_with_pretend():lower() == "k" then
+            return true
+        end
+    end
     if self.is_null and not next(find_joker("Pareidolia")) then return false end
     local c = isFaceHook(self, from_boss)
     return c

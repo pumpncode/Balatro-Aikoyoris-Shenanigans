@@ -328,14 +328,22 @@ return {
             j_akyrs_centrifuge = {
                 name = "[WIP] Centrifuge",
                 text = { 
-                    "First and Last cards {C:attention}+#1#{} Rank",
+                    "If at least {C:attention}3{} cards were played",
+                    "First and last card {C:attention}+#1#{} Rank",
                     "all other cards {C:attention}-#1#{} Rank",
+                }
+            },
+            j_akyrs_henohenomoheji = {
+                name = "Henohenomoheji",
+                text = { 
+                    "Cards with Letter {C:attention}K{},{C:attention}Q{}, and {C:attention}J",
+                    "are considered {C:attention}Face{} Cards",
                 }
             },
         },
         Other={
             akyrs_self_destructs={
-                name="Self Destructs",
+                name="Self-Destructive",
                 text={
                     "{C:red}Self-Destructs{} at ",
                     "the end of the round",
@@ -731,6 +739,7 @@ return {
             k_akyrs_letter_btn_unset = "Unset",
             k_akyrs_letter_btn_auto = "Auto",
             k_akyrs_letter_btn_set = "Set",
+            k_akyrs_letter_btn_swap_case = "Swap Case",
 
             k_akyrs_textbox_notice = "Due to how the game works, you'll have to",
             k_akyrs_textbox_notice_2 = "interact with the textbox for text to show up",
@@ -750,7 +759,7 @@ return {
         },
         high_scores={},
         labels={
-            akyrs_self_destructs="Self Destructs",
+            akyrs_self_destructs="Self-Destructive",
             akyrs_debuff_seal="Seal-Debuffed",
             akyrs_texelated = "Texelated",
             akyrs_noire = "Noire",

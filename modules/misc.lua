@@ -577,3 +577,53 @@ AKYRS.crypternity = function (e)
     end
     return e
 end
+
+AKYRS.swap_case = function (word)
+    if not word then return nil end
+    local swapped = ""
+    for i = 1, #word do
+        local c = word:sub(i, i)
+        if c:match("%l") then
+            swapped = swapped .. c:upper()
+        elseif c:match("%u") then
+            swapped = swapped .. c:lower()
+        else
+            swapped = swapped .. c
+        end
+    end
+    return swapped
+end
+
+local uppercaser = {
+    ["`"] = "~",
+    ["1"] = "!",
+    ["2"] = "@",
+    ["3"] = "#",
+    ["4"] = "$",
+    ["5"] = "%",
+    ["6"] = "^",
+    ["7"] = "&",
+    ["8"] = "*",
+    ["9"] = "(",
+    ["0"] = ")",
+    ["-"] = "_",
+    ["="] = "+",
+    [";"] = ":",
+    ["'"] = '"',
+    [","] = "<",
+    ["."] = ">",
+    ["/"] = "?",
+    ["\\"] = "|",
+    ["["] = "{",
+    ["]"] = "}",
+}
+
+function AKYRS.get_shifted_from_key(key)
+    local k = key
+    if key and uppercaser[key] then 
+        k = uppercaser[key]
+    elseif string.upper(key) ~= key then
+        k = string.upper(key)
+    end
+    return k
+end

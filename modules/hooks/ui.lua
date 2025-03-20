@@ -221,6 +221,29 @@ G.FUNCS.akyrs_wildcard_set_letter_wildcard_auto = function(e)
     G.FUNCS.exit_overlay_menu()
     AKYRS.wildcard_current = nil
 end
+    
+G.FUNCS.akyrs_wildcard_unset_letter_wildcard = function(e)
+    
+    local card = AKYRS.wildcard_current
+    card:flip()
+    G.E_MANAGER:add_event(
+        Event{
+            trigger = "before",
+            delay = 1.0,
+            func = function ()
+                delay(0.5)
+                card:flip()
+                play_sound('card1')
+                card:set_pretend_letters(nil)
+                card:highlight(false)
+                return true
+            end
+        }
+    )
+    card.area:remove_from_highlighted(card, true)
+    G.FUNCS.exit_overlay_menu()
+    AKYRS.wildcard_current = nil
+end
 
 G.FUNCS.akyrs_wildcard_quit_set_letter_wildcard_menu = function(e)
     G.FUNCS.exit_overlay_menu()
@@ -236,11 +259,11 @@ function AKYRS.UIDEF.wildcards_set_letter_ui(card)
         contents = {
                 {
                     n = G.UIT.R,
-                    config = { padding = 0.05,  w = 6, colour = G.C.CLEAR, align = 'cl' },
+                    config = { padding = 0.05,  w = 6, colour = G.C.CLEAR, align = 'cm' },
                     nodes = {
                         {
                             n = G.UIT.R,
-                            config = { padding = 0.05, w = 4.5, align = 'cl' },
+                            config = { padding = 0.05, w = 4.5, align = 'cm' },
                             nodes = {
                                 create_text_input({
                                     w = 4.5,
@@ -249,6 +272,7 @@ function AKYRS.UIDEF.wildcards_set_letter_ui(card)
                                     extended_corpus = true, 
                                     prompt_text = localize("k_akyrs_type_in_letter"),
                                     ref_table = AKYRS.wildcard_current_data,
+                                    current_prompt_text = AKYRS.wildcard_current_data.letter,
                                     ref_value = "letter",
                                     keyboard_offset = 4,
                                 })
@@ -282,6 +306,48 @@ function AKYRS.UIDEF.wildcards_set_letter_ui(card)
                                     focus_args = { button = 'rightshoulder', orientation = 'rm' ,snap_to = true },
                                 }),
                             },
+                        },
+                        {
+                            n = G.UIT.R,
+                            config = { align = "cm" },
+                            nodes = {
+                                UIBox_button({
+                                    colour = G.C.RED,
+                                    text_colour = G.C.WHITE,
+                                    button = "akyrs_wildcard_unset_letter_wildcard",
+                                    label = { localize("k_akyrs_letter_btn_unset") },
+                                    minw = 4.5,
+                                    focus_args = { snap_to = true },
+                                }),
+                            },
+                        },
+                        {
+                            n = G.UIT.R,
+                            config = { padding = 0.05, w = 4.5, align = 'cl' },
+                            nodes = {
+                                {
+                                    n = G.UIT.T,
+                                    config = {
+                                        colour = G.C.UI.TEXT_INACTIVE,
+                                        scale = 0.3,
+                                        text = localize("k_akyrs_textbox_notice")
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            n = G.UIT.R,
+                            config = { padding = 0.05, w = 4.5, align = 'cl' },
+                            nodes = {
+                                {
+                                    n = G.UIT.T,
+                                    config = {
+                                        colour = G.C.UI.TEXT_INACTIVE,
+                                        scale = 0.3,
+                                        text = localize("k_akyrs_textbox_notice_2")
+                                    }
+                                }
+                            }
                         },
                     }
                 },

@@ -250,6 +250,7 @@ AKYRS.picker_primed_action = function ()
         func = function ()
             G.GAME.blind.chips = G.GAME.blind.chips * G.GAME.blind.debuff.score_change
             G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+            G.HUD_blind:get_UIE_by_ID("HUD_blind_count"):juice_up()
             play_sound('timpani')
             return true
         end

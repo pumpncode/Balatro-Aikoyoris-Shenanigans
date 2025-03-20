@@ -724,6 +724,8 @@ return {
             k_akyrs_letter_btn_auto = "Auto",
             k_akyrs_letter_btn_set = "Set",
 
+            k_akyrs_textbox_notice = "Due to how the game works, you'll have to",
+            k_akyrs_textbox_notice_2 = "interact with the textbox for text to show up",
             
             k_akyrs_wildcard_behaviours={
                 'Automatic',

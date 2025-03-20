@@ -1,4 +1,7 @@
 AKYRS.Fonts = {}
+
+-- modified from https://github.com/Steamodded/smods/blob/main/src/game_object.lua
+
 AKYRS.Font = SMODS.GameObject:extend {
     obj_table = AKYRS.Fonts,
     obj_buffer = {},
@@ -18,7 +21,6 @@ AKYRS.Font = SMODS.GameObject:extend {
             sendWarnMessage(('Detected duplicate register call on object %s'):format(self.key), self.set)
             return
         end
-        -- needed for changing high contrast settings, apparently
         self.name = self.key
         AKYRS.Font.super.register(self)
     end,

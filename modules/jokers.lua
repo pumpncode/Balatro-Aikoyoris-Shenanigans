@@ -1010,8 +1010,19 @@ AKYRS.LetterJoker {
     end,
     blueprint_compat = true,
 }
---[[
+
 SMODS.Joker{
-    key = "centrifuge"
+    atlas = 'AikoyoriJokers',
+    key = "centrifuge",
+    pos = {
+        x = 0, y = 2
+    },
+    rarity = 1,
+    cost = 2,
+    calculate = function (self, card, context)
+        if context.after and context.cardarea == G.play then
+            
+        end
+    end
+
 }
-]]

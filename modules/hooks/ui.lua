@@ -411,7 +411,18 @@ function AKYRS.UIDEF.wildcards_ui(card)
                                                     },
                                                 },
                                             nodes = {
-                                                { n = G.UIT.T, config = { text = text, colour = text_colour, scale = 0.4, shadow = true } }
+                                                {
+                                                    n = G.UIT.R,
+                                                    nodes = {
+                                                        { n = G.UIT.T, config = { text = localize("k_akyrs_letter_btn_currently"), colour = text_colour, scale = 0.4, shadow = true } },
+                                                    }
+                                                },
+                                                {
+                                                    n = G.UIT.R,
+                                                    nodes = {
+                                                        { n = G.UIT.T, config = { text = text, colour = text_colour, scale = 0.6, shadow = true } },
+                                                    }
+                                                },
                                             }
                                         }
                                     }
@@ -439,7 +450,7 @@ function Card:highlight(is_higlighted)
                 definition = AKYRS.UIDEF.wildcards_ui(self),
                 config = { align =
                     "cl",
-                    offset = { x = 1, y = 0 },
+                    offset = { x = 1, y = -0.25 },
                     parent = self }
             }
         elseif self.children.use_button then

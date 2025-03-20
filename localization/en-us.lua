@@ -719,7 +719,8 @@ return {
             b_akyrs_hc_challenges_full_txt = "Hardcore Challenges",
             k_akyrs_hardcore_challenge_difficulty = "Difficulty",
 
-            k_akyrs_type_in_letter = "Type in A letter",
+            k_akyrs_type_in_letter = "Type in a letter",
+            k_akyrs_letter_btn_currently = "Currently",
             k_akyrs_letter_btn_unset = "Unset",
             k_akyrs_letter_btn_auto = "Auto",
             k_akyrs_letter_btn_set = "Set",

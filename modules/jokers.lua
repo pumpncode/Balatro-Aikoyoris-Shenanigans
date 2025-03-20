@@ -1019,6 +1019,18 @@ SMODS.Joker{
     },
     rarity = 1,
     cost = 2,
+    config = {
+        extra = {
+            rank_delta = 1
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.rank_delta
+            }
+        }
+    end,
     calculate = function (self, card, context)
         if context.after and context.cardarea == G.play then
             

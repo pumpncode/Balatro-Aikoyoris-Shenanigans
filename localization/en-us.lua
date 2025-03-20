@@ -325,6 +325,13 @@ return {
                     "{C:inactive}(Current Option : {C:white,X:dark_edition} #2# {C:inactive})"
                 }
             },
+            j_akyrs_centrifuge = {
+                name = "[WIP] Centrifuge",
+                text = { 
+                    "First and Last cards {C:attention}+#1#{} Rank",
+                    "all other cards {C:attention}-#1#{} Rank",
+                }
+            },
         },
         Other={
             akyrs_self_destructs={

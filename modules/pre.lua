@@ -28,3 +28,9 @@ AKYRS.DescriptionDummy = SMODS.Center:extend{
 AKYRS.C = {
     DARKER_TRANS = HEX('22222299')
 }
+
+SMODS.optional_features.cardareas.unscored = true
+SMODS.optional_features.retrigger_joker = true
+
+AKYRS.HC_CHALLENGES = {}
+AKYRS.UIDEF = {}

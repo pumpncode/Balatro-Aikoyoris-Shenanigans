@@ -584,11 +584,11 @@ SMODS.Joker {
     end,
     config = {
         extra = {
-            mult = 1
+            mult = 2
         },
     },
     calculate = function(self, card, context)
-        if context.joker_main or context.individual and not context.end_of_round then
+        if context.joker_main or context.individual and not context.end_of_round and (context.cardarea == G.hand or context.cardarea == G.play) then
             return {
                 mult = card.ability.extra.mult
             }

@@ -186,11 +186,11 @@ G.FUNCS.akyrs_wildcard_set_letter_wildcard = function(e)
             trigger = "after",
             delay = AKYRS.get_speed_mult(card) * 0.5,
             func = function ()
+                card.area:remove_from_highlighted(card, true)
                 delay(AKYRS.get_speed_mult(card) * 0.5)
                 card:flip()
                 play_sound('card1')
                 card:set_pretend_letters(AKYRS.wildcard_current_data.letter ~= "" and AKYRS.wildcard_current_data.letter or nil)
-                card.area:remove_from_highlighted(card, true)
                 AKYRS.wildcard_current = nil
                 return true
             end
@@ -208,12 +208,12 @@ G.FUNCS.akyrs_wildcard_set_letter_wildcard_auto = function(e)
             trigger = "after",
             delay = AKYRS.get_speed_mult(card) * 0.5,
             func = function ()
+                card.area:remove_from_highlighted(card, true)
                 delay(AKYRS.get_speed_mult(card) * 0.5)
                 card:flip()
                 play_sound('card1')
                 card:set_pretend_letters("#")
                 card:highlight(false)
-                card.area:remove_from_highlighted(card, true)
                 AKYRS.wildcard_current = nil
                 return true
             end
@@ -232,12 +232,12 @@ G.FUNCS.akyrs_wildcard_unset_letter_wildcard = function(e)
             trigger = "after",
             delay = AKYRS.get_speed_mult(card) * 0.5,
             func = function ()
+                card.area:remove_from_highlighted(card, true)
                 delay(AKYRS.get_speed_mult(card) * 0.5)
                 card:flip()
                 play_sound('card1')
                 card:set_pretend_letters(nil)
                 card:highlight(false)
-                card.area:remove_from_highlighted(card, true)
                 AKYRS.wildcard_current = nil
                 return true
             end
@@ -254,12 +254,12 @@ G.FUNCS.akyrs_wildcard_switch_case_letter_wildcard = function(e)
             trigger = "after",
             delay = AKYRS.get_speed_mult(card) * 0.5,
             func = function ()
+                card.area:remove_from_highlighted(card, true)
                 delay(AKYRS.get_speed_mult(card) * 0.5)
                 card:flip()
                 play_sound('card1')
                 card:set_pretend_letters(AKYRS.swap_case(card.ability.aikoyori_pretend_letter))
                 card:highlight(false)
-                card.area:remove_from_highlighted(card, true)
                 AKYRS.wildcard_current = nil
                 return true
             end

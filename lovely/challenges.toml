@@ -126,9 +126,7 @@ payload = """            } or {
               tab_definition_function_args = from_game_over,
               chosen = _challenge_chosen
             } or nil,
-            
-            
-            """
+"""
 overwrite = true
 match_indent = true
 

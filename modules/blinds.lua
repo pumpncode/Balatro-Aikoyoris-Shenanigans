@@ -568,3 +568,142 @@ SMODS.Blind {
         end 
     end
 }
+
+SMODS.Blind {
+    key = "forgotten_weights_of_the_past",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('60203f'),
+    debuff = {
+        ante_scaler = 2,
+        current_ante = nil,
+    },
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = -999999999999, max = 10},
+    pos = { x = 0, y = 14 },
+    
+    loc_vars = function (self)
+        return {
+            vars = { self.debuff.ante_scaler }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = { 2 }
+        }
+    end,
+    in_pool = function (self)
+        return G.GAME.round_resets.ante < 0  -- :3
+    end,
+    set_blind = function (self)
+        G.GAME.blind.debuff.current_ante = G.GAME.round_resets.ante
+    end,
+    calculate = function (self, blind, context)
+        if context.individual and context.cardarea == G.play and not context.repetition and not blind.disabled then
+            local old_ante = blind.debuff.current_ante
+            blind.debuff.current_ante = blind.debuff.current_ante*blind.debuff.ante_scaler
+            ease_ante(-old_ante + blind.debuff.current_ante)
+        end
+    end
+}
+SMODS.Blind {
+    key = "forgotten_prospects_of_the_future",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('2b664f'),
+    debuff = {
+        ante_scaler = 1,
+    },
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = -999999999999, max = 10},
+    pos = { x = 0, y = 15 },
+    
+    loc_vars = function (self)
+        return {
+            vars = { self.debuff.ante_scaler }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = { 1 }
+        }
+    end,
+    in_pool = function (self)
+        return G.GAME.round_resets.ante < 1  -- :3
+    end,
+    set_blind = function (self)
+        G.GAME.blind.debuff.current_ante = G.GAME.round_resets.ante
+    end,
+    calculate = function (self, blind, context)
+        if context.after and not blind.disabled then
+            ease_ante(blind.debuff.ante_scaler * #G.hand.cards)
+        end
+    end
+}
+SMODS.Blind {
+    key = "forgotten_uncertainties_of_life",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('2c5c6c'),
+    debuff = {
+        hand_shrinker = 1,
+    },
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = -999999999999, max = 10},
+    pos = { x = 0, y = 16 },
+    
+    loc_vars = function (self)
+        return {
+            vars = { self.debuff.hand_shrinker }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = { 1 }
+        }
+    end,
+    in_pool = function (self)
+        return G.GAME.round_resets.ante < 1  -- :3
+    end,
+    calculate = function (self, blind, context)
+        if context.after and not context.end_of_round and not blind.disabled then
+            G.hand:change_size(-blind.debuff.hand_shrinker)
+        end
+    end
+}
+
+SMODS.Blind {
+    key = "forgotten_inevitability_of_death",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('4d494b'),
+    debuff = {
+        discard_dealer = 1,
+    },
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = -999999999999, max = 10},
+    pos = { x = 0, y = 17 },
+    
+    loc_vars = function (self)
+        return {
+            vars = { self.debuff.discard_dealer }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = { 1 }
+        }
+    end,
+    in_pool = function (self)
+        return G.GAME.round_resets.ante < 1  -- :3
+    end,
+    calculate = function (self, blind, context)
+        if context.blind_defeated and not blind.disabled then
+            ease_dollars(-G.GAME.chips / G.GAME.blind.chips)
+        end
+    end
+}

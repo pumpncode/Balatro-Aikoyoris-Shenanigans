@@ -93,6 +93,31 @@ return {
                     "debuffed every hand",
                 }
             },
+            bl_akyrs_forgotten_weights_of_the_past = {
+                name = "Weights of the Past",
+                text = {
+                    "X#1# Ante per Card scored",
+                }
+            },
+            bl_akyrs_forgotten_prospects_of_the_future = {
+                name = "Prospects of the Future",
+                text = {
+                    "+#1# Ante per Card held in hand",
+                }
+            },
+            bl_akyrs_forgotten_uncertainties_of_life = {
+                name = "Uncertainties of Life",
+                text = {
+                    "-#1# hand size permanently after hand played",
+                }
+            },
+            bl_akyrs_forgotten_inevitability_of_death = {
+                name = "Inevitability of Death",
+                text = {
+                    "Lose money at the end of the round",
+                    "By Final Score divided by Blind Requirement"
+                }
+            },
         },
         DescriptionDummy={
             dd_akyrs_maxwell_example={

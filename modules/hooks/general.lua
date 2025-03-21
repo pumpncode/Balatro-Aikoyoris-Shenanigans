@@ -171,7 +171,7 @@ function EventManager:update(dt, forced)
                                 break
                             end
                         end
-                        if not isAlreadyInHighlighted then
+                        if not isAlreadyInHighlighted and #l.area.highlighted < l.area.config.highlighted_limit then
                             l:highlight(true)
                             l.area:add_to_highlighted(l)
                             l.ability.forced_selection = true

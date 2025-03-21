@@ -175,7 +175,7 @@ SMODS.Blind{
     mult = 2,
     boss_colour = HEX('a74ce8'),
     atlas = 'aikoyoriBlindsChips', 
-    boss = {min = 1, max = 10},
+    boss = {min = 3, max = 10},
     pos = { x = 0, y = 5 },
     debuff = {
         disable_chip_x = talismanCheck(3,3333,333,1e300)
@@ -299,7 +299,7 @@ SMODS.Blind{
     mult = 1.5,
     boss_colour = HEX('67e38b'),
     atlas = 'aikoyoriBlindsChips', 
-    boss = {min = 1, max = 10},
+    boss = {min = 2, max = 10},
     pos = { x = 0, y = 6 },
     debuff = {
         primed = false,
@@ -349,7 +349,7 @@ SMODS.Blind {
     mult = 0.5,
     boss_colour = HEX('36adff'),
     atlas = 'aikoyoriBlindsChips', 
-    boss = {min = 1, max = 10},
+    boss = {min = 3, max = 10},
     pos = { x = 0, y = 7 },
     debuff = {
         requirement_scale = 2
@@ -367,7 +367,7 @@ SMODS.Blind {
     mult = 2,
     boss_colour = HEX('ca60ff'),
     atlas = 'aikoyoriBlindsChips', 
-    boss = {min = 1, max = 10},
+    boss = {min = 2, max = 10},
     pos = { x = 0, y = 8 },
     set_blind = function (self)
         for i,k in ipairs(G.consumeables.cards) do
@@ -389,7 +389,7 @@ SMODS.Blind {
     mult = 2,
     boss_colour = HEX('3d8a55'),
     atlas = 'aikoyoriBlindsChips', 
-    boss = {min = 1, max = 10},
+    boss = {min = 4, max = 10},
     debuff = {
         dec_mult = 0.5,
         akyrs_score_face_with_my_dec_mult = true
@@ -417,7 +417,7 @@ SMODS.Blind {
         akyrs_perma_selection = true
     },
     atlas = 'aikoyoriBlindsChips', 
-    boss = {min = 1, max = 10},
+    boss = {min = 3, max = 10},
     pos = { x = 0, y = 12 },
     calculate = function (self, card, context)
         

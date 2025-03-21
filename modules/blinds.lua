@@ -421,6 +421,8 @@ SMODS.Blind {
     pos = { x = 0, y = 12 },
     calculate = function (self, card, context)
         
+    end,
+    press_play = function (self)
     end
 }
 

@@ -95,6 +95,11 @@ function EventManager:update(dt, forced)
                 end
             end
         end
+        if G.GAME.blind.debuff.akyrs_perma_selection then
+            for i, k in ipairs(G.play.cards) do
+                k.ability.akyrs_forced_selection = true
+            end
+        end
     end
     if G.STATE == G.STATES.SELECTING_HAND then
         if not G.GAME.blind.debuff.initial_action_act_set and not G.GAME.blind.disabled then
@@ -158,9 +163,22 @@ function EventManager:update(dt, forced)
                     if l.ability.akyrs_perma_debuff and not l.ability.akyrs_undebuffable then
                         l:set_debuff(true)
                     end
+                    if l.ability.akyrs_forced_selection and not l.ability.akyrs_undebuffable then
+                        local isAlreadyInHighlighted = false
+                        for gg,gk in ipairs(l.area.highlighted) do
+                            if gk == l then
+                                isAlreadyInHighlighted = true
+                                break
+                            end
+                        end
+                        if not isAlreadyInHighlighted then
+                            l:highlight(true)
+                            l.area:add_to_highlighted(l)
+                            l.ability.forced_selection = true
+                        end
+                    end
                 end
             end
-
         end
     end
 

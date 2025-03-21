@@ -714,7 +714,7 @@ SMODS.Joker {
                 G.E_MANAGER:add_event(Event{
                     trigger = 'after',
                     blocking = false,
-                    delay = 0.2*i,
+                    delay = 0.2*i*AKYRS.get_speed_mult(_card),
                     func = function ()
                         if G.play and G.play.cards then
                             local percent = math.abs(1.15 - (i-0.999)/(#G.play.cards-0.998)*0.3)
@@ -729,7 +729,7 @@ SMODS.Joker {
                 })
                 G.E_MANAGER:add_event(Event{
                     trigger = 'after',
-                    delay = 2+0.2*i,
+                    delay = 0.5*AKYRS.get_speed_mult(card)+0.2*i*AKYRS.get_speed_mult(_card),
                     blocking = false,
                     func = function ()
                             
@@ -755,7 +755,7 @@ SMODS.Joker {
                     end
                 })
             end
-            delay(4+0.2*#G.play.cards)
+            delay((0.5*AKYRS.get_speed_mult(card)+0.2*#G.play.cards))
             return {
                 message = localize("k_akyrs_2fa_regen"),
                 
@@ -1027,13 +1027,54 @@ SMODS.Joker{
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
-                card.ability.extra.rank_delta
+                1
             }
         }
     end,
     calculate = function (self, card, context)
-        if context.after and context.cardarea == G.play then
-            
+        if context.after and #G.play.cards >= 3 then
+
+            for i, card2 in ipairs(G.play.cards) do
+                
+                G.E_MANAGER:add_event(Event{
+                    trigger = 'after',
+                    blocking = false,
+                    -- the abs thing is so it does the center to the sides effect
+                    -- TODO: Maybe make it flip from center to border like a centrifuge, not priority tho
+                    delay = 0.2*i*AKYRS.get_speed_mult(card),
+                    func = function ()
+                        if G.play and G.play.cards then
+                            local percent = math.abs(1.15 - (i-0.999)/(#G.play.cards-0.998)*0.3)
+                            if G.play.cards[i] then
+                                G.play.cards[i]:flip()
+                            end
+                            play_sound('card1', percent);
+                        end
+                        return true
+                    end
+                })
+                G.E_MANAGER:add_event(
+                    Event{
+                        trigger = 'after',
+                        delay = 0.5*AKYRS.get_speed_mult(card)+(0.2*i)*AKYRS.get_speed_mult(card),
+                        func = function ()
+                            local rankToChangeTo = card2.base.value
+                            if i == 1 or i == #G.play.cards then
+                                rankToChangeTo = pseudorandom_element(SMODS.Ranks[card2.base.value].next,pseudoseed("akyrscentrifuge"))
+                            else
+                                rankToChangeTo = pseudorandom_element(SMODS.Ranks[card2.base.value].prev,pseudoseed("akyrscentrifuge"))
+                            end
+                            card2:flip()
+                            card2 = SMODS.change_base(card2, nil, rankToChangeTo)
+                            return true
+                        end
+                    }
+                )
+            end
+            delay(0.5*AKYRS.get_speed_mult(card)+0.2*#G.play.cards)
+            return {
+                message = localize("k_akyrs_centrifuged")
+            }
         end
     end
 
@@ -1049,13 +1090,6 @@ AKYRS.LetterJoker{
     cost = 2,
     config = {
         name = "Henohenomoheji",
-        extra = {
-            rank_delta = 1
-        }
     },
-    loc_vars = function (self, info_queue, card)
-        return {
-        }
-    end,
 
 }

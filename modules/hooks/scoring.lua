@@ -102,3 +102,24 @@ function eval_card(card,context)
     return r,s
 end
 ]]
+
+local vanillaRanks = {"2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"}
+local prevRankMap = {"Ace","2","3","4","5","6","7","8","9","10","Jack","Queen","King"}
+AKYRS.RanksPrevSet = {}
+for j, k in ipairs(vanillaRanks) do
+    AKYRS.RanksPrevSet[k] = SMODS.Ranks[k].prev
+    local rankIsAlreadyInThere = false
+    for i, v in ipairs(AKYRS.RanksPrevSet[k]) do
+        if prevRankMap[i] == v then
+            rankIsAlreadyInThere = true
+        end
+    end
+    if not rankIsAlreadyInThere then
+        SMODS.Rank:take_ownership(k,{
+            prev = {
+                unpack(AKYRS.RanksPrevSet[k]),
+                prevRankMap[j]
+            }
+        })
+    end
+end

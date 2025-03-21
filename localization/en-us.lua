@@ -68,8 +68,8 @@ return {
             bl_akyrs_the_key= {
                 name = "The Key",
                 text = {
-                    "[WIP] Selected cards",
-                    "cannot be deselected",
+                    "Played cards cannot be",
+                    "deselected ever again",
                 }
             },
             bl_akyrs_final_periwinkle_pinecone= {
@@ -326,7 +326,7 @@ return {
                 }
             },
             j_akyrs_centrifuge = {
-                name = "[WIP] Centrifuge",
+                name = "Centrifuge",
                 text = { 
                     "If at least {C:attention}3{} cards were played",
                     "First and last card {C:attention}+#1#{} Rank",
@@ -706,6 +706,7 @@ return {
             ph_puzzle_clear = "Puzzle Clear!",
             ph_akyrs_unknown = "???",
             k_akyrs_reciprocaled = "Reciprocal'd!",
+            k_akyrs_centrifuged = "Centrifuged!",
             k_akyrs_drawn_discard = "All Back!",
             k_akyrs_2fa_generate = "Generated!",
             k_akyrs_2fa_regen = "Code Refreshed!",

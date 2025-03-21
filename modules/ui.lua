@@ -327,6 +327,10 @@ G.FUNCS.akyrs_change_wildcard_behaviour = function (e)
   AKYRS.config_wildcard_desc_dyna_2:update()
 end
 
+G.FUNCS.akyrs_change_joker_preview_stuff = function (e)
+  AKYRS.save_config(e)
+end
+
 SMODS.current_mod.config_tab = function ()
   AKYRS.config_dyna_desc_txt_1 = localize('k_akyrs_wildcard_behaviours_description')[AKYRS.config.wildcard_behaviour][1]
   AKYRS.config_dyna_desc_txt_2 = localize('k_akyrs_wildcard_behaviours_description')[AKYRS.config.wildcard_behaviour][2]
@@ -374,6 +378,7 @@ SMODS.current_mod.config_tab = function ()
           },       
         } 
       },
+      -- wildcard description
       {
         n = G.UIT.R,{
           align = "cm", padding = 0.2,
@@ -398,6 +403,71 @@ SMODS.current_mod.config_tab = function ()
             config = {
               align = "cm",
               object = AKYRS.config_wildcard_desc_dyna_2
+            }
+          }
+        }
+      },
+      -- joker previews
+      
+      { n = G.UIT.R, config = { colour = G.C.UI.TRANSPARENT_DARK ,align = "tm"}, nodes = {
+        { n = G.UIT.C, config = {
+          align = "cm", padding = 0.2,
+        }, nodes = {
+          
+          create_toggle({
+            label = localize("k_akyrs_joker_preview"),
+            ref_table = AKYRS.config,
+            ref_value = "show_joker_preview",
+            callback = G.FUNCS.akyrs_change_joker_preview_stuff
+          })
+          }
+        },
+        } 
+      },
+      {
+        n = G.UIT.R,{
+          align = "cm", padding = 0.2,
+        },
+        nodes = {
+          {
+            n = G.UIT.T,
+            config = {
+              text = localize("k_akyrs_joker_preview_description")[1],
+              scale = 0.4,
+              colour = G.C.UI.TEXT_INACTIVE,
+              shadow = true, 
+            }
+          }
+        }
+      },
+      {
+        n = G.UIT.R,{
+          align = "cm", padding = 0.2,
+        },
+        nodes = {
+          {
+            n = G.UIT.T,
+            config = {
+              text = localize("k_akyrs_joker_preview_description")[2],
+              scale = 0.4,
+              colour = G.C.UI.TEXT_INACTIVE,
+              shadow = true, 
+            }
+          }
+        }
+      },
+      {
+        n = G.UIT.R,{
+          align = "cm", padding = 0.2,
+        },
+        nodes = {
+          {
+            n = G.UIT.T,
+            config = {
+              text = localize("k_akyrs_joker_preview_description")[3],
+              scale = 0.4,
+              colour = G.C.UI.TEXT_INACTIVE,
+              shadow = true, 
             }
           }
         }

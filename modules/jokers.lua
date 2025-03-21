@@ -226,31 +226,34 @@ SMODS.Joker {
         }
     },
     generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        local cards = {}
-        for i = 1,5 do
-            local carder = AKYRS.create_random_card("netheritepick")
-            carder:set_ability(G.P_CENTERS["m_stone"])
-            table.insert(cards, carder)
-        end
         SMODS.Center.generate_ui(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
-        AKYRS.card_area_preview(G.akyrsCardsPrev, desc_nodes, {
-            cards = cards,
-            override = true,
-            w = 2.2,
-            h = 0.6,
-            ml = 0,
-            scale = 0.5,
-            func_delay = 1.0,
-            func_after = function(ca) 
-                if ca and ca.cards then
-                    for i,k in ipairs(ca.cards) do
-                        if not k.removed then
-                            k:start_dissolve({G.C.CHIPS}, true)
+        
+        if AKYRS.config.show_joker_preview then
+            local cards = {}
+            for i = 1,5 do
+                local carder = AKYRS.create_random_card("netheritepick")
+                carder:set_ability(G.P_CENTERS["m_stone"], true)
+                table.insert(cards, carder)
+            end
+            AKYRS.card_area_preview(G.akyrsCardsPrev, desc_nodes, {
+                cards = cards,
+                override = true,
+                w = 2.2,
+                h = 0.6,
+                ml = 0,
+                scale = 0.5,
+                func_delay = 1.0,
+                func_after = function(ca) 
+                    if ca and ca.cards then
+                        for i,k in ipairs(ca.cards) do
+                            if not k.removed then
+                                k:start_dissolve({G.C.CHIPS}, true)
+                            end
                         end
                     end
-                end
-             end,
-        })
+                end,
+            })
+        end
     end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
@@ -536,8 +539,9 @@ SMODS.Joker {
     rarity = 2,
     cost = 6,
     loc_vars = function(self, info_queue, card)
-        
-        info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_yona_yona_ex"]
+        if AKYRS.config.show_joker_preview then
+            info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_yona_yona_ex"]
+        end
         return {
             vars = { 
                 card.ability.extra.times,
@@ -670,7 +674,9 @@ SMODS.Joker {
     rarity = 1,
     cost = 3,
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_2fa_example"]
+        if AKYRS.config.show_joker_preview then
+            info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_2fa_example"]
+        end
         return {
             vars = {
                 card.ability.extra.extra,
@@ -938,7 +944,10 @@ AKYRS.LetterJoker {
     rarity = 3,
     cost = 4,
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_maxwell_example"]
+        
+        if AKYRS.config.show_joker_preview then
+            info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_maxwell_example"]
+        end
         info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_credit_larantula"]
         return {
             vars = {  }

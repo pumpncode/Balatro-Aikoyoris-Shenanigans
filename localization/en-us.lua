@@ -757,6 +757,13 @@ return {
                 {'Wildcards do not have letter assigned to them by default.','When played, will not attempt to find letters. (Can help with performance)',} ,
                 {'Automatically find a letter for wildcard and','also set the letter automatically to the target if it is unset.',} 
             },
+
+            k_akyrs_joker_preview = "Enable Joker Preview Window",
+            k_akyrs_joker_preview_description={
+                'Some Jokers have a small "Preview" window where the effect of the Joker',
+                'is demonstrated. If you are experiencing crashes related to "blind" being',
+                'nil when hovering on certain Jokers. Turning this off might mitigate that issue.',
+            },
         },
         high_scores={},
         labels={

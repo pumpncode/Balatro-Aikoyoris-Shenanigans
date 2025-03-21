@@ -515,6 +515,7 @@ SMODS.Blind {
     drawn_to_hand = function (self)
         if self.prepped and G.jokers.cards[1] then
             local jokers = {}
+            local undebuffed = {}
             for i = 1, #G.jokers.cards do
                 G.jokers.cards[i]:set_debuff(false)
                 jokers[#jokers+1] = G.jokers.cards[i] 
@@ -524,6 +525,7 @@ SMODS.Blind {
                 local _card = pseudorandom_element(jokers, pseudoseed('lilac_lasso'))
                 for l,j in ipairs(jokers) do
                     if j == _card then
+                        table.insert(undebuffed, j)
                         table.remove(jokers, l)
                         break
                     end
@@ -532,6 +534,22 @@ SMODS.Blind {
             
             for i, jkr in ipairs(jokers) do
                 jkr:set_debuff(true)
+            end
+            local r_und = {}
+            for i = #undebuffed, 1, -1 do
+                table.insert(r_und, undebuffed[i])
+            end
+            for i, carder in ipairs(r_und) do
+                G.E_MANAGER:add_event(
+                    Event{
+                        trigger = "after",
+                        delay = AKYRS.get_speed_mult(carder)*0.05,
+                        func = function ()
+                            carder:juice_up(0.5,1)
+                            return true
+                        end
+                    }
+                )
             end
         end
         self.prepped = nil

@@ -787,3 +787,25 @@ function Game:main_menu(ctx)
 
     return r
 end
+
+
+local startMaterializeHook = Card.start_materialize
+function Card:start_materialize(cols, slnt, timefac)
+    if self.ability.set == "Alphabet" then
+        if AKYRS.non_letter_symbols_reverse[self.ability.extra.letter] then
+            cols = {HEX("3b82f6")}
+        elseif self.ability.extra.letter == "#" then
+            cols = {HEX("ff2d8d")}
+        elseif tonumber(self.ability.extra.letter) then
+            cols = {HEX("0ca400")}
+        elseif self.ability.extra.letter:match("[AEIOUaeiou]") then
+            cols = {HEX("2d99ff")}
+        elseif self.ability.extra.letter:match("[Yy]") then
+            cols = {HEX("f59e0b")} 
+        else
+            cols = {HEX("52525b")}
+        end
+    end
+    local h = startMaterializeHook(self, cols, slnt, timefac)
+    return h
+end

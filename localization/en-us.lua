@@ -157,7 +157,7 @@ return {
             e_akyrs_texelated = {
                 name = "Texelated",
                 text = {
-                    "{C:mult}+#1#{} Mult",
+                    "{C:mult}#1#{} Mult",
                     "{C:white,X:mult}X#2#{} Mult"
                 }
             },

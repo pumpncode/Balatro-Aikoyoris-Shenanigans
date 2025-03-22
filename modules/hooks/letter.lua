@@ -98,7 +98,7 @@ function Card:stop_drag()
     if G.hand and self.area and self.area == G.hand and G.STATE == G.STATES.SELECTING_HAND then
         self.area:parse_highlighted()
     end
-    if G.deck and self.area and self.area == G.jokers and self.config.center_key == "j_akyrs_hibana" then
+    if G.deck and self.area and self.area == G.jokers and self.config.center_key == "j_akyrs_160" then
         G.deck:shuffle()
     end
     return c
@@ -154,7 +154,7 @@ end
 
 local isSuitHook = Card.is_suit
 function Card:is_suit(suit, bypass_debuff, flush_calc)
-    if self.is_null then return false end
+    if self and self.is_null then return false end
     local c = isSuitHook(self, suit, bypass_debuff, flush_calc)
     return c
 end

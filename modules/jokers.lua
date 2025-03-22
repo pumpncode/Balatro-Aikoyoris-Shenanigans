@@ -872,7 +872,7 @@ SMODS.Joker{
         akyrs_priority_draw_conditions = nil,
     },
     loc_vars = function(self, info_queue, card)
-        local table = card.ability.extra.possible_table[math.fmod(card.ability.akyrs_cycler,#(card.ability.extra.possible_table))]
+        local table = card.ability.extra.possible_table[math.floor(card.ability.akyrs_cycler)]
         info_queue[#info_queue+1] = { key = "dd_akyrs_hibana_conditions", set = "DescriptionDummy"}
         return {
             vars = {

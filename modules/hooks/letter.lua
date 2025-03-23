@@ -176,7 +176,7 @@ end
 local isFaceHook = Card.is_face
 function Card:is_face(from_boss)
     if find_joker("Henohenomoheji") then
-        if self and self.get_letter_with_pretend and self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled and
+        if self and self.get_letter_with_pretend and self.ability and self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled and
         (self:get_letter_with_pretend():lower() == "j" or 
         self:get_letter_with_pretend():lower() == "q" or 
         self:get_letter_with_pretend():lower() == "k") then

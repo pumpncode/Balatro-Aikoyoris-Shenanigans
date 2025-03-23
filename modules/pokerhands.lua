@@ -111,6 +111,7 @@ for i = 3, 31 do
             local word_hand = {}
             table.sort(hand, function(a,b) return a.T.x < b.T.x end)
             for _, v in pairs(hand) do
+                if not v.ability then return {} end
                 local alpha = v.ability.aikoyori_letters_stickers:lower()
                 if alpha == "#" and v.ability.aikoyori_pretend_letter then
                     -- if wild is set fr tbh

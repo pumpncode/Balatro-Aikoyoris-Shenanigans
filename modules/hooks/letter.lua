@@ -176,10 +176,10 @@ end
 local isFaceHook = Card.is_face
 function Card:is_face(from_boss)
     if find_joker("Henohenomoheji") then
-        if 
-        self:get_letter_with_pretend():lower() == "j" or 
+        if self and self.get_letter_with_pretend and
+        (self:get_letter_with_pretend():lower() == "j" or 
         self:get_letter_with_pretend():lower() == "q" or 
-        self:get_letter_with_pretend():lower() == "k" then
+        self:get_letter_with_pretend():lower() == "k") then
             return true
         end
     end

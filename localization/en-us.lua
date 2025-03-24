@@ -15,6 +15,14 @@ return {
                         "{C:red}+#2#{} Discards",
                     },
             },
+            b_akyrs_math_deck = {
+                name = 'Math Deck',
+                text = { '[Very WIP] Evaluate',
+                'mathematical expression',
+                'on your cards',
+                'for hand score',
+                    },
+            },
             b_akyrs_hardcore_challenges={
                 name="Hardcore Challenge Deck",
                 text={

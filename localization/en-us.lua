@@ -674,8 +674,8 @@ return {
             xlettersWild = {name = 'Wild Card',text = { '{C:white,X:mult}No Extra{} XMult'},},
             lettersWildSet = {name = 'Wild Card',text = { 'Able to be set to specific letter'},},
             letterNotScored = {name = '',text = { 'Allows Words','to be played'},},
-            letterNotScoredSymbols = {name = '',text = { 'Allows Words','to be played?'},},
-            letterNotScoredNumbers = {name = '',text = { 'Allows Numerical','value to be played?'},},
+            letterNotScoredSymbols = {name = '',text = { 'These symbols','are used in specific circumstances'},},
+            letterNotScoredNumbers = {name = '',text = { 'Allows creating','mathematical expressions'},},
         },
         Sleeve = {
             sleeve_akyrs_letter = {

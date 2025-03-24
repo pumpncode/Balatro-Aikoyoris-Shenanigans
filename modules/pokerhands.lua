@@ -96,7 +96,7 @@ for i = 3, 31 do
             AKYRS.randomCard(),
             true,
             nil,
-            c
+            akyrs_letter = c
         })
     end
     
@@ -106,7 +106,7 @@ for i = 3, 31 do
         visible = false,
         example = exampler,
         evaluate = function(parts, hand)
-            if not G.GAME.letters_enabled then 
+            if not G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled then 
             return {} end
             local word_hand = {}
             table.sort(hand, function(a,b) return a.T.x < b.T.x end)

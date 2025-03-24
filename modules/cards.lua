@@ -29,16 +29,35 @@ SMODS.Back{
         } }
     end,
     config = {
-        all_nulls = true,
+        akyrs_all_nulls_letter = true,
         starting_deck_size = 100,
         selection = 1e100,
         discards = 2,
-        special_hook = true,
-        letters_enabled = true,
-        letters_mult_enabled = true,
-        letters_xmult_enabled = true,
+        akyrs_start_with_no_cards = true,
+        akyrs_letters_mult_enabled = true,
+        akyrs_letters_xmult_enabled = true,
         ante_scaling = 2,
         vouchers = {'v_akyrs_alphabet_soup','v_akyrs_crossing_field'}
+    },
+}
+SMODS.Back{
+    key = "math_deck",
+    atlas = 'deckBacks',
+    pos = {x = 0, y = 0},
+    loc_vars = function (self, info_queue, card)
+        return { vars = {
+            self.config.ante_scaling,
+            self.config.discards
+        } }
+    end,
+    config = {
+        akyrs_all_nulls_maths = true,
+        starting_deck_size = 100,
+        selection = 1e100,
+        discards = 2,
+        akyrs_start_with_no_cards = true,
+        ante_scaling = 4,
+        random_scale = {min = 0.25, max = 10},
     },
 }
 

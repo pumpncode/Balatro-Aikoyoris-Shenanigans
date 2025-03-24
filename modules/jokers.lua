@@ -1,6 +1,6 @@
 AKYRS.LetterJoker = SMODS.Joker:extend{
     in_pool = function (self, args)
-        return G.GAME.letters_enabled or false
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled or false
     end
 }
 
@@ -958,7 +958,7 @@ AKYRS.LetterJoker {
     },
     
     calculate = function(self, card, context)
-        if G.GAME.letters_enabled and G.GAME.aiko_current_word then
+        if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled and G.GAME.aiko_current_word then
             local word = G.GAME.aiko_current_word
             
             if not word then return {} end

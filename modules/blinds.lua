@@ -57,7 +57,7 @@ SMODS.Blind{
         G.deck:shuffle('akyrthought')
     end,
     in_pool = function(self)
-        return G.GAME.letters_enabled or false
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled or false
     end,
     disable = function(self)
         G.GAME.current_round.advanced_blind = false

@@ -4,11 +4,13 @@ local igo = Game.init_game_object
 function Game:init_game_object()
     local ret = igo(self)
     ret.aiko_cards_playable = 5
-    ret.starting_params.special_hook = false
+    ret.starting_params.akyrs_start_with_no_cards = false
     ret.starting_params.deck_size_letter = 1
-    ret.letters_enabled = false
-    ret.letters_mult_enabled = false
-    ret.letters_xmult_enabled = false
+    ret.akyrs_character_stickers_enabled = false
+    ret.akyrs_wording_enabled = false
+    ret.akyrs_mathematics_enabled = false
+    ret.akyrs_letters_mult_enabled = false
+    ret.akyrs_letters_xmult_enabled = false
     ret.aiko_last_mult = 0
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
@@ -59,10 +61,10 @@ local gameUpdate = EventManager.update
 
 function EventManager:update(dt, forced)
     local s = gameUpdate(self, dt, forced)
-    if G.GAME.letters_enabled and G.GAME.alphabet_rate == 0 then
+    if G.GAME.akyrs_character_stickers_enabled and G.GAME.alphabet_rate == 0 then
         G.GAME.alphabet_rate = 1
     end
-    if not G.GAME.letters_enabled and G.GAME.alphabet_rate > 0 then
+    if not G.GAME.akyrs_character_stickers_enabled and G.GAME.alphabet_rate > 0 then
         G.GAME.alphabet_rate = 0
     end
     if G.GAME.blind and G.GAME.blind.debuff.requirement_scale and not G.GAME.blind.disabled then
@@ -187,7 +189,7 @@ function EventManager:update(dt, forced)
 end
 
 function customDeckHooks(self, card_protos)
-    if self.GAME.starting_params.special_hook then
+    if self.GAME.starting_params.akyrs_start_with_no_cards then
         return {}
     end
     return card_protos
@@ -552,7 +554,7 @@ end
 local applyToRunBackHook = Back.apply_to_run
 
 function Back:apply_to_run()
-    if self.effect.config.all_nulls then
+    if self.effect.config.akyrs_all_nulls_letter then
         G.E_MANAGER:add_event(Event({
             func = function()
                 G.playing_cards = {}
@@ -562,7 +564,7 @@ function Back:apply_to_run()
                 for loops = 1, deckloop do
                     for i, letter in pairs(AKYRS.scrabble_letters) do
                         G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:all_nulls'))
+                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:akyrs_all_nulls_letter'))
                         local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'],
                             { playing_card = G.playing_card })
                         car.is_null = true
@@ -594,7 +596,7 @@ function Back:apply_to_run()
                 return true
             end
         }))
-        G.GAME.starting_params.all_nulls = true
+        G.GAME.starting_params.akyrs_all_nulls_letter = true
     end
     local c = applyToRunBackHook(self)
 
@@ -604,17 +606,17 @@ function Back:apply_to_run()
             G.GAME.modifiers.cry_highlight_limit = math.max(G.GAME.modifiers.cry_highlight_limit, self.effect.config.selection)
         end
     end
-    if self.effect.config.special_hook then
-        G.GAME.starting_params.special_hook = true
+    if self.effect.config.akyrs_start_with_no_cards then
+        G.GAME.starting_params.akyrs_start_with_no_cards = true
     end
-    if self.effect.config.letters_enabled then
-        G.GAME.letters_enabled = true
+    if self.effect.config.akyrs_character_stickers_enabled then
+        G.GAME.akyrs_character_stickers_enabled = true
     end
-    if self.effect.config.letters_mult_enabled then
-        G.GAME.letters_mult_enabled = true
+    if self.effect.config.akyrs_letters_mult_enabled then
+        G.GAME.akyrs_letters_mult_enabled = true
     end
-    if self.effect.config.letters_xmult_enabled then
-        G.GAME.letters_xmult_enabled = true
+    if self.effect.config.akyrs_letters_xmult_enabled then
+        G.GAME.akyrs_letters_xmult_enabled = true
     end
     return c
 end

@@ -39,7 +39,7 @@ end
 
 -- Rendering Letters
 function AKYRS.aikoyori_draw_extras(card, layer)
-    if card and AKYRS.aikoyori_letters_stickers and (G.GAME.letters_enabled or card.ability.forced_letter_render) then
+    if card and AKYRS.aikoyori_letters_stickers and (G.GAME.akyrs_character_stickers_enabled or card.ability.forced_letter_render) then
         if card.ability.aikoyori_letters_stickers and AKYRS.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers] then
             local movement_mod = 0.05 * math.sin(1.1 * (G.TIMERS.REAL + card.aiko_draw_delay)) - 0.07
             local rot_mod = 0.02 * math.sin(0.72 * (G.TIMERS.REAL + card.aiko_draw_delay)) + 0.03
@@ -126,7 +126,7 @@ local getMultBonusHook = Card.get_chip_mult
 function Card:get_chip_mult()
     local c = getMultBonusHook(self)
 
-    if self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled then
+    if self.ability.aikoyori_letters_stickers and G.GAME.akyrs_letters_mult_enabled then
         c = c +
         AKYRS.get_scrabble_score(self.ability.aikoyori_letters_stickers)
     end
@@ -137,7 +137,7 @@ local getXMultBonusHook = Card.get_chip_x_mult
 function Card:get_chip_x_mult()
     local c = getXMultBonusHook(self)
 
-    if self.ability.aikoyori_letters_stickers and G.GAME.letters_xmult_enabled then
+    if self.ability.aikoyori_letters_stickers and G.GAME.akyrs_letters_xmult_enabled then
         c = c +
             (1 + (AKYRS.get_scrabble_score(self.ability.aikoyori_letters_stickers) / 10))
     end
@@ -162,7 +162,7 @@ end
 local getIDHook = Card.get_id
 function Card:get_id()
     if self.is_null then
-        if self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled then
+        if self.ability.aikoyori_letters_stickers and G.GAME.akyrs_letters_mult_enabled then
             --print(self.ability.aikoyori_letters_stickers)
             return -10 - string.byte(self.ability.aikoyori_letters_stickers)
         else
@@ -176,7 +176,7 @@ end
 local isFaceHook = Card.is_face
 function Card:is_face(from_boss)
     if find_joker("Henohenomoheji") then
-        if self and self.get_letter_with_pretend and self.ability and self.ability.aikoyori_letters_stickers and G.GAME.letters_mult_enabled and
+        if self and self.get_letter_with_pretend and self.ability and self.ability.aikoyori_letters_stickers and G.GAME.akyrs_letters_mult_enabled and
         (self:get_letter_with_pretend():lower() == "j" or 
         self:get_letter_with_pretend():lower() == "q" or 
         self:get_letter_with_pretend():lower() == "k") then

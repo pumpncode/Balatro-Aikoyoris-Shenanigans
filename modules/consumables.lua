@@ -70,7 +70,7 @@ for k, v in ipairs(aiko_alphabets_no_wilds) do
             end
         end,
         in_pool = function(self, args)
-            return G.GAME.letters_enabled
+            return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
         end,
     }
 
@@ -116,7 +116,7 @@ SMODS.Consumable{
         end
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
 }
 
@@ -189,7 +189,7 @@ for i, k in ipairs(constellations) do
             end
         end,
         in_pool = function(self, args)
-            return G.GAME.letters_enabled
+            return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
         end,
 
     }
@@ -291,7 +291,7 @@ SMODS.Planet{
         end
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
 
 }

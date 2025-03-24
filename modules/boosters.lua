@@ -41,7 +41,7 @@ SMODS.Booster{
         return create_card("Alphabet", G.pack_cards, nil, nil, true, true, nil, "_letter")
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
     cry_digital_hallucinations = alphabet_digital_hallucinations_compat,
 }
@@ -76,7 +76,7 @@ SMODS.Booster{
         return create_card("Alphabet", G.pack_cards, nil, nil, true, true, nil, "_letter")
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
     cry_digital_hallucinations = alphabet_digital_hallucinations_compat,
 }
@@ -111,7 +111,7 @@ SMODS.Booster{
         return create_card("Alphabet", G.pack_cards, nil, nil, true, true, nil, "_letter")
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
     cry_digital_hallucinations = alphabet_digital_hallucinations_compat,
 }
@@ -146,7 +146,7 @@ SMODS.Booster{
         return create_card("Alphabet", G.pack_cards, nil, nil, true, true, nil, "_letter")
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
     cry_digital_hallucinations = alphabet_digital_hallucinations_compat,
 }
@@ -181,7 +181,7 @@ SMODS.Booster{
         return create_card("Alphabet", G.pack_cards, nil, nil, true, true, nil, "_letter")
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
     cry_digital_hallucinations = alphabet_digital_hallucinations_compat,
 }
@@ -216,7 +216,7 @@ SMODS.Booster{
         return create_card("Alphabet", G.pack_cards, nil, nil, true, true, nil, "_letter")
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
     cry_digital_hallucinations = alphabet_digital_hallucinations_compat,
 }
@@ -251,7 +251,7 @@ SMODS.Booster{
         return create_card("Alphabet", G.pack_cards, nil, nil, true, true, nil, "_letter")
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
     cry_digital_hallucinations = alphabet_digital_hallucinations_compat,
 }
@@ -286,7 +286,7 @@ SMODS.Booster{
         return create_card("Alphabet", G.pack_cards, nil, nil, true, true, nil, "_letter")
     end,
     in_pool = function(self, args)
-        return G.GAME.letters_enabled
+        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
     end,
     cry_digital_hallucinations = alphabet_digital_hallucinations_compat,
 }

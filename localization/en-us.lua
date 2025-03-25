@@ -16,11 +16,12 @@ return {
                     },
             },
             b_akyrs_math_deck = {
-                name = 'Math Deck',
+                name = 'Math Deck [does not work yet]',
                 text = { '[Very WIP] Evaluate',
                 'mathematical expression',
                 'on your cards',
                 'for hand score',
+                'Blind Requirements are Randomised',
                     },
             },
             b_akyrs_hardcore_challenges={

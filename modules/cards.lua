@@ -43,7 +43,7 @@ SMODS.Back{
 SMODS.Back{
     key = "math_deck",
     atlas = 'deckBacks',
-    pos = {x = 1, y = 0},
+    pos = {x = 2, y = 0},
     loc_vars = function (self, info_queue, card)
         return { vars = {
             self.config.ante_scaling,

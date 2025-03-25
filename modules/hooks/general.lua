@@ -61,10 +61,10 @@ local gameUpdate = EventManager.update
 
 function EventManager:update(dt, forced)
     local s = gameUpdate(self, dt, forced)
-    if G.GAME.akyrs_character_stickers_enabled and G.GAME.alphabet_rate == 0 then
+    if (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled) and G.GAME.alphabet_rate == 0 then
         G.GAME.alphabet_rate = 1
     end
-    if not G.GAME.akyrs_character_stickers_enabled and G.GAME.alphabet_rate > 0 then
+    if not (G.GAME.akyrs_character_stickers_enabled or G.GAME.akyrs_wording_enabled) and G.GAME.alphabet_rate > 0 then
         G.GAME.alphabet_rate = 0
     end
     if G.GAME.blind and G.GAME.blind.debuff.requirement_scale and not G.GAME.blind.disabled then

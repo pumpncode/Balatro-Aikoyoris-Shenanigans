@@ -199,7 +199,7 @@ SMODS.current_mod.extra_tabs = function()
         local cards2 = AKYRS.word_to_cards("@larantula_l")
         return {
           n = G.UIT.ROOT,
-          config = { w = 8, align = "tm", r = 0.1 , h = 6, padding = 0.2},
+          config = { w = 8, align = "tm", r = 0.1 , h = 6, padding = 0.2, colour = G.C.UI.TRANSPARENT_DARK},
           nodes = {
             {
               n = G.UIT.C,
@@ -336,20 +336,20 @@ SMODS.current_mod.config_tab = function ()
   AKYRS.config_dyna_desc_txt_2 = localize('k_akyrs_wildcard_behaviours_description')[AKYRS.config.wildcard_behaviour][2]
   AKYRS.config_wildcard_desc_dyna_1 = DynaText{
     scale = 0.4,
-    colours = {G.C.UI.TEXT_INACTIVE},
+    colours = {G.C.UI.TEXT_LIGHT},
     string = {{ref_table = AKYRS ,ref_value = "config_dyna_desc_txt_1"}},
     shadow = true, float = true, silent = true
   }  
   AKYRS.config_wildcard_desc_dyna_2 = DynaText{
     scale = 0.4,
-    colours = {G.C.UI.TEXT_INACTIVE},
+    colours = {G.C.UI.TEXT_LIGHT},
     string = {{ref_table = AKYRS ,ref_value = "config_dyna_desc_txt_2"}},
     shadow = true, float = true, silent = true
   }
   return {
-    n = G.UIT.ROOT, config = { minw = 18, minh = 6 ,align = "tm", r = 0.1 },
+    n = G.UIT.ROOT, config = { minw = 18, minh = 6 ,align = "tm",colour = G.C.UI.TRANSPARENT_DARK, r = 0.1 },
       nodes = {
-        { n = G.UIT.R, config = { colour = G.C.UI.TRANSPARENT_DARK ,align = "tm"}, nodes = {
+        { n = G.UIT.R, config = {align = "tm"}, nodes = {
           { n = G.UIT.C, config = {
             align = "cm", padding = 0.2,
           }, nodes = {
@@ -409,7 +409,7 @@ SMODS.current_mod.config_tab = function ()
       },
       -- joker previews
       
-      { n = G.UIT.R, config = { colour = G.C.UI.TRANSPARENT_DARK ,align = "tm"}, nodes = {
+      { n = G.UIT.R, config = { align = "tm"}, nodes = {
         { n = G.UIT.C, config = {
           align = "cm", padding = 0.2,
         }, nodes = {
@@ -418,6 +418,7 @@ SMODS.current_mod.config_tab = function ()
             label = localize("k_akyrs_joker_preview"),
             ref_table = AKYRS.config,
             ref_value = "show_joker_preview",
+            label_scale = 0.5,
             callback = G.FUNCS.akyrs_change_joker_preview_stuff
           })
           }
@@ -434,8 +435,7 @@ SMODS.current_mod.config_tab = function ()
             config = {
               text = localize("k_akyrs_joker_preview_description")[1],
               scale = 0.4,
-              colour = G.C.UI.TEXT_INACTIVE,
-              shadow = true, 
+              colour = G.C.UI.TEXT_LIGHT,
             }
           }
         }
@@ -450,8 +450,7 @@ SMODS.current_mod.config_tab = function ()
             config = {
               text = localize("k_akyrs_joker_preview_description")[2],
               scale = 0.4,
-              colour = G.C.UI.TEXT_INACTIVE,
-              shadow = true, 
+              colour = G.C.UI.TEXT_LIGHT,
             }
           }
         }
@@ -466,8 +465,7 @@ SMODS.current_mod.config_tab = function ()
             config = {
               text = localize("k_akyrs_joker_preview_description")[3],
               scale = 0.4,
-              colour = G.C.UI.TEXT_INACTIVE,
-              shadow = true, 
+              colour = G.C.UI.TEXT_LIGHT,
             }
           }
         }

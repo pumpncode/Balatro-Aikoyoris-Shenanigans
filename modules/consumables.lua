@@ -70,7 +70,7 @@ for k, v in ipairs(aiko_alphabets_no_wilds) do
             end
         end,
         in_pool = function(self, args)
-            return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
+            return G.GAME.akyrs_character_stickers_enabled
         end,
     }
 
@@ -116,7 +116,7 @@ SMODS.Consumable{
         end
     end,
     in_pool = function(self, args)
-        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
+        return G.GAME.akyrs_character_stickers_enabled
     end,
 }
 
@@ -183,13 +183,12 @@ for i, k in ipairs(constellations) do
             then
                 local value = G.P_CENTERS.v_observatory.config.extra
                 return {
-                    message = localize({ type = "variable", key = "a_xmult", vars = { value } }),
-                    Xmult_mod = value,
+                    Xmult = value,
                 }
             end
         end,
         in_pool = function(self, args)
-            return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
+            return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled) and true or false
         end,
 
     }
@@ -275,6 +274,7 @@ SMODS.Planet{
     use = function (self,card,area,copier)
         AKYRS.silent_bulk_level_up(self, card, area, copier, 1)
     end,
+
     can_use = function(self, card) return true end,
     calculate = function(self, card, context)
         if G.GAME.used_vouchers.v_observatory
@@ -285,13 +285,12 @@ SMODS.Planet{
         then
             local value = G.P_CENTERS.v_observatory.config.extra
             return {
-                message = localize({ type = "variable", key = "a_xmult", vars = { value } }),
-                Xmult_mod = value,
+                Xmult = value,
             }
         end
     end,
     in_pool = function(self, args)
-        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled
+        return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled) and true or false
     end,
 
 }

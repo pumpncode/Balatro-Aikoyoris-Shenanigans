@@ -480,10 +480,13 @@ SMODS.Joker {
             local total = 0
             for i,k in ipairs(G.play.cards) do
 
-                total = total + k.base.nominal
-                if k.base.value == 'Ace' then
-                    total = total - 10
+                if not SMODS.has_no_rank(k)then
+                    total = total + k.base.nominal
+                    if k.base.value == 'Ace' then
+                        total = total - 10
+                    end                    
                 end
+
             end
             if total <= 15 then
                 return {

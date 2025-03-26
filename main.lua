@@ -1,5 +1,8 @@
 AKYRS = SMODS.current_mod
 
+-- i love jonh debugpkus
+assert(SMODS.current_mod.lovely, "Lovely patches were not loaded.\nMake sure your mod folder is not nested (there should be a bunch of files in the mod folder and not just another folder).")
+
 
 AKYRS.MathParserLibrary = assert(SMODS.load_file("./lib/MathParser.min.lua"))()
 AKYRS.MathParser = AKYRS.MathParserLibrary:new()

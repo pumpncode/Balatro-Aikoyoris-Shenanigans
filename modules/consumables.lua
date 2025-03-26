@@ -6,6 +6,7 @@ SMODS.ConsumableType{
     secondary_colour = HEX("3e63c2"),
     collection_rows = {6,6,6},
     shop_rate = 0,
+    default = "c_akyrs_a",
     loc_txt = {
         collection = "Alphabet Cards",
         name = "Alphabet",

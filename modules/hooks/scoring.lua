@@ -103,6 +103,7 @@ function eval_card(card,context)
 end
 ]]
 
+
 local vanillaRanks = {"2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"}
 local prevRankMap = {"Ace","2","3","4","5","6","7","8","9","10","Jack","Queen","King"}
 AKYRS.RanksPrevSet = {}
@@ -120,6 +121,6 @@ for j, k in ipairs(vanillaRanks) do
                 unpack(AKYRS.RanksPrevSet[k]),
                 prevRankMap[j]
             }
-        })
+        }, true)
     end
 end

@@ -11,6 +11,9 @@ SMODS.Voucher {
         G.GAME.akyrs_character_stickers_enabled = false
         G.GAME.akyrs_wording_enabled = false
         G.GAME.akyrs_letters_xmult_enabled = false
+    end,
+    in_pool = function (self, args)
+        return not G.GAME.akyrs_mathematics_enabled
     end
 }
 
@@ -24,5 +27,8 @@ SMODS.Voucher {
     end,
     unredeem = function (self, card) 
         G.GAME.akyrs_letters_mult_enabled = false
+    end,
+    in_pool = function (self, args)
+        return not G.GAME.akyrs_mathematics_enabled
     end
 }

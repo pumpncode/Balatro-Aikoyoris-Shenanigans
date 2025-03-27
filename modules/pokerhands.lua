@@ -201,3 +201,97 @@ for i = 3, 31 do
         l_mult = 2*1.45^i + 3,
     }
 end
+
+SMODS.PokerHand{
+    
+    evaluate = function(parts, hand)
+        if ((not G.GAME.akyrs_character_stickers_enabled) or (not G.GAME.akyrs_mathematics_enabled)) then 
+        return {} end
+        local word_hand = {}
+        table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+        for _, v in pairs(hand) do
+            if not v.ability then return {} end
+            local alpha = v.ability.aikoyori_letters_stickers:lower()
+            if alpha == "#" and v.ability.aikoyori_pretend_letter then
+                -- if wild is set fr tbh
+                alpha = v.ability.aikoyori_pretend_letter:lower()
+            elseif alpha == "#" and AKYRS.config.wildcard_behaviour == 3 then -- if it's unset in mode 3 then just make it a random letter i guess
+                alpha = '★'
+            end
+            table.insert(word_hand, alpha)
+                
+        end
+        if #word_hand ~= i then
+            return {}
+        end
+        
+        local word_hand_str = table.concat(word_hand)
+        
+        local all_wildcards = true
+        for _, val in ipairs(word_hand) do
+            if val ~= "#" then
+                all_wildcards = false
+                break
+            end
+        end
+        if all_wildcards then
+            G.GAME.aiko_current_word = string.lower(example_words[i-2])
+            if (G.STATE == G.STATES.HAND_PLAYED)then  
+                local aiko_current_word_split = {}
+                for char in G.GAME.aiko_current_word:gmatch(".") do
+                    table.insert(aiko_current_word_split, char)
+                end
+                
+                attention_text({
+                    scale = 1.5, text = string.upper(example_words[i-2]), hold = 15, align = 'tm',
+                    major = G.play, offset = {x = 0, y = -1}
+                })
+                G.GAME.aiko_words_played[G.GAME.aiko_current_word] = true
+                G.GAME.current_round.aiko_round_played_words[G.GAME.aiko_current_word] = true
+                if AKYRS.config.wildcard_behaviour == 4 then -- set letters in hand  on mode 4 lol !!!
+                    for g,card in ipairs(hand) do
+                        if card.ability.aikoyori_letters_stickers == "#" and aiko_current_word_split and aiko_current_word_split[g] then
+                            card.ability.aikoyori_pretend_letter = aiko_current_word_split[g]
+                        end
+                    end
+                end
+            end
+            return { hand }
+        end
+        local wordData = {}
+        --print("CHECK TIME! FOR '"..word_hand_str.."' IS THE WORD")
+        if (WORD_CHECKED[word_hand_str]) then
+            --print("WORD "..word_hand_str.." IS IN MEMORY AND THUS SHOULD USE THAT")
+            wordData = WORD_CHECKED[word_hand_str]
+        else
+            --print("WORD "..word_hand_str.." IS NOT IN MEMORY ... CHECKING")
+            wordData = check_word(word_hand)
+            WORD_CHECKED[word_hand_str] = wordData
+        end
+        if wordData.valid then
+            G.GAME.aiko_current_word = wordData.word
+            local aiko_current_word_split = {}
+            for char in wordData.word:gmatch(".") do
+                table.insert(aiko_current_word_split, char)
+            end
+            if (G.STATE == G.STATES.HAND_PLAYED)then  
+                attention_text({
+                    scale =  1.5, text = string.upper(wordData.word), hold = 15, align = 'tm',
+                    major = G.play, offset = {x = 0, y = -1}
+                })
+                G.GAME.aiko_words_played[wordData.word] = true
+                G.GAME.current_round.aiko_round_played_words[wordData.word] = true
+                if AKYRS.config.wildcard_behaviour == 4 then -- set letters in hand  on mode 4 lol !!!
+                    for g,card in ipairs(hand) do
+                        if card.ability.aikoyori_letters_stickers == "#" and aiko_current_word_split and aiko_current_word_split[g] then
+                            card.ability.aikoyori_pretend_letter = aiko_current_word_split[g]
+                        end
+                    end
+                end
+            end
+            return {hand}
+        else 
+            return {}
+        end
+    end,
+}

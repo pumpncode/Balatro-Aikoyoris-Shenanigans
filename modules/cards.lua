@@ -60,7 +60,7 @@ SMODS.Back{
         selection = 1e100,
         discards = 2,
         akyrs_math_threshold = 2,
-        hand_size = 3,
+        hand_size = 6,
         akyrs_power_of_ten_scaling = 4,
         akyrs_hide_normal_hands = true,
         akyrs_hide_high_card = true,

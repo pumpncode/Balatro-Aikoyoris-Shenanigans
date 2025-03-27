@@ -506,6 +506,7 @@ end
 local canPlayHook = G.FUNCS.can_play
 G.FUNCS.can_play = function(e)
     local hasUnsetLetters = false
+    local runOGHook = true
     if AKYRS.config.wildcard_behaviour == 2 and G.GAME.akyrs_character_stickers_enabled then
         
         for i,k in ipairs(G.hand.highlighted) do
@@ -517,10 +518,38 @@ G.FUNCS.can_play = function(e)
         if hasUnsetLetters then
             e.config.colour = G.C.UI.BACKGROUND_INACTIVE
             e.config.button = nil
-        else
-            return canPlayHook(e)
+            runOGHook = false
         end
-    else
+    elseif G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_mathematics_enabled then
+        
+        local word_hand = {}
+        local hand = {}
+        for i,k in ipairs(G.hand.highlighted) do
+            table.insert(hand,k)
+        end
+        table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+        for _, v in pairs(hand) do
+            if not v.ability then return {} end
+            local alpha = v.ability.aikoyori_letters_stickers:lower()
+            if alpha == "#" and v.ability.aikoyori_pretend_letter then
+                -- if wild is set fr tbh
+                alpha = v.ability.aikoyori_pretend_letter:lower()
+            elseif alpha == "#" and AKYRS.config.wildcard_behaviour == 3 then -- if it's unset in mode 3 then just make it a random letter i guess
+                alpha = '★'
+            end
+            table.insert(word_hand, alpha)
+                
+        end
+        
+        local expression = table.concat(word_hand)
+        local stat, val = pcall(AKYRS.MathParser.solve,AKYRS.MathParser,expression)
+        if not stat then
+            e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+            e.config.button = nil
+            runOGHook = false
+        end
+    end
+    if runOGHook then
         return canPlayHook(e)
     end
 end

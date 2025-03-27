@@ -600,6 +600,52 @@ function Back:apply_to_run()
     end
     local c = applyToRunBackHook(self)
 
+    if self.effect.config.akyrs_all_nulls_maths then
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                G.playing_cards = {}
+                
+                local deckloop = G.GAME.starting_params.deck_size_letter or 1
+                local usedLetter = {}
+                for loops = 1, deckloop do
+                    for i, letter in pairs(AKYRS.math_deck_characters) do
+                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:akyrs_all_nulls_maths'))
+                        local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'],
+                            { playing_card = G.playing_card })
+                        car.is_null = true
+
+                        -- misprintize
+                        if G.GAME.modifiers and G.GAME.modifiers.cry_misprint_min and G.GAME.modifiers.cry_misprint_max then
+                            for k, v in pairs(G.playing_cards) do
+                                Cryptid.misprintize(car)
+                            end
+                        end
+                        if not usedLetter[letter:lower()] then letter = letter:upper() usedLetter[letter:lower()]=true else letter = letter:lower() end
+                        car:set_letters(letter)
+                        G.deck:emplace(car)
+
+                        table.insert(G.playing_cards, car)
+                        -- for cryptid
+                        if G.GAME.modifiers and G.GAME.modifiers.cry_ccd then
+                            for k, v in pairs(G.playing_cards) do
+                                v:set_ability(get_random_consumable('cry_ccd', { "no_doe", "no_grc" }, nil, nil, true),
+                                    true, nil)
+                            end
+                        end
+                    end
+                end
+                G.GAME.starting_deck_size = #G.playing_cards
+
+
+                G.deck:shuffle('akyrsletterdeck')
+                return true
+            end
+        }))
+        G.GAME.starting_params.akyrs_all_nulls_letter = true
+    end
+    local c = applyToRunBackHook(self)
+
     if self.effect.config.selection then
         G.GAME.aiko_cards_playable = math.max(G.GAME.aiko_cards_playable, self.effect.config.selection)
         if Cryptid and G.GAME.modifiers.cry_highlight_limit then
@@ -612,11 +658,40 @@ function Back:apply_to_run()
     if self.effect.config.akyrs_character_stickers_enabled then
         G.GAME.akyrs_character_stickers_enabled = true
     end
+    if self.effect.config.akyrs_wording_enabled then
+        G.GAME.akyrs_wording_enabled = true
+    end
+
+    if self.effect.config.akyrs_mathematics_enabled then
+        G.GAME.akyrs_mathematics_enabled = true
+    end
+    if self.effect.config.akyrs_random_scale then
+        G.GAME.akyrs_random_scale = self.effect.config.akyrs_random_scale
+    end
     if self.effect.config.akyrs_letters_mult_enabled then
         G.GAME.akyrs_letters_mult_enabled = true
     end
     if self.effect.config.akyrs_letters_xmult_enabled then
         G.GAME.akyrs_letters_xmult_enabled = true
+    end
+    if self.effect.config.akyrs_letters_xmult_enabled then
+        G.GAME.akyrs_letters_xmult_enabled = true
+    end
+    if self.effect.config.akyrs_power_of_ten_scaling then
+        G.GAME.akyrs_power_of_ten_scaling = true
+    end
+
+    if self.effect.config.akyrs_math_threshold then
+        G.GAME.akyrs_math_threshold = self.effect.config.akyrs_math_threshold
+    else
+        G.GAME.akyrs_math_threshold = 10
+    end
+    if self.effect.config.akyrs_hide_normal_hands then
+        for k, v in pairs(G.GAME.hands) do
+            if (k~= "High Card" and not self.effect.config.akyrs_hide_high_card) or (self.effect.config.akyrs_hand_to_not_hide and k ~= self.effect.config.akyrs_hand_to_not_hide) then
+                v.visible = false
+            end
+        end
     end
     return c
 end

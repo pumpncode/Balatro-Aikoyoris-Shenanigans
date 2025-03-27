@@ -55,7 +55,6 @@ SMODS.Back{
     config = {
         akyrs_all_nulls_maths = true,
         akyrs_start_with_no_cards = true,
-        starting_deck_size = 100,
         akyrs_mathematics_enabled = true,
         akyrs_character_stickers_enabled = true,
         selection = 1e100,

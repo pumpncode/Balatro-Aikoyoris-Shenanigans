@@ -644,7 +644,6 @@ function Back:apply_to_run()
         }))
         G.GAME.starting_params.akyrs_all_nulls_letter = true
     end
-    local c = applyToRunBackHook(self)
 
     if self.effect.config.selection then
         G.GAME.aiko_cards_playable = math.max(G.GAME.aiko_cards_playable, self.effect.config.selection)

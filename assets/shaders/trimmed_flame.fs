@@ -26,7 +26,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 
     //Convert to UV coords (0-1) and floor for pixel effect
     vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba - 0.5;
-    if (uv.y>0) return vec4(0,0,0,0);
+    if (uv.y>0.) return vec4(0.,0.,0.,0.);
     vec2 floored_uv = (floor((uv*PIXEL_SIZE_FAC)))/PIXEL_SIZE_FAC;
     vec2 uv_scaled_centered = (floored_uv);
     uv_scaled_centered += uv_scaled_centered*0.01*(sin(-1.123*floored_uv.x + 0.2*time)*cos(5.3332*floored_uv.y + time*0.931));

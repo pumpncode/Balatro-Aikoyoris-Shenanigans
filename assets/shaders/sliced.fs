@@ -114,7 +114,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     float random2 = randReal(floor(uv.x*7.445)+1+time)*0.05;
     float random = mix(random1, random2, fract(sin(uv.x*7.445)+time));
     float factor = 0.5 + random;
-    float factorY = 1;
+    float factorY = 1.;
     float width = 0.044 + fract(fract(random)*1.72);
     float widthRed = 0.2;
     vec4 tex = Texel(texture, texture_coords);
@@ -122,11 +122,11 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 
     vec4 COLHSL = HSL(tex);
     COLHSL.g = COLHSL.g + 0.000001*sliced.r;
-    //COLHSL.b = 1 - COLHSL.b;
+    //COLHSL.b = 1. - COLHSL.b;
     // -- end
 	tex = RGB(COLHSL);
     vec2 newuv = uv;
-    if ((uv.x*factor)+uv.y*factorY > (1)-factor/2 && (uv.x*factor)+uv.y*factorY < (1+widthRed/2)-(factor/2)){
+    if ((uv.x*factor)+uv.y*factorY > (1.)-factor/2. && (uv.x*factor)+uv.y*factorY < (1.+widthRed/2.)-(factor/2.)){
         //tex.r *= 5.0;
         //tex.r += 1.0;
         //tex.g *= 0.010;
@@ -140,9 +140,9 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
         tex.b -= 0.2;
 
     }
-    if ((uv.x*factor)+uv.y*factorY > (1-width/2)-(factor/2) && uv.x*factor+uv.y*factorY < (1+width/2)-(factor/2)){
-        tex.w = 0;
-        colour.w = 0;
+    if ((uv.x*factor)+uv.y*factorY > (1.-width/2.)-(factor/2.) && uv.x*factor+uv.y*factorY < (1.+width/2)-(factor/2.)){
+        tex.w = 0.;
+        colour.w = 0.;
     }
 
 	return dissolve_mask(tex*colour, texture_coords, newuv);
@@ -163,6 +163,6 @@ vec4 position( mat4 transform_projection, vec4 vertex_position )
     float scale = 0.2*(-0.03 - 0.3*max(0., 0.3-mid_dist))
                 *hovering*(length(mouse_offset)*length(mouse_offset))/(2. -mid_dist);
 
-    return transform_projection * vertex_position + vec4(0,0,0,scale);
+    return transform_projection * vertex_position + vec4(0.,0.,0.,scale);
 }
 #endif

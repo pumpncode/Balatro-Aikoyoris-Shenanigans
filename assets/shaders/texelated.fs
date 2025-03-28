@@ -97,7 +97,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 	vec2 uv2 = uv*10.0;
 	vec3 gridval = simplexGrid(uv2);
 	vec3 outgrid = tex.xyz * (vec3(max(gridval.x,max(gridval.y,gridval.z))))*0.7;
-	tex.xyz = outgrid * (maxfac  + 2) * (gridval * 0.8 + 0.6);
+	tex.xyz = outgrid * (maxfac  + 2.) * (gridval * 0.8 + 0.6);
 
 
     return dissolve_mask(tex*colour, texture_coords, uv);
@@ -118,6 +118,6 @@ vec4 position( mat4 transform_projection, vec4 vertex_position )
     float scale = 0.2*(-0.03 - 0.3*max(0., 0.3-mid_dist))
                 *hovering*(length(mouse_offset)*length(mouse_offset))/(2. -mid_dist);
 
-    return transform_projection * vertex_position + vec4(0,0,0,scale);
+    return transform_projection * vertex_position + vec4(0.,0.,0.,scale);
 }
 #endif

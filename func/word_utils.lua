@@ -31,17 +31,32 @@ AKYRS.math_deck_distribution = {
     ["."] = 4,
 }
 
+AKYRS.math_deck_pro_distribution = {
+    ["1"] = 3, ["2"] = 3, ["3"] = 3, ["4"] = 3, ["5"] = 3, ["6"] = 3, ["7"] = 3, ["8"] = 3, ["9"] = 3, ["0"] = 6, ["("] = 3,
+    [")"] = 3, ["+"] = 4, ["-"] = 4, ["/"] = 4, ["*"] = 4, ["^"] = 1, ["."] = 4, ["="] = 4,
+    ["a"] = 2, ["b"] = 2, ["c"] = 2, ["d"] = 2, ["e"] = 2, ["f"] = 2, ["g"] = 2, ["h"] = 2, ["i"] = 2, ["j"] = 2,
+    ["k"] = 2, ["l"] = 2, ["m"] = 2, ["n"] = 2, ["o"] = 2, ["p"] = 2, ["q"] = 2, ["r"] = 2, ["s"] = 2, ["t"] = 2,
+    ["u"] = 2, ["v"] = 2, ["w"] = 2, ["x"] = 2, ["y"] = 2, ["z"] = 2
+}
+
 AKYRS.scrabble_letters = {}
 AKYRS.math_deck_characters = {}
+AKYRS.math_deck_pro_characters = {}
 
 for letter, count in pairs(AKYRS.scrabble_distribution) do
     for i = 1, count do
         table.insert(AKYRS.scrabble_letters, letter)
     end
 end
+
 for letter, count in pairs(AKYRS.math_deck_distribution) do
     for i = 1, count do
         table.insert(AKYRS.math_deck_characters, letter)
+    end
+end
+for letter, count in pairs(AKYRS.math_deck_pro_distribution) do
+    for i = 1, count do
+        table.insert(AKYRS.math_deck_pro_characters, letter)
     end
 end
 

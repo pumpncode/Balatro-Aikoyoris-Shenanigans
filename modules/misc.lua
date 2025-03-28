@@ -636,3 +636,12 @@ end
 function AKYRS.adjust_rounding(num)
     return math.floor(num*10)/10
 end
+
+function AKYRS.does_hand_only_contain_symbols(cardarea)
+    for i,k in ipairs(cardarea.cards) do
+        if tonumber(k.ability.aikoyori_letters_stickers) then
+            return false
+        end
+    end
+    return true
+end

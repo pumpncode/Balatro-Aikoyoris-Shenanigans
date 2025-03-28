@@ -540,7 +540,21 @@ G.FUNCS.can_play = function(e)
         local expression = table.concat(word_hand)
         local stat, val = pcall(AKYRS.MathParser.solve,AKYRS.MathParser,expression)
         local stat2, val = pcall(AKYRS.MathParser.solve,AKYRS.MathParser,""..to_number(G.GAME.chips)..expression)
-        if not stat and not stat2 then
+        local assignment_parts = {}
+        for part in expression:gmatch("[^=]+") do
+            table.insert(assignment_parts, part)
+        end
+        local stat3 = false
+        if #assignment_parts == 2 then
+            local variable, value_expression = assignment_parts[1], assignment_parts[2]
+            local status, value = pcall(AKYRS.MathParser.solve, AKYRS.MathParser, value_expression)
+            if status then
+                stat3 = true
+            end
+        end
+
+
+        if not stat and not stat2 and not stat3 then
             shouldDisableButton = true
             runOGHook = false
         end

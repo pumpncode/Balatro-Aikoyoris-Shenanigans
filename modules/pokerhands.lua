@@ -209,6 +209,7 @@ SMODS.PokerHand{
     mult = 0,
     l_chips = 0,
     l_mult = 0,
+    visible = false,
     example = {
         { "", true, nil, akyrs_letter = "3"},
         { "", true, nil, akyrs_letter = "7"},
@@ -261,6 +262,7 @@ SMODS.PokerHand{
     mult = 0,
     l_chips = 0,
     l_mult = 0,
+    visible = false,
     example = {
         { "", true, nil, akyrs_letter = "/"},
         { "", true, nil, akyrs_letter = "2"},
@@ -305,6 +307,58 @@ SMODS.PokerHand{
             G.GAME.aikoyori_evaluation_value = value
            
         end
+        return {hand}
+    end,
+}
+SMODS.PokerHand{
+    key = "assignment",
+    chips = 0,
+    mult = 0,
+    l_chips = 0,
+    l_mult = 0,
+    visible = false,
+    example = {
+        { "", true, nil, akyrs_letter = "x"},
+        { "", true, nil, akyrs_letter = "="},
+        { "", true, nil, akyrs_letter = "7"},
+    },
+    evaluate = function(parts, hand)
+        if ((not G.GAME.akyrs_character_stickers_enabled) or (not G.GAME.akyrs_mathematics_enabled)) then 
+        return {} end
+        local word_hand = {}
+        table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+        for _, v in pairs(hand) do
+            if not v.ability then return {} end
+            local alpha = v.ability.aikoyori_letters_stickers:lower()
+            if alpha == "#" and v.ability.aikoyori_pretend_letter then
+                -- if wild is set fr tbh
+                alpha = v.ability.aikoyori_pretend_letter:lower()
+            elseif alpha == "#" and AKYRS.config.wildcard_behaviour == 3 then -- if it's unset in mode 3 then just make it a random letter i guess
+                alpha = '★'
+            end
+            table.insert(word_hand, alpha)
+                
+        end
+        
+        local expression = table.concat(word_hand)
+        local parts = {}
+        for part in expression:gmatch("[^=]+") do
+            table.insert(parts, part)
+        end
+
+        if #parts ~= 2 then
+            return {}
+        end
+
+        local variable, value_expression = parts[1], parts[2]
+        local status, value = pcall(AKYRS.MathParser.solve, AKYRS.MathParser, value_expression)
+
+        if not status then
+            return {}
+        end
+
+        G.GAME.aikoyori_variable_to_set = variable
+        G.GAME.aikoyori_value_to_set_to_variable = value
         return {hand}
     end,
 }

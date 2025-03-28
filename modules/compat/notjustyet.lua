@@ -7,7 +7,7 @@ if G.FUNCS.njy_endround then
                 button_enabled = true
             end
         elseif G.GAME.akyrs_mathematics_enabled and G.GAME.akyrs_character_stickers_enabled then
-            if G.GAME.blind and AKYRS.is_value_within_threshold(G.GAME.blind.chips,G.GAME.chips,G.GAME.akyrs_math_threshold) then
+            if G.GAME.blind and AKYRS.is_value_within_threshold(G.GAME.blind.chips,G.GAME.chips,G.GAME.akyrs_math_threshold) or AKYRS.does_hand_only_contain_symbols(G.hand) then
                 button_enabled = true
             end
 

@@ -11,6 +11,7 @@ function Game:init_game_object()
     ret.akyrs_mathematics_enabled = false
     ret.akyrs_letters_mult_enabled = false
     ret.akyrs_letters_xmult_enabled = false
+    ret.akyrs_parser_var = AKYRS.math_default_const
     ret.aiko_last_mult = 0
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
@@ -206,6 +207,9 @@ end
 local startRunHook = Game.start_run
 function Game:start_run(args)
     local ret = startRunHook(self, args)
+    AKYRS.reset_math_parser({
+        vars = G.GAME.akyrs_parser_var or AKYRS.math_default_const,
+    })
     if not self.aiko_wordle and AKYRS.checkBlindKey("bl_akyrs_the_thought") then
         --print("CHECK SUCCESS")
         self.aiko_wordle = UIBox {
@@ -433,6 +437,12 @@ G.FUNCS.evaluate_play = function()
             major = G.play, offset = {x = 0, y = -1}
         })
     end
+    if G.GAME.aikoyori_variable_to_set and G.GAME.aikoyori_value_to_set_to_variable then
+        attention_text({
+            scale =  1.5, text = G.GAME.aikoyori_variable_to_set.." = "..tostring(G.GAME.aikoyori_value_to_set_to_variable), hold = 15, align = 'tm',
+            major = G.play, offset = {x = 0, y = -1}
+        })
+    end
     if G.GAME.aiko_current_word then
         attention_text({
             scale =  1.5, text = string.upper(G.GAME.aiko_current_word), hold = 15, align = 'tm',
@@ -441,6 +451,9 @@ G.FUNCS.evaluate_play = function()
     end
     local ret = eval_hook()
     G.GAME.aiko_current_word = nil
+    if G.GAME.aikoyori_variable_to_set and G.GAME.aikoyori_value_to_set_to_variable then
+        AKYRS.parser_set_var(G.GAME.aikoyori_variable_to_set , G.GAME.aikoyori_value_to_set_to_variable)
+    end
     if G.GAME.aikoyori_evaluation_value then
         if G.GAME.aikoyori_evaluation_replace then
             
@@ -450,6 +463,8 @@ G.FUNCS.evaluate_play = function()
         end
     end
     G.GAME.aikoyori_evaluation_value = nil
+    G.GAME.aikoyori_variable_to_set = nil
+    G.GAME.aikoyori_value_to_set_to_variable = nil
     return ret
 end
 
@@ -583,96 +598,14 @@ end
 local applyToRunBackHook = Back.apply_to_run
 
 function Back:apply_to_run()
-    if self.effect.config.akyrs_all_nulls_letter then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                G.playing_cards = {}
-                
-                local deckloop = G.GAME.starting_params.deck_size_letter or 1
-                local usedLetter = {}
-                for loops = 1, deckloop do
-                    for i, letter in pairs(AKYRS.scrabble_letters) do
-                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:akyrs_all_nulls_letter'))
-                        local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'],
-                            { playing_card = G.playing_card })
-                        car.is_null = true
-
-                        -- misprintize
-                        if G.GAME.modifiers and G.GAME.modifiers.cry_misprint_min and G.GAME.modifiers.cry_misprint_max then
-                            for k, v in pairs(G.playing_cards) do
-                                Cryptid.misprintize(car)
-                            end
-                        end
-                        if not usedLetter[letter:lower()] then letter = letter:upper() usedLetter[letter:lower()]=true else letter = letter:lower() end
-                        car:set_letters(letter)
-                        G.deck:emplace(car)
-
-                        table.insert(G.playing_cards, car)
-                        -- for cryptid
-                        if G.GAME.modifiers and G.GAME.modifiers.cry_ccd then
-                            for k, v in pairs(G.playing_cards) do
-                                v:set_ability(get_random_consumable('cry_ccd', { "no_doe", "no_grc" }, nil, nil, true),
-                                    true, nil)
-                            end
-                        end
-                    end
-                end
-                G.GAME.starting_deck_size = #G.playing_cards
-
-
-                G.deck:shuffle('akyrsletterdeck')
-                return true
-            end
-        }))
-        G.GAME.starting_params.akyrs_all_nulls_letter = true
+    if self.effect.config.akyrs_starting_letters then
+        G.GAME.starting_params.akyrs_starting_letters = self.effect.config.akyrs_starting_letters
+    end
+    if self.effect.config.akyrs_letters_no_uppercase then
+        G.GAME.starting_params.akyrs_letters_no_uppercase = self.effect.config.akyrs_letters_no_uppercase
     end
     local c = applyToRunBackHook(self)
 
-    if self.effect.config.akyrs_all_nulls_maths then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                G.playing_cards = {}
-                
-                local deckloop = G.GAME.starting_params.deck_size_letter or 1
-                local usedLetter = {}
-                for loops = 1, deckloop do
-                    for i, letter in pairs(AKYRS.math_deck_characters) do
-                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:akyrs_all_nulls_maths'))
-                        local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'],
-                            { playing_card = G.playing_card })
-                        car.is_null = true
-
-                        -- misprintize
-                        if G.GAME.modifiers and G.GAME.modifiers.cry_misprint_min and G.GAME.modifiers.cry_misprint_max then
-                            for k, v in pairs(G.playing_cards) do
-                                Cryptid.misprintize(car)
-                            end
-                        end
-                        if not usedLetter[letter:lower()] then letter = letter:upper() usedLetter[letter:lower()]=true else letter = letter:lower() end
-                        car:set_letters(letter)
-                        G.deck:emplace(car)
-
-                        table.insert(G.playing_cards, car)
-                        -- for cryptid
-                        if G.GAME.modifiers and G.GAME.modifiers.cry_ccd then
-                            for k, v in pairs(G.playing_cards) do
-                                v:set_ability(get_random_consumable('cry_ccd', { "no_doe", "no_grc" }, nil, nil, true),
-                                    true, nil)
-                            end
-                        end
-                    end
-                end
-                G.GAME.starting_deck_size = #G.playing_cards
-
-
-                G.deck:shuffle('akyrsletterdeck')
-                return true
-            end
-        }))
-        G.GAME.starting_params.akyrs_all_nulls_letter = true
-    end
 
     if self.effect.config.selection then
         G.GAME.aiko_cards_playable = math.max(G.GAME.aiko_cards_playable, self.effect.config.selection)
@@ -702,9 +635,6 @@ function Back:apply_to_run()
     if self.effect.config.akyrs_letters_xmult_enabled then
         G.GAME.akyrs_letters_xmult_enabled = true
     end
-    if self.effect.config.akyrs_letters_xmult_enabled then
-        G.GAME.akyrs_letters_xmult_enabled = true
-    end
     if self.effect.config.akyrs_power_of_ten_scaling then
         G.GAME.akyrs_power_of_ten_scaling = true
     end
@@ -718,8 +648,56 @@ function Back:apply_to_run()
         for k, v in pairs(G.GAME.hands) do
             if (k~= "High Card" and not self.effect.config.akyrs_hide_high_card) or (self.effect.config.akyrs_hand_to_not_hide and not self.effect.config.akyrs_hand_to_not_hide[k]) then
                 v.visible = false
+            else
+                v.visible = true
             end
         end
+    end
+    if G.GAME.starting_params.akyrs_starting_letters then
+        
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                G.playing_cards = {}
+                
+                local deckloop = G.GAME.starting_params.deck_size_letter or 1
+                local usedLetter = {}
+                for loops = 1, deckloop do
+                    for i, letter in pairs(G.GAME.starting_params.akyrs_starting_letters) do
+                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                        local front = pseudorandom_element(G.P_CARDS, pseudoseed('aikoyori:akyrs_letter_randomer'))
+                        local car = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'],
+                            { playing_card = G.playing_card })
+                        car.is_null = true
+
+                        -- misprintize
+                        if G.GAME.modifiers and G.GAME.modifiers.cry_misprint_min and G.GAME.modifiers.cry_misprint_max then
+                            for k, v in pairs(G.playing_cards) do
+                                Cryptid.misprintize(car)
+                            end
+                        end
+                        if not G.GAME.starting_params.akyrs_letters_no_uppercase then
+                            if not usedLetter[letter:lower()] then letter = letter:upper() usedLetter[letter:lower()]=true else letter = letter:lower() end
+                        end
+                        car:set_letters(letter)
+                        G.deck:emplace(car)
+
+                        table.insert(G.playing_cards, car)
+                        -- for cryptid
+                        if G.GAME.modifiers and G.GAME.modifiers.cry_ccd then
+                            for k, v in pairs(G.playing_cards) do
+                                v:set_ability(get_random_consumable('cry_ccd', { "no_doe", "no_grc" }, nil, nil, true),
+                                    true, nil)
+                            end
+                        end
+                    end
+                end
+                G.GAME.starting_deck_size = #G.playing_cards
+
+
+                G.deck:shuffle('akyrsletterdeck')
+                return true
+            end
+        }))
     end
     return c
 end

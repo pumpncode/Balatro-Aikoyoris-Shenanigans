@@ -3,6 +3,7 @@ A Balatro mod that adds things I want to add.
 
 Words from the English Words Repo : https://github.com/dwyl/english-words
 Filtered using the Profanity List here : https://github.com/dsojevic/profanity-list
+Used MathParser from https://github.com/ByteXenon/MathParser.lua
 
 Maxwell's Notebook sprite by larantula_l on Discord
 

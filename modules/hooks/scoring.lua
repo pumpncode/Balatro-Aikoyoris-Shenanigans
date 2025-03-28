@@ -136,10 +136,11 @@ function get_blind_amount(ante)
         end
     end
     if G.GAME.akyrs_random_scale then
+        local scale = math.ceil(pseudorandom(pseudoseed("akyrs_random_scale"),G.GAME.akyrs_random_scale.min,G.GAME.akyrs_random_scale.max)*(10^ante))/(10^ante)
         if Talisman then
-            r = to_big(r * pseudorandom(pseudoseed("akyrs_random_scale"),G.GAME.akyrs_random_scale.min,G.GAME.akyrs_random_scale.max)):ceil()
+            r = to_big(r * scale)
         else
-            r = math.ceil(r * pseudorandom(pseudoseed("akyrs_random_scale"),G.GAME.akyrs_random_scale.min,G.GAME.akyrs_random_scale.max))
+            r = math.ceil(r * scale)
         end
     end
     

@@ -505,20 +505,15 @@ end
 
 local canPlayHook = G.FUNCS.can_play
 G.FUNCS.can_play = function(e)
-    local hasUnsetLetters = false
+    local shouldDisableButton = false
     local runOGHook = true
     if AKYRS.config.wildcard_behaviour == 2 and G.GAME.akyrs_character_stickers_enabled then
         
         for i,k in ipairs(G.hand.highlighted) do
             if k.ability.aikoyori_letters_stickers == "#" and not k.ability.aikoyori_pretend_letter then
-                hasUnsetLetters = true
+                shouldDisableButton = true
                 break
             end
-        end
-        if hasUnsetLetters then
-            e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-            e.config.button = nil
-            runOGHook = false
         end
     elseif G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_mathematics_enabled then
         
@@ -541,13 +536,19 @@ G.FUNCS.can_play = function(e)
                 
         end
         
+        local to_number = to_number or function(l) return l end
         local expression = table.concat(word_hand)
         local stat, val = pcall(AKYRS.MathParser.solve,AKYRS.MathParser,expression)
-        if not stat then
-            e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-            e.config.button = nil
+        local stat2, val = pcall(AKYRS.MathParser.solve,AKYRS.MathParser,""..to_number(G.GAME.chips)..expression)
+        if not stat and not stat2 then
+            shouldDisableButton = true
             runOGHook = false
         end
+    end
+    if shouldDisableButton then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+        runOGHook = false
     end
     if runOGHook then
         return canPlayHook(e)

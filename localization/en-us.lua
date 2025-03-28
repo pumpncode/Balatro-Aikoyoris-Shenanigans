@@ -839,6 +839,7 @@ return {
             ["akyrs_30-letter Word"] = {'Create a valid '.. 30 ..'-letter English word', 'without extra letters'},
             ["akyrs_31-letter Word"] = {'Create a valid '.. 31 ..'-letter English word', 'without extra letters'},
             ["akyrs_expression"] = {'Create a valid mathematical expression'},
+            ["akyrs_modification"] = {'Modify current chip value'},
         },
         poker_hands={
             ["akyrs_3-letter Word"] =  "3".."-letter Word" ,
@@ -871,6 +872,7 @@ return {
             ["akyrs_30-letter Word"] = "30".."-letter Word",
             ["akyrs_31-letter Word"] = "31".."-letter Word",
             ["akyrs_expression"] = "Expression",
+            ["akyrs_modification"] = "Modification",
         },
         quips={},
         ranks={},

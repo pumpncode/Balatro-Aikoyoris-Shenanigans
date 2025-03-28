@@ -102,6 +102,14 @@ function EventManager:update(dt, forced)
                 k.ability.akyrs_forced_selection = true
             end
         end
+        if G.GAME.akyrs_mathematics_enabled and G.GAME.akyrs_character_stickers_enabled then
+            if G.GAME.current_round and G.GAME.current_round.current_hand then
+                G.GAME.current_round.current_hand.chips = 0
+                G.GAME.current_round.current_hand.mult = 0
+            end
+            
+            update_hand_text({immediate = true, nopulse = true, delay = 0}, {mult = 0, chips = 0})
+        end
     end
     if G.STATE == G.STATES.SELECTING_HAND then
         if not G.GAME.blind.debuff.initial_action_act_set and not G.GAME.blind.disabled then
@@ -419,8 +427,29 @@ end
 
 local eval_hook = G.FUNCS.evaluate_play
 G.FUNCS.evaluate_play = function()
+    if G.GAME.aikoyori_evaluation_value then
+        attention_text({
+            scale =  1.5, text = ""..G.GAME.aikoyori_evaluation_value, hold = 15, align = 'tm',
+            major = G.play, offset = {x = 0, y = -1}
+        })
+    end
+    if G.GAME.aiko_current_word then
+        attention_text({
+            scale =  1.5, text = string.upper(G.GAME.aiko_current_word), hold = 15, align = 'tm',
+            major = G.play, offset = {x = 0, y = -1}
+        })
+    end
     local ret = eval_hook()
     G.GAME.aiko_current_word = nil
+    if G.GAME.aikoyori_evaluation_value then
+        if G.GAME.aikoyori_evaluation_replace then
+            
+            ease_chips(G.GAME.aikoyori_evaluation_value)
+        else
+            ease_chips(G.GAME.chips + G.GAME.aikoyori_evaluation_value)
+        end
+    end
+    G.GAME.aikoyori_evaluation_value = nil
     return ret
 end
 
@@ -687,7 +716,7 @@ function Back:apply_to_run()
     end
     if self.effect.config.akyrs_hide_normal_hands then
         for k, v in pairs(G.GAME.hands) do
-            if (k~= "High Card" and not self.effect.config.akyrs_hide_high_card) or (self.effect.config.akyrs_hand_to_not_hide and k ~= self.effect.config.akyrs_hand_to_not_hide) then
+            if (k~= "High Card" and not self.effect.config.akyrs_hide_high_card) or (self.effect.config.akyrs_hand_to_not_hide and not self.effect.config.akyrs_hand_to_not_hide[k]) then
                 v.visible = false
             end
         end

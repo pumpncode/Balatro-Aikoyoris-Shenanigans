@@ -632,3 +632,7 @@ function AKYRS.is_value_within_threshold(target, value, threshold_percent)
     local threshold = target * (threshold_percent / 100)
     return math.abs(target - value) <= threshold
 end
+
+function AKYRS.adjust_rounding(num)
+    return math.floor(num*10)/10
+end

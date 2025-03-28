@@ -57,3 +57,11 @@ payload = ''',
 akyrs_desc = {}
 '''
 match_indent = true
+[[patches]]
+[patches.pattern]
+target = '''functions/common_events.lua'''
+pattern = '''func = (function(t) return math.floor(t) end)'''
+position = "at"
+payload = '''func = (function(t) return AKYRS.adjust_rounding(t) end)
+'''
+match_indent = true

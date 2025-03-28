@@ -64,7 +64,7 @@ SMODS.Back{
         akyrs_power_of_ten_scaling = 4,
         akyrs_hide_normal_hands = true,
         akyrs_hide_high_card = true,
-        akyrs_hand_to_not_hide = "akyrs_expression",
+        akyrs_hand_to_not_hide = {["akyrs_expression"] = true,["akyrs_modification"] = true },
         akyrs_random_scale = {min = 0.5, max = 9.5},
     },
 }

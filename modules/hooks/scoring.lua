@@ -103,6 +103,7 @@ function eval_card(card,context)
 end
 ]]
 
+
 local vanillaRanks = {"2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"}
 local prevRankMap = {"Ace","2","3","4","5","6","7","8","9","10","Jack","Queen","King"}
 AKYRS.RanksPrevSet = {}
@@ -120,6 +121,38 @@ for j, k in ipairs(vanillaRanks) do
                 unpack(AKYRS.RanksPrevSet[k]),
                 prevRankMap[j]
             }
-        })
+        }, true)
     end
 end
+
+local get_blind_amount_hook = get_blind_amount
+function get_blind_amount(ante)
+    local r = get_blind_amount_hook(ante)
+    if G.GAME.akyrs_power_of_ten_scaling then
+        if Talisman then
+            r = to_big(10):pow(ante)
+        else
+            r = math.pow(10,ante)
+        end
+    end
+    if G.GAME.akyrs_random_scale then
+        if Talisman then
+            r = to_big(r * pseudorandom(pseudoseed("akyrs_random_scale"),G.GAME.akyrs_random_scale.min,G.GAME.akyrs_random_scale.max)):ceil()
+        else
+            r = math.ceil(r * pseudorandom(pseudoseed("akyrs_random_scale"),G.GAME.akyrs_random_scale.min,G.GAME.akyrs_random_scale.max))
+        end
+    end
+    
+    return r
+end
+
+-- taking over high card so it doesn't do the thing
+local highcard_func = SMODS.PokerHands['High Card'].evaluate
+SMODS.PokerHand:take_ownership("High Card",{
+    evaluate = function (parts, hand)
+        if not G.GAME.akyrs_mathematics_enabled then
+            return highcard_func(parts,hand)
+        end
+        return {}
+    end
+})

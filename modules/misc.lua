@@ -452,7 +452,7 @@ AKYRS.mod_card_values = function(table_in, config)
                         table_in[k] = (ref[k] + add) * multiply
                     end
                 end
-            elseif type(v) == "table" then
+            elseif type(v) == "table" and ref and k then
                 modify_values(v, ref[k])
             end
         end
@@ -626,4 +626,9 @@ function AKYRS.get_shifted_from_key(key)
         k = string.upper(key)
     end
     return k
+end
+
+function AKYRS.is_value_within_threshold(target, value, threshold_percent)
+    local threshold = target * (threshold_percent / 100)
+    return math.abs(target - value) <= threshold
 end

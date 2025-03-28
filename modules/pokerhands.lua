@@ -201,3 +201,59 @@ for i = 3, 31 do
         l_mult = 2*1.45^i + 3,
     }
 end
+
+
+SMODS.PokerHand{
+    key = "expression",
+    chips = 0,
+    mult = 0,
+    l_chips = 0,
+    l_mult = 0,
+    example = {
+        { "", true, nil, akyrs_letter = "3"},
+        { "", true, nil, akyrs_letter = "7"},
+        { "", true, nil, akyrs_letter = "*"},
+        { "", true, nil, akyrs_letter = "4"},
+        { "", true, nil, akyrs_letter = "+"},
+        { "", true, nil, akyrs_letter = "2"},
+        { "", true, nil, akyrs_letter = "7"},
+    },
+    evaluate = function(parts, hand)
+        if ((not G.GAME.akyrs_character_stickers_enabled) or (not G.GAME.akyrs_mathematics_enabled)) then 
+        return {} end
+        local word_hand = {}
+        table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+        for _, v in pairs(hand) do
+            if not v.ability then return {} end
+            local alpha = v.ability.aikoyori_letters_stickers:lower()
+            if alpha == "#" and v.ability.aikoyori_pretend_letter then
+                -- if wild is set fr tbh
+                alpha = v.ability.aikoyori_pretend_letter:lower()
+            elseif alpha == "#" and AKYRS.config.wildcard_behaviour == 3 then -- if it's unset in mode 3 then just make it a random letter i guess
+                alpha = '★'
+            end
+            table.insert(word_hand, alpha)
+                
+        end
+        
+        local expression = table.concat(word_hand)
+        
+        
+        local status, value = pcall(AKYRS.MathParser.solve,AKYRS.MathParser,expression)
+        if not status then return {} end
+
+        if (G.STATE == G.STATES.HAND_PLAYED) then
+            if value ~= value then
+                error("Galaxy Collapse!",4)
+                return {}
+            end
+            attention_text({
+                scale =  1.5, text = string.upper(value), hold = 15, align = 'tm',
+                major = G.play, offset = {x = 0, y = -1}
+            })
+            G.GAME.aiko_words_played[value] = true
+            ease_chips(G.GAME.chips + value)
+        end
+        return {hand}
+    end,
+}

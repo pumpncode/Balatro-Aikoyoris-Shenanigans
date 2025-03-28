@@ -10,12 +10,38 @@ AKYRS.scrabble_scores = {
     u = 1, v = 4, w = 4, x = 8, y = 4, z = 10, ["#"] = 0
 }
 
+AKYRS.math_deck_distribution = {
+    ["1"] = 3,
+    ["2"] = 3,
+    ["3"] = 3,
+    ["4"] = 3,
+    ["5"] = 3,
+    ["6"] = 3,
+    ["7"] = 3,
+    ["8"] = 3,
+    ["9"] = 3,
+    ["0"] = 6,
+    ["("] = 3,
+    [")"] = 3,
+    ["+"] = 4,
+    ["-"] = 4,
+    ["/"] = 4,
+    ["*"] = 4,
+    ["^"] = 1,
+    ["."] = 4,
+}
 
 AKYRS.scrabble_letters = {}
+AKYRS.math_deck_characters = {}
 
 for letter, count in pairs(AKYRS.scrabble_distribution) do
     for i = 1, count do
         table.insert(AKYRS.scrabble_letters, letter)
+    end
+end
+for letter, count in pairs(AKYRS.math_deck_distribution) do
+    for i = 1, count do
+        table.insert(AKYRS.math_deck_characters, letter)
     end
 end
 

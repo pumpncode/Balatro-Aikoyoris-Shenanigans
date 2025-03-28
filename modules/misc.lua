@@ -630,6 +630,9 @@ end
 
 function AKYRS.is_value_within_threshold(target, value, threshold_percent)
     local threshold = target * (threshold_percent / 100)
+    if Talisman then
+        return to_big(math.abs(target - value)):lte(threshold)
+    end
     return math.abs(target - value) <= threshold
 end
 

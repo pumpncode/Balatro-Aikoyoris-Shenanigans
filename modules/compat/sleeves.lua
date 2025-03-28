@@ -15,7 +15,7 @@ if CardSleeves then
                 vars = { self.config.deck_size, self.config.discards, self.config.hand_size, self.config.ante_scaling  }
             elseif self.get_current_deck_key() == "b_akyrs_math_deck" then
                 key = self.key .. "_math_pro"
-                self.config = { akyrs_starting_letters = AKYRS.math_deck_pro_characters, akyrs_letters_no_uppercase = true, hands = 2, hand_size = 2, discards = 4 }
+                self.config = { akyrs_starting_letters = AKYRS.math_deck_pro_characters, akyrs_letters_no_uppercase = true, hands = 2, hand_size = 2, discards = 2 }
                 vars = { self.config.hands, self.config.hand_size, self.config.discards,   }
             else
                 key = self.key

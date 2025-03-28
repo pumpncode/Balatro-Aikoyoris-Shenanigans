@@ -638,6 +638,9 @@ function Back:apply_to_run()
     if self.effect.config.akyrs_power_of_ten_scaling then
         G.GAME.akyrs_power_of_ten_scaling = true
     end
+    if self.effect.config.akyrs_no_skips then
+        G.GAME.akyrs_no_skips = self.effect.config.akyrs_no_skips
+    end
 
     if self.effect.config.akyrs_math_threshold then
         G.GAME.akyrs_math_threshold = self.effect.config.akyrs_math_threshold

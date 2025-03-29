@@ -10,7 +10,8 @@ target = "card.lua"
 pattern = """    local badges = {}"""
 position = "after"
 payload = """
-            if self.is_null or SMODS.has_enhancement(self, "m_akyrs_scoreless") then
+            loc_vars = loc_vars or {}
+            if (self.is_null or SMODS.has_enhancement(self, "m_akyrs_scoreless")) and loc_vars then
                 loc_vars.nominal_chips = nil
             end
 """

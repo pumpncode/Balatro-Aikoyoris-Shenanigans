@@ -13,6 +13,7 @@ return {
                         "as you want per hand",
                         "{C:red}X#1#{} base Blind Size",
                         "{C:red}+#2#{} Discards",
+                        "{C:attention}+#3#{} Hand Size",
                     },
             },
             b_akyrs_math_deck = {
@@ -703,6 +704,17 @@ return {
                     "{C:red}X#4#{} base Blind Size",
              }
             },
+            sleeve_akyrs_letter_math_pro = {
+                name = "Math Deck Pro",
+                text = { 
+                    "Start with additional",
+                    "{C:attention}2{} sets of {C:attention}English alphabet{}",
+                    "and {C:attention}4{} Equal signs",
+                    "{C:blue}+#1#{} Extra Hand",
+                    "{C:attention}+#2#{} Extra Hand Size",
+                    "{C:red}+#3#{} Extra Discards",
+             }
+            },
         }
     },
     misc = {
@@ -839,6 +851,8 @@ return {
             ["akyrs_30-letter Word"] = {'Create a valid '.. 30 ..'-letter English word', 'without extra letters'},
             ["akyrs_31-letter Word"] = {'Create a valid '.. 31 ..'-letter English word', 'without extra letters'},
             ["akyrs_expression"] = {'Create a valid mathematical expression'},
+            ["akyrs_modification"] = {'Modify current chip value'},
+            ["akyrs_assignment"] = {'Assign a value to a variable'},
         },
         poker_hands={
             ["akyrs_3-letter Word"] =  "3".."-letter Word" ,
@@ -871,6 +885,8 @@ return {
             ["akyrs_30-letter Word"] = "30".."-letter Word",
             ["akyrs_31-letter Word"] = "31".."-letter Word",
             ["akyrs_expression"] = "Expression",
+            ["akyrs_modification"] = "Modification",
+            ["akyrs_assignment"] = "Assignment",
         },
         quips={},
         ranks={},

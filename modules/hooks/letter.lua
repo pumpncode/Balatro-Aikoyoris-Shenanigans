@@ -17,6 +17,9 @@ function Card:set_letters_random()
         local index = pseudorandom(pseudoseed('aiko:letters'), 1, #G.GAME.letters_to_give)
         local l = table.remove(G.GAME.letters_to_give, index)
         if not G.GAME.used_up_uppercase then l = l:upper() end
+        if G.GAME.akyrs_mathematics_enabled then 
+            self.is_null = true
+        end
         self.ability.aikoyori_letters_stickers = l
     else
         self.ability.aikoyori_letters_stickers = pseudorandom_element(AKYRS.scrabble_letters, pseudoseed('aiko:letters'))

@@ -3,9 +3,6 @@ AKYRS = SMODS.current_mod
 -- i love jonh debugpkus
 assert(SMODS.current_mod.lovely, "Lovely patches were not loaded.\nMake sure your mod folder is not nested (there should be a bunch of files in the mod folder and not just another folder).")
 
-
-AKYRS.MathParserLibrary = assert(SMODS.load_file("./lib/MathParser.min.lua"))()
-AKYRS.MathParser = AKYRS.MathParserLibrary:new()
 assert(SMODS.load_file("./modules/pre.lua"))()
 assert(SMODS.load_file("./modules/atlasses.lua"))()
 assert(SMODS.load_file("./modules/fonts.lua"))()
@@ -35,6 +32,7 @@ assert(SMODS.load_file("./modules/compat/cryptid.lua"))()
 assert(SMODS.load_file("./modules/compat/sleeves.lua"))()
 assert(SMODS.load_file("./modules/compat/talisman.lua"))()
 assert(SMODS.load_file("./modules/compat/jokerdisplay.lua"))()
+assert(SMODS.load_file("./modules/compat/cartomancer.lua"))()
 assert(SMODS.load_file("./modules/compat/notjustyet.lua"))()
 assert(SMODS.load_file("./modules/pokerhands.lua"))()
 assert(SMODS.load_file("./modules/challenges.lua"))()

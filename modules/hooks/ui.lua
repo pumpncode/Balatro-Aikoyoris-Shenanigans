@@ -505,20 +505,15 @@ end
 
 local canPlayHook = G.FUNCS.can_play
 G.FUNCS.can_play = function(e)
-    local hasUnsetLetters = false
+    local shouldDisableButton = false
     local runOGHook = true
     if AKYRS.config.wildcard_behaviour == 2 and G.GAME.akyrs_character_stickers_enabled then
         
         for i,k in ipairs(G.hand.highlighted) do
             if k.ability.aikoyori_letters_stickers == "#" and not k.ability.aikoyori_pretend_letter then
-                hasUnsetLetters = true
+                shouldDisableButton = true
                 break
             end
-        end
-        if hasUnsetLetters then
-            e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-            e.config.button = nil
-            runOGHook = false
         end
     elseif G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_mathematics_enabled then
         
@@ -541,13 +536,33 @@ G.FUNCS.can_play = function(e)
                 
         end
         
+        local to_number = to_number or function(l) return l end
         local expression = table.concat(word_hand)
         local stat, val = pcall(AKYRS.MathParser.solve,AKYRS.MathParser,expression)
-        if not stat then
-            e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-            e.config.button = nil
+        local stat2, val = pcall(AKYRS.MathParser.solve,AKYRS.MathParser,""..to_number(G.GAME.chips)..expression)
+        local assignment_parts = {}
+        for part in expression:gmatch("[^=]+") do
+            table.insert(assignment_parts, part)
+        end
+        local stat3 = false
+        if #assignment_parts == 2 then
+            local variable, value_expression = assignment_parts[1], assignment_parts[2]
+            local status, value = pcall(AKYRS.MathParser.solve, AKYRS.MathParser, value_expression)
+            if status then
+                stat3 = true
+            end
+        end
+
+
+        if not stat and not stat2 and not stat3 then
+            shouldDisableButton = true
             runOGHook = false
         end
+    end
+    if shouldDisableButton then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+        runOGHook = false
     end
     if runOGHook then
         return canPlayHook(e)

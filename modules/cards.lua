@@ -25,11 +25,12 @@ SMODS.Back{
     loc_vars = function (self, info_queue, card)
         return { vars = {
             self.config.ante_scaling,
-            self.config.discards
+            self.config.discards,
+            self.config.hand_size
         } }
     end,
     config = {
-        akyrs_all_nulls_letter = true,
+        akyrs_starting_letters = AKYRS.scrabble_letters,
         starting_deck_size = 100,
         selection = 1e100,
         discards = 2,
@@ -38,6 +39,7 @@ SMODS.Back{
         akyrs_letters_xmult_enabled = true,
         akyrs_hide_normal_hands = true,
         ante_scaling = 2,
+        hand_size = 2,
         vouchers = {'v_akyrs_alphabet_soup','v_akyrs_crossing_field'}
     },
 }
@@ -53,18 +55,19 @@ SMODS.Back{
         } }
     end,
     config = {
-        akyrs_all_nulls_maths = true,
+        akyrs_starting_letters = AKYRS.math_deck_characters,
         akyrs_start_with_no_cards = true,
         akyrs_mathematics_enabled = true,
         akyrs_character_stickers_enabled = true,
+        akyrs_no_skips = true,
         selection = 1e100,
-        discards = 2,
+        discards = 1,
         akyrs_math_threshold = 2,
         hand_size = 6,
         akyrs_power_of_ten_scaling = 4,
         akyrs_hide_normal_hands = true,
         akyrs_hide_high_card = true,
-        akyrs_hand_to_not_hide = "akyrs_expression",
+        akyrs_hand_to_not_hide = {["akyrs_expression"] = true,["akyrs_modification"] = true },
         akyrs_random_scale = {min = 0.5, max = 9.5},
     },
 }

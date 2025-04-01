@@ -19,7 +19,7 @@ if CardSleeves then
                 vars = { self.config.hands, self.config.hand_size, self.config.discards,   }
             else
                 key = self.key
-                self.config = { vouchers = {'v_akyrs_alphabet_soup' }, ante_scaling = 2, deck_size = 1 }
+                self.config = { vouchers = {'v_akyrs_alphabet_soup' }, ante_scaling = 2, deck_size = 1, akyrs_hand_to_not_hide = {["akyrs_expression"] = true,["akyrs_modification"] = true,["akyrs_assignment"] = true }, }
                 vars = {  }
             end
             return { key = key, vars = vars }
@@ -31,6 +31,9 @@ if CardSleeves then
             end
             if (sleeve.config.akyrs_letters_no_uppercase) then
                 G.GAME.starting_params.akyrs_letters_no_uppercase = sleeve.config.akyrs_letters_no_uppercase
+            end
+            if (sleeve.config.akyrs_hand_to_not_hide) then
+                G.GAME.starting_params.akyrs_hand_to_not_hide = sleeve.config.akyrs_hand_to_not_hide
             end
             CardSleeves.Sleeve.apply(sleeve)
         end

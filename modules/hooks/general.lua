@@ -437,7 +437,7 @@ G.FUNCS.evaluate_play = function()
             major = G.play, offset = {x = 0, y = -1}
         })
     end
-    if G.GAME.aikoyori_variable_to_set and G.GAME.aikoyori_value_to_set_to_variable then
+    if G.GAME.aikoyori_variable_to_set and G.GAME.aikoyori_value_to_set_to_variable and not G.GAME.aikoyori_evaluation_value then
         attention_text({
             scale =  1.5, text = G.GAME.aikoyori_variable_to_set.." = "..tostring(G.GAME.aikoyori_value_to_set_to_variable), hold = 15, align = 'tm',
             major = G.play, offset = {x = 0, y = -1}
@@ -688,7 +688,7 @@ function Back:apply_to_run()
                         -- for cryptid
                         if G.GAME.modifiers and G.GAME.modifiers.cry_ccd then
                             for k, v in pairs(G.playing_cards) do
-                                v:set_ability(get_random_consumable('cry_ccd', { "no_doe", "no_grc" }, nil, nil, true),
+                                v:set_ability(Cryptid.random_consumable('cry_ccd', { "no_doe", "no_grc" }, nil, nil, true),
                                     true, nil)
                             end
                         end

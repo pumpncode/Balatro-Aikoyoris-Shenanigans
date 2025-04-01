@@ -41,8 +41,8 @@ payload = """
             end
 
         else
-            if not _c.is_null then
-                local last_letter = string.sub(_c.key, -1):lower()
+            if not _c.is_null and string.sub(_c.key, -1) then
+                local last_letter = string.lower(string.sub(_c.key, -1))
                 local key = "letterNotScored"
                 if(AKYRS.non_letter_symbols_reverse[last_letter]) then
                     key = key.."Symbols"

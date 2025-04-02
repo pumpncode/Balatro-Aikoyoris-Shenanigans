@@ -648,3 +648,32 @@ function AKYRS.does_hand_only_contain_symbols(cardarea)
     end
     return true
 end
+
+AKYRS.make_new_card_area = function(config)
+    if not config then config = {} end
+    local height = config.h or 1.25
+    local width = config.w or 1
+    local card_limit = config.card_limit or 1
+    local margin_left = config.ml or 0.
+    local margin_top = config.mt or 0
+    local type = config.type or "title"
+    local highlight_limit = config.highlight_limit or 0
+    local use_room = config.use_room or true
+    local ca = CardArea(
+        (use_room and G.ROOM.T.x or 0) + margin_left * (use_room and G.ROOM.T.w or 1), (use_room and G.ROOM.T.h or 0) + margin_top
+        , width , height,
+        {card_limit = card_limit, type = type, highlight_limit = highlight_limit}
+    )
+    return ca
+end
+
+AKYRS.destroy_existing_cards = function(cardarea)
+    if cardarea and cardarea.cards then
+        for i,k in ipairs(cardarea.cards) do
+            k:start_dissolve(nil, true)
+        end
+    end
+    if cardarea then 
+        cardarea:remove()
+    end
+end

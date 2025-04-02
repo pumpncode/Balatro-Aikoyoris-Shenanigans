@@ -10,6 +10,9 @@ pattern = """    self.ARGS.invisible_area_types = self.ARGS.invisible_area_types
 position = "after"
 payload = """
 self.ARGS.invisible_area_types["akyrs_credits"] = 1
+self.ARGS.invisible_area_types["akyrs_solitaire_foundation"] = 1
+self.ARGS.invisible_area_types["akyrs_solitaire_tableau"] = 1
+self.ARGS.invisible_area_types["akyrs_solitaire_waste"] = 1
 """
 overwrite = true
 match_indent = true

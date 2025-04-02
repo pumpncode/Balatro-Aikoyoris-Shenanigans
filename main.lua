@@ -17,6 +17,7 @@ assert(SMODS.load_file("./modules/hooks/debug.lua"))() -- debug
 assert(SMODS.load_file("./modules/hooks/ui.lua"))() -- debug
 assert(SMODS.load_file("./modules/sounds.lua"))()
 assert(SMODS.load_file("./modules/desc.lua"))()
+assert(SMODS.load_file("./modules/custom_minigames/solitaire.lua"))()
 assert(SMODS.load_file("./modules/draw_step.lua"))()
 assert(SMODS.load_file("./modules/consumables.lua"))()
 assert(SMODS.load_file("./modules/boosters.lua"))()

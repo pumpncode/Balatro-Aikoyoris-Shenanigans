@@ -306,7 +306,7 @@ SMODS.current_mod.extra_tabs = function()
     },
     {
       label = "SOLITAIRE TEST",
-      tab_definition_function = AKYRS.SOLITAIRE_UI.get_UI_definition
+      tab_definition_function = AKYRS.SOL.get_UI_definition
     },
   }
 end

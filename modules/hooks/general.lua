@@ -584,22 +584,24 @@ function CardArea:align_cards()
                 card.T.y = self.T.y + 0.25 * (k-1)
                 card.T.x = self.T.x
             end
-            if k == #self.cards then
-                card.states.drag.can = true
-                card.states.click.can = true
-                if card.facing == 'back' then
-                    card.facing = 'front'
-                    card.sprite_facing = 'front'
-                    card.ability.akyrs_solitaire_revealed = true
-                end
-            else
-                card.states.drag.can = false
-                card.states.click.can = false
-                if card.facing == 'front' and not card.ability.akyrs_solitaire_revealed then
-                    card.facing = 'back'
-                    card.sprite_facing = 'back'
-                end
+            if (AKYRS.SOL.current_state ~= AKYRS.SOL.states.START_DRAW and AKYRS.SOL.current_state ~= AKYRS.SOL.states.INACTIVE) then
+                if k == #self.cards then
+                    card.states.drag.can = true
+                    card.states.click.can = true
+                    if card.facing == 'back' then
+                        card:flip()
+                        card.ability.akyrs_solitaire_revealed = true
+                    end
+                else
+                    card.states.drag.can = false
+                    card.states.click.can = false
+                    if card.facing == 'front' and not card.ability.akyrs_solitaire_revealed then
+                        card.facing = 'back'
+                        card.sprite_facing = 'back'
+                    end
+                end 
             end
+
         end
         --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
     end

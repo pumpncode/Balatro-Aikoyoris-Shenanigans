@@ -791,6 +791,8 @@ return {
             k_akyrs_textbox_notice_2 = "interact with the textbox for text to show up",
 
             k_akyrs_plus_alphabet = "+1 Alphabet",
+
+            k_akyrs_solitaire_redeal = "Redeal",
             
             k_akyrs_wildcard_behaviours={
                 'Automatic',

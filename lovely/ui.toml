@@ -27,18 +27,7 @@ payload = """
 overwrite = true
 match_indent = true
 
-[[patches]]
-[patches.pattern]
-target = "game.lua"
-pattern = """
-            G.STATE = G.STATES.NEW_ROUND
-"""
-position = "before"
-payload = """
-            if not G.GAME.current_round.advanced_blind then
-"""
-overwrite = true
-match_indent = true
+
 [[patches]]
 [patches.pattern]
 target = "game.lua"
@@ -47,6 +36,25 @@ pattern = """
 """
 position = "after"
 payload = """
+            end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """
+            G.STATE = G.STATES.NEW_ROUND
+"""
+position = "before"
+payload = """
+            if G.GAME.current_round.advanced_blind and G.GAME.aiko_puzzle_win or G.GAME.current_round.hands_left < 1 then
+                if G.GAME.aiko_puzzle_win or G.GAME.current_round.hands_left < 1 then
+                    G.STATE = G.STATES.NEW_ROUND
+                else
+                    G.STATE = G.STATES.DRAW_TO_HAND
+                end
             elseif G.GAME.akyrs_mathematics_enabled and G.GAME.akyrs_character_stickers_enabled then
                 if (G.GAME.blind and G.GAME.chips == G.GAME.blind.chips) or G.GAME.current_round.hands_left < 1 or AKYRS.does_hand_only_contain_symbols(G.hand) then
                     G.STATE = G.STATES.NEW_ROUND
@@ -54,12 +62,6 @@ payload = """
                     G.STATE = G.STATES.DRAW_TO_HAND
                 end
             else
-                if G.GAME.aiko_puzzle_win or G.GAME.current_round.hands_left < 1 then
-                    G.STATE = G.STATES.NEW_ROUND
-                else
-                    G.STATE = G.STATES.DRAW_TO_HAND
-                end
-            end
 """
 overwrite = true
 match_indent = true

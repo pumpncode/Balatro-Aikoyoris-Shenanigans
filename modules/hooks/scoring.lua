@@ -103,7 +103,7 @@ function eval_card(card,context)
 end
 ]]
 
-
+--[[
 local vanillaRanks = {"2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"}
 local prevRankMap = {"Ace","2","3","4","5","6","7","8","9","10","Jack","Queen","King"}
 AKYRS.RanksPrevSet = {}
@@ -124,6 +124,7 @@ for j, k in ipairs(vanillaRanks) do
         }, true)
     end
 end
+]]
 
 local get_blind_amount_hook = get_blind_amount
 function get_blind_amount(ante)

@@ -559,7 +559,7 @@ end
 local cardAreaAlignHook = CardArea.align_cards
 function CardArea:align_cards()
     local r = cardAreaAlignHook(self)
-    if self.config.type == 'akyrs_credits' then
+    if self.config.type == 'akyrs_credits' and self.cards then
 
         for k, card in ipairs(self.cards) do
             if not card.states.drag.is then 
@@ -573,8 +573,78 @@ function CardArea:align_cards()
                 card.T.x = card.T.x + card.shadow_parrallax.x/30
             end
         end
-        table.sort(self.cards, function (a, b) return a.T.x + a.T.w/2 < b.T.x + b.T.w/2 end)
-    end  
+        --table.sort(self.cards, function (a, b) return a.T.x + a.T.w/2 < b.T.x + b.T.w/2 end)
+    end
+    if self.config.type == 'akyrs_solitaire_tableau' then
+
+        for k, card in ipairs(self.cards) do
+            if not card.states.drag.is then 
+                --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
+
+                card.T.y = self.T.y + 0.25 * (k-1)
+                card.T.x = self.T.x
+            end
+            if (AKYRS.SOL.current_state ~= AKYRS.SOL.states.START_DRAW and AKYRS.SOL.current_state ~= AKYRS.SOL.states.INACTIVE) then
+                if k == #self.cards then
+                    card.states.drag.can = true
+                    card.states.click.can = true
+                    if card.facing == 'back' then
+                        card:flip()
+                        card.sprite_facing = card.facing
+                    end
+                    card.ability.akyrs_solitaire_revealed = true
+                else
+                    card.states.drag.can = false
+                    card.states.click.can = false
+                    if not card.ability.akyrs_solitaire_revealed then
+                        
+                    if card.sprite_facing == 'front' then
+                        card.sprite_facing = 'back'
+                    end
+                    if card.facing == 'front' then
+                        card.facing = 'back'
+                    end
+                    end
+                end 
+            end
+            if AKYRS.SOL.current_state == AKYRS.SOL.states.START_DRAW then
+                card.facing = 'back'
+                card.sprite_facing = 'back'
+            end
+
+        end
+        --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
+    end
+    if self.config.type == 'akyrs_solitaire_foundation' then
+
+        for k, card in ipairs(self.cards) do
+            if not card.states.drag.is then 
+                --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
+
+                card.T.y = self.T.y
+                card.T.x = self.T.x
+            end
+        end
+        --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
+    end
+    if self.config.type == 'akyrs_solitaire_waste' then
+
+        for k, card in ipairs(self.cards) do
+            if not card.states.drag.is then 
+                local xm = math.max(0, (k - #self.cards) + 2 )
+                card.T.y = self.T.y
+                card.T.x = self.T.x + (xm)*0.5
+            end
+            if k == #self.cards then
+                card.states.drag.can = true
+                card.states.click.can = true
+            else
+                card.states.drag.can = false
+                card.states.click.can = false
+            end
+        end
+        --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
+    end
     return r
 end
 local cardAreaDrawHook = CardArea.draw
@@ -583,7 +653,7 @@ function CardArea:draw()
 
     self.ARGS.draw_layers = self.ARGS.draw_layers or self.config.draw_layers or {'shadow', 'card'}
     for k, v in ipairs(self.ARGS.draw_layers) do
-        if self.config.type == 'akyrs_credits' then 
+        if self.config.type == 'akyrs_credits' or self.config.type == 'akyrs_solitaire_tableau' or self.config.type == 'akyrs_solitaire_foundation' or self.config.type == 'akyrs_solitaire_waste' then 
             for i = 1, #self.cards do 
                 if self.cards[i] ~= G.CONTROLLER.focused.target or self == G.hand then
                     if G.CONTROLLER.dragging.target ~= self.cards[i] then self.cards[i]:draw(v) end

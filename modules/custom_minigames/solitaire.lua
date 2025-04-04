@@ -76,26 +76,35 @@ AKYRS.SOL.fill_stock_with_fresh_cards = function()
         local a = AKYRS.SOL.stockCardArea.T
         for i, proto in ipairs(AKYRS.SOL.cards_protos) do
             local card = Card(a.X,a.Y,G.CARD_W,G.CARD_H, G.P_CARDS[proto], G.P_CENTERS['c_base'])
-            card.facing = 'back'
             card.sprite_facing = 'back'
+            card.facing = 'back'
+            card.states.release_on.can = true
+            card.states.collide.can = true
             AKYRS.SOL.stockCardArea:emplace(card)
         end
-        AKYRS.SOL.stockCardArea:shuffle('aikoyorisoiltaires')
+        AKYRS.SOL.stockCardArea:shuffle(pseudoseed('aikoyorisoiltaires'))
     end
 end
 AKYRS.SOL.initial_setup = function()
+    
+    AKYRS.SOL.current_state = AKYRS.SOL.states.START_DRAW
     if #AKYRS.SOL.cardAreas.tableau > 0 and AKYRS.SOL.stockCardArea then
         G.E_MANAGER:add_event(
             Event{
                 trigger = "after",
-                delay = 0,
+                delay = 0.1,
                 func = function ()
-                    AKYRS.SOL.current_state = AKYRS.SOL.states.START_DRAW
                     
                     for i, ca in ipairs(AKYRS.SOL.cardAreas.tableau) do
                         AKYRS.SOL.draw_from_stock_to_tableau(i,i)
                     end
-                    AKYRS.SOL.current_state = AKYRS.SOL.states.PLAY
+                    delay(0.01)
+                    AKYRS.simple_event_add(
+                        function ()
+                            AKYRS.SOL.current_state = AKYRS.SOL.states.PLAY
+                            return true
+                        end, 0.1
+                    )
                     return true
                 end
             }
@@ -105,20 +114,32 @@ end
 AKYRS.SOL.draw_from_stock_to_tableau = function(tableau_no, amount)
     delay(0.01)
     for i=1, amount do
-        draw_card(AKYRS.SOL.stockCardArea,AKYRS.SOL.cardAreas.tableau[tableau_no], i*100/amount, 'down', false, nil, 0.1)
+        AKYRS.draw_card(AKYRS.SOL.stockCardArea,AKYRS.SOL.cardAreas.tableau[tableau_no], i*100/amount, 'down', false, nil, 0.03, false, true, nil,nil, "back")
     end
+    AKYRS.simple_event_add(
+        function ()
+            AKYRS.SOL.cardAreas.tableau[tableau_no]:align_cards()
+            return true
+        end, 0
+    )
 end
 AKYRS.SOL.draw_from_stock_to_waste = function(amount)
     for i=1, amount do
-        draw_card(AKYRS.SOL.stockCardArea,AKYRS.SOL.wasteCardArea, i*100/amount, 'up', false)
+        AKYRS.draw_card(AKYRS.SOL.stockCardArea,AKYRS.SOL.wasteCardArea, i*100/amount, 'up', false, nil, 0)
     end
+    AKYRS.simple_event_add(
+        function ()
+            AKYRS.SOL.wasteCardArea:align_cards()
+            return true
+        end, 0
+    )
 end
 
 AKYRS.SOL.draw_from_waste_to_stock = function(amount)
 
     
     for i=1, amount do
-        draw_card(AKYRS.SOL.wasteCardArea,AKYRS.SOL.stockCardArea, i*100/amount, 'down', false, nil, 0.01)
+        AKYRS.draw_card(AKYRS.SOL.wasteCardArea,AKYRS.SOL.stockCardArea, i*100/amount, 'down', false, nil, 0.01)
     end
 end
 
@@ -149,28 +170,29 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "foundation1" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.foundationArea1) end
         AKYRS.SOL.foundationArea1 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", emplace_func = AKYRS.foundation_check}
         table.insert(AKYRS.SOL.cardAreas.foundations, AKYRS.SOL.foundationArea1)
+        
         return AKYRS.SOL.foundationArea1
     end
     if cardarea == "foundation2" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.foundationArea2) end
         AKYRS.SOL.foundationArea2 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", emplace_func = AKYRS.foundation_check}
         table.insert(AKYRS.SOL.cardAreas.foundations, AKYRS.SOL.foundationArea2)
         return AKYRS.SOL.foundationArea2
     end
     if cardarea == "foundation3" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.foundationArea3) end
         AKYRS.SOL.foundationArea3 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", emplace_func = AKYRS.foundation_check}
         table.insert(AKYRS.SOL.cardAreas.foundations, AKYRS.SOL.foundationArea3)
         return AKYRS.SOL.foundationArea3
     end
     if cardarea == "foundation4" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.foundationArea4) end
         AKYRS.SOL.foundationArea4 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", emplace_func = AKYRS.foundation_check}
         table.insert(AKYRS.SOL.cardAreas.foundations, AKYRS.SOL.foundationArea4)
         return AKYRS.SOL.foundationArea4
     end
@@ -178,7 +200,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau1" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea1) end
         AKYRS.SOL.tableauArea1 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_tableau"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea1)
         return AKYRS.SOL.tableauArea1
@@ -186,7 +208,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau2" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea2) end
         AKYRS.SOL.tableauArea2 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_tableau"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
         
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea2)
         return AKYRS.SOL.tableauArea2
@@ -194,7 +216,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau3" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea3) end
         AKYRS.SOL.tableauArea3 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_tableau"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea3)
         return AKYRS.SOL.tableauArea3
@@ -202,7 +224,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau4" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea4) end
         AKYRS.SOL.tableauArea4 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_tableau"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea4)
         return AKYRS.SOL.tableauArea4
@@ -210,7 +232,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau5" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea5) end
         AKYRS.SOL.tableauArea5 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_tableau"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea5)
         return AKYRS.SOL.tableauArea5
@@ -218,7 +240,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau6" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea6) end
         AKYRS.SOL.tableauArea6 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_tableau"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
             
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea6)
@@ -227,10 +249,11 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau7" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea7) end
         AKYRS.SOL.tableauArea7 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_tableau"}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
             
             table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea7)
         AKYRS.SOL.cardarea_initialized = true -- jank
+        AKYRS.SOL.initial_setup()
         return AKYRS.SOL.tableauArea7
     end
 
@@ -242,7 +265,6 @@ AKYRS.SOL.get_UI_definition = function(params)
 
     end
     AKYRS.SOL.fill_stock_with_fresh_cards()
-    AKYRS.SOL.initial_setup()
     params = params or {}
     local width = params.width or 8
     local height = params.height or 6
@@ -426,4 +448,74 @@ end
 
 G.FUNCS.akyrs_draw_from_waste_to_stock = function ()
     AKYRS.SOL.draw_from_waste_to_stock(#AKYRS.SOL.wasteCardArea.cards)
+end
+
+local cardReleaseRecalcHook = Card.stop_drag
+function Card:stop_drag()
+    for i, k in ipairs(G.CONTROLLER.collision_list) do
+        --print(AKYRS.check_type(k))
+        if (k:is(CardArea)) then
+            if k.config.akyrs_emplace_func and k.config.akyrs_emplace_func(k, self) then
+                --print("SUCCESS!!")
+                AKYRS.draw_card(self.area, k, 1, 'up', nil, self)
+                break
+            end
+        end
+    end
+
+
+    local c = cardReleaseRecalcHook(self)
+    return c
+end
+
+
+G.FUNCS.akyrs_draw_from_waste_to_stock = function ()
+    AKYRS.SOL.draw_from_waste_to_stock(#AKYRS.SOL.wasteCardArea.cards)
+end
+
+G.FUNCS.akyrs_check_drag_target_active = function(e)
+end
+local prepper = Game.prep_stage
+function Game:prep_stage(new_stage, new_state, new_game_obj)
+    local c = prepper(self,new_stage, new_state, new_game_obj)
+    --G.ROOM.states.release_on.can = false
+    return c
+end
+
+AKYRS.are_suits_opposite_colour = function(card1, card2)
+    local red_suits = { "Hearts", "Diamonds" }
+    local black_suits = { "Spades", "Clubs" }
+
+    local is_red1 = AKYRS.is_in_table(red_suits, card1.base.suit)
+    local is_red2 = AKYRS.is_in_table(red_suits, card2.base.suit)
+
+    -- Opposite colors if one is red and the other is black
+    return (is_red1 and not is_red2) or (not is_red1 and is_red2)
+end
+
+function AKYRS.foundation_check(cardarea, card)
+    if #cardarea.cards == 0 and card.base.value == "Ace" then
+        return true
+    end
+    local top_card = cardarea.cards[#cardarea.cards]
+    if top_card and card.base.value ~= "Ace" and AKYRS.is_in_table(SMODS.Ranks[top_card.base.value].next, card.base.value) and 
+    
+        card.base.suit == top_card.base.suit then
+        return true
+    end
+    return false
+    
+end
+function AKYRS.tableau_check(cardarea, card)
+    if #cardarea.cards == 0 and card.base.value == "King" then
+        return true
+    end
+    local top_card = cardarea.cards[#cardarea.cards]
+    --print(AKYRS.is_in_table(SMODS.Ranks[top_card.base.value].prev, card.base.value))
+    if top_card and top_card.base.value ~= "Ace" and AKYRS.is_in_table(SMODS.Ranks[top_card.base.value].prev, card.base.value) and
+    AKYRS.are_suits_opposite_colour(top_card, card) and card.base.suit ~= top_card.base.suit then
+        return true
+    end
+    return false
+    
 end

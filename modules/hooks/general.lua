@@ -590,16 +590,26 @@ function CardArea:align_cards()
                     card.states.click.can = true
                     if card.facing == 'back' then
                         card:flip()
-                        card.ability.akyrs_solitaire_revealed = true
+                        card.sprite_facing = card.facing
                     end
+                    card.ability.akyrs_solitaire_revealed = true
                 else
                     card.states.drag.can = false
                     card.states.click.can = false
-                    if card.facing == 'front' and not card.ability.akyrs_solitaire_revealed then
-                        card.facing = 'back'
+                    if not card.ability.akyrs_solitaire_revealed then
+                        
+                    if card.sprite_facing == 'front' then
                         card.sprite_facing = 'back'
                     end
+                    if card.facing == 'front' then
+                        card.facing = 'back'
+                    end
+                    end
                 end 
+            end
+            if AKYRS.SOL.current_state == AKYRS.SOL.states.START_DRAW then
+                card.facing = 'back'
+                card.sprite_facing = 'back'
             end
 
         end

@@ -658,12 +658,15 @@ AKYRS.make_new_card_area = function(config)
     local margin_top = config.mt or 0
     local type = config.type or "title"
     local highlight_limit = config.highlight_limit or 0
+    local emplace_func = config.emplace_func or nil
     local use_room = config.use_room or true
     local ca = CardArea(
         (use_room and G.ROOM.T.x or 0) + margin_left * (use_room and G.ROOM.T.w or 1), (use_room and G.ROOM.T.h or 0) + margin_top
         , width , height,
-        {card_limit = card_limit, type = type, highlight_limit = highlight_limit}
+        {card_limit = card_limit, type = type, highlight_limit = highlight_limit, akyrs_emplace_func = emplace_func}
     )
+    ca.states.collide.can = true
+    ca.states.release_on.can = true
     return ca
 end
 
@@ -676,4 +679,114 @@ AKYRS.destroy_existing_cards = function(cardarea)
     if cardarea then 
         cardarea:remove()
     end
+end
+
+
+function AKYRS.draw_card(from, to, percent, dir, sort, card, delay, mute, stay_flipped, vol, discarded_only, forced_facing)
+    percent = percent or 50
+    delay = delay or 0.1 
+    if dir == 'down' then 
+        percent = 1-percent
+    end
+    sort = sort or false
+    local drawn = nil
+
+    G.E_MANAGER:add_event(Event({
+        trigger = 'before',
+        delay = delay,
+        blocking = not (G.SETTINGS.GAMESPEED >= 999 and ((to == G.hand and from == G.deck) or (to == G.deck and from == G.hand))), -- Has to be these specific draws only, otherwise it's buggy
+        
+        func = function()
+            if card then 
+                if from then card = from:remove_card(card) end
+                if card then drawn = true end
+                if card and to == G.hand and not card.states.visible then
+                    card.states.visible = true
+                end
+                local stay_flipped = G.GAME and G.GAME.blind and G.GAME.blind:stay_flipped(to, card, from)
+
+                to:emplace(card, nil, stay_flipped)
+                if card and forced_facing then 
+                    card.sprite_facing = forced_facing
+                    card.facing = forced_facing
+                end
+            else
+                card = to:draw_card_from(from, stay_flipped, discarded_only)
+                if card then drawn = true end
+                if card and to == G.hand and not card.states.visible then
+                    card.states.visible = true
+                end
+                if card and forced_facing then 
+                    card.sprite_facing = forced_facing
+                    card.facing = forced_facing
+                end
+            end
+            if not mute and drawn then
+                if from == G.deck or from == G.hand or from == G.play or from == G.jokers or from == G.consumeables or from == G.discard then
+                    G.VIBRATION = G.VIBRATION + 0.6
+                end
+                play_sound('card1', 0.85 + percent*0.2/100, 0.6*(vol or 1))
+            end
+            if sort then
+                to:sort()
+            end
+            SMODS.drawn_cards = SMODS.drawn_cards or {}
+            if card and card.playing_card then SMODS.drawn_cards[#SMODS.drawn_cards+1] = card end
+            
+            if card and forced_facing then 
+                card.facing = forced_facing
+                card.sprite_facing = forced_facing
+            end
+            return true
+        end
+      }))
+end
+
+AKYRS.simple_event_add = function (func, delay)
+    G.E_MANAGER:add_event(Event{
+        trigger = 'after',
+        delay = delay or 0.1,
+        func = func
+    })
+end
+
+AKYRS.check_type = function(d)
+    local type_map = {
+        {"Controller",Controller},
+        {"Particles",Particles},
+        {"DynaText",DynaText},
+        {"Back",Back},
+        {"Blind",Blind},
+        {"Card",Card},
+        {"Tag",Tag},
+        {"CardArea",CardArea},
+        {"UIElement",UIElement},
+        {"UIBox",UIBox},
+        {"AnimatedSprite",AnimatedSprite},
+        {"Sprite",Sprite},
+        {"Card_Character",Card_Character},
+        {"Event",Event},
+        {"EventManager",EventManager},
+        {"Game",Game},
+        {"Moveable",Moveable},
+        {"Node",Node},
+        {"Object",Object},
+    }
+
+    for i, class_ref in ipairs(type_map) do
+        if d:is(class_ref[2]) then
+            return class_ref[1]
+        end
+    end
+
+    return type(d)
+end
+
+function AKYRS.is_in_table(table, value)
+    for _, v in ipairs(table) do
+        if v == value then
+            return true
+        end
+    end
+    return false
 end

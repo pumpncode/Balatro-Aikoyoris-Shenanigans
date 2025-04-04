@@ -571,3 +571,10 @@ G.FUNCS.can_play = function(e)
         return canPlayHook(e)
     end
 end
+
+local UIESetH = UIElement.set_values
+function UIElement:set_values(_T, recalculate)
+    local c = UIESetH(self,_T,recalculate)
+    self.states.release_on.can = true
+    return c
+end

@@ -452,6 +452,15 @@ end
 
 local cardReleaseRecalcHook = Card.stop_drag
 function Card:stop_drag()
+    if self.following_cards then
+        for i,k in ipairs(self.following_cards) do
+            k.is_being_pulled = false
+            if not k.area then
+                k.old_area:emplace(k)
+            end
+        end
+        self.following_cards = {}
+    end
     for i, k in ipairs(G.CONTROLLER.collision_list) do
         --print(AKYRS.check_type(k))
         if (k:is(CardArea)) then
@@ -494,6 +503,7 @@ AKYRS.are_suits_opposite_colour = function(card1, card2)
 end
 
 function AKYRS.foundation_check(cardarea, card)
+    if card.following_cards and #card.following_cards > 0 then return false end
     if #cardarea.cards == 0 and card.base.value == "Ace" then
         return true
     end

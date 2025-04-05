@@ -578,11 +578,17 @@ function CardArea:align_cards()
     if self.config.type == 'akyrs_solitaire_tableau' then
 
         for k, card in ipairs(self.cards) do
-            if not card.states.drag.is then 
+            if not card.states.drag.is and not card.is_being_pulled then 
                 --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
 
-                card.T.y = self.T.y + 0.25 * (k-1)
+                card.T.y = self.T.y + 0.5 * (k-1)
                 card.T.x = self.T.x
+            end
+            card.following_cards = card.following_cards or {}
+            for ke, card2 in ipairs(self.cards) do
+                if ke > k and not AKYRS.is_in_table(card.following_cards,card2) then
+                    table.insert(card.following_cards, card2)
+                end
             end
             if (AKYRS.SOL.current_state ~= AKYRS.SOL.states.START_DRAW and AKYRS.SOL.current_state ~= AKYRS.SOL.states.INACTIVE) then
                 if k == #self.cards then
@@ -594,16 +600,16 @@ function CardArea:align_cards()
                     end
                     card.ability.akyrs_solitaire_revealed = true
                 else
-                    card.states.drag.can = false
-                    card.states.click.can = false
                     if not card.ability.akyrs_solitaire_revealed then
-                        
-                    if card.sprite_facing == 'front' then
-                        card.sprite_facing = 'back'
-                    end
-                    if card.facing == 'front' then
-                        card.facing = 'back'
-                    end
+                            
+                        card.states.drag.can = false
+                        card.states.click.can = false
+                        if card.sprite_facing == 'front' then
+                            card.sprite_facing = 'back'
+                        end
+                        if card.facing == 'front' then
+                            card.facing = 'back'
+                        end
                     end
                 end 
             end
@@ -642,6 +648,19 @@ function CardArea:align_cards()
                 card.states.drag.can = false
                 card.states.click.can = false
             end
+        end
+        --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
+    end
+    if self.config.type == 'akyrs_cards_temporary_dragged' then
+
+        for k, card in ipairs(self.cards) do
+            if not card.states.drag.is and not card.is_being_pulled then 
+                --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
+
+                card.T.y = self.T.y + 0.5 * (k-1)
+                card.T.x = self.T.x
+            end
+
         end
         --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
     end
@@ -964,4 +983,21 @@ function Card:start_materialize(cols, slnt, timefac)
     end
     local h = startMaterializeHook(self, cols, slnt, timefac)
     return h
+end
+
+local cardDragHook = Card.drag
+function Card:drag(off)
+    local c = cardDragHook(self, off)
+    if self.following_cards then
+        for i,k in ipairs(self.following_cards) do
+            if k.area then
+                k.old_area = k.area
+                k.area:remove_card(k)
+            end
+            k.is_being_pulled = true
+            k.T = self.T
+            k.T.y = self.T.y + 0.5 * i
+        end
+    end
+    return c
 end

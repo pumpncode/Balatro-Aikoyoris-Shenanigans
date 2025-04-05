@@ -657,13 +657,14 @@ AKYRS.make_new_card_area = function(config)
     local margin_left = config.ml or 0.
     local margin_top = config.mt or 0
     local type = config.type or "title"
+    local temporary = config.temporary or false
     local highlight_limit = config.highlight_limit or 0
     local emplace_func = config.emplace_func or nil
     local use_room = config.use_room or true
     local ca = CardArea(
         (use_room and G.ROOM.T.x or 0) + margin_left * (use_room and G.ROOM.T.w or 1), (use_room and G.ROOM.T.h or 0) + margin_top
         , width , height,
-        {card_limit = card_limit, type = type, highlight_limit = highlight_limit, akyrs_emplace_func = emplace_func}
+        {card_limit = card_limit, type = type, highlight_limit = highlight_limit, akyrs_emplace_func = emplace_func, temporary = temporary}
     )
     ca.states.collide.can = true
     ca.states.release_on.can = true
@@ -704,8 +705,11 @@ function AKYRS.draw_card(from, to, percent, dir, sort, card, delay, mute, stay_f
                     card.states.visible = true
                 end
                 local stay_flipped = G.GAME and G.GAME.blind and G.GAME.blind:stay_flipped(to, card, from)
-
-                to:emplace(card, nil, stay_flipped)
+                if to then
+                    to:emplace(card, nil, stay_flipped)
+                else
+                    
+                end
                 if card and forced_facing then 
                     card.sprite_facing = forced_facing
                     card.facing = forced_facing

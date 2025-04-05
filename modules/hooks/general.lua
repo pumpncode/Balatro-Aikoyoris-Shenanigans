@@ -585,6 +585,8 @@ function CardArea:align_cards()
             end
             if (AKYRS.SOL.current_state ~= AKYRS.SOL.states.START_DRAW and AKYRS.SOL.current_state ~= AKYRS.SOL.states.INACTIVE) then
                 if k == #self.cards then
+                    
+                    card.states.collide.can = true
                     card.states.drag.can = true
                     card.states.click.can = true
                     if card.facing == 'back' then
@@ -605,6 +607,11 @@ function CardArea:align_cards()
                         end
                     end
                 end 
+            else
+                
+                card.states.collide.can = false
+                card.states.drag.can = false
+                card.states.click.can = false
             end
             if AKYRS.SOL.current_state == AKYRS.SOL.states.START_DRAW then
                 card.facing = 'back'

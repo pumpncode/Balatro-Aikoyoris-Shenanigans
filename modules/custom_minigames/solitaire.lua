@@ -81,6 +81,7 @@ AKYRS.SOL.fill_stock_with_fresh_cards = function()
             card.states.release_on.can = true
             card.states.collide.can = true
             card.ability.akyrs_part_of_solitaire = true
+            card.states.collide.can = false
             AKYRS.SOL.stockCardArea:emplace(card)
         end
         AKYRS.SOL.stockCardArea:shuffle(pseudoseed('aikoyorisoiltaires'))
@@ -530,19 +531,22 @@ function Card:drag(off)
         ]]
 
         for i,k in ipairs(self.following_cards) do
-            k:set_alignment({
+            k.akyrs_card_held = self
+            --[[
+                        k:set_alignment({
                 major = self,
                 bond = "Weak",
                 align = "cm",
-                offset = {
-                    x = 0,
-                    y = 0.5 * i
-                }
-            })
+            })--
+            ]]
+
+            k.T.x = self.T.x
+            k.T.y = self.T.y + 0.5 * i
             k.is_being_pulled = true
-            if k.area then
-                k.area:remove_card(k)
-            end
+            k.akyrs_stay_on_top = i
+            --if k.area then
+            --    k.area:remove_card(k)
+            --end
             --k.area = nil
         end
         --print("THERE are "..#self.children.akyrs_drag_storage.cards," CARDS IN DRAGGED AREA")
@@ -583,12 +587,19 @@ function Card:stop_drag()
     end
     if self.following_cards then
         for i,k in ipairs(self.following_cards) do
+            if k.akyrs_card_held and k.akyrs_card_held:is(Card) then
+                k.akyrs_card_held.following_cards = nil
+                k.akyrs_card_held.area:remove_card(k)
+                k.akyrs_card_held.area:align_cards()
+            end
+            
+            k.akyrs_stay_on_top = nil
+            --[[
             if k.role.major and k.role.major:is(Card) then
                 k.role.major.following_cards = nil
                 k.role.major.area:remove_card(k)
                 k.role.major.area:align_cards()
             end
-
             k:set_alignment({
                 bond = "Strong",
                 offset = {
@@ -596,6 +607,8 @@ function Card:stop_drag()
                 }
             })
             k.role.role_type = "Major"
+            ]]
+            k.akyrs_card_held = nil
         
             if not k.area then k.area = area end
             if not AKYRS.is_in_table(area.cards,k) then

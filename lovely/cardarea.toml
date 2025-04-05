@@ -30,3 +30,54 @@ self.config.akyrs_pile_drag = config.akyrs_pile_drag or nil
 overwrite = true
 match_indent = true
 
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """
+            if not v.parent then 
+                love.graphics.push()
+                v:translate_container()
+                v:draw()
+                love.graphics.pop()
+            end
+            """
+position = "before"
+payload = """
+if not v.akyrs_stay_on_top then
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """
+    for k, v in pairs(self.I.POPUP) do
+        love.graphics.push()
+        v:translate_container()
+        v:draw()
+        love.graphics.pop()
+    end
+            """
+position = "before"
+payload = """
+local top_cards = {}
+for k, v in pairs(self.I.CARD) do
+    if (v.akyrs_stay_on_top) then -- PATCHED BY AIKOYORI :D
+        table.insert(top_cards, v)
+    end
+end
+table.sort(top_cards, function(a, b)
+    return (a.akyrs_stay_on_top or 0) < (b.akyrs_stay_on_top or 0)
+end)
+for i,v in ipairs(top_cards) do
+    love.graphics.push()
+    v:translate_container()
+    v:draw()
+    love.graphics.pop()
+end
+"""
+overwrite = true
+match_indent = true
+

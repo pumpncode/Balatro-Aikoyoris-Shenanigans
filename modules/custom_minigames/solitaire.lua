@@ -532,7 +532,8 @@ function Card:drag(off)
         for i,k in ipairs(self.following_cards) do
             k:set_alignment({
                 major = self,
-                bond = "Strong",
+                bond = "Weak",
+                align = "cm",
                 offset = {
                     x = 0,
                     y = 0.5 * i

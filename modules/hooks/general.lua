@@ -576,19 +576,12 @@ function CardArea:align_cards()
         --table.sort(self.cards, function (a, b) return a.T.x + a.T.w/2 < b.T.x + b.T.w/2 end)
     end
     if self.config.type == 'akyrs_solitaire_tableau' then
-
         for k, card in ipairs(self.cards) do
             if not card.states.drag.is and not card.is_being_pulled then 
                 --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
 
                 card.T.y = self.T.y + 0.5 * (k-1)
                 card.T.x = self.T.x
-            end
-            card.following_cards = card.following_cards or {}
-            for ke, card2 in ipairs(self.cards) do
-                if ke > k and not AKYRS.is_in_table(card.following_cards,card2) then
-                    table.insert(card.following_cards, card2)
-                end
             end
             if (AKYRS.SOL.current_state ~= AKYRS.SOL.states.START_DRAW and AKYRS.SOL.current_state ~= AKYRS.SOL.states.INACTIVE) then
                 if k == #self.cards then
@@ -657,7 +650,7 @@ function CardArea:align_cards()
             if not card.states.drag.is and not card.is_being_pulled then 
                 --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
 
-                card.T.y = self.T.y + 0.5 * (k-1)
+                card.T.y = self.T.y + 0.5 * (k)
                 card.T.x = self.T.x
             end
 
@@ -672,7 +665,7 @@ function CardArea:draw()
 
     self.ARGS.draw_layers = self.ARGS.draw_layers or self.config.draw_layers or {'shadow', 'card'}
     for k, v in ipairs(self.ARGS.draw_layers) do
-        if self.config.type == 'akyrs_credits' or self.config.type == 'akyrs_solitaire_tableau' or self.config.type == 'akyrs_solitaire_foundation' or self.config.type == 'akyrs_solitaire_waste' then 
+        if self.config.type == 'akyrs_credits' or self.config.type == 'akyrs_solitaire_tableau' or self.config.type == 'akyrs_solitaire_foundation' or self.config.type == 'akyrs_solitaire_waste' or self.config.type == 'akyrs_cards_temporary_dragged' and self.cards then 
             for i = 1, #self.cards do 
                 if self.cards[i] ~= G.CONTROLLER.focused.target or self == G.hand then
                     if G.CONTROLLER.dragging.target ~= self.cards[i] then self.cards[i]:draw(v) end
@@ -983,21 +976,4 @@ function Card:start_materialize(cols, slnt, timefac)
     end
     local h = startMaterializeHook(self, cols, slnt, timefac)
     return h
-end
-
-local cardDragHook = Card.drag
-function Card:drag(off)
-    local c = cardDragHook(self, off)
-    if self.following_cards then
-        for i,k in ipairs(self.following_cards) do
-            if k.area then
-                k.old_area = k.area
-                k.area:remove_card(k)
-            end
-            k.is_being_pulled = true
-            k.T = self.T
-            k.T.y = self.T.y + 0.5 * i
-        end
-    end
-    return c
 end

@@ -200,7 +200,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau1" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea1) end
         AKYRS.SOL.tableauArea1 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check, pile_drag = true}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea1)
         return AKYRS.SOL.tableauArea1
@@ -208,7 +208,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau2" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea2) end
         AKYRS.SOL.tableauArea2 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check, pile_drag = true}
         
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea2)
         return AKYRS.SOL.tableauArea2
@@ -216,7 +216,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau3" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea3) end
         AKYRS.SOL.tableauArea3 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check, pile_drag = true}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea3)
         return AKYRS.SOL.tableauArea3
@@ -224,7 +224,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau4" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea4) end
         AKYRS.SOL.tableauArea4 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check, pile_drag = true}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea4)
         return AKYRS.SOL.tableauArea4
@@ -232,7 +232,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau5" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea5) end
         AKYRS.SOL.tableauArea5 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check, pile_drag = true}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea5)
         return AKYRS.SOL.tableauArea5
@@ -240,7 +240,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau6" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea6) end
         AKYRS.SOL.tableauArea6 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check, pile_drag = true}
             
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea6)
@@ -249,7 +249,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau7" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea7) end
         AKYRS.SOL.tableauArea7 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.tableau_check, pile_drag = true}
             
             table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea7)
         AKYRS.SOL.cardarea_initialized = true -- jank
@@ -450,34 +450,6 @@ G.FUNCS.akyrs_draw_from_waste_to_stock = function ()
     AKYRS.SOL.draw_from_waste_to_stock(#AKYRS.SOL.wasteCardArea.cards)
 end
 
-local cardReleaseRecalcHook = Card.stop_drag
-function Card:stop_drag()
-    if self.following_cards then
-        for i,k in ipairs(self.following_cards) do
-            k.is_being_pulled = false
-            if not k.area then
-                k.old_area:emplace(k)
-            end
-        end
-        self.following_cards = {}
-    end
-    for i, k in ipairs(G.CONTROLLER.collision_list) do
-        --print(AKYRS.check_type(k))
-        if (k:is(CardArea)) then
-            if k.config.akyrs_emplace_func and k.config.akyrs_emplace_func(k, self) then
-                --print("SUCCESS!!")
-                AKYRS.draw_card(self.area, k, 1, 'up', nil, self)
-                break
-            end
-        end
-    end
-
-
-    local c = cardReleaseRecalcHook(self)
-    return c
-end
-
-
 G.FUNCS.akyrs_draw_from_waste_to_stock = function ()
     AKYRS.SOL.draw_from_waste_to_stock(#AKYRS.SOL.wasteCardArea.cards)
 end
@@ -528,4 +500,135 @@ function AKYRS.tableau_check(cardarea, card)
     end
     return false
     
+end
+
+
+local cardDragHook = Card.drag
+function Card:drag(off)
+    local c = cardDragHook(self, off)
+    if self.area and not self.following_cards and self.area.config.akyrs_pile_drag then
+        AKYRS.reset_cardarea_bundler(self.area)
+        AKYRS.recalculate_cardarea_bundler(self.area)
+    end
+    if self.following_cards then
+        
+        --[[self.children.akyrs_drag_storage = self.children.akyrs_drag_storage or
+                AKYRS.make_new_card_area{
+            height = 7 * G.CARD_H,
+            width = G.CARD_W,
+            temporary = true,
+            type = 'akyrs_cards_temporary_dragged'
+        }
+        self.children.akyrs_drag_storage:set_alignment({
+            major = self,
+            bond = "Strong"
+        })
+        ]]
+
+        for i,k in ipairs(self.following_cards) do
+            k:set_alignment({
+                major = self,
+                bond = "Strong",
+                offset = {
+                    x = 0,
+                    y = 0.5 * i
+                }
+            })
+            k.is_being_pulled = true
+            if k.area then
+                k.area:remove_card(k)
+            end
+            --k.area = nil
+        end
+        --print("THERE are "..#self.children.akyrs_drag_storage.cards," CARDS IN DRAGGED AREA")
+        --print("THERE are "..#self.following_cards," CARDS IN DRAGGED AREA")
+        if self.area then
+            self.area:align_cards()
+        end
+    end
+    return c
+end
+
+
+local cardReleaseRecalcHook = Card.stop_drag
+function Card:stop_drag()
+
+    local area = self.area
+    for i, k in ipairs(G.CONTROLLER.collision_list) do
+        --print(AKYRS.check_type(k))
+        if (k:is(CardArea)) then
+            if k.config.akyrs_emplace_func and k.config.akyrs_emplace_func(k, self) then
+                --print("SUCCESS!!")
+                area = k
+                break
+            end
+        end
+        
+        if (k:is(Card)) and false then
+            if k.area and k.area.config.akyrs_emplace_func and k.area.config.akyrs_emplace_func(k.area, self) then
+                --print("SUCCESS!!")
+                area = k.area
+                break
+            end
+        end
+    end
+    if area and area ~= self.area then
+        AKYRS.draw_card(self.area, area, 1, 'up', nil, self ,0)
+        area:align_cards()
+    end
+    if self.following_cards then
+        for i,k in ipairs(self.following_cards) do
+            if k.role.major and k.role.major:is(Card) then
+                k.role.major.following_cards = nil
+                k.role.major.area:remove_card(k)
+                k.role.major.area:align_cards()
+            end
+
+            k:set_alignment({
+                bond = "Strong",
+                offset = {
+                    x = 0, y = 0
+                }
+            })
+            k.role.role_type = "Major"
+        
+            if not k.area then k.area = area end
+            if not AKYRS.is_in_table(area.cards,k) then
+                AKYRS.simple_event_add(
+                    function ()
+                        area:emplace(k)
+                        return true
+                    end, 0
+                )
+            end
+            k.following_cards = nil
+            k.is_being_pulled = false
+        end
+        self.following_cards = nil
+        
+    end
+    if area then
+        
+        area:align_cards()
+    end
+--[[
+    if self.children.akyrs_drag_storage and self.children.akyrs_drag_storage.cards then
+        for i,k in ipairs(self.children.akyrs_drag_storage.cards) do
+            AKYRS.draw_card(k.area, self.area, 1, 'up', nil, k,0)
+            k.is_being_pulled = false
+        end
+        AKYRS.simple_event_add(
+            function ()
+                if self.children.akyrs_drag_storage then
+                    self.children.akyrs_drag_storage:remove()
+                    self.children.akyrs_drag_storage = nil
+                end
+                return true
+            end
+        )
+    end
+]]
+
+    local c = cardReleaseRecalcHook(self)
+    return c
 end

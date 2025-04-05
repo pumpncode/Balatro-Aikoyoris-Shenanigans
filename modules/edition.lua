@@ -15,6 +15,12 @@ SMODS.Edition{
                 Xmult = card.edition.extra.x_mult
             }
         end
+        if context.pre_joker and (context.cardarea == G.jokers)  then
+            return {
+                mult = card.edition.extra.mult,
+                Xmult = card.edition.extra.x_mult
+            }
+        end
     end,
     loc_vars = function (self, info_queue, card)
         return {

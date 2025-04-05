@@ -658,13 +658,14 @@ AKYRS.make_new_card_area = function(config)
     local margin_top = config.mt or 0
     local type = config.type or "title"
     local temporary = config.temporary or false
+    local akyrs_pile_drag = config.pile_drag or nil
     local highlight_limit = config.highlight_limit or 0
     local emplace_func = config.emplace_func or nil
     local use_room = config.use_room or true
     local ca = CardArea(
         (use_room and G.ROOM.T.x or 0) + margin_left * (use_room and G.ROOM.T.w or 1), (use_room and G.ROOM.T.h or 0) + margin_top
         , width , height,
-        {card_limit = card_limit, type = type, highlight_limit = highlight_limit, akyrs_emplace_func = emplace_func, temporary = temporary}
+        {card_limit = card_limit, type = type, highlight_limit = highlight_limit, akyrs_emplace_func = emplace_func, temporary = temporary, akyrs_pile_drag=akyrs_pile_drag }
     )
     ca.states.collide.can = true
     ca.states.release_on.can = true
@@ -745,6 +746,60 @@ function AKYRS.draw_card(from, to, percent, dir, sort, card, delay, mute, stay_f
         end
       }))
 end
+function AKYRS.instant_draw_card(from, to, percent, dir, sort, card, mute, stay_flipped, vol, discarded_only, forced_facing)
+    percent = percent or 50
+    if dir == 'down' then 
+        percent = 1-percent
+    end
+    sort = sort or false
+    local drawn = nil
+
+    if card then 
+        if from then card = from:remove_card(card) end
+        if card then drawn = true end
+        if card and to == G.hand and not card.states.visible then
+            card.states.visible = true
+        end
+        local stay_flipped = G.GAME and G.GAME.blind and G.GAME.blind:stay_flipped(to, card, from)
+        if to then
+            to:emplace(card, nil, stay_flipped)
+        else
+            
+        end
+        if card and forced_facing then 
+            card.sprite_facing = forced_facing
+            card.facing = forced_facing
+        end
+    else
+        card = to:draw_card_from(from, stay_flipped, discarded_only)
+        if card then drawn = true end
+        if card and to == G.hand and not card.states.visible then
+            card.states.visible = true
+        end
+        if card and forced_facing then 
+            card.sprite_facing = forced_facing
+            card.facing = forced_facing
+        end
+    end
+    if not mute and drawn then
+        if from == G.deck or from == G.hand or from == G.play or from == G.jokers or from == G.consumeables or from == G.discard then
+            G.VIBRATION = G.VIBRATION + 0.6
+        end
+        play_sound('card1', 0.85 + percent*0.2/100, 0.6*(vol or 1))
+    end
+    if sort then
+        to:sort()
+    end
+    SMODS.drawn_cards = SMODS.drawn_cards or {}
+    if card and card.playing_card then SMODS.drawn_cards[#SMODS.drawn_cards+1] = card end
+    
+    if card and forced_facing then 
+        card.facing = forced_facing
+        card.sprite_facing = forced_facing
+    end
+    return true
+        
+end
 
 AKYRS.simple_event_add = function (func, delay)
     G.E_MANAGER:add_event(Event{
@@ -793,4 +848,43 @@ function AKYRS.is_in_table(table, value)
         end
     end
     return false
+end
+
+function AKYRS.find_index(table, value)
+    for index, v in ipairs(table) do
+        if v == value then
+            return index
+        end
+    end
+    return nil
+end
+
+function AKYRS.remove_value_from_table(tbl, value)
+    local index = AKYRS.find_index(tbl, value)
+    if index then
+        table.remove(tbl, index)
+        return true
+    end
+    return false
+end
+
+function AKYRS.recalculate_cardarea_bundler(cardarea)
+    for k, card in ipairs(cardarea.cards) do -- G.CONTROLLER.hovering.target.area.cards
+        if card.states.drag.is then
+            card.following_cards = card.following_cards or {}
+            for ke, card2 in ipairs(cardarea.cards) do
+                if ke > k and not AKYRS.is_in_table(card.following_cards,card2) and not card2.is_being_pulled then
+                    table.insert(card.following_cards, card2)
+                end
+            end
+        end
+
+    end
+    cardarea.last_card_amnt = #cardarea.cards
+end
+function AKYRS.reset_cardarea_bundler(cardarea)
+    for k, card in ipairs(cardarea.cards) do -- G.CONTROLLER.hovering.target.area.cards
+        card.following_cards = nil
+
+    end
 end

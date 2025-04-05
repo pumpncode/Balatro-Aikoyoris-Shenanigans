@@ -406,7 +406,9 @@ SMODS.Blind {
     end,
     calculate = function (self, blind, context)
         if context.individual and (context.cardarea == G.hand or context.cardarea == G.play or context.cardarea == "unscored") then
-            return { Xmult = blind.debuff.dec_mult }
+            if context.other_card:is_face(true) then
+                return { Xmult = blind.debuff.dec_mult }
+            end
         end
     end,
     pos = { x = 0, y = 9 },

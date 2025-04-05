@@ -80,6 +80,7 @@ AKYRS.SOL.fill_stock_with_fresh_cards = function()
             card.facing = 'back'
             card.states.release_on.can = true
             card.states.collide.can = true
+            card.ability.akyrs_part_of_solitaire = true
             AKYRS.SOL.stockCardArea:emplace(card)
         end
         AKYRS.SOL.stockCardArea:shuffle(pseudoseed('aikoyorisoiltaires'))
@@ -469,12 +470,14 @@ AKYRS.are_suits_opposite_colour = function(card1, card2)
 
     local is_red1 = AKYRS.is_in_table(red_suits, card1.base.suit)
     local is_red2 = AKYRS.is_in_table(red_suits, card2.base.suit)
+    local is_black1 = AKYRS.is_in_table(black_suits, card2.base.suit)
+    local is_black2 = AKYRS.is_in_table(black_suits, card2.base.suit)
 
-    -- Opposite colors if one is red and the other is black
-    return (is_red1 and not is_red2) or (not is_red1 and is_red2)
+    return (is_red1 and is_black2) or (is_black1 and is_red2)
 end
 
 function AKYRS.foundation_check(cardarea, card)
+    if not card.ability.akyrs_part_of_solitaire then return false end
     if card.following_cards and #card.following_cards > 0 then return false end
     if #cardarea.cards == 0 and card.base.value == "Ace" then
         return true
@@ -489,6 +492,7 @@ function AKYRS.foundation_check(cardarea, card)
     
 end
 function AKYRS.tableau_check(cardarea, card)
+    if not card.ability.akyrs_part_of_solitaire then return false end
     if #cardarea.cards == 0 and card.base.value == "King" then
         return true
     end

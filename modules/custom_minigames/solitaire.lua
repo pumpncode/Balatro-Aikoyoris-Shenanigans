@@ -470,7 +470,7 @@ AKYRS.are_suits_opposite_colour = function(card1, card2)
 
     local is_red1 = AKYRS.is_in_table(red_suits, card1.base.suit)
     local is_red2 = AKYRS.is_in_table(red_suits, card2.base.suit)
-    local is_black1 = AKYRS.is_in_table(black_suits, card2.base.suit)
+    local is_black1 = AKYRS.is_in_table(black_suits, card1.base.suit)
     local is_black2 = AKYRS.is_in_table(black_suits, card2.base.suit)
 
     return (is_red1 and is_black2) or (is_black1 and is_red2)

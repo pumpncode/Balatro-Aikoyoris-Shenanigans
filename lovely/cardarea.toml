@@ -34,17 +34,31 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "game.lua"
-pattern = """
-            if not v.parent then 
+pattern = """            if (not v.parent and v ~= self.CONTROLLER.dragging.target and v ~= self.CONTROLLER.focused.target) then
                 love.graphics.push()
                 v:translate_container()
                 v:draw()
                 love.graphics.pop()
-            end
-            """
+            end"""
 position = "before"
 payload = """
 if not v.akyrs_stay_on_top then
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """            if (not v.parent and v ~= self.CONTROLLER.dragging.target and v ~= self.CONTROLLER.focused.target) then
+                love.graphics.push()
+                v:translate_container()
+                v:draw()
+                love.graphics.pop()
+            end"""
+position = "after"
+payload = """
+end
 """
 overwrite = true
 match_indent = true

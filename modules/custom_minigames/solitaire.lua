@@ -75,7 +75,7 @@ AKYRS.SOL.fill_stock_with_fresh_cards = function()
     if AKYRS.SOL.stockCardArea then
         local a = AKYRS.SOL.stockCardArea.T
         for i, proto in ipairs(AKYRS.SOL.cards_protos) do
-            local card = Card(a.X,a.Y,G.CARD_W,G.CARD_H, G.P_CARDS[proto], G.P_CENTERS['c_base'])
+            local card = SolitaireCard(a.X,a.Y,G.CARD_W,G.CARD_H, G.P_CARDS[proto], G.P_CENTERS['c_base'])
             card.sprite_facing = 'back'
             card.facing = 'back'
             card.states.release_on.can = true
@@ -430,14 +430,6 @@ AKYRS.SOL.get_UI_definition = function(params)
 end
 
 -- hooks 
-local solitaireCardClickHook = Card.click
-function Card:click()
-    local c = solitaireCardClickHook(self)
-    if self.area == AKYRS.SOL.stockCardArea then
-        AKYRS.SOL.draw_from_stock_to_waste(1)
-    end
-    return c
-end
 
 local solitaireCardAreaClickHook = CardArea.click
 function CardArea:click()
@@ -457,12 +449,6 @@ G.FUNCS.akyrs_draw_from_waste_to_stock = function ()
 end
 
 G.FUNCS.akyrs_check_drag_target_active = function(e)
-end
-local prepper = Game.prep_stage
-function Game:prep_stage(new_stage, new_state, new_game_obj)
-    local c = prepper(self,new_stage, new_state, new_game_obj)
-    --G.ROOM.states.release_on.can = false
-    return c
 end
 
 AKYRS.are_suits_opposite_colour = function(card1, card2)
@@ -505,148 +491,4 @@ function AKYRS.tableau_check(cardarea, card)
     end
     return false
     
-end
-
-
-local cardDragHook = Card.drag
-function Card:drag(off)
-    local c = cardDragHook(self, off)
-    if self.area and not self.following_cards and self.area.config.akyrs_pile_drag then
-        AKYRS.reset_cardarea_bundler(self.area)
-        AKYRS.recalculate_cardarea_bundler(self.area)
-    end
-    if self.following_cards then
-        
-        --[[self.children.akyrs_drag_storage = self.children.akyrs_drag_storage or
-                AKYRS.make_new_card_area{
-            height = 7 * G.CARD_H,
-            width = G.CARD_W,
-            temporary = true,
-            type = 'akyrs_cards_temporary_dragged'
-        }
-        self.children.akyrs_drag_storage:set_alignment({
-            major = self,
-            bond = "Strong"
-        })
-        ]]
-
-        for i,k in ipairs(self.following_cards) do
-            k.akyrs_card_held = self
-            --[[
-                        k:set_alignment({
-                major = self,
-                bond = "Weak",
-                align = "cm",
-            })--
-            ]]
-
-            k.T.x = self.T.x
-            k.T.y = self.T.y + 0.5 * i
-            k.is_being_pulled = true
-            k.akyrs_stay_on_top = i
-            --if k.area then
-            --    k.area:remove_card(k)
-            --end
-            --k.area = nil
-        end
-        --print("THERE are "..#self.children.akyrs_drag_storage.cards," CARDS IN DRAGGED AREA")
-        --print("THERE are "..#self.following_cards," CARDS IN DRAGGED AREA")
-        if self.area then
-            self.area:align_cards()
-        end
-    end
-    return c
-end
-
-
-local cardReleaseRecalcHook = Card.stop_drag
-function Card:stop_drag()
-
-    local area = self.area
-    for i, k in ipairs(G.CONTROLLER.collision_list) do
-        --print(AKYRS.check_type(k))
-        if (k:is(CardArea)) then
-            if k.config.akyrs_emplace_func and k.config.akyrs_emplace_func(k, self) then
-                --print("SUCCESS!!")
-                area = k
-                break
-            end
-        end
-        
-        if (k:is(Card)) and false then
-            if k.area and k.area.config.akyrs_emplace_func and k.area.config.akyrs_emplace_func(k.area, self) then
-                --print("SUCCESS!!")
-                area = k.area
-                break
-            end
-        end
-    end
-    if area and area ~= self.area then
-        AKYRS.draw_card(self.area, area, 1, 'up', nil, self ,0)
-        area:align_cards()
-    end
-    if self.following_cards then
-        for i,k in ipairs(self.following_cards) do
-            if k.akyrs_card_held and k.akyrs_card_held:is(Card) then
-                k.akyrs_card_held.following_cards = nil
-                k.akyrs_card_held.area:remove_card(k)
-                k.akyrs_card_held.area:align_cards()
-            end
-            
-            k.akyrs_stay_on_top = nil
-            --[[
-            if k.role.major and k.role.major:is(Card) then
-                k.role.major.following_cards = nil
-                k.role.major.area:remove_card(k)
-                k.role.major.area:align_cards()
-            end
-            k:set_alignment({
-                bond = "Strong",
-                offset = {
-                    x = 0, y = 0
-                }
-            })
-            k.role.role_type = "Major"
-            ]]
-            k.akyrs_card_held = nil
-        
-            if not k.area then k.area = area end
-            if not AKYRS.is_in_table(area.cards,k) then
-                AKYRS.simple_event_add(
-                    function ()
-                        area:emplace(k)
-                        return true
-                    end, 0
-                )
-            end
-            k.following_cards = nil
-            k.is_being_pulled = false
-        end
-        self.following_cards = nil
-        
-    end
-    if area then
-        
-        area:align_cards()
-    end
---[[
-    if self.children.akyrs_drag_storage and self.children.akyrs_drag_storage.cards then
-        for i,k in ipairs(self.children.akyrs_drag_storage.cards) do
-            AKYRS.draw_card(k.area, self.area, 1, 'up', nil, k,0)
-            k.is_being_pulled = false
-        end
-        AKYRS.simple_event_add(
-            function ()
-                if self.children.akyrs_drag_storage then
-                    self.children.akyrs_drag_storage:remove()
-                    self.children.akyrs_drag_storage = nil
-                end
-                return true
-            end
-        )
-    end
-]]
-
-    local c = cardReleaseRecalcHook(self)
-    return c
 end

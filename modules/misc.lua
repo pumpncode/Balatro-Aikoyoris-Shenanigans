@@ -868,13 +868,18 @@ function AKYRS.remove_value_from_table(tbl, value)
     return false
 end
 
-function AKYRS.recalculate_cardarea_bundler(cardarea)
+function AKYRS.recalculate_cardarea_bundler(cardarea, func, reset)
+    local logic = func or function(x) return x.states.drag.is or x.states.click.is end
     for k, card in ipairs(cardarea.cards) do -- G.CONTROLLER.hovering.target.area.cards
-        if card.states.drag.is then
-            card.following_cards = card.following_cards or {}
+        if logic(card) then
+            
+            card.following_cards = reset and {} or (card.following_cards or {})
             for ke, card2 in ipairs(cardarea.cards) do
                 if ke > k and not AKYRS.is_in_table(card.following_cards,card2) and not card2.is_being_pulled then
                     table.insert(card.following_cards, card2)
+                    --print(AKYRS.C2S(card2))
+                    --print("CARDS IN THE THING - "..AKYRS.TBL_C2S(card.following_cards))
+                    
                 end
             end
         end
@@ -888,3 +893,20 @@ function AKYRS.reset_cardarea_bundler(cardarea)
 
     end
 end
+
+function AKYRS.C2S(card)
+    return (card.base.value .. " of " .. card.base.suit)
+end
+
+function AKYRS.TBL_C2S(table)
+    local result = ""
+    for _, card in ipairs(table) do
+        if type(card) == "table" and card.base and card.base.value and card.base.suit then
+            result = result .. AKYRS.C2S(card) .. ", "
+        else
+            return nil
+        end
+    end
+    return result:sub(1, -3) -- Remove the trailing ", "
+end
+

@@ -1044,7 +1044,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.after and #G.play.cards >= 3 then
+        if context.after and #G.play.cards >= 3 and not context.blueprint then
 
             for i, card2 in ipairs(G.play.cards) do
                 
@@ -1104,4 +1104,90 @@ AKYRS.LetterJoker{
         name = "Henohenomoheji",
     },
 
+}
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "neurosama",
+    pos = {
+        x = 1, y = 2
+    },
+    rarity = 3,
+    cost = 6,
+    config = {
+        name = "Neuro Sama",
+        extras = {
+            xmult = 1,
+            xmult_inc = 0.1,
+        }
+    },
+    loc_vars = function (self,info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.xmult,
+                card.ability.extras.xmult_inc
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play and not context.blueprint then
+            if context.other_card:is_suit("Hearts") or (context.other_card:is_suit("Spades") and SMODS.find_card("j_akyrs_evilneuro")) then
+                return {
+                    message = localize("k_upgrade_ex"),
+                    func = function ()
+                        card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_inc
+                    end
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+                xmult = card.ability.extras.xmult
+            }
+        end
+    end,
+    blueprint_compat = true
+}
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "evilneuro",
+    pos = {
+        x = 2, y = 2
+    },
+    rarity = 3,
+    cost = 6,
+    config = {
+        name = "Evil Neuro",
+        extras = {
+            xchips = 1,
+            xchips_inc = 0.1,
+        }
+    },
+    loc_vars = function (self,info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.xchips,
+                card.ability.extras.xchips_inc
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play and not context.blueprint then
+            if context.other_card:is_suit("Clubs") or (context.other_card:is_suit("Diamonds") and SMODS.find_card("j_akyrs_neurosama")) then
+                return {
+                    message = localize("k_upgrade_ex"),
+                    func = function ()
+                        card.ability.extras.xchips = card.ability.extras.xchips + card.ability.extras.xchips_inc
+                    end
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+                xchips = card.ability.extras.xchips
+            }
+        end
+    end,
+    blueprint_compat = true
 }

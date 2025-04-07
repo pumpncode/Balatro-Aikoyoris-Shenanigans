@@ -374,6 +374,28 @@ return {
                     "are considered {C:attention}Face{} Cards",
                 }
             },
+            j_akyrs_neurosama = {
+                name = "Neuro Sama",
+                text = { 
+                    "This Joker gains {X:mult,C:white} X#2# {} Mult",
+                    "for every {C:hearts}Hearts{} scored",
+                    "and if {T:j_akyrs_evilneuro,C:red}Evil Neuro{} is present,",
+                    "also gains {X:mult,C:white} X#2# {} Mult",
+                    "for every {C:spades}Spades{} scored",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
+                }
+            },
+            j_akyrs_evilneuro = {
+                name = "Evil Neuro",
+                text = { 
+                    "This Joker gains {X:chips,C:white} X#2# {} Chips",
+                    "for every {C:clubs}Clubs{} scored",
+                    "and if {T:j_akyrs_neurosama,C:red}Neuro Sama{} is present,",
+                    "also gains {X:chips,C:white} X#2# {} Chips",
+                    "for every {C:diamonds}Diamonds{} scored",
+                    "{C:inactive}(Currently {X:chips,C:white} X#1# {C:inactive} Chips)",
+                }
+            },
         },
         Other={
             akyrs_self_destructs={

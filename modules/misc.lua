@@ -983,15 +983,8 @@ function AKYRS.maxwell_enhance_card(enhancement, context)
         context.other_card:set_edition(baby, false, false)
     end
 
-    if (AKYRS.is_valid_enhancement(axd)) then
-        
-        local enhancement_from_name = {}
-        for i,k in pairs(G.P_CENTERS) do
-            if(k.set == "Enhanced") then
-                enhancement_from_name[string.split(k.name," ")[1]] = k
-            end
-        end
-        context.other_card:set_ability(enhancement_from_name[axd],nil,true)
+    if (AKYRS.maxwell_word_to_enhancement_map(enhancement)) then
+        context.other_card:set_ability(AKYRS.maxwell_word_to_enhancement_map(enhancement),nil,true)
     end
 end
 
@@ -1054,4 +1047,41 @@ function AKYRS.maxwell_word_to_edition_map(word)
     if word == "noir" then return "akyrs_noire","e_akyrs_noire" end
     if word == "texel" then return "akyrs_texelated","e_akyrs_texelated" end
     return nil,nil
+end
+
+function AKYRS.maxwell_word_to_enhancement_map(word)
+    if word == "gold" or word == "golden" or word == "aurum" or word == "aurums" or word == "golds" or word == "goldens" or word == "shiny" then
+        return G.P_CENTERS.m_gold
+    end
+    if word == "iron" or word == "steel" or word == "reinforced" or word == "irons" or word == "galvanised" or word == "galvanized" or word == "stainless" then
+        return G.P_CENTERS.m_steel
+    end
+    if word == "rock" or word == "rocky" or word == "stone" or word == "stoned" or word == "pebble" or word == "rocked" or word == "hard" then
+        return G.P_CENTERS.m_stone
+    end
+    if word == "lucky" or word == "clover" or word == "chance" or word == "gambling" or word == "lucked" or word == "luckier" or word == "luckiest" then
+        return G.P_CENTERS.m_lucky
+    end
+    if word == "glass" or word == "glasses" or word == "shatter" or word == "shatters" or word == "break" or word == "breaks" or word == "fragile" or word == "silicon" then
+        return G.P_CENTERS.m_glass
+    end
+    if word == "wild" or word == "wildcard" or word == "any" or word == "all" or word == "every" or word == "able" or word == "bewildered" then
+        return G.P_CENTERS.m_wild
+    end
+    if word == "multiply" or word == "mult" or word == "red" or word == "ding" then
+        return G.P_CENTERS.m_mult
+    end
+    if word == "chips" or word == "chip" or word == "blue" or word == "blip" or word == "bonus" then
+        return G.P_CENTERS.m_bonus
+    end
+    if word == "brick" or word == "heavy" or word == "bonk" or word == "throw" then
+        return G.P_CENTERS["m_akyrs_brick_card"]
+    end
+    if word == "scoreless" then
+        return G.P_CENTERS["m_akyrs_scoreless"]
+    end
+    if word == "base" or word == "plain" or word == "boring" or word == "nothing" or word == "undo" or word == "remove" or word == "delete" then
+        return G.P_CENTERS.c_base
+    end
+    return nil
 end

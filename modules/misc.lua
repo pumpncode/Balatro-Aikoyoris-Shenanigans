@@ -657,13 +657,15 @@ AKYRS.make_new_card_area = function(config)
     local margin_left = config.ml or 0.
     local margin_top = config.mt or 0
     local type = config.type or "title"
+    local temporary = config.temporary or false
+    local akyrs_pile_drag = config.pile_drag or nil
     local highlight_limit = config.highlight_limit or 0
     local emplace_func = config.emplace_func or nil
     local use_room = config.use_room or true
     local ca = CardArea(
         (use_room and G.ROOM.T.x or 0) + margin_left * (use_room and G.ROOM.T.w or 1), (use_room and G.ROOM.T.h or 0) + margin_top
         , width , height,
-        {card_limit = card_limit, type = type, highlight_limit = highlight_limit, akyrs_emplace_func = emplace_func}
+        {card_limit = card_limit, type = type, highlight_limit = highlight_limit, akyrs_emplace_func = emplace_func, temporary = temporary, akyrs_pile_drag=akyrs_pile_drag }
     )
     ca.states.collide.can = true
     ca.states.release_on.can = true
@@ -704,8 +706,11 @@ function AKYRS.draw_card(from, to, percent, dir, sort, card, delay, mute, stay_f
                     card.states.visible = true
                 end
                 local stay_flipped = G.GAME and G.GAME.blind and G.GAME.blind:stay_flipped(to, card, from)
-
-                to:emplace(card, nil, stay_flipped)
+                if to then
+                    to:emplace(card, nil, stay_flipped)
+                else
+                    
+                end
                 if card and forced_facing then 
                     card.sprite_facing = forced_facing
                     card.facing = forced_facing
@@ -740,6 +745,60 @@ function AKYRS.draw_card(from, to, percent, dir, sort, card, delay, mute, stay_f
             return true
         end
       }))
+end
+function AKYRS.instant_draw_card(from, to, percent, dir, sort, card, mute, stay_flipped, vol, discarded_only, forced_facing)
+    percent = percent or 50
+    if dir == 'down' then 
+        percent = 1-percent
+    end
+    sort = sort or false
+    local drawn = nil
+
+    if card then 
+        if from then card = from:remove_card(card) end
+        if card then drawn = true end
+        if card and to == G.hand and not card.states.visible then
+            card.states.visible = true
+        end
+        local stay_flipped = G.GAME and G.GAME.blind and G.GAME.blind:stay_flipped(to, card, from)
+        if to then
+            to:emplace(card, nil, stay_flipped)
+        else
+            
+        end
+        if card and forced_facing then 
+            card.sprite_facing = forced_facing
+            card.facing = forced_facing
+        end
+    else
+        card = to:draw_card_from(from, stay_flipped, discarded_only)
+        if card then drawn = true end
+        if card and to == G.hand and not card.states.visible then
+            card.states.visible = true
+        end
+        if card and forced_facing then 
+            card.sprite_facing = forced_facing
+            card.facing = forced_facing
+        end
+    end
+    if not mute and drawn then
+        if from == G.deck or from == G.hand or from == G.play or from == G.jokers or from == G.consumeables or from == G.discard then
+            G.VIBRATION = G.VIBRATION + 0.6
+        end
+        play_sound('card1', 0.85 + percent*0.2/100, 0.6*(vol or 1))
+    end
+    if sort then
+        to:sort()
+    end
+    SMODS.drawn_cards = SMODS.drawn_cards or {}
+    if card and card.playing_card then SMODS.drawn_cards[#SMODS.drawn_cards+1] = card end
+    
+    if card and forced_facing then 
+        card.facing = forced_facing
+        card.sprite_facing = forced_facing
+    end
+    return true
+        
 end
 
 AKYRS.simple_event_add = function (func, delay)
@@ -789,4 +848,245 @@ function AKYRS.is_in_table(table, value)
         end
     end
     return false
+end
+
+function AKYRS.find_index(table, value)
+    for index, v in ipairs(table) do
+        if v == value then
+            return index
+        end
+    end
+    return nil
+end
+
+function AKYRS.remove_value_from_table(tbl, value)
+    local index = AKYRS.find_index(tbl, value)
+    if index then
+        table.remove(tbl, index)
+        return true
+    end
+    return false
+end
+
+function AKYRS.recalculate_cardarea_bundler(cardarea, func, reset)
+    local logic = func or function(x) return x.states.drag.is or x.states.click.is end
+    for k, card in ipairs(cardarea.cards) do -- G.CONTROLLER.hovering.target.area.cards
+        if logic(card) then
+            
+            card.following_cards = reset and {} or (card.following_cards or {})
+            for ke, card2 in ipairs(cardarea.cards) do
+                if ke > k and not AKYRS.is_in_table(card.following_cards,card2) and not card2.is_being_pulled then
+                    table.insert(card.following_cards, card2)
+                    --print(AKYRS.C2S(card2))
+                    --print("CARDS IN THE THING - "..AKYRS.TBL_C2S(card.following_cards))
+                    
+                end
+            end
+        end
+
+    end
+    cardarea.last_card_amnt = #cardarea.cards
+end
+function AKYRS.reset_cardarea_bundler(cardarea)
+    for k, card in ipairs(cardarea.cards) do -- G.CONTROLLER.hovering.target.area.cards
+        card.following_cards = nil
+
+    end
+end
+
+function AKYRS.C2S(card)
+    return (card.base.value .. " of " .. card.base.suit)
+end
+
+
+function AKYRS.TBL_C2S(table)
+    local result = ""
+    for _, card in ipairs(table) do
+        if type(card) == "table" and card.base and card.base.value and card.base.suit then
+            result = result .. AKYRS.C2S(card) .. ", "
+        else
+            return nil
+        end
+    end
+    return result:sub(1, -3) -- Remove the trailing ", "
+end
+
+function AKYRS.is_valid_enhancement(name)
+    for _, v in pairs(G.P_CENTER_POOLS.Enhanced) do
+        local first_part = string.split(v.name," ")[1]
+        if first_part == name then
+            return true
+        end
+    end
+    return false
+end
+
+function AKYRS.is_valid_edition(name)
+    for _, v in pairs(G.P_CENTER_POOLS.Edition) do
+        if v.name == name then
+            return true
+        end
+    end
+    return false
+end
+
+function string.split(inputstr, sep)
+    if sep == nil then
+        sep = "%s"
+    end
+    local t = {}
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+        table.insert(t, str)
+    end
+    return t
+end
+
+
+function AKYRS.capitalize(stringIn)
+    return string.gsub(" " .. stringIn, "%W%l", string.upper):sub(2)
+end
+
+function AKYRS.maxwell_generate_card(cardtype, context)
+
+    local center,area,count,name = AKYRS.maxwell_card_to_area_map(string.lower(cardtype))
+    for i = 1, count do
+        if name == "Cards" then
+            local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
+            local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
+            area:emplace(carder)
+            table.insert(G.playing_cards, carder)
+        elseif area == G.deck then
+            local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
+            local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, pseudorandom_element(G.P_CENTER_POOLS.Enhanced,pseudoseed("maxwellrandom")), {playing_card = G.playing_card})
+            area:emplace(carder)
+            table.insert(G.playing_cards, carder)
+        elseif name then
+            --print(cardtype)
+            --print(name)
+            pcall(function()
+                local carder = create_card(name, area, nil, nil, nil, nil, nil, 'akyrs:maxwell')
+                if carder then
+                    area:emplace(carder)
+                end
+            end)
+        end 
+    end
+
+end
+
+function AKYRS.maxwell_enhance_card(enhancement, context)
+    local axd = AKYRS.capitalize(enhancement)
+    local da,baby = AKYRS.maxwell_word_to_edition_map(enhancement)
+    --print(da)
+    --print(baby)
+    if (da) then
+        context.other_card:set_edition(baby, false, false)
+    end
+
+    if (AKYRS.maxwell_word_to_enhancement_map(enhancement)) then
+        context.other_card:set_ability(AKYRS.maxwell_word_to_enhancement_map(enhancement),nil,true)
+    end
+end
+
+AKYRS.plural_centers = {
+    ["jokers"]    = "joker",
+    ["cards"]     = "card",
+    ["enhanceds"] = "enhanced",
+    ["vouchers"]  = "voucher",
+    ["tarots"]    = "tarot",
+    ["planets"]   = "planet",
+    ["spectrals"] = "spectral",
+}
+
+function AKYRS.maxwell_card_to_area_map(word)
+    local count = 1
+    local center = G.P_CENTER_POOLS.Tarot
+    local area = G.consumeables
+    local centerName = nil
+    if word == "joker" or word == "jokers" then
+        area = G.jokers
+        center = G.P_CENTER_POOLS.Joker
+        centerName = "Joker"
+    end
+    if word == "card" or word == "cards" then
+        area = G.deck
+        center = G.P_CARDS
+        centerName = "Cards"
+    end
+    if word == "enhanced" or word == "enhanceds"  then
+        area = G.deck
+        center = G.P_CENTER_POOLS.Enhanced
+    end
+    if word == "tarot" or word == "tarots" then
+        area = G.consumeables
+        center = G.P_CENTER_POOLS.Tarot
+        centerName = "Tarot"
+    end
+    if word == "planet" or word == "planets" then
+        area = G.consumeables
+        center = G.P_CENTER_POOLS.Planet
+        centerName = "Planet"
+    end
+    if word == "spectral" or word == "spectrals" then
+        area = G.consumeables
+        center = G.P_CENTER_POOLS.Spectral
+        centerName = "Spectral"
+    end
+    if AKYRS.plural_centers[word] then
+        count = count + pseudorandom(pseudoseed("maniwishiwassleeping"),0,9)
+    end
+    return center,area,count,centerName
+end
+
+function AKYRS.maxwell_word_to_edition_map(word)
+    if word == "neg" or word == "negs" or word == "negative" or word == "negatives" then return "Negative","e_negative" end
+    if word == "holo" or word == "holos" or word == "holographic" or word == "holographics" then return "Holographic","e_holo" end
+    if word == "poly" or word == "polies" or word == "polychrome" or word == "polychromes" then return "Polychrome","e_polychrome" end
+    if word == "foil" or word == "foils" or word == "foiled" or word == "foileds" then return "Foil","e_foil" end
+    if word == "sliced" then return "akyrs_sliced","e_akyrs_sliced" end
+    if word == "noir" then return "akyrs_noire","e_akyrs_noire" end
+    if word == "texel" then return "akyrs_texelated","e_akyrs_texelated" end
+    return nil,nil
+end
+
+function AKYRS.maxwell_word_to_enhancement_map(word)
+    if word == "gold" or word == "golden" or word == "aurum" or word == "aurums" or word == "golds" or word == "goldens" or word == "shiny" then
+        return G.P_CENTERS.m_gold
+    end
+    if word == "iron" or word == "steel" or word == "reinforced" or word == "irons" or word == "galvanised" or word == "galvanized" or word == "stainless" then
+        return G.P_CENTERS.m_steel
+    end
+    if word == "rock" or word == "rocky" or word == "stone" or word == "stoned" or word == "pebble" or word == "rocked" or word == "hard" then
+        return G.P_CENTERS.m_stone
+    end
+    if word == "lucky" or word == "clover" or word == "chance" or word == "gambling" or word == "lucked" or word == "luckier" or word == "luckiest" then
+        return G.P_CENTERS.m_lucky
+    end
+    if word == "glass" or word == "glasses" or word == "shatter" or word == "shatters" or word == "break" or word == "breaks" or word == "fragile" or word == "silicon" then
+        return G.P_CENTERS.m_glass
+    end
+    if word == "wild" or word == "wildcard" or word == "any" or word == "all" or word == "every" or word == "able" or word == "bewildered" then
+        return G.P_CENTERS.m_wild
+    end
+    if word == "multiply" or word == "mult" or word == "red" or word == "ding" then
+        return G.P_CENTERS.m_mult
+    end
+    if word == "chips" or word == "chip" or word == "blue" or word == "blip" or word == "bonus" then
+        return G.P_CENTERS.m_bonus
+    end
+    if word == "brick" or word == "heavy" or word == "bonk" or word == "throw" then
+        return G.P_CENTERS["m_akyrs_brick_card"]
+    end
+    if word == "scoreless" then
+        return G.P_CENTERS["m_akyrs_scoreless"]
+    end
+    if word == "base" or word == "plain" or word == "boring" or word == "nothing" or word == "undo" or word == "remove" or word == "delete" then
+        return G.P_CENTERS.c_base
+    end
+    return nil
+end
+
+function AKYRS.score_catches_fire_or_not()
+    if not G.GAME or not G.GAME.blind then return false end
+    return G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult > G.GAME.blind.chips
 end

@@ -134,3 +134,7 @@ SMODS.Shader{
     key = "magenta_tint",
     path = "magenta_letter_tint.fs",
 }
+SMODS.Shader{
+    key = "burnt",
+    path = "burnt.fs",
+}

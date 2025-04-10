@@ -312,36 +312,6 @@ local function is_valid_pool(name)
     return G.P_CENTER_POOLS[name] and true or false
 end
 
-function string.split(inputstr, sep)
-    if sep == nil then
-        sep = "%s"
-    end
-    local t = {}
-    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-        table.insert(t, str)
-    end
-    return t
-end
-
-local function is_valid_edition(name)
-    for _, v in pairs(G.P_CENTER_POOLS.Edition) do
-        if v.name == name then
-            return true
-        end
-    end
-    return false
-end
-
-
-local function is_valid_enhancement(name)
-    for _, v in pairs(G.P_CENTER_POOLS.Enhanced) do
-        local first_part = string.split(v.name," ")[1]
-        if first_part == name then
-            return true
-        end
-    end
-    return false
-end
 -- it is forbidden to dog
 SMODS.Joker {
     atlas = 'AikoyoriJokers',
@@ -966,57 +936,14 @@ AKYRS.LetterJoker {
             
             if not word then return {} end
             word = string.lower(word)
-            local lowerword = string.lower(word)
-            word = string.gsub(" " .. word, "%W%l", string.upper):sub(2)
-            if word == "Default" then word = nil end
-            if word == "Card" then word = "Default" end
-            if word == "Consumable" then word = "Consumeables" end
-            if word == "Holo" then word = "Holographic" end
             --print(word)
             if context.cardarea == G.play and context.individual then
-                if (is_valid_edition(word)) then
-                    context.other_card:set_edition({[lowerword] = true}, false, false)
-                end
-
-                if (is_valid_enhancement(word)) then
-                    
-                    local enhancement_from_name = {}
-                    for i,k in pairs(G.P_CENTERS) do
-                        if(k.set == "Enhanced") then
-                            enhancement_from_name[string.split(k.name," ")[1]] = k
-                        end
-                    end
-                    context.other_card:set_ability(enhancement_from_name[word],nil,true)
-                end
+                AKYRS.maxwell_enhance_card(word, context)
             end
 
             if context.joker_main then     
-                if (word == "Joker") then
-                    local carder = create_card(word,G.jokers, nil, nil, nil, nil, nil, 'akyrs:maxwell')
-                    G.jokers:emplace(carder)
-                elseif word == "Default" then
-                    local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
-                    local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
-                    G.deck:emplace(carder)
-                    table.insert(G.playing_cards, carder)
-                else
-                    --print(word)
-                    pcall(function(word)
-                        
-                        local carder = create_card(word,G.consumeables, nil, nil, nil, nil, nil, 'akyrs:maxwell')
-                        if carder then
-                            G.consumeables:emplace(carder)
-                        end
-                    end, word)
-                end
-
-                G.GAME.consumeable_buffer = 0
-                return {
-                    message = localize {
-                        key = 'k_created',
-                        vars = { word }
-                    }
-                }
+  
+                AKYRS.maxwell_generate_card(word, context)
             end
         end
     end,
@@ -1044,7 +971,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.after and #G.play.cards >= 3 then
+        if context.after and #G.play.cards >= 3 and not context.blueprint then
 
             for i, card2 in ipairs(G.play.cards) do
                 
@@ -1102,6 +1029,290 @@ AKYRS.LetterJoker{
     cost = 2,
     config = {
         name = "Henohenomoheji",
+    },
+
+}
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "neurosama",
+    pos = {
+        x = 1, y = 2
+    },
+    rarity = 3,
+    cost = 6,
+    config = {
+        name = "Neuro Sama",
+        extras = {
+            xmult = 1,
+            xmult_inc = 0.1,
+        }
+    },
+    loc_vars = function (self,info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.xmult,
+                card.ability.extras.xmult_inc
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play and not context.blueprint then
+            if context.other_card:is_suit("Hearts") or (context.other_card:is_suit("Spades") and SMODS.find_card("j_akyrs_evilneuro")) then
+                return {
+                    message = localize("k_upgrade_ex"),
+                    func = function ()
+                        card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_inc
+                    end
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+                xmult = card.ability.extras.xmult
+            }
+        end
+    end,
+    blueprint_compat = true
+}
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "evilneuro",
+    pos = {
+        x = 2, y = 2
+    },
+    rarity = 3,
+    cost = 6,
+    config = {
+        name = "Evil Neuro",
+        extras = {
+            xchips = 1,
+            xchips_inc = 0.1,
+        }
+    },
+    loc_vars = function (self,info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.xchips,
+                card.ability.extras.xchips_inc
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play and not context.blueprint then
+            if context.other_card:is_suit("Clubs") or (context.other_card:is_suit("Diamonds") and SMODS.find_card("j_akyrs_neurosama")) then
+                return {
+                    message = localize("k_upgrade_ex"),
+                    func = function ()
+                        card.ability.extras.xchips = card.ability.extras.xchips + card.ability.extras.xchips_inc
+                    end
+                }
+            end
+        end
+        if context.joker_main then
+            return {
+                xchips = card.ability.extras.xchips
+            }
+        end
+    end,
+    blueprint_compat = true
+}
+
+
+
+-- happy ghast family
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "dried_ghast",
+    pos = {
+        x = 3, y = 2
+    },
+    rarity = 1,
+    cost = 3,
+    config = {
+        name = "Dried Ghast",
+        extras = {
+            rounds_left = 2
+        }
+    },
+    loc_vars = function (self,info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["j_akyrs_ghastling"]
+        return {
+            vars = {
+                card.ability.extras.rounds_left,
+                2
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.setting_blind and not context.blueprint then
+            return {
+                message = localize("k_akyrs_dried"),
+                func = function ()
+                    card.ability.current_round_discards = G.GAME.round_resets.discards
+                    G.GAME.current_round.discards_left = 0
+                end
+            }
+        end
+        if context.selling_card and context.card == card and not context.blueprint then
+            G.GAME.current_round.discards_left = card.ability.current_round_discards 
+        end
+        if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+            if not card.ability.do_not_decrease then
+                return {
+                    message = localize("k_akyrs_moisture"),
+                    func = function ()
+                        card.ability.extras.rounds_left = card.ability.extras.rounds_left - 1
+                        if card.ability.extras.rounds_left <= 0 then
+                            card:start_dissolve({G.C.BLUE}, nil, 0.5)
+                            SMODS.add_card({ key = "j_akyrs_ghastling"})
+                        end
+                    end
+                }
+            else
+                return {
+                    func = function ()
+                        card.ability.do_not_decrease = false
+                    end
+                }
+            end
+
+        end
+        if context.final_scoring_step and not context.blueprint then
+            if AKYRS.score_catches_fire_or_not() then
+                return {
+                    message = localize("k_reset"),
+                    func = function ()
+                        card.ability.extras.rounds_left = 2
+                        card.ability.do_not_decrease = true
+                    end
+                }
+            end
+        end
+    end,
+}
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "ghastling",
+    pos = {
+        x = 3, y = 2
+    },
+    rarity = 2,
+    cost = 6,
+    config = {
+        name = "Ghastling",
+        extras = {
+            rounds_left = 20,
+            mult = 21.6
+        }
+    },
+    in_pool = function (self, args)
+        return false
+    end,
+    loc_vars = function (self,info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["j_akyrs_happy_ghast"]
+        return {
+            vars = {
+                card.ability.extras.rounds_left,
+                card.ability.extras.mult,
+                3
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.after and context.cardarea == G.jokers and not context.blueprint then
+            if not card.ability.do_not_decrease then
+                return {
+                    message = localize("k_akyrs_growth"),
+                    func = function ()
+                        card.ability.extras.rounds_left = card.ability.extras.rounds_left - (#SMODS.find_card("j_ice_cream") + 1)
+                        if card.ability.extras.rounds_left <= 0 then
+                            card:start_dissolve({G.C.RED}, nil, 0.5)
+                            SMODS.add_card({ key = "j_akyrs_happy_ghast"})
+                        end
+                    end
+                }
+            else
+                return {
+                    func = function ()
+                        card.ability.do_not_decrease = false
+                    end
+                }
+            end
+
+        end
+        if context.joker_main then
+            return {
+                mult = card.ability.extras.mult
+            }
+        end
+        if context.final_scoring_step and not context.blueprint then
+            if AKYRS.score_catches_fire_or_not() then
+                return {
+                    message = localize("k_akyrs_back"),
+                    func = function ()
+                        card.ability.extras.rounds_left = card.ability.extras.rounds_left + 3
+                        card.ability.do_not_decrease = true
+                    end
+                }
+            end
+        end
+    end,
+    blueprint_compat = true
+}
+
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "happy_ghast",
+    pos = {
+        x = 4, y = 2
+    },
+    rarity = 3,
+    cost = 6,
+    config = {
+        name = "Happy Ghast",
+        extras = {
+            xmult = 4
+        }
+    },
+    in_pool = function (self, args)
+        return false
+    end,
+    loc_vars = function (self,info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.xmult
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                xmult = card.ability.extras.xmult
+            }
+        end
+    end,
+    blueprint_compat = true
+}
+
+-- charred roach
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "charred_roach",
+    pos = {
+        x = 4, y = 2
+    },
+    rarity = 3,
+    cost = 6,
+    config = {
+        name = "Happy Ghast",
+        extras = {
+            xmult = 4
+        }
     },
 
 }

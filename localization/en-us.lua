@@ -184,6 +184,13 @@ return {
                     "All values are halved"
                 }
             },
+            e_akyrs_burnt = {
+                name = "Burnt",
+                text = {
+                    "{C:green}#1# in #2#{} chance",
+                    "of disintegrating into Ash"
+                }
+            },
         },
         Enhanced={
             m_akyrs_brick_card = {
@@ -250,7 +257,7 @@ return {
             j_akyrs_maxwells_notebook = {
                 name = "Maxwell's Notebook",
                 text = { 
-                    "Spelling the name of a card",
+                    "Spelling the type of a card",
                     "gives you {C:attention}one{} of that card",
                     "Spelling enhancements enhance",
                     "the {C:attention}scored card{} to the one you spelled",
@@ -372,6 +379,56 @@ return {
                 text = { 
                     "Cards with Letter {C:attention}K{},{C:attention}Q{}, and {C:attention}J",
                     "are considered {C:attention}Face{} Cards",
+                }
+            },
+            j_akyrs_neurosama = {
+                name = "Neuro Sama",
+                text = { 
+                    "This Joker gains {X:mult,C:white} X#2# {} Mult",
+                    "for every {C:hearts}Hearts{} scored",
+                    "and if {T:j_akyrs_evilneuro,C:red}Evil Neuro{} is present,",
+                    "also gains {X:mult,C:white} X#2# {} Mult",
+                    "for every {C:spades}Spades{} scored",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
+                }
+            },
+            j_akyrs_evilneuro = {
+                name = "Evil Neuro",
+                text = { 
+                    "This Joker gains {X:chips,C:white} X#2# {} Chips",
+                    "for every {C:clubs}Clubs{} scored",
+                    "and if {T:j_akyrs_neurosama,C:red}Neuro Sama{} is present,",
+                    "also gains {X:chips,C:white} X#2# {} Chips",
+                    "for every {C:diamonds}Diamonds{} scored",
+                    "{C:inactive}(Currently {X:chips,C:white} X#1# {C:inactive} Chips)",
+                }
+            },
+            j_akyrs_dried_ghast = {
+                name = "Dried Ghast",
+                text = { 
+                    "Play with {C:red}no discards{}",
+                    "for the next {C:blue}#1# rounds{}",
+                    "and create {T:j_akyrs_ghastling,C:purple}Ghastling{}",
+                    "{C:red}Self-destructs{}",
+                    "Resets back to {C:blue}#2#{} if score catches fire",
+                }
+            },
+            j_akyrs_ghastling = {
+                name = "Ghastling",
+                text = { 
+                    "{C:mult}+#2#{} Mult",
+                    "After playing {C:attention}#1#{} hands",
+                    "Creates a {T:j_akyrs_happy_ghast,C:purple}Happy Ghast{}",
+                    "{C:red}Self-destructs{}",
+                    "Decreses by {C:blue}1{} more every hand",
+                    "per {T:j_ice_cream,C:blue}Ice Cream{} present",
+                    "Increases by {C:blue}#3#{} every time score catches fire",
+                }
+            },
+            j_akyrs_happy_ghast = {
+                name = "Happy Ghast",
+                text = { 
+                    "{X:mult,C:white}X#1#{} Mult",
                 }
             },
         },
@@ -767,6 +824,10 @@ return {
             k_akyrs_created_by = "Created by",
             k_akyrs_additional_art_by = "Additional Art by",
             k_akyrs_difficult = "Difficult",
+            k_akyrs_dried = "Dried...",
+            k_akyrs_moisture = "Moisturised!",
+            k_akyrs_growth = "Growth!",
+            k_akyrs_back = "Reverse!",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
             k_akyrs_hardcore_challenge_mode_flavour = "Tough and completely optional Challenges",
@@ -820,7 +881,8 @@ return {
             akyrs_debuff_seal="Seal-Debuffed",
             akyrs_texelated = "Texelated",
             akyrs_noire = "Noire",
-            akyrs_sliced = "Sliced"
+            akyrs_sliced = "Sliced",
+            akyrs_burnt = "Burnt"
         },
         poker_hand_descriptions={
             ["akyrs_3-letter Word"] =  {'Create a valid '.. 3 ..'-letter English word', 'without extra letters'},

@@ -392,7 +392,6 @@ SMODS.Blind {
     boss = {min = 4, max = 10},
     debuff = {
         dec_mult = 0.5,
-        akyrs_score_face_with_my_dec_mult = true
     },
     
     loc_vars = function (self)
@@ -404,6 +403,13 @@ SMODS.Blind {
         return {
             vars = { 0.5 }
         }
+    end,
+    calculate = function (self, blind, context)
+        if context.individual and (context.cardarea == G.hand or context.cardarea == G.play or context.cardarea == "unscored") then
+            if context.other_card:is_face(true) then
+                return { Xmult = blind.debuff.dec_mult }
+            end
+        end
     end,
     pos = { x = 0, y = 9 },
 }

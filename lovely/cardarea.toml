@@ -13,6 +13,7 @@ self.ARGS.invisible_area_types["akyrs_credits"] = 1
 self.ARGS.invisible_area_types["akyrs_solitaire_foundation"] = 1
 self.ARGS.invisible_area_types["akyrs_solitaire_tableau"] = 1
 self.ARGS.invisible_area_types["akyrs_solitaire_waste"] = 1
+self.ARGS.invisible_area_types["akyrs_cards_temporary_dragged"] = 1
 """
 overwrite = true
 match_indent = true
@@ -22,7 +23,75 @@ match_indent = true
 target = "cardarea.lua"
 pattern = """    self.config.sort = config.sort or 'desc'"""
 position = "after"
-payload = """self.config.akyrs_emplace_func = config.akyrs_emplace_func or nil"""
+payload = """
+self.config.akyrs_emplace_func = config.akyrs_emplace_func or nil
+self.config.akyrs_pile_drag = config.akyrs_pile_drag or nil
+"""
+overwrite = true
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """            if (not v.parent and v ~= self.CONTROLLER.dragging.target and v ~= self.CONTROLLER.focused.target) then
+                love.graphics.push()
+                v:translate_container()
+                v:draw()
+                love.graphics.pop()
+            end"""
+position = "before"
+payload = """
+if not v.akyrs_stay_on_top then
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """            if (not v.parent and v ~= self.CONTROLLER.dragging.target and v ~= self.CONTROLLER.focused.target) then
+                love.graphics.push()
+                v:translate_container()
+                v:draw()
+                love.graphics.pop()
+            end"""
+position = "after"
+payload = """
+end
+"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """
+    for k, v in pairs(self.I.POPUP) do
+        love.graphics.push()
+        v:translate_container()
+        v:draw()
+        love.graphics.pop()
+    end
+            """
+position = "before"
+payload = """
+local top_cards = {}
+for k, v in pairs(self.I.CARD) do
+    if (v.akyrs_stay_on_top) then -- PATCHED BY AIKOYORI :D
+        table.insert(top_cards, v)
+    end
+end
+table.sort(top_cards, function(a, b)
+    return (a.akyrs_stay_on_top or 0) < (b.akyrs_stay_on_top or 0)
+end)
+for i,v in ipairs(top_cards) do
+    love.graphics.push()
+    v:translate_container()
+    v:draw()
+    love.graphics.pop()
+end
+"""
 overwrite = true
 match_indent = true
 

@@ -111,6 +111,36 @@ SMODS.Enhancement{
     replace_base_card = true,
 }
 
+SMODS.Enhancement{
+    key = "ash_card",
+    atlas = 'cardUpgrades',
+    pos = {x = 2, y = 0},
+    loc_vars = function (self, info_queue, card)
+        return { vars = {
+            card.ability.extra.chips,
+            G.GAME.probabilities.normal or 1,
+            card.ability.extra.odds,
+        } }
+    end,
+    config = {
+        extra = {
+            chips = 100,
+            odds = 4
+        }
+    },
+    calculate = function (self, card, context)
+        if context.main_scoring and context.cardarea == G.play then
+            return {
+                chips = card.ability.extra.chips
+            }
+        end
+    end,
+    no_rank = true,
+    no_suit = true,
+    never_scores = true,
+    replace_base_card = true,
+}
+
 
 SMODS.Enhancement{
     key = "scoreless",

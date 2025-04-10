@@ -15,6 +15,12 @@ SMODS.Edition{
                 Xmult = card.edition.extra.x_mult
             }
         end
+        if context.pre_joker and (context.cardarea == G.jokers)  then
+            return {
+                mult = card.edition.extra.mult,
+                Xmult = card.edition.extra.x_mult
+            }
+        end
     end,
     loc_vars = function (self, info_queue, card)
         return {
@@ -89,4 +95,35 @@ SMODS.Edition{
         card.akyrs_upgrade_sliced = false
     end,
     weight = 5,
+}
+
+SMODS.Edition{
+    key = "burnt",
+    shader = "akyrs_burnt",
+    config = {
+        extra = {
+            odds = 7,
+        },
+        name = "akyrs_burnt"
+    },
+    disable_base_shader = true,
+    sound = { sound = "akyrs_noire_sfx", per = 0.8, vol = 0.3 },
+    in_shop = false,
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                G.GAME.probabilities.normal or 1,
+                card.edition.extra.odds,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        local odder = pseudorandom("burnt") > G.GAME.probabilities.normal / card.edition.extra.odds
+        if context.end_of_round then
+            if odder and (context.destroy_card) then
+                return { remove = true }
+            end
+        end
+    end,
+    weight = 0,
 }

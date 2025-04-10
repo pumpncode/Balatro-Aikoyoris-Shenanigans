@@ -298,4 +298,41 @@ if JokerDisplay then
             card.joker_display_values.display_state = localize(card.joker_display_values.tab[3][1],card.joker_display_values.tab[3][2])
         end,
     }
+    jod["j_akyrs_neurosama"] = {
+        text = {
+            {
+                border_nodes = {
+                    { text = "X"},
+                    { ref_table = "card.joker_display_values", ref_value = "xmult", retrigger_type = "exp" },
+                },
+            }
+        },
+        reminder_text = {
+            { ref_table = "card.joker_display_values", ref_value = "suits"},
+        },
+        calc_function = function(card)
+            card.joker_display_values.xmult = card.ability.extras.xmult
+            card.joker_display_values.add = card.ability.extras.xmult_inc
+            card.joker_display_values.suits = "(Hearts"..(#SMODS.find_card("j_akyrs_evilneuro") > 0 and " or Spades" or "")..")"
+        end,
+    }
+    jod["j_akyrs_evilneuro"] = {
+        text = {
+            {
+                border_nodes = {
+                    { text = "X"},
+                    { ref_table = "card.joker_display_values", ref_value = "xchips", retrigger_type = "exp" },
+                },
+                border_colour = G.C.CHIPS
+            }
+        },
+        reminder_text = {
+            { ref_table = "card.joker_display_values", ref_value = "suits"},
+        },
+        calc_function = function(card)
+            card.joker_display_values.xchips = card.ability.extras.xchips
+            card.joker_display_values.add = card.ability.extras.xchips_inc
+            card.joker_display_values.suits = "(Clubs"..(#SMODS.find_card("j_akyrs_neurosama") > 0 and " or Diamonds" or "")..")"
+        end,
+    }
 end

@@ -282,6 +282,12 @@ end
 local updateSelectHandHook = Game.update_selecting_hand
 function Game:update_selecting_hand(dt)
     local ret = updateSelectHandHook(self, dt)
+    
+    if G.GAME.aiko_current_word ~= nil then
+        G.GAME.aiko_current_word = nil
+    end
+
+
     if not self.aiko_wordle and AKYRS.isBlindKeyAThing() == "bl_akyrs_the_thought" then
         self.aiko_wordle = UIBox {
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
@@ -313,9 +319,10 @@ function Game:update_new_round(dt)
     if self.aiko_wordle then
         self.aiko_wordle:remove(); self.aiko_wordle = nil
     end
-
+    
     return ret
 end
+
 
 local deleteRunHook = Game.delete_run
 function Game:delete_run()
@@ -576,16 +583,17 @@ function CardArea:align_cards()
         --table.sort(self.cards, function (a, b) return a.T.x + a.T.w/2 < b.T.x + b.T.w/2 end)
     end
     if self.config.type == 'akyrs_solitaire_tableau' then
-
         for k, card in ipairs(self.cards) do
-            if not card.states.drag.is then 
+            if not card.states.drag.is and not card.is_being_pulled then 
                 --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
 
-                card.T.y = self.T.y + 0.25 * (k-1)
+                card.T.y = self.T.y + 0.5 * (k-1)
                 card.T.x = self.T.x
             end
             if (AKYRS.SOL.current_state ~= AKYRS.SOL.states.START_DRAW and AKYRS.SOL.current_state ~= AKYRS.SOL.states.INACTIVE) then
                 if k == #self.cards then
+                    
+                    card.states.collide.can = true
                     card.states.drag.can = true
                     card.states.click.can = true
                     if card.facing == 'back' then
@@ -594,18 +602,23 @@ function CardArea:align_cards()
                     end
                     card.ability.akyrs_solitaire_revealed = true
                 else
-                    card.states.drag.can = false
-                    card.states.click.can = false
                     if not card.ability.akyrs_solitaire_revealed then
-                        
-                    if card.sprite_facing == 'front' then
-                        card.sprite_facing = 'back'
-                    end
-                    if card.facing == 'front' then
-                        card.facing = 'back'
-                    end
+                            
+                        card.states.drag.can = false
+                        card.states.click.can = false
+                        if card.sprite_facing == 'front' then
+                            card.sprite_facing = 'back'
+                        end
+                        if card.facing == 'front' then
+                            card.facing = 'back'
+                        end
                     end
                 end 
+            else
+                
+                card.states.collide.can = false
+                card.states.drag.can = false
+                card.states.click.can = false
             end
             if AKYRS.SOL.current_state == AKYRS.SOL.states.START_DRAW then
                 card.facing = 'back'
@@ -645,6 +658,19 @@ function CardArea:align_cards()
         end
         --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
     end
+    if self.config.type == 'akyrs_cards_temporary_dragged' then
+
+        for k, card in ipairs(self.cards) do
+            if not card.states.drag.is and not card.is_being_pulled then 
+                --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
+
+                card.T.y = self.T.y + 0.5 * (k)
+                card.T.x = self.T.x
+            end
+
+        end
+        --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
+    end
     return r
 end
 local cardAreaDrawHook = CardArea.draw
@@ -653,7 +679,7 @@ function CardArea:draw()
 
     self.ARGS.draw_layers = self.ARGS.draw_layers or self.config.draw_layers or {'shadow', 'card'}
     for k, v in ipairs(self.ARGS.draw_layers) do
-        if self.config.type == 'akyrs_credits' or self.config.type == 'akyrs_solitaire_tableau' or self.config.type == 'akyrs_solitaire_foundation' or self.config.type == 'akyrs_solitaire_waste' then 
+        if self.config.type == 'akyrs_credits' or self.config.type == 'akyrs_solitaire_tableau' or self.config.type == 'akyrs_solitaire_foundation' or self.config.type == 'akyrs_solitaire_waste' or self.config.type == 'akyrs_cards_temporary_dragged' and self.cards then 
             for i = 1, #self.cards do 
                 if self.cards[i] ~= G.CONTROLLER.focused.target or self == G.hand then
                     if G.CONTROLLER.dragging.target ~= self.cards[i] then self.cards[i]:draw(v) end

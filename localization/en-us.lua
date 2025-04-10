@@ -250,7 +250,7 @@ return {
             j_akyrs_maxwells_notebook = {
                 name = "Maxwell's Notebook",
                 text = { 
-                    "Spelling the name of a card",
+                    "Spelling the type of a card",
                     "gives you {C:attention}one{} of that card",
                     "Spelling enhancements enhance",
                     "the {C:attention}scored card{} to the one you spelled",

@@ -898,6 +898,7 @@ function AKYRS.C2S(card)
     return (card.base.value .. " of " .. card.base.suit)
 end
 
+
 function AKYRS.TBL_C2S(table)
     local result = ""
     for _, card in ipairs(table) do
@@ -910,3 +911,147 @@ function AKYRS.TBL_C2S(table)
     return result:sub(1, -3) -- Remove the trailing ", "
 end
 
+function AKYRS.is_valid_enhancement(name)
+    for _, v in pairs(G.P_CENTER_POOLS.Enhanced) do
+        local first_part = string.split(v.name," ")[1]
+        if first_part == name then
+            return true
+        end
+    end
+    return false
+end
+
+function AKYRS.is_valid_edition(name)
+    for _, v in pairs(G.P_CENTER_POOLS.Edition) do
+        if v.name == name then
+            return true
+        end
+    end
+    return false
+end
+
+function string.split(inputstr, sep)
+    if sep == nil then
+        sep = "%s"
+    end
+    local t = {}
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+        table.insert(t, str)
+    end
+    return t
+end
+
+
+function AKYRS.capitalize(stringIn)
+    return string.gsub(" " .. stringIn, "%W%l", string.upper):sub(2)
+end
+
+function AKYRS.maxwell_generate_card(cardtype, context)
+
+    local center,area,count,name = AKYRS.maxwell_card_to_area_map(string.lower(cardtype))
+    for i = 1, count do
+        if name == "Cards" then
+            local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
+            local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
+            area:emplace(carder)
+            table.insert(G.playing_cards, carder)
+        elseif area == G.deck then
+            local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
+            local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, pseudorandom_element(G.P_CENTER_POOLS.Enhanced,pseudoseed("maxwellrandom")), {playing_card = G.playing_card})
+            area:emplace(carder)
+            table.insert(G.playing_cards, carder)
+        elseif name then
+            --print(cardtype)
+            --print(name)
+            pcall(function()
+                local carder = create_card(name, area, nil, nil, nil, nil, nil, 'akyrs:maxwell')
+                if carder then
+                    area:emplace(carder)
+                end
+            end)
+        end 
+    end
+
+end
+
+function AKYRS.maxwell_enhance_card(enhancement, context)
+    local axd = AKYRS.capitalize(enhancement)
+    local da,baby = AKYRS.maxwell_word_to_edition_map(enhancement)
+    --print(da)
+    --print(baby)
+    if (da) then
+        context.other_card:set_edition(baby, false, false)
+    end
+
+    if (AKYRS.is_valid_enhancement(axd)) then
+        
+        local enhancement_from_name = {}
+        for i,k in pairs(G.P_CENTERS) do
+            if(k.set == "Enhanced") then
+                enhancement_from_name[string.split(k.name," ")[1]] = k
+            end
+        end
+        context.other_card:set_ability(enhancement_from_name[axd],nil,true)
+    end
+end
+
+AKYRS.plural_centers = {
+    ["jokers"]    = "joker",
+    ["cards"]     = "card",
+    ["enhanceds"] = "enhanced",
+    ["vouchers"]  = "voucher",
+    ["tarots"]    = "tarot",
+    ["planets"]   = "planet",
+    ["spectrals"] = "spectral",
+}
+
+function AKYRS.maxwell_card_to_area_map(word)
+    local count = 1
+    local center = G.P_CENTER_POOLS.Tarot
+    local area = G.consumeables
+    local centerName = nil
+    if word == "joker" or word == "jokers" then
+        area = G.jokers
+        center = G.P_CENTER_POOLS.Joker
+        centerName = "Joker"
+    end
+    if word == "card" or word == "cards" then
+        area = G.deck
+        center = G.P_CARDS
+        centerName = "Cards"
+    end
+    if word == "enhanced" or word == "enhanceds"  then
+        area = G.deck
+        center = G.P_CENTER_POOLS.Enhanced
+    end
+    if word == "tarot" or word == "tarots" then
+        area = G.consumeables
+        center = G.P_CENTER_POOLS.Tarot
+        centerName = "Tarot"
+    end
+    if word == "planet" or word == "planets" then
+        area = G.consumeables
+        center = G.P_CENTER_POOLS.Planet
+        centerName = "Planet"
+    end
+    if word == "spectral" or word == "spectrals" then
+        area = G.consumeables
+        center = G.P_CENTER_POOLS.Spectral
+        centerName = "Spectral"
+    end
+    if AKYRS.plural_centers[word] then
+        count = count + pseudorandom(pseudoseed("maniwishiwassleeping"),0,9)
+    end
+    return center,area,count,centerName
+end
+
+function AKYRS.maxwell_word_to_edition_map(word)
+    if word == "neg" or word == "negs" or word == "negative" or word == "negatives" then return "Negative","e_negative" end
+    if word == "holo" or word == "holos" or word == "holographic" or word == "holographics" then return "Holographic","e_holo" end
+    if word == "poly" or word == "polies" or word == "polychrome" or word == "polychromes" then return "Polychrome","e_polychrome" end
+    if word == "foil" or word == "foils" or word == "foiled" or word == "foileds" then return "Foil","e_foil" end
+    if word == "sliced" then return "akyrs_sliced","e_akyrs_sliced" end
+    if word == "noir" then return "akyrs_noire","e_akyrs_noire" end
+    if word == "texel" then return "akyrs_texelated","e_akyrs_texelated" end
+    return nil,nil
+end

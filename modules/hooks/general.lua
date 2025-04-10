@@ -282,6 +282,12 @@ end
 local updateSelectHandHook = Game.update_selecting_hand
 function Game:update_selecting_hand(dt)
     local ret = updateSelectHandHook(self, dt)
+    
+    if G.GAME.aiko_current_word ~= nil then
+        G.GAME.aiko_current_word = nil
+    end
+
+
     if not self.aiko_wordle and AKYRS.isBlindKeyAThing() == "bl_akyrs_the_thought" then
         self.aiko_wordle = UIBox {
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
@@ -313,9 +319,10 @@ function Game:update_new_round(dt)
     if self.aiko_wordle then
         self.aiko_wordle:remove(); self.aiko_wordle = nil
     end
-
+    
     return ret
 end
+
 
 local deleteRunHook = Game.delete_run
 function Game:delete_run()

@@ -184,6 +184,13 @@ return {
                     "All values are halved"
                 }
             },
+            e_akyrs_burnt = {
+                name = "Burnt",
+                text = {
+                    "{C:green}#1# in #2#{} chance",
+                    "of disintegrating into Ash"
+                }
+            },
         },
         Enhanced={
             m_akyrs_brick_card = {
@@ -874,7 +881,8 @@ return {
             akyrs_debuff_seal="Seal-Debuffed",
             akyrs_texelated = "Texelated",
             akyrs_noire = "Noire",
-            akyrs_sliced = "Sliced"
+            akyrs_sliced = "Sliced",
+            akyrs_burnt = "Burnt"
         },
         poker_hand_descriptions={
             ["akyrs_3-letter Word"] =  {'Create a valid '.. 3 ..'-letter English word', 'without extra letters'},

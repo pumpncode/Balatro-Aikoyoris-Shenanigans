@@ -1298,3 +1298,21 @@ SMODS.Joker{
     end,
     blueprint_compat = true
 }
+
+-- charred roach
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "charred_roach",
+    pos = {
+        x = 4, y = 2
+    },
+    rarity = 3,
+    cost = 6,
+    config = {
+        name = "Happy Ghast",
+        extras = {
+            xmult = 4
+        }
+    },
+
+}

@@ -1320,6 +1320,7 @@ SMODS.Joker{
                     if context.card_getting_removed.area == G.jokers then
                         local copy = copy_card(context.card_getting_removed,nil,nil,nil, true)
                         copy:set_edition('e_akyrs_burnt')
+                        copy.sell_cost = 0
                         G.jokers:emplace(copy)
                     end
                 end
@@ -1336,6 +1337,7 @@ SMODS.Joker{
                         table.insert(G.playing_cards, copy)
                         copy:set_edition('e_akyrs_burnt')
                         copy:add_to_deck()
+                        copy.sell_cost = 0
                         G.hand:emplace(copy)
                         copy:start_materialize(nil)
 

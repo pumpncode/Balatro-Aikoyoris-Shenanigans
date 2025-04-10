@@ -101,7 +101,7 @@ SMODS.Edition{
     key = "burnt",
     shader = "akyrs_burnt",
     config = {
-        extra = {
+        extras = {
             odds = 7,
         },
         name = "akyrs_burnt"
@@ -113,13 +113,13 @@ SMODS.Edition{
         return {
             vars = {
                 G.GAME.probabilities.normal or 1,
-                card.edition.extra.odds,
+                card.edition.extras.odds,
             }
         }
     end,
     calculate = function (self, card, context)
         if context.end_of_round then
-            local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.edition.extra.odds
+            local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.edition.extras.odds
             card.edition.akyrs_burned_to_ash = odder
         end
         

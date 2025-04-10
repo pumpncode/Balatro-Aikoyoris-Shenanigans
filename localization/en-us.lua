@@ -205,6 +205,14 @@ return {
                 text={
                     "Does not score"
                 },
+            },
+            m_akyrs_ash_card = {
+                name="Ash Card",
+                text={
+                    "{C:blue}+#1#{} Chips",
+                    "{C:green}#2# in #3#{} chance",
+                    "of disintegrating into nothing"
+                },
             }
         },
         Joker={
@@ -429,6 +437,14 @@ return {
                 name = "Happy Ghast",
                 text = { 
                     "{X:mult,C:white}X#1#{} Mult",
+                }
+            },
+            j_akyrs_ash_joker = {
+                name = "Ash Joker",
+                text = { 
+                    "{C:chips}+#1#{} Chips",
+                    "{C:green}#2# in #3#{} chance",
+                    "of disintegrating into nothing"
                 }
             },
         },

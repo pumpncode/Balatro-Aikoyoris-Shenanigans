@@ -118,12 +118,11 @@ SMODS.Edition{
         }
     end,
     calculate = function (self, card, context)
-        local odder = pseudorandom("burnt") > G.GAME.probabilities.normal / card.edition.extra.odds
         if context.end_of_round then
-            if odder and (context.destroy_card) then
-                return { remove = true }
-            end
+            local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.edition.extra.odds
+            card.edition.akyrs_burned_to_ash = odder
         end
+        
     end,
     weight = 0,
 }

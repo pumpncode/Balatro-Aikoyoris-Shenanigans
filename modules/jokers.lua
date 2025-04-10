@@ -1309,10 +1309,50 @@ SMODS.Joker{
     rarity = 3,
     cost = 6,
     config = {
-        name = "Happy Ghast",
+        name = "Charred Roach",
         extras = {
-            xmult = 4
         }
     },
+
+}
+-- ash jpker
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "ash_joker",
+    pos = {
+        x = 5, y = 2
+    },
+    rarity = 1,
+    cost = 0,
+    in_pool = function (self, args)
+        return false
+    end,
+    config = {
+        name = "Ash Joker",
+        extras = {
+            chips = 100,
+            odds = 4
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.chips,
+                G.GAME.probabilities.normal,
+                card.ability.extras.odds,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                chips = card.ability.extras.chips
+            }
+        end
+        if context.end_of_round and context.cardarea == G.jokers then
+            local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.ability.extras.odds
+            card.ability.akyrs_ash_disintegrate = odder
+        end
+    end
 
 }

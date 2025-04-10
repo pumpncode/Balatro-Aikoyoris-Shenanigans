@@ -271,6 +271,39 @@ function end_round()
                             delay = 0.5,
                         }), 'base')
                     end
+                    if SMODS.get_enhancements(card)["m_akyrs_ash_card"] or card.config.center_key == "j_akyrs_ash_joker" then
+                        local odder = pseudorandom("ashed") < G.GAME.probabilities.normal / card.ability.extras.odds
+                        if odder then
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    card:start_dissolve({ G.C.BLACK }, nil, 1.6)
+                                    return true
+                                end,
+                                delay = 0.5,
+                            }), 'base')
+                        end
+
+                    end
+                    if card.edition and card.edition.key == "e_akyrs_burnt" then
+                        local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.edition.extras.odds
+                        if odder then
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    local area = card.area
+                                    if area == G.jokers then
+                                        SMODS.add_card({ key = "j_akyrs_ash_joker"})
+                                    end
+                                    if area == G.deck then
+                                        SMODS.add_card({ key = "m_akyrs_ash_card"})
+                                    end
+                                    card:start_dissolve({ G.C.BLACK }, nil, 1.6)
+                                    
+                                    return true
+                                end,
+                                delay = 0.5,
+                            }), 'base')
+                        end
+                    end
                 end
             end
         end

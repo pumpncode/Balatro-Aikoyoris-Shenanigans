@@ -110,6 +110,8 @@ SMODS.Edition{
     sound = { sound = "akyrs_noire_sfx", per = 0.8, vol = 0.3 },
     in_shop = false,
     loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["m_akyrs_ash_card"]
+        info_queue[#info_queue+1] = G.P_CENTERS["j_akyrs_ash_joker"]
         return {
             vars = {
                 G.GAME.probabilities.normal or 1,
@@ -118,10 +120,6 @@ SMODS.Edition{
         }
     end,
     calculate = function (self, card, context)
-        if context.end_of_round then
-            local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.edition.extras.odds
-            card.edition.akyrs_burned_to_ash = odder
-        end
         
     end,
     weight = 0,

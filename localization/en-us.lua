@@ -443,7 +443,7 @@ return {
                 name = "Charred Roach",
                 text = { 
                     "{C:red}Destroying{} cards",
-                    "grants you a {C:yellow}Burnt{} copy of it",
+                    "grants you a {C:attention}Burnt{} copy of it",
                 }
             },
             j_akyrs_ash_joker = {

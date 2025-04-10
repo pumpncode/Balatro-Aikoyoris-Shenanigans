@@ -139,7 +139,7 @@ SMODS.Enhancement{
     end,
     config = {
         extras = {
-            chips = 100,
+            chips = 20,
             odds = 4
         }
     },

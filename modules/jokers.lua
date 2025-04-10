@@ -1313,6 +1313,10 @@ SMODS.Joker{
         extras = {
         }
     },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["e_akyrs_burnt"]
+        
+    end,
     calculate = function (self, card, context)
         if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] and card == context.card_triggering then
             return {
@@ -1366,7 +1370,7 @@ SMODS.Joker{
     config = {
         name = "Ash Joker",
         extras = {
-            chips = 100,
+            chips = 20,
             odds = 4
         }
     },

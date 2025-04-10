@@ -1142,6 +1142,7 @@ SMODS.Joker{
         return {
             vars = {
                 card.ability.extras.rounds_left,
+                2
             }
         }
     end,
@@ -1159,16 +1160,36 @@ SMODS.Joker{
             G.GAME.current_round.discards_left = card.ability.current_round_discards 
         end
         if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
-            return {
-                message = localize("k_akyrs_moisture"),
-                func = function ()
-                    card.ability.extras.rounds_left = card.ability.extras.rounds_left - 1
-                    if card.ability.extras.rounds_left <= 0 then
-                        card:start_dissolve({G.C.BLUE}, nil, 0.5)
-                        SMODS.add_card({ key = "j_akyrs_ghastling"})
+            if not card.ability.do_not_decrease then
+                return {
+                    message = localize("k_akyrs_moisture"),
+                    func = function ()
+                        card.ability.extras.rounds_left = card.ability.extras.rounds_left - 1
+                        if card.ability.extras.rounds_left <= 0 then
+                            card:start_dissolve({G.C.BLUE}, nil, 0.5)
+                            SMODS.add_card({ key = "j_akyrs_ghastling"})
+                        end
                     end
-                end
-            }
+                }
+            else
+                return {
+                    func = function ()
+                        card.ability.do_not_decrease = false
+                    end
+                }
+            end
+
+        end
+        if context.final_scoring_step and not context.blueprint then
+            if AKYRS.score_catches_fire_or_not() then
+                return {
+                    message = localize("k_reset"),
+                    func = function ()
+                        card.ability.extras.rounds_left = 2
+                        card.ability.do_not_decrease = true
+                    end
+                }
+            end
         end
     end,
 }
@@ -1185,7 +1206,7 @@ SMODS.Joker{
         name = "Ghastling",
         extras = {
             rounds_left = 20,
-            mult = 35
+            mult = 21.6
         }
     },
     in_pool = function (self, args)
@@ -1197,30 +1218,52 @@ SMODS.Joker{
             vars = {
                 card.ability.extras.rounds_left,
                 card.ability.extras.mult,
+                3
             }
         }
     end,
     calculate = function (self, card, context)
         if context.after and context.cardarea == G.jokers and not context.blueprint then
-            return {
-                message = localize("k_akyrs_moisture"),
-                func = function ()
-                    card.ability.extras.rounds_left = card.ability.extras.rounds_left - (#SMODS.find_card("j_ice_cream") > 0 and 2 or 1)
-                    if card.ability.extras.rounds_left <= 0 then
-                        card:start_dissolve({G.C.RED}, nil, 0.5)
-                        SMODS.add_card({ key = "j_akyrs_happy_ghast"})
+            if not card.ability.do_not_decrease then
+                return {
+                    message = localize("k_akyrs_growth"),
+                    func = function ()
+                        card.ability.extras.rounds_left = card.ability.extras.rounds_left - (#SMODS.find_card("j_ice_cream") + 1)
+                        if card.ability.extras.rounds_left <= 0 then
+                            card:start_dissolve({G.C.RED}, nil, 0.5)
+                            SMODS.add_card({ key = "j_akyrs_happy_ghast"})
+                        end
                     end
-                end
-            }
+                }
+            else
+                return {
+                    func = function ()
+                        card.ability.do_not_decrease = false
+                    end
+                }
+            end
+
         end
         if context.joker_main then
             return {
                 mult = card.ability.extras.mult
             }
         end
+        if context.final_scoring_step and not context.blueprint then
+            if AKYRS.score_catches_fire_or_not() then
+                return {
+                    message = localize("k_akyrs_back"),
+                    func = function ()
+                        card.ability.extras.rounds_left = card.ability.extras.rounds_left + 3
+                        card.ability.do_not_decrease = true
+                    end
+                }
+            end
+        end
     end,
     blueprint_compat = true
 }
+
 
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
@@ -1228,13 +1271,12 @@ SMODS.Joker{
     pos = {
         x = 4, y = 2
     },
-    rarity = 2,
+    rarity = 3,
     cost = 6,
     config = {
         name = "Happy Ghast",
         extras = {
-            rounds_left = 20,
-            xmult = 4.5
+            xmult = 4
         }
     },
     in_pool = function (self, args)
@@ -1243,7 +1285,7 @@ SMODS.Joker{
     loc_vars = function (self,info_queue, card)
         return {
             vars = {
-                card.ability.extras.xmult,
+                card.ability.extras.xmult
             }
         }
     end,

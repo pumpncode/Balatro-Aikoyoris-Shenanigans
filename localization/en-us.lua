@@ -402,7 +402,8 @@ return {
                     "Play with {C:red}no discards{}",
                     "for the next {C:blue}#1# rounds{}",
                     "and create {T:j_akyrs_ghastling,C:purple}Ghastling{}",
-                    "{C:red}Self-destructs{}"
+                    "{C:red}Self-destructs{}",
+                    "Resets back to {C:blue}#2#{} if score catches fire",
                 }
             },
             j_akyrs_ghastling = {
@@ -412,8 +413,9 @@ return {
                     "After playing {C:attention}#1#{} hands",
                     "Creates a {T:j_akyrs_happy_ghast,C:purple}Happy Ghast{}",
                     "{C:red}Self-destructs{}",
-                    "Decreses twice as fast",
-                    "if at least one {T:j_ice_cream,C:blue}Ice Cream{} is present",
+                    "Decreses by {C:blue}1{} more every hand",
+                    "per {T:j_ice_cream,C:blue}Ice Cream{} present",
+                    "Increases by {C:blue}#3#{} every time score catches fire",
                 }
             },
             j_akyrs_happy_ghast = {
@@ -818,6 +820,7 @@ return {
             k_akyrs_dried = "Dried...",
             k_akyrs_moisture = "Moisturised!",
             k_akyrs_growth = "Growth!",
+            k_akyrs_back = "Reverse!",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
             k_akyrs_hardcore_challenge_mode_flavour = "Tough and completely optional Challenges",

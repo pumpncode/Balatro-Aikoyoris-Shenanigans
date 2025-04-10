@@ -1085,3 +1085,8 @@ function AKYRS.maxwell_word_to_enhancement_map(word)
     end
     return nil
 end
+
+function AKYRS.score_catches_fire_or_not()
+    if not G.GAME or not G.GAME.blind then return false end
+    return G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult > G.GAME.blind.chips
+end

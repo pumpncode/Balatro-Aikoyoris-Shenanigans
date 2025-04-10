@@ -203,7 +203,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     col.b *= 0.4 - 0.4 * (smoothstep(rnd,0.1,0.5));
     col.g *= 0.0;
     tex.b *= 1-step(0.04,rnd);
-    col.r += (burnt.y)*0.000000001 + fac5*0.00000001;
+    col.r += (burnt.y)*0.01 + fac5*0.01;
     tex = RGB(col);
     tex.a *= step(0.03,rnd);
     //float rand = pnoise(vec3(uv * 0.2 + burnt.x*burnt.y*0.000001, sin(burnt.y*0.01)*10.),vec3(1.3,4.45,2.13)) * 6.9;

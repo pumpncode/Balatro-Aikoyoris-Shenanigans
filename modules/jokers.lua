@@ -1118,3 +1118,141 @@ SMODS.Joker{
     end,
     blueprint_compat = true
 }
+
+
+
+-- happy ghast family
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "dried_ghast",
+    pos = {
+        x = 3, y = 2
+    },
+    rarity = 1,
+    cost = 3,
+    config = {
+        name = "Dried Ghast",
+        extras = {
+            rounds_left = 2
+        }
+    },
+    loc_vars = function (self,info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["j_akyrs_ghastling"]
+        return {
+            vars = {
+                card.ability.extras.rounds_left,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.setting_blind and not context.blueprint then
+            return {
+                message = localize("k_akyrs_dried"),
+                func = function ()
+                    card.ability.current_round_discards = G.GAME.round_resets.discards
+                    G.GAME.current_round.discards_left = 0
+                end
+            }
+        end
+        if context.selling_card and context.card == card and not context.blueprint then
+            G.GAME.current_round.discards_left = card.ability.current_round_discards 
+        end
+        if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+            return {
+                message = localize("k_akyrs_moisture"),
+                func = function ()
+                    card.ability.extras.rounds_left = card.ability.extras.rounds_left - 1
+                    if card.ability.extras.rounds_left <= 0 then
+                        card:start_dissolve({G.C.BLUE}, nil, 0.5)
+                        SMODS.add_card({ key = "j_akyrs_ghastling"})
+                    end
+                end
+            }
+        end
+    end,
+}
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "ghastling",
+    pos = {
+        x = 3, y = 2
+    },
+    rarity = 2,
+    cost = 6,
+    config = {
+        name = "Ghastling",
+        extras = {
+            rounds_left = 20,
+            mult = 35
+        }
+    },
+    in_pool = function (self, args)
+        return false
+    end,
+    loc_vars = function (self,info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["j_akyrs_happy_ghast"]
+        return {
+            vars = {
+                card.ability.extras.rounds_left,
+                card.ability.extras.mult,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.after and context.cardarea == G.jokers and not context.blueprint then
+            return {
+                message = localize("k_akyrs_moisture"),
+                func = function ()
+                    card.ability.extras.rounds_left = card.ability.extras.rounds_left - (#SMODS.find_card("j_ice_cream") > 0 and 2 or 1)
+                    if card.ability.extras.rounds_left <= 0 then
+                        card:start_dissolve({G.C.RED}, nil, 0.5)
+                        SMODS.add_card({ key = "j_akyrs_happy_ghast"})
+                    end
+                end
+            }
+        end
+        if context.joker_main then
+            return {
+                mult = card.ability.extras.mult
+            }
+        end
+    end,
+    blueprint_compat = true
+}
+
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "happy_ghast",
+    pos = {
+        x = 4, y = 2
+    },
+    rarity = 2,
+    cost = 6,
+    config = {
+        name = "Happy Ghast",
+        extras = {
+            rounds_left = 20,
+            xmult = 4.5
+        }
+    },
+    in_pool = function (self, args)
+        return false
+    end,
+    loc_vars = function (self,info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.xmult,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                xmult = card.ability.extras.xmult
+            }
+        end
+    end,
+    blueprint_compat = true
+}

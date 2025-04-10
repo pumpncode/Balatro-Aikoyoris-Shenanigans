@@ -396,6 +396,32 @@ return {
                     "{C:inactive}(Currently {X:chips,C:white} X#1# {C:inactive} Chips)",
                 }
             },
+            j_akyrs_dried_ghast = {
+                name = "Dried Ghast",
+                text = { 
+                    "Play with {C:red}no discards{}",
+                    "for the next {C:blue}#1# rounds{}",
+                    "and create {T:j_akyrs_ghastling,C:purple}Ghastling{}",
+                    "{C:red}Self-destructs{}"
+                }
+            },
+            j_akyrs_ghastling = {
+                name = "Ghastling",
+                text = { 
+                    "{C:mult}+#2#{} Mult",
+                    "After playing {C:attention}#1#{} hands",
+                    "Creates a {T:j_akyrs_happy_ghast,C:purple}Happy Ghast{}",
+                    "{C:red}Self-destructs{}",
+                    "Decreses twice as fast",
+                    "if at least one {T:j_ice_cream,C:blue}Ice Cream{} is present",
+                }
+            },
+            j_akyrs_happy_ghast = {
+                name = "Happy Ghast",
+                text = { 
+                    "{X:mult,C:white}X#1#{} Mult",
+                }
+            },
         },
         Other={
             akyrs_self_destructs={
@@ -789,6 +815,9 @@ return {
             k_akyrs_created_by = "Created by",
             k_akyrs_additional_art_by = "Additional Art by",
             k_akyrs_difficult = "Difficult",
+            k_akyrs_dried = "Dried...",
+            k_akyrs_moisture = "Moisturised!",
+            k_akyrs_growth = "Growth!",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
             k_akyrs_hardcore_challenge_mode_flavour = "Tough and completely optional Challenges",

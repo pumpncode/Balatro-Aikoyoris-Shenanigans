@@ -439,6 +439,13 @@ return {
                     "{X:mult,C:white}X#1#{} Mult",
                 }
             },
+            j_akyrs_charred_roach = {
+                name = "Charred Roach",
+                text = { 
+                    "{C:red}Destroying{} cards",
+                    "grants you a {C:yellow}Burnt{} copy of it",
+                }
+            },
             j_akyrs_ash_joker = {
                 name = "Ash Joker",
                 text = { 

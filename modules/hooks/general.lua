@@ -248,7 +248,24 @@ G.FUNCS.can_discard = function(e)
     return ret
 end
 
+local cardRemoveHook = Card.start_dissolve
+function Card:start_dissolve(dissolve_colours, silent, dissolve_time_fac, no_juice)
 
+    if G.GAME and AKYRS.all_card_areas then
+        for _, cardarea in ipairs(AKYRS.all_card_areas) do
+            if cardarea and cardarea.cards then
+                for i, card in ipairs(cardarea.cards) do
+                    if not card.removed and not self.removed then
+                        
+                        SMODS.calculate_context({ akyrs_card_remove = true, card_getting_removed = self, card_triggering = card, })
+                    end
+                end
+            end
+        end
+    end
+    local l = cardRemoveHook(self,dissolve_colours, silent, dissolve_time_fac, no_juice)
+    return l
+end
 
 local endRoundHook = end_round
 function end_round()

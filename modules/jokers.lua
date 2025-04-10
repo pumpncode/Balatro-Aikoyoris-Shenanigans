@@ -1313,6 +1313,40 @@ SMODS.Joker{
         extras = {
         }
     },
+    calculate = function (self, card, context)
+        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] and card == context.card_triggering then
+            return {
+                func = function ()
+                    if context.card_getting_removed.area == G.jokers then
+                        local copy = copy_card(context.card_getting_removed,nil,nil,nil, true)
+                        copy:set_edition('e_akyrs_burnt')
+                        G.jokers:emplace(copy)
+                    end
+                end
+            }
+        end
+        if context.remove_playing_cards and not context.blueprint then
+            return {
+                func = function ()
+                    local new_cards = {}
+                    for k, val in ipairs(context.removed) do
+                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                        local copy = copy_card(val,nil,nil,G.playing_card, true)
+                        G.deck.config.card_limit = G.deck.config.card_limit + 1
+                        table.insert(G.playing_cards, copy)
+                        copy:set_edition('e_akyrs_burnt')
+                        copy:add_to_deck()
+                        G.hand:emplace(copy)
+                        copy:start_materialize(nil)
+
+                        new_cards[#new_cards+1] = copy
+                    end
+
+                    playing_card_joker_effects(new_cards)
+                end
+            }
+        end
+    end
 
 }
 -- ash jpker

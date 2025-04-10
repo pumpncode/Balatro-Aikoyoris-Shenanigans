@@ -257,7 +257,7 @@ function Card:start_dissolve(dissolve_colours, silent, dissolve_time_fac, no_jui
                 for i, card in ipairs(cardarea.cards) do
                     if not card.removed and not self.removed then
                         
-                        SMODS.calculate_context({ akyrs_card_remove = true, card_getting_removed = self, card_triggering = card, })
+                        pcall(SMODS.calculate_context,{ akyrs_card_remove = true, card_getting_removed = self, card_triggering = card, })
                     end
                 end
             end

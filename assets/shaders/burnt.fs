@@ -183,27 +183,17 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     vec4 tex = Texel( texture, texture_coords);
     vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
 
-    number low = min(tex.r, min(tex.g, tex.b));
-    number high = max(tex.r, max(tex.g, tex.b));
-	number delta = high-low -0.1;
-
-    number fac = 0.8 + 0.9*sin(11.*uv.x+4.32*uv.y + burnt.r*12. + cos(burnt.r*5.3 + uv.y*4.2 - uv.x*4.));
-    number fac2 = 0.5 + 0.5*sin(8.*uv.x+2.32*uv.y + burnt.r*5. - cos(burnt.r*2.3 + uv.x*8.2));
-    number fac3 = 0.5 + 0.5*sin(10.*uv.x+5.32*uv.y + burnt.r*6.111 + sin(burnt.r*5.3 + uv.y*3.2));
-    number fac4 = 0.5 + 0.5*sin(3.*uv.x+2.32*uv.y + burnt.r*8.111 + sin(burnt.r*1.3 + uv.y*11.2));
-    number fac5 = sin(0.9*16.*uv.x+5.32*uv.y + burnt.r*12. + cos(burnt.r*5.3 + uv.y*4.2 - uv.x*4.));
-
-    number maxfac = 0.7*max(max(fac, max(fac2, max(fac3,0.0))) + (fac+fac2+fac3*fac4), 0.);
-
     // modify tex.rgb for output
 	// maxfac is probably max factor for like shine or something idk
     // ok fac 5 is the shine when you move mouse -> <- and it does the woosh thing
     float rnd = pnoise(vec3(uv*2.123,3.12135134*time), vec3(7.,123.,3.));
     vec4 col = HSL(tex);
-    col.b *= 0.4 - 0.4 * (smoothstep(rnd,0.1,0.5));
+    col.b *= 0.4 - 0.4 * (smoothstep(rnd,0.1,0.5)) + sin(burnt.y) * 0.001;
     col.g *= 0.0;
     tex.b *= 1-step(0.04,rnd);
-    col.r += (burnt.y)*0.01 + fac5*0.01;
+    if(burnt.y != 0) {
+        col.r += sin(burnt.y)*0.01;
+    }
     tex = RGB(col);
     tex.a *= step(0.03,rnd);
     //float rand = pnoise(vec3(uv * 0.2 + burnt.x*burnt.y*0.000001, sin(burnt.y*0.01)*10.),vec3(1.3,4.45,2.13)) * 6.9;

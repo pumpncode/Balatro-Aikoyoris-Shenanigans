@@ -79,7 +79,7 @@ SMODS.Edition{
         akyrs_card_extra_triggers = 1
     },
     disable_base_shader = true,
-    sound = { sound = "akyrs_noire_sfx", per = 0.8, vol = 0.3 },
+    sound = { sound = "akyrs_sliced_sfx", per = 0.8, vol = 0.3 },
     in_shop = true,
     on_apply = function (card)
         if not card.akyrs_upgrade_sliced then
@@ -107,7 +107,7 @@ SMODS.Edition{
         name = "akyrs_burnt"
     },
     disable_base_shader = true,
-    sound = { sound = "akyrs_noire_sfx", per = 0.8, vol = 0.3 },
+    sound = { sound = "akyrs_burnt_sfx", per = 0.8, vol = 0.3 },
     in_shop = false,
     loc_vars = function (self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS["m_akyrs_ash_card"]

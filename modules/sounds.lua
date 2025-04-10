@@ -25,3 +25,13 @@ SMODS.Sound({
     key = "texelated_sfx",
     path = "texelated.ogg",
 })
+
+SMODS.Sound({
+    key = "sliced_sfx",
+    path = "sliced.ogg",
+})
+
+SMODS.Sound({
+    key = "burnt_sfx",
+    path = "burnt.ogg",
+})

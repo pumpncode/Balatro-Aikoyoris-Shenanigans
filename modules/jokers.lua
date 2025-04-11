@@ -1198,7 +1198,7 @@ SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "ghastling",
     pos = {
-        x = 3, y = 2
+        x = 4, y = 2
     },
     rarity = 2,
     cost = 6,
@@ -1269,14 +1269,14 @@ SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "happy_ghast",
     pos = {
-        x = 4, y = 2
+        x = 5, y = 2
     },
     rarity = 3,
     cost = 6,
     config = {
         name = "Happy Ghast",
         extras = {
-            xmult = 4
+            xmult = 4.2
         }
     },
     in_pool = function (self, args)
@@ -1304,9 +1304,9 @@ SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "charred_roach",
     pos = {
-        x = 4, y = 2
+        x = 6, y = 2
     },
-    rarity = 3,
+    rarity = 2,
     cost = 6,
     config = {
         name = "Charred Roach",
@@ -1318,7 +1318,8 @@ SMODS.Joker{
         
     end,
     calculate = function (self, card, context)
-        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] and card == context.card_triggering then
+        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] and card == context.card_triggering 
+        and not (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_akyrs_ash_joker") then
             return {
                 func = function ()
                     if context.card_getting_removed.area == G.jokers then
@@ -1335,17 +1336,19 @@ SMODS.Joker{
                 func = function ()
                     local new_cards = {}
                     for k, val in ipairs(context.removed) do
-                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                        local copy = copy_card(val,nil,nil,G.playing_card, true)
-                        G.deck.config.card_limit = G.deck.config.card_limit + 1
-                        table.insert(G.playing_cards, copy)
-                        copy:set_edition('e_akyrs_burnt')
-                        copy:add_to_deck()
-                        copy.sell_cost = 0
-                        G.hand:emplace(copy)
-                        copy:start_materialize(nil)
+                        if not SMODS.get_enhancements(val)["m_akyrs_ash_card"] then
+                            G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                            local copy = copy_card(val,nil,nil,G.playing_card, true)
+                            G.deck.config.card_limit = G.deck.config.card_limit + 1
+                            table.insert(G.playing_cards, copy)
+                            copy:set_edition('e_akyrs_burnt')
+                            copy:add_to_deck()
+                            copy.sell_cost = 0
+                            G.hand:emplace(copy)
+                            copy:start_materialize(nil)
+                            new_cards[#new_cards+1] = copy
+                        end
 
-                        new_cards[#new_cards+1] = copy
                     end
 
                     playing_card_joker_effects(new_cards)
@@ -1360,7 +1363,7 @@ SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "ash_joker",
     pos = {
-        x = 5, y = 2
+        x = 7, y = 2
     },
     rarity = 1,
     cost = 0,
@@ -1370,7 +1373,7 @@ SMODS.Joker{
     config = {
         name = "Ash Joker",
         extras = {
-            chips = 20,
+            chips = 35,
             odds = 4
         }
     },

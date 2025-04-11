@@ -1358,7 +1358,7 @@ SMODS.Joker{
     end
 
 }
--- ash jpker
+-- ash joker
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "ash_joker",
@@ -1432,6 +1432,51 @@ AKYRS.LetterJoker{
                     chips = card.ability.extras.chips
                 }
             end
+        end
+    end
+}
+-- chicken jockey
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "chicken_jockey",
+    pos = {
+        x = 9, y = 2
+    },
+    rarity = 1,
+    cost = 0,
+    config = {
+        name = "Chicken Jockey",
+        extras = {
+            xmult = 1,
+            xmult_inc = 2,
+            decrease_popcorn = 10,
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["j_popcorn"]
+        return {
+            vars = {
+                card.ability.extras.xmult_inc,
+                card.ability.extras.xmult,
+                card.ability.extras.decrease_popcorn,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                xmult = card.ability.extras.xmult
+            }
+        end
+
+        if context.akyrs_card_remove and card == context.card_triggering 
+        and (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_popcorn") then
+            return {
+                message = localize("k_upgrade_ex"),
+                func = function ()
+                    card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_inc
+                end
+            }
         end
     end
 }

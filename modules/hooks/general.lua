@@ -248,22 +248,33 @@ G.FUNCS.can_discard = function(e)
     return ret
 end
 
-local cardRemoveHook = Card.start_dissolve
-function Card:start_dissolve(dissolve_colours, silent, dissolve_time_fac, no_juice)
+local cardSellHook = Card.sell_card
 
-    if G.GAME and AKYRS.all_card_areas then
-        for _, cardarea in ipairs(AKYRS.all_card_areas) do
-            if cardarea and cardarea.cards then
-                for i, card in ipairs(cardarea.cards) do
-                    if not card.removed and not self.removed then
-                        
-                        pcall(SMODS.calculate_context,{ akyrs_card_remove = true, card_getting_removed = self, card_triggering = card, })
+function Card:sell_card()
+    self.akyrs_is_being_sold = true
+    local c = cardSellHook(self)
+    return c
+end
+
+local cardRemoveHook = Card.remove
+function Card:remove()
+
+    if not self.akyrs_is_being_sold and not (self.area and (self.area.config.collection or self.area.temporary)) and self.area then
+        if G.GAME and AKYRS.all_card_areas then
+            for _, cardarea in ipairs(AKYRS.all_card_areas) do
+                if cardarea and cardarea.cards and not cardarea.config.collection then
+                    for i, card in ipairs(cardarea.cards) do
+                        if not card.removed and not self.removed and card ~= self and not card.akyrs_is_being_sold and card.area and not (card.area and (card.area.config.collection or card.area.temporary)) then
+                            
+                            pcall(SMODS.calculate_context,{ akyrs_card_remove = true, card_getting_removed = self, card_triggering = card, })
+                        end
                     end
                 end
             end
         end
     end
-    local l = cardRemoveHook(self,dissolve_colours, silent, dissolve_time_fac, no_juice)
+
+    local l = cardRemoveHook(self)
     return l
 end
 
@@ -532,7 +543,7 @@ end
 local cardAreaInitHook = CardArea.init
 function CardArea:init(X, Y, W, H, config)
     local r = cardAreaInitHook(self,X,Y,W,H,config)
-    if not config.temporary then
+    if not config.temporary and not config.collection then
         if not AKYRS.all_card_areas then
             AKYRS.all_card_areas = {}
         end
@@ -579,9 +590,20 @@ end
 local cardInitHook = Card.init
 function Card:init(X, Y, W, H, card, center, params)
     local ret = cardInitHook(self, X, Y, W, H, card, center, params)
+    
+    self:akyrs_mod_card_value_init()
     self.akyrs_upgrade_sliced = false
     
     return ret
+end
+
+function Card:akyrs_mod_card_value_init()
+    if self and self.area and #SMODS.find_card("j_akyrs_chicken_jockey") > 0 and self.config.center_key == "j_popcorn" and not self.area.config.collection and not self.area.config.temporary then
+        local jj = SMODS.find_card("j_akyrs_chicken_jockey")
+        local val = jj[#jj].ability.extras.decrease_popcorn
+        self.ability.extra = val
+    end
+  
 end
 
 local cardSave = Card.save

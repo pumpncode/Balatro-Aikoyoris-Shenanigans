@@ -188,7 +188,8 @@ return {
                 name = "Burnt",
                 text = {
                     "{C:green}#1# in #2#{} chance",
-                    "of disintegrating into Ash"
+                    "of disintegrating into Ash",
+                    "at the end of the round"
                 }
             },
         },
@@ -211,7 +212,8 @@ return {
                 text={
                     "{C:blue}+#1#{} Chips",
                     "{C:green}#2# in #3#{} chance",
-                    "of disintegrating into nothing"
+                    "of disintegrating into nothing",
+                    "at the end of the round"
                 },
             }
         },
@@ -451,7 +453,8 @@ return {
                 text = { 
                     "{C:chips}+#1#{} Chips",
                     "{C:green}#2# in #3#{} chance",
-                    "of disintegrating into nothing"
+                    "of disintegrating into nothing",
+                    "at the end of the round"
                 }
             },
             j_akyrs_yee = {
@@ -461,6 +464,17 @@ return {
                     "Gain {C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult",
                     "Per Scored {C:attention}Y's{} and {C:blue}E's{}",
                     "{s:0.7,C:inactive}Who even remembered this???{}"
+                }
+            },
+            j_akyrs_chicken_jockey = {
+                name = "Chicken Jockey",
+                text = { 
+                    "Every {T:j_popcorn,C:red}Popcorn{}",
+                    "decreses by {C:red}-#3#{} Mult instead",
+                    "Gain {X:mult,C:white}X#1#{} Mult per",
+                    "{C:red}Popcorn{} eaten.",
+                    "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+                    "{s:0.7,C:inactive}Absolute Cinema.{}"
                 }
             },
         },
@@ -860,6 +874,7 @@ return {
             k_akyrs_moisture = "Moisturised!",
             k_akyrs_growth = "Growth!",
             k_akyrs_back = "Reverse!",
+            k_akyrs_cinema = "Cinema!",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
             k_akyrs_hardcore_challenge_mode_flavour = "Tough and completely optional Challenges",

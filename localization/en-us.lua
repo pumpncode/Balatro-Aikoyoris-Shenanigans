@@ -480,7 +480,7 @@ return {
             j_akyrs_tetoris = {
                 name = "Tetoris",
                 text = { 
-                    "{C:attention}L{}, {C:attention}S{} ,{C:attention}O{} ,{C:attention}Z{} ,{C:attention}J{} ,{C:attention}I{}, and {C:attention}T{}",
+                    "{C:attention}L{}, {C:attention}S{}, {C:attention}O{}, {C:attention}Z{}, {C:attention}J{}, {C:attention}I{}, and {C:attention}T{}",
                     "gives {C:chips}+#1#{} Chips",
                     "and {X:chips,C:white}X#2#{} Chips when scored",
                     "{s:0.7,C:inactive}teteteteto teto tetete tetoris!{}"

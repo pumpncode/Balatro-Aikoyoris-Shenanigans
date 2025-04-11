@@ -307,11 +307,14 @@ function end_round()
                             G.E_MANAGER:add_event(Event({
                                 func = function()
                                     local area = card.area
-                                    if area == G.jokers then
+                                    if area == G.jokers or area == G.consumeables then
                                         SMODS.add_card({ key = "j_akyrs_ash_joker"})
+                                        
                                     end
-                                    if area == G.deck then
-                                        SMODS.add_card({ key = "m_akyrs_ash_card"})
+                                    if area == G.deck or area == G.hand or area == G.discard then
+                                        local c = SMODS.add_card({ key = "m_akyrs_ash_card" , area = G.deck})
+                                        G.deck.config.card_limit = G.deck.config.card_limit + 1
+                                        table.insert(G.playing_cards, c)
                                     end
                                     card:start_dissolve({ G.C.BLACK }, nil, 1.6)
                                     

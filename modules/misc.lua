@@ -1099,3 +1099,13 @@ AKYRS.word_letter_count = function(word)
     end
     return wordArray
 end
+
+AKYRS.get_letter_freq_from_cards = function(listofcards)
+    
+    local wordArray = {}
+    for i,v in ipairs(listofcards) do
+        local w = string.lower(v:get_letter_with_pretend())
+        wordArray[w] = wordArray[w] and wordArray[w] + 1 or 1
+    end
+    return wordArray
+end

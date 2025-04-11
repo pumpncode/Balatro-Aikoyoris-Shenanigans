@@ -460,7 +460,7 @@ return {
             j_akyrs_yee = {
                 name = "Yee",
                 text = { 
-                    "If spelled word has {C:attention}a Y{} and {C:blue}two E's{},",
+                    "If played word contains {C:attention}a Y{} and {C:blue}two E's{},",
                     "Gain {C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult",
                     "Per Scored {C:attention}Y's{} and {C:blue}E's{}",
                     "{s:0.7,C:inactive}Who even remembered this???{}"
@@ -469,12 +469,21 @@ return {
             j_akyrs_chicken_jockey = {
                 name = "Chicken Jockey",
                 text = { 
-                    "Every {T:j_popcorn,C:red}Popcorn{}",
+                    "Every {C:red}Popcorn{}",
                     "decreses by {C:red}-#3#{} Mult instead",
                     "Gain {X:mult,C:white}X#1#{} Mult per",
                     "{C:red}Popcorn{} eaten.",
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
                     "{s:0.7,C:inactive}Absolute Cinema.{}"
+                }
+            },
+            j_akyrs_tetoris = {
+                name = "Tetoris",
+                text = { 
+                    "{C:attention}L{}, {C:attention}S{} ,{C:attention}O{} ,{C:attention}Z{} ,{C:attention}J{} ,{C:attention}I{}, and {C:attention}T{}",
+                    "gives {C:chips}+#1#{} Chips",
+                    "and {X:chips,C:white}X#2#{} Chips when scored",
+                    "{s:0.7,C:inactive}teteteteto teto tetete tetoris!{}"
                 }
             },
         },

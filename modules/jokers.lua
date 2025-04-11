@@ -1424,7 +1424,7 @@ AKYRS.LetterJoker{
     end,
     calculate = function (self, card, context)
         if context.individual and context.cardarea == G.play and G.GAME.aiko_current_word then
-            local w = AKYRS.word_letter_count(string.lower(G.GAME.aiko_current_word))
+            local w = AKYRS.get_letter_freq_from_cards(G.play.cards)
             local l = string.lower(context.other_card:get_letter_with_pretend())
             if (w["y"] and w["y"] >= 1 and w["e"] and w["e"] >= 2) and (l == "y" or l == "e") then
                 return {
@@ -1477,6 +1477,52 @@ SMODS.Joker{
                     card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_inc
                 end
             }
+        end
+    end
+}
+
+
+-- TETORIS
+AKYRS.tetoris_piece = {
+    l = true,
+    s = true,
+    o = true,
+    z = true,
+    j = true,
+    i = true,
+    t = true,
+}
+AKYRS.LetterJoker {
+    key = "tetoris",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 0, y = 3
+    },
+    rarity = 3,
+    cost = 4,
+    config = {
+        name = "Tetoris",
+        extras = {
+            chips = 10,
+            xchips = 2.1,
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.chips,
+                card.ability.extras.xchips,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play then
+            if AKYRS.tetoris_piece[string.lower(context.other_card:get_letter_with_pretend())] then
+                return {
+                    chips = card.ability.extras.chips,
+                    xchips = card.ability.extras.xchips,
+                }
+            end
         end
     end
 }

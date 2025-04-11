@@ -1442,7 +1442,7 @@ SMODS.Joker{
     pos = {
         x = 9, y = 2
     },
-    rarity = 1,
+    rarity = 2,
     cost = 0,
     config = {
         name = "Chicken Jockey",

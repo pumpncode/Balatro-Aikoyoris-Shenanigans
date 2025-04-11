@@ -258,13 +258,14 @@ end
 
 local cardRemoveHook = Card.remove
 function Card:remove()
+    local area = self.area or self.akyrs_lastcardarea
 
-    if not self.akyrs_is_being_sold and not (self.area and (self.area.config.collection or self.area.temporary)) and self.area then
+    if not self.akyrs_is_being_sold and not (area and (area.config.collection or area.temporary)) and area then
         if G.GAME and AKYRS.all_card_areas then
             for _, cardarea in ipairs(AKYRS.all_card_areas) do
-                if cardarea and cardarea.cards and not cardarea.config.collection then
+                if cardarea and cardarea.cards and not cardarea.config.collection and not cardarea.temporary then
                     for i, card in ipairs(cardarea.cards) do
-                        if not card.removed and not self.removed and card ~= self and not card.akyrs_is_being_sold and card.area and not (card.area and (card.area.config.collection or card.area.temporary)) then
+                        if not card.removed and not self.removed and card ~= self and not card.akyrs_is_being_sold and not ((area.config.collection or area.temporary)) then
                             
                             pcall(SMODS.calculate_context,{ akyrs_card_remove = true, card_getting_removed = self, card_triggering = card, })
                         end
@@ -597,8 +598,21 @@ function Card:init(X, Y, W, H, card, center, params)
     return ret
 end
 
+local cardAreaEmplaceFunction = CardArea.emplace
+function CardArea:emplace(c,l,fl)
+    c.akyrs_lastcardarea = self
+    return cardAreaEmplaceFunction(self,c,l,fl)
+end
+
+local setCAHook = Card.set_card_area
+function Card:set_card_area(area)
+    local x = setCAHook(self,area)
+    self.akyrs_lastcardarea = area
+    return x
+end
+
 function Card:akyrs_mod_card_value_init()
-    if self and self.area and #SMODS.find_card("j_akyrs_chicken_jockey") > 0 and self.config.center_key == "j_popcorn" and not self.area.config.collection and not self.area.config.temporary then
+    if #SMODS.find_card("j_akyrs_chicken_jockey") > 0 and self.config.center_key == "j_popcorn" then
         local jj = SMODS.find_card("j_akyrs_chicken_jockey")
         local val = jj[#jj].ability.extras.decrease_popcorn
         self.ability.extra = val

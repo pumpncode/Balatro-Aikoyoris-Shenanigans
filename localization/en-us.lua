@@ -458,7 +458,7 @@ return {
                 name = "Yee",
                 text = { 
                     "If spelled word has {C:attention}a Y{} and {C:blue}two E's{},",
-                    "Gain {C:chips}+#1#{} Chips and {C:mult}+#1#{} Mult",
+                    "Gain {C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult",
                     "Per Scored {C:attention}Y's{} and {C:blue}E's{}",
                     "{s:0.7,C:inactive}Who even remembered this???{}"
                 }

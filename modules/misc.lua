@@ -488,7 +488,6 @@ AKYRS.word_splitter = function(word)
       table.insert(wordArray, word:sub(i, i))
     end
     return wordArray
-
 end
 AKYRS.word_to_cards = function(word)
     
@@ -1089,4 +1088,14 @@ end
 function AKYRS.score_catches_fire_or_not()
     if not G.GAME or not G.GAME.blind then return false end
     return G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult > G.GAME.blind.chips
+end
+
+
+AKYRS.word_letter_count = function(word)
+    
+    local wordArray = {}
+    for i = 1, #word do
+        wordArray[word:sub(i, i)] = wordArray[word:sub(i, i)] and wordArray[word:sub(i, i)] + 1 or 1
+    end
+    return wordArray
 end

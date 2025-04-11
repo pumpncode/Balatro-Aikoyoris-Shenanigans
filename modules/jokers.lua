@@ -1397,5 +1397,41 @@ SMODS.Joker{
             card.ability.akyrs_ash_disintegrate = odder
         end
     end
-
+}
+-- yee
+AKYRS.LetterJoker{
+    atlas = 'AikoyoriJokers',
+    key = "yee",
+    pos = {
+        x = 8, y = 2
+    },
+    rarity = 2,
+    cost = 5,
+    config = {
+        name = "Yee",
+        extras = {
+            chips = 20,
+            mult = 12
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.chips,
+                card.ability.extras.mult,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play and G.GAME.aiko_current_word then
+            local w = AKYRS.word_letter_count(string.lower(G.GAME.aiko_current_word))
+            local l = string.lower(context.other_card:get_letter_with_pretend())
+            if (w["y"] and w["y"] >= 1 and w["e"] and w["e"] >= 2) and (l == "y" or l == "e") then
+                return {
+                    mult = card.ability.extras.mult,
+                    chips = card.ability.extras.chips
+                }
+            end
+        end
+    end
 }

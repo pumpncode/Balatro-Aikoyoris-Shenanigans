@@ -78,79 +78,7 @@ SMODS.Blind{
         recalculateBlindUI()
     end,
     press_play = function(self)
-        if(G.GAME.aiko_current_word) then
-            
-            local word_table = {}
-            for char in G.GAME.aiko_current_word:gmatch(".") do
-                table.insert(word_table, char)
-            end
-            for k,v in ipairs(G.hand.cards) do
-                if v.highlighted then
-                    local _card = copy_card(v, nil, nil, G.playing_card)
-                    _card.ability.akyrs_self_destructs = true
-                    _card.ability.aikoyori_letters_stickers = v.ability.aikoyori_letters_stickers
-                    G.deck.config.card_limit = G.deck.config.card_limit + 1
-                    table.insert(G.playing_cards, _card)
-                    G.deck:emplace(_card)
-                    _card:add_to_deck()
-                end
 
-            end
-            local todo_table = {}
-            for char in G.GAME.word_todo:gmatch(".") do
-                table.insert(todo_table, char)
-            end
-
-            local result_string = ""
-            local result_string_arr = {}
-            for i, char in ipairs(todo_table) do
-                if word_table[i] and string.upper(word_table[i]) == string.upper(char) then
-                    result_string = result_string .. "-"
-                    table.insert(result_string_arr,"-")
-                else
-                    result_string = result_string .. char
-                    table.insert(result_string_arr,char)
-                end
-            end
-
-            local word_for_display = {
-
-            }
-            local letter_count = {
-
-            }
-            for _, char in ipairs(result_string_arr) do
-                local lower_char = string.lower(char)
-                letter_count[lower_char] = (letter_count[lower_char] or 0) + 1
-            end
-
-            for i, char in ipairs(word_table) do
-                if todo_table[i] and string.upper(char) == string.upper(todo_table[i]) then
-                    G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] = true
-                    table.insert(word_for_display,{string.lower(char), 1})
-                elseif letter_count[string.lower(char)] and letter_count[string.lower(char)] > 0 and not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] then
-                    G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] = true
-                    
-                    table.insert(word_for_display,{string.lower(char), letter_count[string.lower(char)] > 0 and 2 or 3})
-                    letter_count[string.lower(char)] = letter_count[string.lower(char)] - 1
-                else
-                    if not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] and not G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] then
-                        G.GAME.current_round.aiko_round_incorrect_letter[string.lower(char)] = true
-                    end
-                    table.insert(word_for_display,{string.lower(char), 3})
-                end
-            end
-            
-
-            table.insert(G.GAME.current_round.aiko_round_played_words,word_for_display)
-            
-
-
-            if string.upper(G.GAME.word_todo) == string.upper(G.GAME.aiko_current_word) then
-                --print("WIN!")
-                G.GAME.aiko_puzzle_win = true
-            end
-        end
     end
 
 }

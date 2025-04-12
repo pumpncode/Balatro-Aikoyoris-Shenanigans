@@ -44,7 +44,7 @@ elseif AKYRS.config.wildcard_behaviour == 4 then
     -- warn on unset: this should set pretend letters to that of the card
 end
 
-function check_word(str_arr_in)
+function AKYRS.check_word(str_arr_in)
     local wild_positions = {}
     local wild_count = 0
 
@@ -83,7 +83,7 @@ function check_word(str_arr_in)
     return backtrack(1) or { valid = false, word = nil }
 end
 
-WORD_CHECKED = {
+AKYRS.WORD_CHECKED = {
 
 }
 
@@ -137,59 +137,21 @@ for i = 3, 31 do
             end
             if all_wildcards then
                 G.GAME.aiko_current_word = string.lower(example_words[i-2])
-                if (G.STATE == G.STATES.HAND_PLAYED)then  
-                    local aiko_current_word_split = {}
-                    for char in G.GAME.aiko_current_word:gmatch(".") do
-                        table.insert(aiko_current_word_split, char)
-                    end
-                    
-                    attention_text({
-                        scale = 1.5, text = string.upper(example_words[i-2]), hold = 15, align = 'tm',
-                        major = G.play, offset = {x = 0, y = -1}
-                    })
-                    G.GAME.aiko_words_played[G.GAME.aiko_current_word] = true
-                    G.GAME.current_round.aiko_round_played_words[G.GAME.aiko_current_word] = true
-                    if AKYRS.config.wildcard_behaviour == 4 then -- set letters in hand  on mode 4 lol !!!
-                        for g,card in ipairs(hand) do
-                            if card.ability.aikoyori_letters_stickers == "#" and aiko_current_word_split and aiko_current_word_split[g] then
-                                card.ability.aikoyori_pretend_letter = aiko_current_word_split[g]
-                            end
-                        end
-                    end
-                end
                 return { hand }
             end
             local wordData = {}
             --print("CHECK TIME! FOR '"..word_hand_str.."' IS THE WORD")
-            if (WORD_CHECKED[word_hand_str]) then
+            if (AKYRS.WORD_CHECKED[word_hand_str]) then
                 --print("WORD "..word_hand_str.." IS IN MEMORY AND THUS SHOULD USE THAT")
-                wordData = WORD_CHECKED[word_hand_str]
+                wordData = AKYRS.WORD_CHECKED[word_hand_str]
             else
                 --print("WORD "..word_hand_str.." IS NOT IN MEMORY ... CHECKING")
-                wordData = check_word(word_hand)
-                WORD_CHECKED[word_hand_str] = wordData
+                wordData = AKYRS.check_word(word_hand)
+                AKYRS.WORD_CHECKED[word_hand_str] = wordData
             end
             if wordData.valid then
                 G.GAME.aiko_current_word = wordData.word
                 local aiko_current_word_split = {}
-                for char in wordData.word:gmatch(".") do
-                    table.insert(aiko_current_word_split, char)
-                end
-                if (G.STATE == G.STATES.HAND_PLAYED)then  
-                    attention_text({
-                        scale =  1.5, text = string.upper(wordData.word), hold = 15, align = 'tm',
-                        major = G.play, offset = {x = 0, y = -1}
-                    })
-                    G.GAME.aiko_words_played[wordData.word] = true
-                    G.GAME.current_round.aiko_round_played_words[wordData.word] = true
-                    if AKYRS.config.wildcard_behaviour == 4 then -- set letters in hand  on mode 4 lol !!!
-                        for g,card in ipairs(hand) do
-                            if card.ability.aikoyori_letters_stickers == "#" and aiko_current_word_split and aiko_current_word_split[g] then
-                                card.ability.aikoyori_pretend_letter = aiko_current_word_split[g]
-                            end
-                        end
-                    end
-                end
                 return {hand}
             else 
                 return {}

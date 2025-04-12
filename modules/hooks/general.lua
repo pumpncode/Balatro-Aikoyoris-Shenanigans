@@ -515,14 +515,119 @@ G.FUNCS.evaluate_play = function()
             major = G.play, offset = {x = 0, y = -1}
         })
     end
+    -- print(#G.play.cards)
+    if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled then
+        
+        
+        local aiko_current_word_split = {}
+        for i, j in ipairs(G.play.cards) do
+            if j.ability.aikoyori_letters_stickers then
+                table.insert(aiko_current_word_split,string.lower(j:get_letter_with_pretend()))
+            end
+        end
+        local wordData = {}
+        if (AKYRS.WORD_CHECKED[aiko_current_word_split]) then
+            --print("WORD "..word_hand_str.." IS IN MEMORY AND THUS SHOULD USE THAT")
+            wordData = AKYRS.WORD_CHECKED[aiko_current_word_split]
+        else
+            --print("WORD "..word_hand_str.." IS NOT IN MEMORY ... CHECKING")
+            wordData = AKYRS.check_word(aiko_current_word_split)
+            AKYRS.WORD_CHECKED[aiko_current_word_split] = wordData
+        end
+        --print(wordData)
+        if wordData.valid then
+            G.GAME.aiko_current_word = wordData.word
+            G.GAME.aiko_words_played[wordData.word] = true
+            G.GAME.current_round.aiko_round_played_words[wordData.word] = true
+            if AKYRS.config.wildcard_behaviour == 4 then -- set letters in hand  on mode 4 lol !!!
+                for g,card in ipairs(G.play) do
+                    if card.ability.aikoyori_letters_stickers == "#" and aiko_current_word_split and aiko_current_word_split[g] then
+                        card.ability.aikoyori_pretend_letter = aiko_current_word_split[g]
+                    end
+                end
+            end
+        end
+    end
     if G.GAME.aiko_current_word then
         attention_text({
             scale =  1.5, text = string.upper(G.GAME.aiko_current_word), hold = 15, align = 'tm',
             major = G.play, offset = {x = 0, y = -1}
         })
     end
+    if(G.GAME.aiko_current_word) then
+            
+        local word_table = {}
+        for char in G.GAME.aiko_current_word:gmatch(".") do
+            table.insert(word_table, char)
+        end
+        for k,v in ipairs(G.hand.cards) do
+            if v.highlighted then
+                local _card = copy_card(v, nil, nil, G.playing_card)
+                _card.ability.akyrs_self_destructs = true
+                _card.ability.aikoyori_letters_stickers = v.ability.aikoyori_letters_stickers
+                G.deck.config.card_limit = G.deck.config.card_limit + 1
+                table.insert(G.playing_cards, _card)
+                G.deck:emplace(_card)
+                _card:add_to_deck()
+            end
+
+        end
+        local todo_table = {}
+        for char in G.GAME.word_todo:gmatch(".") do
+            table.insert(todo_table, char)
+        end
+
+        local result_string = ""
+        local result_string_arr = {}
+        for i, char in ipairs(todo_table) do
+            if word_table[i] and string.upper(word_table[i]) == string.upper(char) then
+                result_string = result_string .. "-"
+                table.insert(result_string_arr,"-")
+            else
+                result_string = result_string .. char
+                table.insert(result_string_arr,char)
+            end
+        end
+
+        local word_for_display = {
+
+        }
+        local letter_count = {
+
+        }
+        for _, char in ipairs(result_string_arr) do
+            local lower_char = string.lower(char)
+            letter_count[lower_char] = (letter_count[lower_char] or 0) + 1
+        end
+
+        for i, char in ipairs(word_table) do
+            if todo_table[i] and string.upper(char) == string.upper(todo_table[i]) then
+                G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] = true
+                table.insert(word_for_display,{string.lower(char), 1})
+            elseif letter_count[string.lower(char)] and letter_count[string.lower(char)] > 0 and not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] then
+                G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] = true
+                
+                table.insert(word_for_display,{string.lower(char), letter_count[string.lower(char)] > 0 and 2 or 3})
+                letter_count[string.lower(char)] = letter_count[string.lower(char)] - 1
+            else
+                if not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] and not G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] then
+                    G.GAME.current_round.aiko_round_incorrect_letter[string.lower(char)] = true
+                end
+                table.insert(word_for_display,{string.lower(char), 3})
+            end
+        end
+        
+
+        table.insert(G.GAME.current_round.aiko_round_played_words,word_for_display)
+        
+
+
+        if string.upper(G.GAME.word_todo) == string.upper(G.GAME.aiko_current_word) then
+            --print("WIN!")
+            G.GAME.aiko_puzzle_win = true
+        end
+    end
     local ret = eval_hook()
-    G.GAME.aiko_current_word = nil
     if G.GAME.aikoyori_variable_to_set and G.GAME.aikoyori_value_to_set_to_variable then
         AKYRS.parser_set_var(G.GAME.aikoyori_variable_to_set , G.GAME.aikoyori_value_to_set_to_variable)
     end
@@ -537,6 +642,7 @@ G.FUNCS.evaluate_play = function()
     G.GAME.aikoyori_evaluation_value = nil
     G.GAME.aikoyori_variable_to_set = nil
     G.GAME.aikoyori_value_to_set_to_variable = nil
+    G.GAME.aiko_current_word = nil
     return ret
 end
 

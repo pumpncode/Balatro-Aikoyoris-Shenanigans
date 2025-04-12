@@ -265,7 +265,7 @@ function Card:remove()
             for _, cardarea in ipairs(AKYRS.all_card_areas) do
                 if cardarea and cardarea.cards and not cardarea.config.collection and not cardarea.temporary then
                     for i, card in ipairs(cardarea.cards) do
-                        if not card.removed and not self.removed and card ~= self and not card.akyrs_is_being_sold and not ((area.config.collection or area.temporary)) then
+                        if not card.removed and not self.removed and card ~= self and not card.akyrs_is_being_sold and not card.ability.akyrs_part_of_solitaire and not ((area.config.collection or area.temporary)) then
                             
                             pcall(SMODS.calculate_context,{ akyrs_card_remove = true, card_getting_removed = self, card_triggering = card, })
                         end

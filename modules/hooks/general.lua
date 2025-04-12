@@ -260,7 +260,7 @@ local cardRemoveHook = Card.remove
 function Card:remove()
     local area = self.area or self.akyrs_lastcardarea
 
-    if not self.akyrs_is_being_sold and not (area and (area.config.collection or area.temporary)) and area then
+    if not self.akyrs_is_being_sold and not (area and (area.config.collection or area.config.temporary or area.config.view_deck  or area.config.type == "title")) and area then
         if G.GAME and AKYRS.all_card_areas then
             for _, cardarea in ipairs(AKYRS.all_card_areas) do
                 if cardarea and cardarea.cards and not cardarea.config.collection and not cardarea.temporary then

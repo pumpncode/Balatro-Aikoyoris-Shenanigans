@@ -265,7 +265,7 @@ function Card:remove()
     if not G.AKYRS_RUN_BEING_DELETED and not self.akyrs_is_being_sold and not (area and (area.config.collection or area.config.temporary or area.config.view_deck)) and area and AKYRS.area_to_check_remove(area) then
         if G.GAME and AKYRS.all_card_areas then
             for _, cardarea in ipairs(AKYRS.all_card_areas) do
-                if cardarea and cardarea.cards and not cardarea.config.collection and not cardarea.temporary then
+                if cardarea and cardarea.cards and not cardarea.config.collection and not cardarea.temporary and AKYRS.area_to_check_remove(cardarea) then
                     for i, card in ipairs(cardarea.cards) do
                         if not card.removed and not self.removed and card ~= self and not card.akyrs_is_being_sold and not card.ability.akyrs_part_of_solitaire and not ((area.config.collection or area.temporary)) then
                             

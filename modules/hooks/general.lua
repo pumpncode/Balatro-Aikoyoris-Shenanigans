@@ -260,7 +260,7 @@ local cardRemoveHook = Card.remove
 function Card:remove()
     local area = self.area or self.akyrs_lastcardarea
 
-    if not self.akyrs_is_being_sold and not (area and (area.config.collection or area.config.temporary or area.config.view_deck  or area.config.type == "title")) and area then
+    if not G.AKYRS_RUN_BEING_DELETED and not self.akyrs_is_being_sold and not (area and (area.config.collection or area.config.temporary or area.config.view_deck  or area.config.type == "title")) and area then
         if G.GAME and AKYRS.all_card_areas then
             for _, cardarea in ipairs(AKYRS.all_card_areas) do
                 if cardarea and cardarea.cards and not cardarea.config.collection and not cardarea.temporary then
@@ -391,11 +391,13 @@ end
 
 local deleteRunHook = Game.delete_run
 function Game:delete_run()
+    self.AKYRS_RUN_BEING_DELETED = true
     local ret = deleteRunHook(self)
 
     if self.aiko_wordle then
         self.aiko_wordle:remove(); self.aiko_wordle = nil
     end
+    self.AKYRS_RUN_BEING_DELETED = nil
     return ret
 end
 
@@ -572,60 +574,60 @@ G.FUNCS.evaluate_play = function()
             end
 
         end
-        local todo_table = {}
-        for char in G.GAME.word_todo:gmatch(".") do
-            table.insert(todo_table, char)
-        end
-
-        local result_string = ""
-        local result_string_arr = {}
-        for i, char in ipairs(todo_table) do
-            if word_table[i] and string.upper(word_table[i]) == string.upper(char) then
-                result_string = result_string .. "-"
-                table.insert(result_string_arr,"-")
-            else
-                result_string = result_string .. char
-                table.insert(result_string_arr,char)
+        if G.GAME.word_todo then
+            local todo_table = {}
+            for char in G.GAME.word_todo:gmatch(".") do
+                table.insert(todo_table, char)
             end
-        end
 
-        local word_for_display = {
-
-        }
-        local letter_count = {
-
-        }
-        for _, char in ipairs(result_string_arr) do
-            local lower_char = string.lower(char)
-            letter_count[lower_char] = (letter_count[lower_char] or 0) + 1
-        end
-
-        for i, char in ipairs(word_table) do
-            if todo_table[i] and string.upper(char) == string.upper(todo_table[i]) then
-                G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] = true
-                table.insert(word_for_display,{string.lower(char), 1})
-            elseif letter_count[string.lower(char)] and letter_count[string.lower(char)] > 0 and not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] then
-                G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] = true
-                
-                table.insert(word_for_display,{string.lower(char), letter_count[string.lower(char)] > 0 and 2 or 3})
-                letter_count[string.lower(char)] = letter_count[string.lower(char)] - 1
-            else
-                if not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] and not G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] then
-                    G.GAME.current_round.aiko_round_incorrect_letter[string.lower(char)] = true
+            local result_string = ""
+            local result_string_arr = {}
+            for i, char in ipairs(todo_table) do
+                if word_table[i] and string.upper(word_table[i]) == string.upper(char) then
+                    result_string = result_string .. "-"
+                    table.insert(result_string_arr,"-")
+                else
+                    result_string = result_string .. char
+                    table.insert(result_string_arr,char)
                 end
-                table.insert(word_for_display,{string.lower(char), 3})
+            end
+            local word_for_display = {
+    
+            }
+            local letter_count = {
+    
+            }
+            for _, char in ipairs(result_string_arr) do
+                local lower_char = string.lower(char)
+                letter_count[lower_char] = (letter_count[lower_char] or 0) + 1
+            end
+    
+            for i, char in ipairs(word_table) do
+                if todo_table[i] and string.upper(char) == string.upper(todo_table[i]) then
+                    G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] = true
+                    table.insert(word_for_display,{string.lower(char), 1})
+                elseif letter_count[string.lower(char)] and letter_count[string.lower(char)] > 0 and not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] then
+                    G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] = true
+                    
+                    table.insert(word_for_display,{string.lower(char), letter_count[string.lower(char)] > 0 and 2 or 3})
+                    letter_count[string.lower(char)] = letter_count[string.lower(char)] - 1
+                else
+                    if not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] and not G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] then
+                        G.GAME.current_round.aiko_round_incorrect_letter[string.lower(char)] = true
+                    end
+                    table.insert(word_for_display,{string.lower(char), 3})
+                end
+            end
+            
+    
+            table.insert(G.GAME.current_round.aiko_round_played_words,word_for_display)    
+            if string.upper(G.GAME.word_todo) == string.upper(G.GAME.aiko_current_word) then
+                --print("WIN!")
+                G.GAME.aiko_puzzle_win = true
             end
         end
-        
-
-        table.insert(G.GAME.current_round.aiko_round_played_words,word_for_display)
-        
 
 
-        if string.upper(G.GAME.word_todo) == string.upper(G.GAME.aiko_current_word) then
-            --print("WIN!")
-            G.GAME.aiko_puzzle_win = true
-        end
     end
     local ret = eval_hook()
     if G.GAME.aikoyori_variable_to_set and G.GAME.aikoyori_value_to_set_to_variable then

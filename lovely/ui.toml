@@ -10,19 +10,19 @@ pattern = """                            game_over = false
             end"""
 position = "after"
 payload = """
-            if G.GAME.current_round.advanced_blind then
-                if G.GAME.aiko_puzzle_win then
-                    game_over = false
-                else
-                    game_over = true
-                end
-            elseif G.GAME.akyrs_mathematics_enabled and G.GAME.akyrs_character_stickers_enabled then
-                if G.GAME.blind and AKYRS.is_value_within_threshold(G.GAME.blind.chips,G.GAME.chips,G.GAME.akyrs_math_threshold) then
-                    game_over = false
-                else
-                    game_over = true
-                end
-            end
+if G.GAME.current_round.advanced_blind then
+    if G.GAME.aiko_puzzle_win then
+        game_over = false
+    else
+        game_over = true
+    end
+elseif G.GAME.akyrs_mathematics_enabled and G.GAME.akyrs_character_stickers_enabled then
+    if G.GAME.blind and AKYRS.is_value_within_threshold(G.GAME.blind.chips,G.GAME.chips,G.GAME.akyrs_math_threshold) then
+        game_over = false
+    else
+        game_over = true
+    end
+end
 """
 overwrite = true
 match_indent = true
@@ -36,7 +36,6 @@ pattern = """
 """
 position = "after"
 payload = """
-            end
 """
 overwrite = true
 match_indent = true
@@ -44,24 +43,24 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "game.lua"
-pattern = """
-            G.STATE = G.STATES.NEW_ROUND
+pattern = """        G.STATE_COMPLETE = false
+        return true
 """
 position = "before"
 payload = """
-            if G.GAME.current_round.advanced_blind and G.GAME.aiko_puzzle_win or G.GAME.current_round.hands_left < 1 then
-                if G.GAME.aiko_puzzle_win or G.GAME.current_round.hands_left < 1 then
-                    G.STATE = G.STATES.NEW_ROUND
-                else
-                    G.STATE = G.STATES.DRAW_TO_HAND
-                end
-            elseif G.GAME.akyrs_mathematics_enabled and G.GAME.akyrs_character_stickers_enabled then
-                if (G.GAME.blind and G.GAME.chips == G.GAME.blind.chips) or G.GAME.current_round.hands_left < 1 or AKYRS.does_hand_only_contain_symbols(G.hand) then
-                    G.STATE = G.STATES.NEW_ROUND
-                else
-                    G.STATE = G.STATES.DRAW_TO_HAND
-                end
-            else
+if G.GAME.current_round.advanced_blind and G.GAME.aiko_puzzle_win or G.GAME.current_round.hands_left < 1 then
+    if G.GAME.aiko_puzzle_win or G.GAME.current_round.hands_left < 1 then
+        G.STATE = G.STATES.NEW_ROUND
+    else
+        G.STATE = G.STATES.DRAW_TO_HAND
+    end
+elseif G.GAME.akyrs_mathematics_enabled and G.GAME.akyrs_character_stickers_enabled then
+    if (G.GAME.blind and G.GAME.chips == G.GAME.blind.chips) or G.GAME.current_round.hands_left < 1 or AKYRS.does_hand_only_contain_symbols(G.hand) then
+        G.STATE = G.STATES.NEW_ROUND
+    else
+        G.STATE = G.STATES.DRAW_TO_HAND
+    end
+end
 """
 overwrite = true
 match_indent = true

@@ -469,8 +469,9 @@ return {
             j_akyrs_chicken_jockey = {
                 name = "Chicken Jockey",
                 text = { 
-                    "Every {C:red}Popcorn{}",
-                    "decreses by {C:red}-#3#{} Mult instead",
+                    "Every {C:red}Popcorn{} obtained",
+                    "while this Joker is present",
+                    "decreses Mult by {C:red}-#3#{} per round instead",
                     "Gain {X:mult,C:white}X#1#{} Mult per",
                     "{C:red}Popcorn{} eaten.",
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
@@ -481,8 +482,8 @@ return {
                 name = "Tetoris",
                 text = { 
                     "{C:attention}L{}, {C:attention}S{}, {C:attention}O{}, {C:attention}Z{}, {C:attention}J{}, {C:attention}I{}, and {C:attention}T{}",
-                    "gives {C:chips}+#1#{} Chips",
-                    "and {X:chips,C:white}X#2#{} Chips when scored",
+                    "gives {C:chips}+#1#{} Chips when scored",
+                    "and {X:chips,C:white}X#2#{} Chips if any one those is present.",
                     "{s:0.7,C:inactive}teteteteto teto tetete tetoris!{}"
                 }
             },

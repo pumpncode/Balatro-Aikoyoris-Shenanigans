@@ -1516,10 +1516,16 @@ AKYRS.LetterJoker {
         }
     end,
     calculate = function (self, card, context)
-        if context.individual and context.cardarea == G.play then
+        if context.individual and context.cardarea == G.play and G.GAME.akyrs_character_stickers_enabled then
             if AKYRS.tetoris_piece[string.lower(context.other_card:get_letter_with_pretend())] then
                 return {
                     chips = card.ability.extras.chips,
+                }
+            end
+        end
+        if context.joker_main then
+            if AKYRS.tetoris_piece[string.lower(context.other_card:get_letter_with_pretend())] and G.GAME.akyrs_character_stickers_enabled then
+                return {
                     xchips = card.ability.extras.xchips,
                 }
             end

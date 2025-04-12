@@ -178,7 +178,7 @@ end
 
 local isFaceHook = Card.is_face
 function Card:is_face(from_boss)
-    if find_joker("Henohenomoheji") then
+    if #SMODS.find_card("j_akyrs_henohenomoheji") > 0 then
         if self and self.get_letter_with_pretend and self.ability and self.ability.aikoyori_letters_stickers and G.GAME.akyrs_character_stickers_enabled and
         (self:get_letter_with_pretend():lower() == "j" or 
         self:get_letter_with_pretend():lower() == "q" or 

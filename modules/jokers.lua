@@ -1524,7 +1524,8 @@ AKYRS.LetterJoker {
             end
         end
         if context.joker_main then
-            if AKYRS.tetoris_piece[string.lower(context.other_card:get_letter_with_pretend())] and G.GAME.akyrs_character_stickers_enabled then
+            local c = AKYRS.get_letter_freq_from_cards(G.play.cards)
+            if (c["l"] or c["s"] or c["o"] or c["z"] or c["j"] or c["i"] or c["t"]) and G.GAME.akyrs_character_stickers_enabled then
                 return {
                     xchips = card.ability.extras.xchips,
                 }

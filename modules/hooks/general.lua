@@ -710,7 +710,9 @@ end
 
 local cardAreaEmplaceFunction = CardArea.emplace
 function CardArea:emplace(c,l,fl)
-    c.akyrs_lastcardarea = self
+    if c then
+        c.akyrs_lastcardarea = self
+    end
     return cardAreaEmplaceFunction(self,c,l,fl)
 end
 

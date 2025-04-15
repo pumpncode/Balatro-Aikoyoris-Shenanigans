@@ -111,7 +111,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     // -- start
     
     float random1 = randReal(floor(uv.x*7.445)+time)*0.05;
-    float random2 = randReal(floor(uv.x*7.445)+1+time)*0.05;
+    float random2 = randReal(floor(uv.x*7.445)+1.+time)*0.05;
     float random = mix(random1, random2, fract(sin(uv.x*7.445)+time));
     float factor = 0.5 + random;
     float factorY = 1.;
@@ -140,7 +140,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
         tex.b -= 0.2;
 
     }
-    if ((uv.x*factor)+uv.y*factorY > (1.-width/2.)-(factor/2.) && uv.x*factor+uv.y*factorY < (1.+width/2)-(factor/2.)){
+    if ((uv.x*factor)+uv.y*factorY > (1.-width/2.)-(factor/2.) && uv.x*factor+uv.y*factorY < (1.+width/2.)-(factor/2.)){
         tex.w = 0.;
         colour.w = 0.;
     }

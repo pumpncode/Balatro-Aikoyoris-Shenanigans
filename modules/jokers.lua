@@ -1198,7 +1198,7 @@ SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "ghastling",
     pos = {
-        x = 3, y = 2
+        x = 4, y = 2
     },
     rarity = 2,
     cost = 6,
@@ -1269,14 +1269,14 @@ SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "happy_ghast",
     pos = {
-        x = 4, y = 2
+        x = 5, y = 2
     },
     rarity = 3,
     cost = 6,
     config = {
         name = "Happy Ghast",
         extras = {
-            xmult = 4
+            xmult = 4.2
         }
     },
     in_pool = function (self, args)
@@ -1304,15 +1304,232 @@ SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "charred_roach",
     pos = {
-        x = 4, y = 2
+        x = 6, y = 2
     },
-    rarity = 3,
+    rarity = 2,
     cost = 6,
     config = {
-        name = "Happy Ghast",
+        name = "Charred Roach",
         extras = {
-            xmult = 4
         }
     },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["e_akyrs_burnt"]
+        
+    end,
+    calculate = function (self, card, context)
+        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] and card == context.card_triggering 
+        and not (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_akyrs_ash_joker") then
+            return {
+                func = function ()
+                    if context.card_getting_removed.area == G.jokers then
+                        local copy = copy_card(context.card_getting_removed,nil,nil,nil, true)
+                        copy:set_edition('e_akyrs_burnt')
+                        copy.sell_cost = 0
+                        G.jokers:emplace(copy)
+                    end
+                end
+            }
+        end
+        if context.remove_playing_cards and not context.blueprint then
+            return {
+                func = function ()
+                    local new_cards = {}
+                    for k, val in ipairs(context.removed) do
+                        if not SMODS.get_enhancements(val)["m_akyrs_ash_card"] then
+                            G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                            local copy = copy_card(val,nil,nil,G.playing_card, true)
+                            G.deck.config.card_limit = G.deck.config.card_limit + 1
+                            table.insert(G.playing_cards, copy)
+                            copy:set_edition('e_akyrs_burnt')
+                            copy:add_to_deck()
+                            copy.sell_cost = 0
+                            G.hand:emplace(copy)
+                            copy:start_materialize(nil)
+                            new_cards[#new_cards+1] = copy
+                        end
 
+                    end
+
+                    playing_card_joker_effects(new_cards)
+                end
+            }
+        end
+    end
+
+}
+-- ash joker
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "ash_joker",
+    pos = {
+        x = 7, y = 2
+    },
+    rarity = 1,
+    cost = 0,
+    in_pool = function (self, args)
+        return false
+    end,
+    config = {
+        name = "Ash Joker",
+        extras = {
+            chips = 35,
+            odds = 4
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.chips,
+                G.GAME.probabilities.normal,
+                card.ability.extras.odds,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                chips = card.ability.extras.chips
+            }
+        end
+        if context.end_of_round and context.cardarea == G.jokers then
+            local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.ability.extras.odds
+            card.ability.akyrs_ash_disintegrate = odder
+        end
+    end
+}
+-- yee
+AKYRS.LetterJoker{
+    atlas = 'AikoyoriJokers',
+    key = "yee",
+    pos = {
+        x = 8, y = 2
+    },
+    rarity = 2,
+    cost = 5,
+    config = {
+        name = "Yee",
+        extras = {
+            chips = 20,
+            mult = 12
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.chips,
+                card.ability.extras.mult,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play and G.GAME.aiko_current_word then
+            local w = AKYRS.get_letter_freq_from_cards(G.play.cards)
+            local l = string.lower(context.other_card:get_letter_with_pretend())
+            if (w["y"] and w["y"] >= 1 and w["e"] and w["e"] >= 2) and (l == "y" or l == "e") then
+                return {
+                    mult = card.ability.extras.mult,
+                    chips = card.ability.extras.chips
+                }
+            end
+        end
+    end
+}
+-- chicken jockey
+SMODS.Joker{
+    atlas = 'AikoyoriJokers',
+    key = "chicken_jockey",
+    pos = {
+        x = 9, y = 2
+    },
+    rarity = 2,
+    cost = 0,
+    config = {
+        name = "Chicken Jockey",
+        extras = {
+            xmult = 1,
+            xmult_inc = 2,
+            decrease_popcorn = 10,
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["j_popcorn"]
+        return {
+            vars = {
+                card.ability.extras.xmult_inc,
+                card.ability.extras.xmult,
+                card.ability.extras.decrease_popcorn,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                xmult = card.ability.extras.xmult
+            }
+        end
+
+        if context.akyrs_card_remove and card == context.card_triggering 
+        and (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_popcorn") then
+            return {
+                message = localize("k_upgrade_ex"),
+                func = function ()
+                    card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_inc
+                end
+            }
+        end
+    end
+}
+
+
+-- TETORIS
+AKYRS.tetoris_piece = {
+    l = true,
+    s = true,
+    o = true,
+    z = true,
+    j = true,
+    i = true,
+    t = true,
+}
+AKYRS.LetterJoker {
+    key = "tetoris",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 0, y = 3
+    },
+    rarity = 3,
+    cost = 4,
+    config = {
+        name = "Tetoris",
+        extras = {
+            chips = 10,
+            xchips = 2.1,
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.chips,
+                card.ability.extras.xchips,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play and G.GAME.akyrs_character_stickers_enabled then
+            if AKYRS.tetoris_piece[string.lower(context.other_card:get_letter_with_pretend())] then
+                return {
+                    chips = card.ability.extras.chips,
+                }
+            end
+        end
+        if context.joker_main then
+            local c = AKYRS.get_letter_freq_from_cards(G.play.cards)
+            if (c["l"] or c["s"] or c["o"] or c["z"] or c["j"] or c["i"] or c["t"]) and G.GAME.akyrs_character_stickers_enabled then
+                return {
+                    xchips = card.ability.extras.xchips,
+                }
+            end
+        end
+    end
 }

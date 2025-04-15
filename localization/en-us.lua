@@ -188,7 +188,8 @@ return {
                 name = "Burnt",
                 text = {
                     "{C:green}#1# in #2#{} chance",
-                    "of disintegrating into Ash"
+                    "of disintegrating into Ash",
+                    "at the end of the round"
                 }
             },
         },
@@ -204,6 +205,15 @@ return {
                 name="Scoreless",
                 text={
                     "Does not score"
+                },
+            },
+            m_akyrs_ash_card = {
+                name="Ash Card",
+                text={
+                    "{C:blue}+#1#{} Chips",
+                    "{C:green}#2# in #3#{} chance",
+                    "of disintegrating into nothing",
+                    "at the end of the round"
                 },
             }
         },
@@ -429,6 +439,52 @@ return {
                 name = "Happy Ghast",
                 text = { 
                     "{X:mult,C:white}X#1#{} Mult",
+                }
+            },
+            j_akyrs_charred_roach = {
+                name = "Charred Roach",
+                text = { 
+                    "{C:red}Destroying{} cards",
+                    "grants you a {C:attention}Burnt{} copy of it",
+                }
+            },
+            j_akyrs_ash_joker = {
+                name = "Ash Joker",
+                text = { 
+                    "{C:chips}+#1#{} Chips",
+                    "{C:green}#2# in #3#{} chance",
+                    "of disintegrating into nothing",
+                    "at the end of the round"
+                }
+            },
+            j_akyrs_yee = {
+                name = "Yee",
+                text = { 
+                    "If played word contains {C:attention}a Y{} and {C:blue}two E's{},",
+                    "Gain {C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult",
+                    "Per Scored {C:attention}Y's{} and {C:blue}E's{}",
+                    "{s:0.7,C:inactive}Who even remembered this???{}"
+                }
+            },
+            j_akyrs_chicken_jockey = {
+                name = "Chicken Jockey",
+                text = { 
+                    "Every {C:red}Popcorn{} obtained",
+                    "while this Joker is present",
+                    "decreses Mult by {C:red}-#3#{} per round instead",
+                    "Gain {X:mult,C:white}X#1#{} Mult per",
+                    "{C:red}Popcorn{} eaten.",
+                    "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+                    "{s:0.7,C:inactive}Absolute Cinema.{}"
+                }
+            },
+            j_akyrs_tetoris = {
+                name = "Tetoris",
+                text = { 
+                    "{C:attention}L{}, {C:attention}S{}, {C:attention}O{}, {C:attention}Z{}, {C:attention}J{}, {C:attention}I{}, and {C:attention}T{}",
+                    "gives {C:chips}+#1#{} Chips when scored",
+                    "and {X:chips,C:white}X#2#{} Chips if any one those is present.",
+                    "{s:0.7,C:inactive}teteteteto teto tetete tetoris!{}"
                 }
             },
         },
@@ -828,6 +884,7 @@ return {
             k_akyrs_moisture = "Moisturised!",
             k_akyrs_growth = "Growth!",
             k_akyrs_back = "Reverse!",
+            k_akyrs_cinema = "Cinema!",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
             k_akyrs_hardcore_challenge_mode_flavour = "Tough and completely optional Challenges",

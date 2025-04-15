@@ -248,7 +248,38 @@ G.FUNCS.can_discard = function(e)
     return ret
 end
 
+local cardSellHook = Card.sell_card
 
+function Card:sell_card()
+    self.akyrs_is_being_sold = true
+    local c = cardSellHook(self)
+    return c
+end
+AKYRS.area_to_check_remove = function(area)
+    return area == G.play or area == G.hand or area == G.deck or area == G.jokers or area == G.consumeables or nil
+end
+local cardRemoveHook = Card.remove
+function Card:remove()
+    local area = self.area or self.akyrs_lastcardarea
+
+    if not G.AKYRS_RUN_BEING_DELETED and not self.akyrs_is_being_sold and not (area and (area.config.collection or area.config.temporary or area.config.view_deck)) and area and AKYRS.area_to_check_remove(area) then
+        if G.GAME and AKYRS.all_card_areas then
+            for _, cardarea in ipairs(AKYRS.all_card_areas) do
+                if cardarea and cardarea.cards and not cardarea.config.collection and not cardarea.temporary and AKYRS.area_to_check_remove(cardarea) then
+                    for i, card in ipairs(cardarea.cards) do
+                        if not card.removed and not self.removed and card ~= self and not card.akyrs_is_being_sold and not card.ability.akyrs_part_of_solitaire and not ((area.config.collection or area.temporary)) then
+                            
+                            pcall(SMODS.calculate_context,{ akyrs_card_remove = true, card_getting_removed = self, card_triggering = card, })
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    local l = cardRemoveHook(self)
+    return l
+end
 
 local endRoundHook = end_round
 function end_round()
@@ -270,6 +301,42 @@ function end_round()
                             end,
                             delay = 0.5,
                         }), 'base')
+                    end
+                    if SMODS.get_enhancements(card)["m_akyrs_ash_card"] or card.config.center_key == "j_akyrs_ash_joker" then
+                        local odder = pseudorandom("ashed") < G.GAME.probabilities.normal / card.ability.extras.odds
+                        if odder then
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    card:start_dissolve({ G.C.BLACK }, nil, 1.6)
+                                    return true
+                                end,
+                                delay = 0.5,
+                            }), 'base')
+                        end
+
+                    end
+                    if card.edition and card.edition.key == "e_akyrs_burnt" then
+                        local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.edition.extras.odds
+                        if odder then
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    local area = card.area
+                                    if area == G.jokers or area == G.consumeables then
+                                        SMODS.add_card({ key = "j_akyrs_ash_joker"})
+                                        
+                                    end
+                                    if area == G.deck or area == G.hand or area == G.discard then
+                                        local c = SMODS.add_card({ key = "m_akyrs_ash_card" , area = G.deck})
+                                        G.deck.config.card_limit = G.deck.config.card_limit + 1
+                                        table.insert(G.playing_cards, c)
+                                    end
+                                    card:start_dissolve({ G.C.BLACK }, nil, 1.6)
+                                    
+                                    return true
+                                end,
+                                delay = 0.5,
+                            }), 'base')
+                        end
                     end
                 end
             end
@@ -326,11 +393,13 @@ end
 
 local deleteRunHook = Game.delete_run
 function Game:delete_run()
+    self.AKYRS_RUN_BEING_DELETED = true
     local ret = deleteRunHook(self)
 
     if self.aiko_wordle then
         self.aiko_wordle:remove(); self.aiko_wordle = nil
     end
+    self.AKYRS_RUN_BEING_DELETED = nil
     return ret
 end
 
@@ -450,14 +519,119 @@ G.FUNCS.evaluate_play = function()
             major = G.play, offset = {x = 0, y = -1}
         })
     end
+    -- print(#G.play.cards)
+    if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled then
+        
+        
+        local aiko_current_word_split = {}
+        for i, j in ipairs(G.play.cards) do
+            if j.ability.aikoyori_letters_stickers then
+                table.insert(aiko_current_word_split,string.lower(j:get_letter_with_pretend()))
+            end
+        end
+        local wordData = {}
+        if (AKYRS.WORD_CHECKED[aiko_current_word_split]) then
+            --print("WORD "..word_hand_str.." IS IN MEMORY AND THUS SHOULD USE THAT")
+            wordData = AKYRS.WORD_CHECKED[aiko_current_word_split]
+        else
+            --print("WORD "..word_hand_str.." IS NOT IN MEMORY ... CHECKING")
+            wordData = AKYRS.check_word(aiko_current_word_split)
+            AKYRS.WORD_CHECKED[aiko_current_word_split] = wordData
+        end
+        --print(wordData)
+        if wordData.valid then
+            G.GAME.aiko_current_word = wordData.word
+            G.GAME.aiko_words_played[wordData.word] = true
+            G.GAME.current_round.aiko_round_played_words[wordData.word] = true
+            if AKYRS.config.wildcard_behaviour == 4 then -- set letters in hand  on mode 4 lol !!!
+                for g,card in ipairs(G.play) do
+                    if card.ability.aikoyori_letters_stickers == "#" and aiko_current_word_split and aiko_current_word_split[g] then
+                        card.ability.aikoyori_pretend_letter = aiko_current_word_split[g]
+                    end
+                end
+            end
+        end
+    end
     if G.GAME.aiko_current_word then
         attention_text({
             scale =  1.5, text = string.upper(G.GAME.aiko_current_word), hold = 15, align = 'tm',
             major = G.play, offset = {x = 0, y = -1}
         })
     end
+    if(G.GAME.aiko_current_word) then
+            
+        local word_table = {}
+        for char in G.GAME.aiko_current_word:gmatch(".") do
+            table.insert(word_table, char)
+        end
+        for k,v in ipairs(G.hand.cards) do
+            if v.highlighted then
+                local _card = copy_card(v, nil, nil, G.playing_card)
+                _card.ability.akyrs_self_destructs = true
+                _card.ability.aikoyori_letters_stickers = v.ability.aikoyori_letters_stickers
+                G.deck.config.card_limit = G.deck.config.card_limit + 1
+                table.insert(G.playing_cards, _card)
+                G.deck:emplace(_card)
+                _card:add_to_deck()
+            end
+
+        end
+        if G.GAME.word_todo then
+            local todo_table = {}
+            for char in G.GAME.word_todo:gmatch(".") do
+                table.insert(todo_table, char)
+            end
+
+            local result_string = ""
+            local result_string_arr = {}
+            for i, char in ipairs(todo_table) do
+                if word_table[i] and string.upper(word_table[i]) == string.upper(char) then
+                    result_string = result_string .. "-"
+                    table.insert(result_string_arr,"-")
+                else
+                    result_string = result_string .. char
+                    table.insert(result_string_arr,char)
+                end
+            end
+            local word_for_display = {
+    
+            }
+            local letter_count = {
+    
+            }
+            for _, char in ipairs(result_string_arr) do
+                local lower_char = string.lower(char)
+                letter_count[lower_char] = (letter_count[lower_char] or 0) + 1
+            end
+    
+            for i, char in ipairs(word_table) do
+                if todo_table[i] and string.upper(char) == string.upper(todo_table[i]) then
+                    G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] = true
+                    table.insert(word_for_display,{string.lower(char), 1})
+                elseif letter_count[string.lower(char)] and letter_count[string.lower(char)] > 0 and not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] then
+                    G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] = true
+                    
+                    table.insert(word_for_display,{string.lower(char), letter_count[string.lower(char)] > 0 and 2 or 3})
+                    letter_count[string.lower(char)] = letter_count[string.lower(char)] - 1
+                else
+                    if not G.GAME.current_round.aiko_round_correct_letter[string.lower(char)] and not G.GAME.current_round.aiko_round_misaligned_letter[string.lower(char)] then
+                        G.GAME.current_round.aiko_round_incorrect_letter[string.lower(char)] = true
+                    end
+                    table.insert(word_for_display,{string.lower(char), 3})
+                end
+            end
+            
+    
+            table.insert(G.GAME.current_round.aiko_round_played_words,word_for_display)    
+            if string.upper(G.GAME.word_todo) == string.upper(G.GAME.aiko_current_word) then
+                --print("WIN!")
+                G.GAME.aiko_puzzle_win = true
+            end
+        end
+
+
+    end
     local ret = eval_hook()
-    G.GAME.aiko_current_word = nil
     if G.GAME.aikoyori_variable_to_set and G.GAME.aikoyori_value_to_set_to_variable then
         AKYRS.parser_set_var(G.GAME.aikoyori_variable_to_set , G.GAME.aikoyori_value_to_set_to_variable)
     end
@@ -472,6 +646,7 @@ G.FUNCS.evaluate_play = function()
     G.GAME.aikoyori_evaluation_value = nil
     G.GAME.aikoyori_variable_to_set = nil
     G.GAME.aikoyori_value_to_set_to_variable = nil
+    G.GAME.aiko_current_word = nil
     return ret
 end
 
@@ -479,7 +654,7 @@ end
 local cardAreaInitHook = CardArea.init
 function CardArea:init(X, Y, W, H, config)
     local r = cardAreaInitHook(self,X,Y,W,H,config)
-    if not config.temporary then
+    if not config.temporary and not config.collection then
         if not AKYRS.all_card_areas then
             AKYRS.all_card_areas = {}
         end
@@ -526,9 +701,33 @@ end
 local cardInitHook = Card.init
 function Card:init(X, Y, W, H, card, center, params)
     local ret = cardInitHook(self, X, Y, W, H, card, center, params)
+    
+    self:akyrs_mod_card_value_init()
     self.akyrs_upgrade_sliced = false
     
     return ret
+end
+
+local cardAreaEmplaceFunction = CardArea.emplace
+function CardArea:emplace(c,l,fl)
+    c.akyrs_lastcardarea = self
+    return cardAreaEmplaceFunction(self,c,l,fl)
+end
+
+local setCAHook = Card.set_card_area
+function Card:set_card_area(area)
+    local x = setCAHook(self,area)
+    self.akyrs_lastcardarea = area
+    return x
+end
+
+function Card:akyrs_mod_card_value_init()
+    if #SMODS.find_card("j_akyrs_chicken_jockey") > 0 and self.config.center_key == "j_popcorn" then
+        local jj = SMODS.find_card("j_akyrs_chicken_jockey")
+        local val = jj[#jj].ability.extras.decrease_popcorn
+        self.ability.extra = val
+    end
+  
 end
 
 local cardSave = Card.save

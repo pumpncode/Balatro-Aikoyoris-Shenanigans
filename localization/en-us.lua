@@ -916,7 +916,6 @@ return {
             k_akyrs_hibana_change = "Nanana...",
             k_akyrs_with = "with",
             k_akyrs_credits = "Credits",
-            k_akyrs_title = "Aikoyori's Shenanigans",
             k_akyrs_created_by = "Created by",
             k_akyrs_additional_art_by = "Additional Art by",
             k_akyrs_difficult = "Difficult",
@@ -925,10 +924,13 @@ return {
             k_akyrs_growth = "Growth!",
             k_akyrs_back = "Reverse!",
             k_akyrs_cinema = "Cinema!",
-            
+
             k_akyrs_cant_be_debuffed = "Cannot Be Debuffed",
 
             k_akyrs_confrontation_has_face_in_hand_warning = "Must not hold face cards in hand",
+
+            k_akyrs_title = "Aikoyori's Shenanigans",
+            k_akyrs_join_akyrs_discord = "Join my Discord",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
             k_akyrs_hardcore_challenge_mode_flavour = "Tough and completely optional Challenges",

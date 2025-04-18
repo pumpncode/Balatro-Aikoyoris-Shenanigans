@@ -1124,3 +1124,7 @@ AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
         }
     end
 end
+
+G.FUNCS.go_to_aikoyori_discord_server = function(e)
+    love.system.openURL( "https://discord.gg/JVg8Bynm7k" )
+end

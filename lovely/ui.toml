@@ -230,3 +230,28 @@ end
 overwrite = true
 match_indent = true
 
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """        ability_text[1] and {n=G.UIT.R, config={align = "cm", padding = 0.08, colour = mix_colours(blind.boss_colour, G.C.GREY, 0.4), r = 0.1, emboss = 0.05, minw = 2.5, minh = 0.9}, nodes=ability_text} or nil
+      }}"""
+position = "after"
+payload = """
+AKYRS.add_blind_extra_info(blind,ability_text,{text_size = 0.4})
+"""
+overwrite = true
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """  local run_info_colour = run_info and (blind_state == 'Defeated' and G.C.GREY or blind_state == 'Skipped' and G.C.BLUE or blind_state == 'Upcoming' and G.C.ORANGE or blind_state == 'Current' and G.C.RED or G.C.GOLD)"""
+position = "before"
+payload = """
+AKYRS.add_blind_extra_info(blind_choice.config,blind_desc_nodes,{text_size = 0.35,border_size = 0.75})
+"""
+overwrite = true
+match_indent = true
+

@@ -641,3 +641,194 @@ SMODS.Blind {
         end
     end
 }
+
+
+SMODS.Blind {
+    key = "expert_confrontation",
+    dollars = 10,
+    mult = 3,
+    boss_colour = HEX('ce36ff'),
+    debuff = {
+        akyrs_cant_be_disabled = true
+    },
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 9, max = 10},
+    pos = { x = 0, y = 18 },
+    debuff_hand = function (self, cards, hand, handname, check)
+        local has_face = false
+        for i,j in ipairs(G.hand.cards) do
+            if j:is_face() and not j.highlighted then
+                has_face = true
+                break
+            end
+        end
+        return has_face
+    end,
+    loc_vars = function (self)
+        return {
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+        }
+    end,
+    in_pool = function (self)
+        local pseudocard = AKYRS.PseudoCard("8",8,"Hearts")
+        return G.GAME.round_resets.ante > 8 and not Card.is_face(pseudocard)
+    end,
+    get_loc_debuff_text = function (self)
+        return localize("k_akyrs_confrontation_has_face_in_hand_warning")
+    end,
+
+}
+SMODS.Blind {
+    key = "expert_fluctuation",
+    dollars = 10,
+    mult = 3,
+    boss_colour = HEX('ff6c9a'),
+    debuff = {
+        mult_min = 0.01,
+        mult_max = 1.1,
+        akyrs_cant_be_disabled = true,
+    },
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 9, max = 10},
+    pos = { x = 0, y = 19 },
+    
+    loc_vars = function (self)
+        return {
+            vars = { self.debuff.mult_min, self.debuff.mult_max }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = { 0.01, 1.1 }
+        }
+    end,
+    calculate = function (self, blind, context)
+        if context.before then
+            local xm = pseudorandom(pseudoseed("akyrs_fluctuation"))*(blind.debuff.mult_max - blind.debuff.mult_min) + blind.debuff.mult_min
+            G.GAME.chips = G.GAME.chips * xm
+            G.GAME.chips_text = number_format(G.GAME.chips)
+            G.HUD:get_UIE_by_ID("chip_UI_count"):juice_up()
+            play_sound('timpani')
+        end
+    end,
+
+}
+SMODS.Blind {
+    key = "expert_straightforwardness",
+    dollars = 10,
+    mult = 3,
+    boss_colour = HEX('4d77ff'),
+    debuff = {
+        akyrs_cant_be_disabled = true,
+        ch = 1,
+        mul = 1
+    },
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 9, max = 10},
+    pos = { x = 0, y = 20 },
+    
+    loc_vars = function (self)
+        return {
+            vars = {
+                self.debuff.ch,
+                self.debuff.mul,
+            }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = {
+                1, 1
+            }
+        }
+    end,
+    modify_hand = function (self, cards, poker_hands, text, mult, hand_chips)
+        if poker_hands["Straight"] and next(poker_hands["Straight"]) then
+            return mult, hand_chips, false
+        end
+        return self.debuff.mul, self.debuff.ch, true
+    end,
+}
+SMODS.Blind {
+    key = "expert_entanglement",
+    dollars = 10,
+    mult = 2,
+    boss_colour = HEX('1fb643'),
+    debuff = {
+        akyrs_cant_be_disabled = true,
+    },
+    stay_flipped = function (self, area, card)
+        if area == G.hand and G.hand.cards then
+            local ranks = {}
+            for i, v in ipairs(G.hand.cards) do
+                if v.base and v.base.suit and not SMODS.has_no_suit(v) and v.facing == 'front' then
+                    ranks[v.base.suit] = true
+                end
+            end
+            if card.base and card.base.suit and ranks[card.base.suit] and not SMODS.has_no_suit(card) then
+                return true
+            end
+        end
+        return false
+    end,
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 9, max = 10},
+    pos = { x = 0, y = 21 },
+    
+    loc_vars = function (self)
+        return {
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+        }
+    end,
+}
+SMODS.Blind {
+    key = "expert_manuscript",
+    dollars = 10,
+    mult = 3,
+    boss_colour = HEX('ffa530'),
+    debuff = {
+        akyrs_cant_be_disabled = true,
+    },
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 9, max = 10},
+    pos = { x = 0, y = 22 },
+    
+    modify_hand = function (self, cards, poker_hands, text, mult, hand_chips)
+        ease_dollars(-mult)
+        return mult, hand_chips, true
+    end,
+    --[[
+    calculate = function (self, blind, context)
+        if context.individual and context.area == G.play and not context.repetition then
+            local x = localize(context.scoring_name,"poker_hands")
+            local y = G.GAME.hands[scoring_hand]
+            return {
+                dollars = -y.mult
+            }
+                
+        end
+    end]]
+}
+SMODS.Blind {
+    key = "expert_inflation",
+    dollars = 10,
+    mult = 24,
+    boss_colour = HEX('7371ff'),
+    debuff = {
+        akyrs_cant_be_disabled = true,
+    },
+    
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 12, max = 10},
+    pos = { x = 0, y = 23 },
+}

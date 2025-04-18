@@ -70,7 +70,7 @@ return {
             bl_akyrs_the_nature= {
                 name = "The Nature",
                 text = {
-                    "Face cards all",
+                    "Face cards (both held and played)",
                     "give X#1# Mult each",
                 }
             },
@@ -125,6 +125,46 @@ return {
                 text = {
                     "Lose money at the end of the round",
                     "By Final Score divided by Blind Requirement"
+                }
+            },
+            bl_akyrs_expert_confrontation = {
+                name = "Confrontation",
+                text = {
+                    "Face cards must not be held in hand",
+                }
+            },
+            bl_akyrs_expert_fluctuation = {
+                name = "Fluctuation",
+                text = {
+                    "Randomly multiply score by",
+                    "between #1# and #2# before hand played",
+                }
+            },
+            bl_akyrs_expert_straightforwardness = {
+                name = "Straightforwardness",
+                text = {
+                    "Hands without Straight",
+                    "Starts with base #1# Chip and #2# Mult",
+                }
+            },
+            bl_akyrs_expert_entanglement = {
+                name = "Entanglement",
+                text = {
+                    "All but one cards from each suit",
+                    "are drawn face down",
+                }
+            },
+            bl_akyrs_expert_manuscript = {
+                name = "Manuscript",
+                text = {
+                    "Lose money equal to",
+                    "played Poker Hand's Base Mult",
+                }
+            },
+            bl_akyrs_expert_inflation = {
+                name = "Inflation",
+                text = {
+                    "Absurdly large blind",
                 }
             },
         },
@@ -885,6 +925,10 @@ return {
             k_akyrs_growth = "Growth!",
             k_akyrs_back = "Reverse!",
             k_akyrs_cinema = "Cinema!",
+            
+            k_akyrs_cant_be_debuffed = "Cannot Be Debuffed",
+
+            k_akyrs_confrontation_has_face_in_hand_warning = "Must not hold face cards in hand",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
             k_akyrs_hardcore_challenge_mode_flavour = "Tough and completely optional Challenges",

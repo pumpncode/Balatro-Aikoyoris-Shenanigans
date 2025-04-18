@@ -640,6 +640,7 @@ function AKYRS.adjust_rounding(num)
 end
 
 function AKYRS.does_hand_only_contain_symbols(cardarea)
+    if G.deck and G.deck.cards and #G.deck.cards > 0 then return false end
     for i,k in ipairs(cardarea.cards) do
         if tonumber(k.ability.aikoyori_letters_stickers) then
             return false
@@ -1108,4 +1109,18 @@ AKYRS.get_letter_freq_from_cards = function(listofcards)
         wordArray[w] = wordArray[w] and wordArray[w] + 1 or 1
     end
     return wordArray
+end
+
+AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
+    extras = extras or {}
+    local fsz = extras.text_size or 0.5
+    local bsz = extras.border_size or 1
+    if blind.debuff.akyrs_cant_be_disabled then
+        ability_text_table[#ability_text_table+1] = {
+            n = G.UIT.R, config = { padding = 0.1, outline = bsz, outline_colour = mix_colours(G.C.RED,G.C.BLACK,0.5), colour = G.C.RED, r = 0.2, align = "cm" },
+            nodes = {
+                {n=G.UIT.T, config={text = localize('k_akyrs_cant_be_debuffed'), scale = fsz, colour = G.C.WHITE}},
+            }
+        }
+    end
 end

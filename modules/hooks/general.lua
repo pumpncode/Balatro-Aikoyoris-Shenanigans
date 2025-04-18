@@ -1190,3 +1190,11 @@ function Card:start_materialize(cols, slnt, timefac)
     local h = startMaterializeHook(self, cols, slnt, timefac)
     return h
 end
+
+local blindDisable = Blind.disable
+function Blind:disable()
+    if self.debuff.akyrs_cant_be_disabled then
+        return
+    end
+    return blindDisable(self)
+end

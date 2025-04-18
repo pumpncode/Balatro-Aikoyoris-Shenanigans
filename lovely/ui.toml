@@ -255,3 +255,15 @@ AKYRS.add_blind_extra_info(blind_choice.config,blind_desc_nodes,{text_size = 0.3
 overwrite = true
 match_indent = true
 
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/overrides.lua"]'
+pattern = """	e.UIBox:recalculate()"""
+position = "before"
+payload = """
+AKYRS.add_blind_extra_info(G.GAME.blind,e,{text_size = 0.35,border_size = 0.75, set_parent_child = true})
+"""
+overwrite = true
+match_indent = true
+

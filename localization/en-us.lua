@@ -157,7 +157,7 @@ return {
             bl_akyrs_expert_manuscript = {
                 name = "Manuscript",
                 text = {
-                    "Lose money equal to",
+                    "Lose money per hand equal to",
                     "played Poker Hand's Base Mult",
                 }
             },

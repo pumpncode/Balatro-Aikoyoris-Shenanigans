@@ -1115,13 +1115,22 @@ AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
     extras = extras or {}
     local fsz = extras.text_size or 0.5
     local bsz = extras.border_size or 1
+    local set_parent_child = extras.set_parent_child or false
+    local z = nil
     if blind.debuff.akyrs_cant_be_disabled then
-        ability_text_table[#ability_text_table+1] = {
+        z = {
             n = G.UIT.R, config = { padding = 0.1, outline = bsz, outline_colour = mix_colours(G.C.RED,G.C.BLACK,0.5), colour = G.C.RED, r = 0.2, align = "cm" },
             nodes = {
                 {n=G.UIT.T, config={text = localize('k_akyrs_cant_be_debuffed'), scale = fsz, colour = G.C.WHITE}},
             }
         }
+    end
+    if z then
+        if set_parent_child then
+            ability_text_table.UIBox:set_parent_child(z, ability_text_table)
+        else
+            ability_text_table[#ability_text_table+1] = z
+        end
     end
 end
 

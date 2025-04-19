@@ -776,7 +776,7 @@ SMODS.Blind {
     mult = 3,
     boss_colour = HEX('ce36ff'),
     debuff = {
-        akyrs_cannot_be_disabled = true
+        akyrs_cannot_be_disabled = true,
     },
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 9, max = 10},

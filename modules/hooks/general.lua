@@ -1213,6 +1213,7 @@ end
 local blindDisable = Blind.disable
 function Blind:disable()
     if self.debuff.akyrs_cannot_be_disabled then
+        play_sound("akyrs_loud_incorrect_buzzer",1,0.1)
         attention_text({
             text = localize("k_nope_ex"),
             scale = 1, 
@@ -1237,7 +1238,8 @@ local rerollBossHook = G.FUNCS.reroll_boss
 G.FUNCS.reroll_boss = function(e)
     
     if not AKYRS.can_boss_be_rerolled(G.GAME.round_resets.blind_choices.Boss) then
-        
+        local uib = G.blind_select_opts.boss:get_UIE_by_ID("blind_desc")
+        play_sound("akyrs_loud_incorrect_buzzer",1,0.1)
         attention_text({
             text = localize("k_nope_ex"),
             scale = 1, 
@@ -1245,7 +1247,7 @@ G.FUNCS.reroll_boss = function(e)
             rotate = math.pi / 8,
             backdrop_colour = G.GAME.blind.boss_colour,
             align = "cm",
-            major = G.blind_select_opts.boss:get_UIE_by_ID("blind_desc").children[1].children[1].children[1],
+            major =  uib and uib.children and uib.children[1] and uib.children[1].children[1].children[1] or nil,
             offset = {x = 0, y = 0.1}
         })
 
@@ -1271,11 +1273,20 @@ end
 
 local getNewBossHook = get_new_boss
 get_new_boss = function()
-    if not AKYRS.can_boss_be_rerolled(G.GAME.round_resets.blind_choices.Boss) then
+    if not AKYRS.can_boss_be_rerolled(G.GAME.round_resets.blind_choices.Boss) and not G.GAME.akyrs_blind_just_defeated then
+        -- TODO: FIX THIS
         return G.GAME.round_resets.blind_choices.Boss
     else
+        G.GAME.akyrs_blind_just_defeated = nil
         local x = getNewBossHook()
         return x
     end
 
+end
+
+local blindDefeatHook = Blind.defeat
+function Blind:defeat(silent)
+    local x = blindDefeatHook(self,silent)
+    G.GAME.akyrs_blind_just_defeated = true
+    return x
 end

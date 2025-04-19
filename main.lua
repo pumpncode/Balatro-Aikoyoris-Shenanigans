@@ -20,6 +20,7 @@ assert(SMODS.load_file("./modules/hooks/ui.lua"))() -- uir
 
 assert(SMODS.load_file("./modules/sounds.lua"))()
 assert(SMODS.load_file("./modules/desc.lua"))()
+assert(SMODS.load_file("./modules/pseudocard.lua"))()
 
 assert(SMODS.load_file("./modules/custom_minigames/solitaire.lua"))() -- solitaire boss
 assert(SMODS.load_file("./modules/custom_minigames/solitaire_ui.lua"))()

@@ -1190,3 +1190,21 @@ function Card:start_materialize(cols, slnt, timefac)
     local h = startMaterializeHook(self, cols, slnt, timefac)
     return h
 end
+
+local blindDisable = Blind.disable
+function Blind:disable()
+    if self.debuff.akyrs_cant_be_disabled then
+        attention_text({
+            text = localize("k_nope_ex"),
+            scale = 1, 
+            hold = 1.0,
+            rotate = math.pi / 8,
+            backdrop_colour = G.GAME.blind.boss_colour,
+            align = "cm",
+            major = G.GAME.blind,
+            offset = {x = 0, y = 0.1}
+        })
+        return
+    end
+    return blindDisable(self)
+end

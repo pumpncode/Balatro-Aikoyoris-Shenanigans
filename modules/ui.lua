@@ -297,7 +297,16 @@ SMODS.current_mod.extra_tabs = function()
                       }
                     },
                   }
-                }
+                },
+                {
+                  n = G.UIT.R,
+                  config = {},
+                  nodes = {
+                    UIBox_button({
+                      colour = HEX('5865F2'), minw = 4.5, minh = 1, padding = 0.1, emboss = 0.2, button = "go_to_aikoyori_discord_server", label = {localize("k_akyrs_join_akyrs_discord")}
+                    })
+                  }
+                },
               }
             }
           }

@@ -105,11 +105,12 @@ for i = 3, 31 do
         key = i.."-letter Word",
         visible = false,
         example = exampler,
-        evaluate = function(parts, hand)
+        evaluate = function(parts, hand_in)
             if ((not G.GAME.akyrs_character_stickers_enabled) or (not G.GAME.akyrs_wording_enabled)) then 
             return {} end
             local word_hand = {}
-            table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+            local hand = AKYRS.shallow_indexed_table_copy(hand_in)
+            table.sort(hand, AKYRS.hand_sort_function)
             for _, v in pairs(hand) do
                 if not v.ability then return {} end
                 local alpha = v.ability.aikoyori_letters_stickers:lower()
@@ -181,11 +182,12 @@ SMODS.PokerHand{
         { "", true, nil, akyrs_letter = "2"},
         { "", true, nil, akyrs_letter = "7"},
     },
-    evaluate = function(parts, hand)
+    evaluate = function(parts, hand_in)
         if ((not G.GAME.akyrs_character_stickers_enabled) or (not G.GAME.akyrs_mathematics_enabled)) then 
         return {} end
         local word_hand = {}
-        table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+        local hand = AKYRS.shallow_indexed_table_copy(hand_in)
+        table.sort(hand, AKYRS.hand_sort_function)
         for _, v in pairs(hand) do
             if not v.ability then return {} end
             local alpha = v.ability.aikoyori_letters_stickers:lower()
@@ -230,11 +232,12 @@ SMODS.PokerHand{
         { "", true, nil, akyrs_letter = "2"},
         { "", true, nil, akyrs_letter = "5"},
     },
-    evaluate = function(parts, hand)
+    evaluate = function(parts, hand_in)
         if ((not G.GAME.akyrs_character_stickers_enabled) or (not G.GAME.akyrs_mathematics_enabled)) then 
         return {} end
         local word_hand = {}
-        table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+        local hand = AKYRS.shallow_indexed_table_copy(hand_in)
+        table.sort(hand, AKYRS.hand_sort_function)
         for _, v in pairs(hand) do
             if not v.ability then return {} end
             local alpha = v.ability.aikoyori_letters_stickers:lower()
@@ -284,11 +287,12 @@ SMODS.PokerHand{
         { "", true, nil, akyrs_letter = "="},
         { "", true, nil, akyrs_letter = "7"},
     },
-    evaluate = function(parts, hand)
+    evaluate = function(parts, hand_in)
         if ((not G.GAME.akyrs_character_stickers_enabled) or (not G.GAME.akyrs_mathematics_enabled)) then 
         return {} end
         local word_hand = {}
-        table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+        local hand = AKYRS.shallow_indexed_table_copy(hand_in)
+        table.sort(hand, AKYRS.hand_sort_function)
         for _, v in pairs(hand) do
             if not v.ability then return {} end
             local alpha = v.ability.aikoyori_letters_stickers:lower()

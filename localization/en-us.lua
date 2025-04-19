@@ -143,7 +143,7 @@ return {
             bl_akyrs_expert_straightforwardness = {
                 name = "Straightforwardness",
                 text = {
-                    "Hands without Straight",
+                    "All Hands",
                     "Starts with base #1# Chip and #2# Mult",
                 }
             },
@@ -165,6 +165,31 @@ return {
                 name = "Inflation",
                 text = {
                     "Absurdly large blind",
+                }
+            },
+            bl_akyrs_the_choice = {
+                name = "The Choice",
+                text = {
+                    "Played words must contain '#1#'",
+                }
+            },
+            bl_akyrs_the_reject = {
+                name = "The Reject",
+                text = {
+                    "Played words must not contain '#1#'",
+                }
+            },
+            bl_akyrs_the_redo = {
+                name = "The Redo",
+                text = {
+                    "Played words must not contain letter",
+                    "from last played words this Blind",
+                }
+            },
+            bl_akyrs_the_reverse = {
+                name = "The Reverse",
+                text = {
+                    "Words must be played in reverse",
                 }
             },
         },
@@ -294,7 +319,7 @@ return {
                     "{C:chips}Chips{} or {C:mult}Mult{} value changes",
                     "{s:0.8}Times needed increases by {C:attention}#5#{}",
                     "{s:0.8}every time this Joker gains {C:mult}Mult{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{} Mult{C:inactive}){}" }
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}" }
             },
             j_akyrs_quasi_connectivity = {
                 name = "Quasi Connectivity",
@@ -925,7 +950,10 @@ return {
             k_akyrs_back = "Reverse!",
             k_akyrs_cinema = "Cinema!",
 
-            k_akyrs_cant_be_debuffed = "Cannot Be Debuffed",
+            k_akyrs_random_letter = "randomly selected letter",
+
+            k_akyrs_cannot_be_disabled = "Cannot Be Disabled",
+            k_akyrs_cannot_be_rerolled = "Cannot Be Rerolled",
 
             k_akyrs_confrontation_has_face_in_hand_warning = "Must not hold face cards in hand",
 

@@ -1116,24 +1116,51 @@ AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
     local fsz = extras.text_size or 0.5
     local bsz = extras.border_size or 1
     local set_parent_child = extras.set_parent_child or false
-    local z = nil
-    if blind.debuff.akyrs_cant_be_disabled then
-        z = {
+    local z = {}
+    if blind.debuff.akyrs_cannot_be_disabled then
+        z[#z+1] = {
             n = G.UIT.R, config = { padding = 0.1, outline = bsz, outline_colour = mix_colours(G.C.RED,G.C.BLACK,0.5), colour = G.C.RED, r = 0.2, align = "cm" },
             nodes = {
-                {n=G.UIT.T, config={text = localize('k_akyrs_cant_be_debuffed'), scale = fsz, colour = G.C.WHITE}},
+                {n=G.UIT.T, config={text = localize('k_akyrs_cannot_be_disabled'), scale = fsz, colour = G.C.WHITE}},
+            }
+        }
+    end
+    if blind.debuff.akyrs_cannot_be_rerolled then
+        z[#z+1] = {
+            n = G.UIT.R, config = { padding = 0.1, outline = bsz, outline_colour = mix_colours(G.C.PURPLE,G.C.BLACK,0.5), colour = G.C.PURPLE, r = 0.2, align = "cm" },
+            nodes = {
+                {n=G.UIT.T, config={text = localize('k_akyrs_cannot_be_rerolled'), scale = fsz, colour = G.C.WHITE}},
             }
         }
     end
     if z then
         if set_parent_child then
-            ability_text_table.UIBox:set_parent_child(z, ability_text_table)
+            for i,k in ipairs(z) do
+                ability_text_table.UIBox:set_parent_child(k, ability_text_table)
+            end
         else
-            ability_text_table[#ability_text_table+1] = z
+            for i,k in ipairs(z) do
+                ability_text_table[#ability_text_table+1] = k
+            end
         end
     end
 end
 
+AKYRS.hand_sort_function = function (a,b)
+    if G.GAME and G.GAME.words_reversed then
+        return a.T.x > b.T.x
+    end
+    return a.T.x < b.T.x    
+end
+
 G.FUNCS.go_to_aikoyori_discord_server = function(e)
     love.system.openURL( "https://discord.gg/JVg8Bynm7k" )
+end
+
+AKYRS.shallow_indexed_table_copy = function(t)
+    local t2 = {}
+    for i,k in ipairs(t) do
+        table.insert(t2,k)
+    end
+    return t2
 end

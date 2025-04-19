@@ -40,10 +40,12 @@ AKYRS.math_deck_pro_distribution = {
 }
 
 AKYRS.scrabble_letters = {}
+AKYRS.raw_scrabble_letters = {}
 AKYRS.math_deck_characters = {}
 AKYRS.math_deck_pro_characters = {}
 
 for letter, count in pairs(AKYRS.scrabble_distribution) do
+    table.insert(AKYRS.raw_scrabble_letters, letter)
     for i = 1, count do
         table.insert(AKYRS.scrabble_letters, letter)
     end

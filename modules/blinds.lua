@@ -57,7 +57,7 @@ SMODS.Blind{
         G.deck:shuffle('akyrthought')
     end,
     in_pool = function(self)
-        return G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled or false
+        return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled)
     end,
     disable = function(self)
         G.GAME.current_round.advanced_blind = false
@@ -96,6 +96,133 @@ local function talismanCheck(v,big,omega,jen)
     return v
 end
 
+SMODS.Blind{
+    key = "the_choice",
+    dollars = 5,
+    mult = 2,
+    boss_colour = HEX("918b8b"),
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 3, max = 10},
+    pos = { x = 0, y = 1 },
+    in_pool = function(self)
+        return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled)
+    end,
+    loc_vars = function (self)
+        return {
+            vars = {
+                string.upper(G.GAME.akyrs_letter_target)
+            }
+        }
+    end,
+    debuff_hand = function (self, cards, hand, handname, check)
+        if not G.GAME.akyrs_character_stickers_enabled or self.disabled then return false end
+        for i, v in ipairs(cards) do
+            local l = string.upper(v:get_letter_with_pretend())
+            if l and l == string.upper(G.GAME.akyrs_letter_target) then
+                return false
+            end
+        end
+        return true
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = {
+                localize("k_akyrs_random_letter")
+            }
+        }
+    end
+}
+
+SMODS.Blind{
+    key = "the_reject",
+    dollars = 5,
+    mult = 2,
+    boss_colour = HEX("a2a2a2"),
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10},
+    pos = { x = 0, y = 2 },
+    in_pool = function(self)
+        return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled)
+    end,
+    loc_vars = function (self)
+        return {
+            vars = {
+                string.upper(G.GAME.akyrs_letter_target)
+            }
+        }
+    end,
+    debuff_hand = function (self, cards, hand, handname, check)
+        if not G.GAME.akyrs_character_stickers_enabled or self.disabled then return false end
+        for i, v in ipairs(cards) do
+            local l = string.upper(v:get_letter_with_pretend())
+            if l and G.GAME.akyrs_last_played_letters[string.upper(G.GAME.akyrs_letter_target)] then
+                return true
+            end
+        end
+        return false
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = {
+                localize("k_akyrs_random_letter")
+            }
+        }
+    end
+}
+
+
+SMODS.Blind{
+    key = "the_redo",
+    dollars = 5,
+    mult = 2,
+    boss_colour = HEX("ffd611"),
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 3, max = 10},
+    pos = { x = 0, y = 3 },
+    in_pool = function(self)
+        return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled)
+    end,
+    debuff_hand = function (self, cards, hand, handname, check)
+        if not G.GAME.akyrs_character_stickers_enabled or self.disabled then return false end
+        for i, v in ipairs(cards) do
+            local l = string.upper(v:get_letter_with_pretend())
+            if l and G.GAME.akyrs_last_played_letters[l] then
+                return true
+            end
+        end
+        return false
+    end,
+}
+
+SMODS.Blind{
+    key = "the_reverse",
+    dollars = 5,
+    mult = 2,
+    boss_colour = HEX("ff7d49"),
+    atlas = 'aikoyoriBlindsChips', 
+    boss = {min = 1, max = 10},
+    pos = { x = 0, y = 4 },
+    in_pool = function(self)
+        return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled)
+    end,
+    loc_vars = function (self)
+        return {
+            vars = {
+                string.upper(G.GAME.akyrs_letter_target)
+            }
+        }
+    end,
+    set_blind = function (self)
+        G.GAME.words_reversed = true
+    end,
+    disable = function (self)
+        G.GAME.words_reversed = nil
+    end,
+    defeat = function (self)
+        G.GAME.words_reversed = nil
+    end,
+    
+}
 local to_big = not to_big and function(x) return x end or to_big
 SMODS.Blind{
     key = "the_libre",
@@ -649,7 +776,7 @@ SMODS.Blind {
     mult = 3,
     boss_colour = HEX('ce36ff'),
     debuff = {
-        akyrs_cant_be_disabled = true
+        akyrs_cannot_be_disabled = true
     },
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 9, max = 10},
@@ -689,7 +816,7 @@ SMODS.Blind {
     debuff = {
         mult_min = 0.01,
         mult_max = 1.1,
-        akyrs_cant_be_disabled = true,
+        akyrs_cannot_be_disabled = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -723,7 +850,7 @@ SMODS.Blind {
     mult = 3,
     boss_colour = HEX('4d77ff'),
     debuff = {
-        akyrs_cant_be_disabled = true,
+        akyrs_cannot_be_disabled = true,
         ch = 1,
         mul = 1
     },
@@ -748,10 +875,8 @@ SMODS.Blind {
         }
     end,
     modify_hand = function (self, cards, poker_hands, text, mult, hand_chips)
-        if poker_hands["Straight"] and next(poker_hands["Straight"]) then
-            return mult, hand_chips, false
-        end
         return self.debuff.mul, self.debuff.ch, true
+        -- return mult, hand_chips, false
     end,
 }
 SMODS.Blind {
@@ -760,7 +885,7 @@ SMODS.Blind {
     mult = 2,
     boss_colour = HEX('1fb643'),
     debuff = {
-        akyrs_cant_be_disabled = true,
+        akyrs_cannot_be_disabled = true,
     },
     stay_flipped = function (self, area, card)
         if area == G.hand and G.hand.cards then
@@ -796,7 +921,7 @@ SMODS.Blind {
     mult = 3,
     boss_colour = HEX('ffa530'),
     debuff = {
-        akyrs_cant_be_disabled = true,
+        akyrs_cannot_be_disabled = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -825,7 +950,7 @@ SMODS.Blind {
     mult = 24,
     boss_colour = HEX('7371ff'),
     debuff = {
-        akyrs_cant_be_disabled = true,
+        akyrs_cannot_be_disabled = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 

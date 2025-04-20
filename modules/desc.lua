@@ -194,3 +194,26 @@ AKYRS.DescriptionDummy{
         })
     end,
 }
+
+AKYRS.DescriptionDummy{
+    key = "expert_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "master_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "ultima_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "remaster_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "lunatic_blind"
+}
+
+AKYRS.DescriptionDummy{
+    key = "no_disabling"
+}
+AKYRS.DescriptionDummy{
+    key = "no_reroll"
+}

@@ -1120,40 +1120,115 @@ AKYRS.get_letter_freq_from_cards = function(listofcards)
     end
     return wordArray
 end
-
+AKYRS.icons_pos = {
+    ["expert"]        = { x = 0, y = 1},
+    ["master"]        = { x = 1, y = 1},
+    ["ultima"]        = { x = 2, y = 1},
+    ["remaster"]      = { x = 3, y = 1},
+    ["lunatic"]       = { x = 4, y = 1},
+    ["no_reroll"]     = { x = 0, y = 0},
+    ["no_disabling"]  = { x = 1, y = 0},
+    ["no_face"]       = { x = 2, y = 0},
+}
+AKYRS.icon_sprites = {}
+AKYRS.full_ui_add = function(nodes, key, scale)
+    local m = G.localization.descriptions["DescriptionDummy"][key]
+    table.insert(nodes, {
+        n = G.UIT.C,
+        config = { align = "cm", padding = 0.1 },
+        nodes = {
+            { n = G.UIT.T, config = { text = m.name, colour = G.C.UI.TEXT_LIGHT, scale = scale }}
+        }
+    })
+end
 AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
     extras = extras or {}
+    local icon_size = extras.icon_size or 0.5
     local fsz = extras.text_size or 0.5
+    local dfctysz = extras.difficulty_text_size or 0.5
     local bsz = extras.border_size or 1
     local set_parent_child = extras.set_parent_child or false
+    local cache = extras.cached_icons or false
+    local full_ui = extras.full_ui or false
+    local hide = extras.hide or {  }
+    local row = extras.row or false
     local z = {}
-    if blind.debuff.akyrs_cannot_be_disabled then
-        z[#z+1] = {
-            n = G.UIT.R, config = { padding = 0.1, outline = bsz, outline_colour = mix_colours(G.C.RED,G.C.BLACK,0.5), colour = G.C.RED, r = 0.2, align = "cm" },
-            nodes = {
-                {n=G.UIT.T, config={text = localize('k_akyrs_cannot_be_disabled'), scale = fsz, colour = G.C.WHITE}},
-            }
-        }
-    end
-    if blind.debuff.akyrs_cannot_be_rerolled then
-        z[#z+1] = {
-            n = G.UIT.R, config = { padding = 0.1, outline = bsz, outline_colour = mix_colours(G.C.PURPLE,G.C.BLACK,0.5), colour = G.C.PURPLE, r = 0.2, align = "cm" },
-            nodes = {
-                {n=G.UIT.T, config={text = localize('k_akyrs_cannot_be_rerolled'), scale = fsz, colour = G.C.WHITE}},
-            }
-        }
-    end
-    if z then
-        if set_parent_child then
-            for i,k in ipairs(z) do
-                ability_text_table.UIBox:set_parent_child(k, ability_text_table)
+
+    if blind and blind.debuff then
+        if blind.debuff.akyrs_blind_difficulty and not hide.difficulty then
+            local sprite = nil
+            if cache then
+                AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] = AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[blind.debuff.akyrs_blind_difficulty])
+                sprite = AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty]
+            else
+                sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[blind.debuff.akyrs_blind_difficulty])
             end
-        else
-            for i,k in ipairs(z) do
-                ability_text_table[#ability_text_table+1] = k
+    
+            local blind_txt_dmy = "dd_akyrs_"..blind.debuff.akyrs_blind_difficulty.."_blind"
+            z[#z+1] = {
+                n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies[blind_txt_dmy] },
+                nodes = {
+                    {n=G.UIT.O, config={object = sprite, scale = fsz}},
+                }
+            }
+            if full_ui then
+                AKYRS.full_ui_add(z[#z].nodes, blind_txt_dmy, dfctysz)
             end
         end
+        if blind.debuff.akyrs_cannot_be_disabled and not hide.disabled then
+            
+            local sprite = nil
+            if cache then
+                AKYRS.icon_sprites["no_disabling"] = AKYRS.icon_sprites["no_disabling"] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos["no_disabling"])
+                sprite = AKYRS.icon_sprites["no_disabling"]
+            else
+                sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos["no_disabling"])
+            end
+            z[#z+1] = {
+                n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies["dd_akyrs_no_disabling"] },
+                nodes = {
+                    {n=G.UIT.O, config={object = sprite, scale = fsz}},
+                }
+            }
+            if full_ui then
+                AKYRS.full_ui_add(z[#z].nodes, "dd_akyrs_no_disabling", dfctysz)
+            end
+        end
+        if blind.debuff.akyrs_cannot_be_rerolled and not hide.reroll then
+            local sprite = nil
+            if cache then
+                AKYRS.icon_sprites["no_reroll"] = AKYRS.icon_sprites["no_reroll"] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos["no_reroll"])
+                sprite = AKYRS.icon_sprites["no_reroll"]
+            else
+                sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos["no_reroll"])
+            end
+            z[#z+1] = {
+                n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies["dd_akyrs_no_reroll"] },
+                nodes = {
+                    {n=G.UIT.O, config={object = sprite, scale = fsz}},
+                }
+            }
+            if full_ui then
+                AKYRS.full_ui_add(z[#z].nodes, "dd_akyrs_no_reroll", dfctysz)
+            end
+        end
+    
     end
+    if z and #z > 0 and blind and ability_text_table then
+        local xd = {
+            n = full_ui and G.UIT.R or G.UIT.R,
+            config = { align = "cm", padding = 0.1, can_collide = true, hover = true},
+            nodes = z
+        }
+        if set_parent_child then
+            ability_text_table.UIBox:set_parent_child(xd, ability_text_table)
+            --print("CHILD = "..#ability_text_table.children)
+            ability_text_table.UIBox:recalculate()
+        else
+            ability_text_table[#ability_text_table+1] = xd
+        end
+    end
+    if z then return z end
 end
 
 AKYRS.hand_sort_function = function (a,b)

@@ -777,6 +777,7 @@ SMODS.Blind {
     boss_colour = HEX('ce36ff'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
     },
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 9, max = 10},
@@ -817,6 +818,7 @@ SMODS.Blind {
         mult_min = 0.01,
         mult_max = 1.1,
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -851,6 +853,7 @@ SMODS.Blind {
     boss_colour = HEX('4d77ff'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
         ch = 1,
         mul = 1
     },
@@ -886,6 +889,7 @@ SMODS.Blind {
     boss_colour = HEX('1fb643'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
     },
     stay_flipped = function (self, area, card)
         if area == G.hand and G.hand.cards then
@@ -922,6 +926,7 @@ SMODS.Blind {
     boss_colour = HEX('ffa530'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -951,6 +956,7 @@ SMODS.Blind {
     boss_colour = HEX('7371ff'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
     },
     
     atlas = 'aikoyoriBlindsChips', 

@@ -578,3 +578,59 @@ function UIElement:set_values(_T, recalculate)
     self.states.release_on.can = true
     return c
 end
+
+function UIBox:akyrs_set_parent_child_with_pos(node, parent, pos)
+    local UIE = UIElement(parent, self, node.n, node.config)
+
+    --set the group of the element
+    if parent and parent.config and parent.config.group then if UIE.config then UIE.config.group = parent.config.group else UIE.config = {group = parent.config.group} end end
+
+    --set the button for the element
+    if parent and parent.config and parent.config.button then if UIE.config then UIE.config.button_UIE = parent else UIE.config = {button_UIE = parent} end end
+    if parent and parent.config and parent.config.button_UIE then if UIE.config then UIE.config.button_UIE = parent.config.button_UIE else UIE.config = {button = parent.config.button} end end
+
+    if node.n and node.n == G.UIT.O and UIE.config.button then
+        UIE.config.object.states.click.can = false
+    end
+
+    --current node is a container
+    if (node.n and node.n == G.UIT.C or node.n == G.UIT.R or node.n == G.UIT.ROOT) and node.nodes then
+        for k, v in pairs(node.nodes) do
+            self:set_parent_child(v, UIE)
+        end
+    end
+
+    if not parent then
+        self.UIRoot = UIE 
+        self.UIRoot.parent = self
+    else
+        table.insert(parent.children, pos, UIE)
+    end
+    if node.config and node.config.mid then 
+        self.Mid = UIE
+    end
+end
+
+
+local ogBlindBox = create_UIBox_HUD_blind
+function create_UIBox_HUD_blind()
+    local x = ogBlindBox()
+    local blind_setup = G.P_BLINDS[G.GAME.round_resets.blind_choices[G.GAME.blind_on_deck]]
+    local shit = AKYRS.add_blind_extra_info(blind_setup,nil,{text_size = 0.35,border_size = 0.3, difficulty_text_size = 0.3, cached_icons = true, row = true})
+
+    --print(inspect(G.GAME.blind))
+    
+    table.insert(x.nodes[2].nodes,2,{
+        n = G.UIT.R, config = { align = "cm", id = "akyrs_blind_attributes"}, nodes = shit
+    })
+    
+
+    return x
+end
+
+local blindSetTextHook = Blind.set_text
+function Blind:set_text()
+    local x = blindSetTextHook(self)
+    G.HUD_blind:recalculate()
+    return x
+end

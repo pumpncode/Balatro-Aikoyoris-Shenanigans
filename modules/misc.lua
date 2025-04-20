@@ -1086,8 +1086,18 @@ function AKYRS.maxwell_word_to_enhancement_map(word)
     return nil
 end
 
+function AKYRS.remove_comma(string)
+    return string.gsub(string, ",", "")
+end
+
 function AKYRS.score_catches_fire_or_not()
     if not G.GAME or not G.GAME.blind then return false end
+
+    if type(G.GAME.blind.chips) == "string" then
+        local stud = tonumber(AKYRS.remove_comma(G.GAME.blind.chips))
+        G.GAME.blind.chips = Talisman and to_big(stud) or stud
+
+        end
     return G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult > G.GAME.blind.chips
 end
 

@@ -238,7 +238,7 @@ pattern = """        ability_text[1] and {n=G.UIT.R, config={align = "cm", paddi
       }}"""
 position = "after"
 payload = """
-AKYRS.add_blind_extra_info(blind,ability_text,{text_size = 0.4})
+AKYRS.add_blind_extra_info(blind,ability_text,{text_size = 0.25})
 """
 overwrite = true
 match_indent = true
@@ -250,7 +250,7 @@ target = "functions/UI_definitions.lua"
 pattern = """  local run_info_colour = run_info and (blind_state == 'Defeated' and G.C.GREY or blind_state == 'Skipped' and G.C.BLUE or blind_state == 'Upcoming' and G.C.ORANGE or blind_state == 'Current' and G.C.RED or G.C.GOLD)"""
 position = "before"
 payload = """
-AKYRS.add_blind_extra_info(blind_choice.config,blind_desc_nodes,{text_size = 0.35,border_size = 0.75})
+AKYRS.add_blind_extra_info(blind_choice.config,blind_desc_nodes,{text_size = 0.25,border_size = 0.75})
 """
 overwrite = true
 match_indent = true
@@ -262,7 +262,7 @@ target = '=[SMODS _ "src/overrides.lua"]'
 pattern = """	e.UIBox:recalculate()"""
 position = "before"
 payload = """
-AKYRS.add_blind_extra_info(G.GAME.blind,e,{text_size = 0.35,border_size = 0.75, set_parent_child = true})
+AKYRS.add_blind_extra_info(G.GAME.blind,e,{text_size = 0.35,border_size = 0.6, set_parent_child = true})
 """
 overwrite = true
 match_indent = true

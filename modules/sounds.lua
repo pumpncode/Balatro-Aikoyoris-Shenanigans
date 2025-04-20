@@ -35,3 +35,8 @@ SMODS.Sound({
     key = "burnt_sfx",
     path = "burnt.ogg",
 })
+
+SMODS.Sound({
+    key = "loud_incorrect_buzzer",
+    path = "loudbuzzer.ogg",
+})

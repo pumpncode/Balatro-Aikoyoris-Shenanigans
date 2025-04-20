@@ -525,7 +525,7 @@ G.FUNCS.can_play = function(e)
         for i,k in ipairs(G.hand.highlighted) do
             table.insert(hand,k)
         end
-        table.sort(hand, function(a,b) return a.T.x < b.T.x end)
+        table.sort(hand, AKYRS.hand_sort_function)
         for _, v in pairs(hand) do
             if not v.ability then return {} end
             local alpha = v.ability.aikoyori_letters_stickers:lower()

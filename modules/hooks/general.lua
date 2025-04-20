@@ -25,10 +25,12 @@ function Game:init_game_object()
     ret.current_round.aiko_round_misaligned_letter = {}
     ret.current_round.aiko_round_incorrect_letter = {}
     ret.current_round.aiko_played_suits = {}
+    ret.current_round.akyrs_last_played_letters = {}
     ret.current_round.discards_sub = 0
     ret.current_round.hands_sub = 0
     ret.current_round.aiko_infinite_hack = "8"
     ret.current_round.advanced_blind = false
+    ret.akyrs_last_ante = nil
 
     return ret
 end
@@ -36,6 +38,13 @@ end
 function SMODS.current_mod.reset_game_globals(run_start)
     G.GAME.current_round.discards_sub = 0
     G.GAME.current_round.hands_sub = 0
+    if G.GAME.akyrs_last_ante ~= G.GAME.round_resets.ante then
+        G.GAME.akyrs_letter_target = pseudorandom_element(AKYRS.raw_scrabble_letters, pseudoseed(G.GAME.pseudorandom.seed.."akyrs".."letter_pick"))
+        G.GAME.akyrs_last_ante = G.GAME.round_resets.ante
+    end
+    
+    EMPTY(G.GAME.akyrs_last_played_letters)
+    G.GAME.akyrs_last_played_letters = {}
     G.GAME.current_round.aiko_played_suits = {}
 end
 
@@ -520,13 +529,20 @@ G.FUNCS.evaluate_play = function()
         })
     end
     -- print(#G.play.cards)
+    local word_split = nil
     if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled then
         
-        
         local aiko_current_word_split = {}
-        for i, j in ipairs(G.play.cards) do
+        word_split = {}
+        local cards = {}
+        for i, k in ipairs(G.play.cards) do
+            table.insert(cards,k)
+        end
+        table.sort(cards,AKYRS.hand_sort_function)
+        for i, j in ipairs(cards) do
             if j.ability.aikoyori_letters_stickers then
                 table.insert(aiko_current_word_split,string.lower(j:get_letter_with_pretend()))
+                word_split[string.upper(j:get_letter_with_pretend())] = true
             end
         end
         local wordData = {}
@@ -628,10 +644,13 @@ G.FUNCS.evaluate_play = function()
                 G.GAME.aiko_puzzle_win = true
             end
         end
-
-
     end
     local ret = eval_hook()
+    
+    if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled and word_split then
+        EMPTY(G.GAME.akyrs_last_played_letters)
+        G.GAME.akyrs_last_played_letters = word_split
+    end
     if G.GAME.aikoyori_variable_to_set and G.GAME.aikoyori_value_to_set_to_variable then
         AKYRS.parser_set_var(G.GAME.aikoyori_variable_to_set , G.GAME.aikoyori_value_to_set_to_variable)
     end
@@ -1193,7 +1212,8 @@ end
 
 local blindDisable = Blind.disable
 function Blind:disable()
-    if self.debuff.akyrs_cant_be_disabled then
+    if self.debuff.akyrs_cannot_be_disabled then
+        play_sound("akyrs_loud_incorrect_buzzer",1,0.1)
         attention_text({
             text = localize("k_nope_ex"),
             scale = 1, 
@@ -1207,4 +1227,68 @@ function Blind:disable()
         return
     end
     return blindDisable(self)
+end
+
+AKYRS.can_boss_be_rerolled = function (boss_key)
+    if G.P_BLINDS[boss_key] and G.P_BLINDS[boss_key].debuff.akyrs_cannot_be_rerolled then return false end
+    return true
+end
+
+local rerollBossHook = G.FUNCS.reroll_boss 
+G.FUNCS.reroll_boss = function(e)
+    
+    if not AKYRS.can_boss_be_rerolled(G.GAME.round_resets.blind_choices.Boss) then
+        local uib = G.blind_select_opts.boss:get_UIE_by_ID("blind_desc")
+        play_sound("akyrs_loud_incorrect_buzzer",1,0.1)
+        attention_text({
+            text = localize("k_nope_ex"),
+            scale = 1, 
+            hold = 1.0,
+            rotate = math.pi / 8,
+            backdrop_colour = G.GAME.blind.boss_colour,
+            align = "cm",
+            major =  uib and uib.children and uib.children[1] and uib.children[1].children[1].children[1] or nil,
+            offset = {x = 0, y = 0.1}
+        })
+
+    else
+        local x = rerollBossHook(e)
+        return x
+    end
+end
+
+local reroll_button_hook = G.FUNCS.reroll_boss_button
+G.FUNCS.reroll_boss_button = function(e)
+    if not AKYRS.can_boss_be_rerolled(G.GAME.round_resets.blind_choices.Boss) then
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+        e.children[1].children[1].config.shadow = false
+        if e.children[2] then e.children[2].children[1].config.shadow = false end 
+    else
+        local x = reroll_button_hook(e)
+        return x
+    end
+
+end
+
+local getNewBossHook = get_new_boss
+get_new_boss = function()
+    if not AKYRS.can_boss_be_rerolled(G.GAME.round_resets.blind_choices.Boss) and not G.GAME.akyrs_blind_just_defeated then
+        -- TODO: FIX THIS
+        return G.GAME.round_resets.blind_choices.Boss
+    else
+        G.GAME.akyrs_blind_just_defeated = nil
+        local x = getNewBossHook()
+        return x
+    end
+
+end
+
+local blindDefeatHook = Blind.defeat
+function Blind:defeat(silent)
+    local x = blindDefeatHook(self,silent)
+    if self.boss then
+        G.GAME.akyrs_blind_just_defeated = true
+    end
+    return x
 end

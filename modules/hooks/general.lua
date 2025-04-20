@@ -1287,6 +1287,8 @@ end
 local blindDefeatHook = Blind.defeat
 function Blind:defeat(silent)
     local x = blindDefeatHook(self,silent)
-    G.GAME.akyrs_blind_just_defeated = true
+    if self.boss then
+        G.GAME.akyrs_blind_just_defeated = true
+    end
     return x
 end

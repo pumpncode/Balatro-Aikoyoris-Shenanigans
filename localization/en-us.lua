@@ -273,6 +273,28 @@ return {
                     "This boss cannot be disabled",
                 },
             },
+            dd_akyrs_forgotten_blind  = {
+                name="Forgotten Blind",
+                text={
+                    "This boss only appears in Negative Antes",
+                },
+            },
+            dd_akyrs_word_blind  = {
+                name="Word Blind",
+                text={
+                    "This boss can only appear",
+                    "when it is possible to",
+                    "play words",
+                },
+            },
+            dd_akyrs_puzzle_blind  = {
+                name="Puzzle Blind",
+                text={
+                    "This boss can only be defeated",
+                    "by completing certain criteria",
+                    "(Score usually does not matter in this)",
+                },
+            },
         },
         Edition={
             e_akyrs_texelated = {

@@ -1121,25 +1121,76 @@ AKYRS.get_letter_freq_from_cards = function(listofcards)
     return wordArray
 end
 AKYRS.icons_pos = {
-    ["expert"]        = { x = 0, y = 1},
-    ["master"]        = { x = 1, y = 1},
-    ["ultima"]        = { x = 2, y = 1},
-    ["remaster"]      = { x = 3, y = 1},
-    ["lunatic"]       = { x = 4, y = 1},
-    ["no_reroll"]     = { x = 0, y = 0},
-    ["no_disabling"]  = { x = 1, y = 0},
-    ["no_face"]       = { x = 2, y = 0},
+    ["expert"]          = { x = 0, y = 1},
+    ["master"]          = { x = 1, y = 1},
+    ["ultima"]          = { x = 2, y = 1},
+    ["remaster"]        = { x = 3, y = 1},
+    ["lunatic"]         = { x = 4, y = 1},
+    ["no_reroll"]       = { x = 0, y = 0},
+    ["no_disabling"]    = { x = 1, y = 0},
+    ["no_face"]         = { x = 2, y = 0},
+    ["forgotten_blind"] = { x = 5, y = 1},
+    ["word_blind"]      = { x = 6, y = 1},
+    ["puzzle_blind"]    = { x = 7, y = 1},
 }
 AKYRS.icon_sprites = {}
 AKYRS.full_ui_add = function(nodes, key, scale)
     local m = G.localization.descriptions["DescriptionDummy"][key]
-    table.insert(nodes, {
-        n = G.UIT.C,
-        config = { align = "cm", padding = 0.1 },
-        nodes = {
-            { n = G.UIT.T, config = { text = m.name, colour = G.C.UI.TEXT_LIGHT, scale = scale }}
+    local l = {
+        {
+            n = G.UIT.R,
+            nodes = {
+                { n = G.UIT.T, config = { text = m.name, colour = G.C.UI.TEXT_LIGHT, scale = scale*1.2 }},
+            }
         }
-    })
+    }
+    if m.text then
+        for i, tx in ipairs(m.text) do
+            table.insert(l, 
+                {
+                    n = G.UIT.R,
+                    nodes = {
+                        { n = G.UIT.T, config = { text = tx, colour = G.C.UI.TEXT_LIGHT, scale = scale }},
+                    }
+                }
+            )
+        end
+    end
+    
+    local x = {
+        n = G.UIT.C,
+        config = { align = "lm", padding = 0.1 },
+        nodes = {
+            { n = G.UIT.R, config = {}, nodes = l },
+            
+        }
+    }
+    table.insert(nodes, x)
+end
+AKYRS.generate_icon_blinds = function(key, config)
+    if not key then return end
+    local z = config.table or {}
+    local cache = config.cache or false
+    local icon_size = config.icon_size or false
+    local full_ui = config.full_ui or false
+    local fsz = config.font_size or false
+    local dfctysz = config.text_size_for_full or false
+    local sprite = nil
+    if cache then
+        AKYRS.icon_sprites[key] = AKYRS.icon_sprites[key] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[key])
+        sprite = AKYRS.icon_sprites[key]
+    else
+        sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[key])
+    end
+    z[#z+1] = {
+        n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies["dd_akyrs_"..key] },
+        nodes = {
+            {n=G.UIT.O, config={object = sprite, scale = fsz}},
+        }
+    }
+    if full_ui then
+        AKYRS.full_ui_add(z[#z].nodes, "dd_akyrs_"..key, dfctysz)
+    end
 end
 AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
     extras = extras or {}
@@ -1176,43 +1227,20 @@ AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
             end
         end
         if blind.debuff.akyrs_cannot_be_disabled and not hide.disabled then
-            
-            local sprite = nil
-            if cache then
-                AKYRS.icon_sprites["no_disabling"] = AKYRS.icon_sprites["no_disabling"] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos["no_disabling"])
-                sprite = AKYRS.icon_sprites["no_disabling"]
-            else
-                sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos["no_disabling"])
-            end
-            z[#z+1] = {
-                n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies["dd_akyrs_no_disabling"] },
-                nodes = {
-                    {n=G.UIT.O, config={object = sprite, scale = fsz}},
-                }
-            }
-            if full_ui then
-                AKYRS.full_ui_add(z[#z].nodes, "dd_akyrs_no_disabling", dfctysz)
-            end
+            AKYRS.generate_icon_blinds("no_disabling",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
         end
         if blind.debuff.akyrs_cannot_be_rerolled and not hide.reroll then
-            local sprite = nil
-            if cache then
-                AKYRS.icon_sprites["no_reroll"] = AKYRS.icon_sprites["no_reroll"] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos["no_reroll"])
-                sprite = AKYRS.icon_sprites["no_reroll"]
-            else
-                sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos["no_reroll"])
-            end
-            z[#z+1] = {
-                n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies["dd_akyrs_no_reroll"] },
-                nodes = {
-                    {n=G.UIT.O, config={object = sprite, scale = fsz}},
-                }
-            }
-            if full_ui then
-                AKYRS.full_ui_add(z[#z].nodes, "dd_akyrs_no_reroll", dfctysz)
-            end
+            AKYRS.generate_icon_blinds("no_reroll",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
         end
-    
+        if blind.debuff.akyrs_is_forgotten_blind and not hide.forgotten_blind then
+            AKYRS.generate_icon_blinds("forgotten_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
+        if blind.debuff.akyrs_is_word_blind and not hide.word_blind then
+            AKYRS.generate_icon_blinds("word_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
+        if blind.debuff.akyrs_is_puzzle_blind and not hide.puzzle_blind then
+            AKYRS.generate_icon_blinds("puzzle_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
     end
     if z and #z > 0 and blind and ability_text_table then
         local xd = {

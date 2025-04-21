@@ -1453,7 +1453,7 @@ SMODS.Joker{
         }
     },
     loc_vars = function (self, info_queue, card)
-        info_queue[#info_queue+1] = G.P_CENTERS["j_popcorn"]
+        info_queue[#info_queue+1] = localize{set = "Joker", key = "j_popcorn"}
         return {
             vars = {
                 card.ability.extras.xmult_inc,

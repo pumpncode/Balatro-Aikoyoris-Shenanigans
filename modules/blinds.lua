@@ -12,6 +12,8 @@ SMODS.Blind{
     debuff = {
         special_blind = true,
         infinite_discards = true,
+        akyrs_is_word_blind = true,
+        akyrs_is_puzzle_blind = true,
     },
     vars = {},
     set_blind = function(self)
@@ -101,7 +103,10 @@ SMODS.Blind{
     dollars = 5,
     mult = 2,
     boss_colour = HEX("918b8b"),
-    atlas = 'aikoyoriBlindsChips', 
+    atlas = 'aikoyoriBlindsChips',
+    debuff = {
+        akyrs_is_word_blind = true,
+    },
     boss = {min = 3, max = 10},
     pos = { x = 0, y = 1 },
     in_pool = function(self)
@@ -141,6 +146,9 @@ SMODS.Blind{
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 1, max = 10},
     pos = { x = 0, y = 2 },
+    debuff = {
+        akyrs_is_word_blind = true,
+    },
     in_pool = function(self)
         return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled)
     end,
@@ -179,6 +187,9 @@ SMODS.Blind{
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 3, max = 10},
     pos = { x = 0, y = 3 },
+    debuff = {
+        akyrs_is_word_blind = true,
+    },
     in_pool = function(self)
         return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled)
     end,
@@ -202,6 +213,9 @@ SMODS.Blind{
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 1, max = 10},
     pos = { x = 0, y = 4 },
+    debuff = {
+        akyrs_is_word_blind = true,
+    },
     in_pool = function(self)
         return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled)
     end,
@@ -638,6 +652,7 @@ SMODS.Blind {
     debuff = {
         ante_scaler = 2,
         current_ante = nil,
+        akyrs_is_forgotten_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -675,6 +690,7 @@ SMODS.Blind {
     boss_colour = HEX('2b664f'),
     debuff = {
         ante_scaler = 1,
+        akyrs_is_forgotten_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -710,6 +726,7 @@ SMODS.Blind {
     boss_colour = HEX('2c5c6c'),
     debuff = {
         hand_shrinker = 1,
+        akyrs_is_forgotten_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -743,6 +760,7 @@ SMODS.Blind {
     boss_colour = HEX('4d494b'),
     debuff = {
         discard_dealer = 1,
+        akyrs_is_forgotten_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -777,6 +795,8 @@ SMODS.Blind {
     boss_colour = HEX('ce36ff'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 9, max = 10},
@@ -801,7 +821,7 @@ SMODS.Blind {
     end,
     in_pool = function (self)
         local pseudocard = AKYRS.PseudoCard("8",8,"Hearts")
-        return G.GAME.round_resets.ante > 8 and not Card.is_face(pseudocard)
+        return G.GAME.round_resets.ante > G.GAME.win_ante and not Card.is_face(pseudocard)
     end,
     get_loc_debuff_text = function (self)
         return localize("k_akyrs_confrontation_has_face_in_hand_warning")
@@ -817,6 +837,8 @@ SMODS.Blind {
         mult_min = 0.01,
         mult_max = 1.1,
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -851,6 +873,8 @@ SMODS.Blind {
     boss_colour = HEX('4d77ff'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
         ch = 1,
         mul = 1
     },
@@ -886,6 +910,8 @@ SMODS.Blind {
     boss_colour = HEX('1fb643'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     stay_flipped = function (self, area, card)
         if area == G.hand and G.hand.cards then
@@ -922,6 +948,8 @@ SMODS.Blind {
     boss_colour = HEX('ffa530'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -951,6 +979,8 @@ SMODS.Blind {
     boss_colour = HEX('7371ff'),
     debuff = {
         akyrs_cannot_be_disabled = true,
+        akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 

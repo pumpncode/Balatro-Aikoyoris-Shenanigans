@@ -143,8 +143,8 @@ return {
             bl_akyrs_expert_straightforwardness = {
                 name = "Straightforwardness",
                 text = {
-                    "All Hands",
-                    "Starts with base #1# Chip and #2# Mult",
+                    "All Hands starts with",
+                    "base #1# Chip and #2# Mult",
                 }
             },
             bl_akyrs_expert_entanglement = {
@@ -225,7 +225,89 @@ return {
                     "{X:dark_edition,C:white}3{} - Hearts",
                     "{X:dark_edition,C:white}4{} - 5",
                 },
-            }
+            },
+            dd_akyrs_expert_blind  = {
+                name="Expert Blind",
+                text={
+                    "Blind with higher",
+                    "difficulty than usual",
+                },
+            },
+            dd_akyrs_master_blind  = {
+                name="Master Blind",
+                text={
+                    "Blind with even higher",
+                    "difficulty level",
+                },
+            },
+            dd_akyrs_ultima_blind  = {
+                name="Ultima Blind",
+                text={
+                    "Extremely difficult blind",
+                    "{scale:0.7,C:inactive}(I feel like I've seen this somewhere)",
+                },
+            },
+            dd_akyrs_remaster_blind  = {
+                name="Re:Master Blind",
+                text={
+                    "Buffed version of existing blinds",
+                    "{scale:0.7,C:inactive}(I feel like I've seen this somewhere too)",
+                },
+            },
+            dd_akyrs_lunatic_blind  = {
+                name="Lunatic Blind",
+                text={
+                    "Even more difficult than Ultima Blinds",
+                    "{scale:0.7,C:inactive}(I feel like I've seen this somewhere as well)",
+                },
+            },
+            dd_akyrs_no_reroll  = {
+                name="No Rerolling",
+                text={
+                    "This blind cannot be rerolled",
+                },
+            },
+            dd_akyrs_no_disabling  = {
+                name="No Disabling",
+                text={
+                    "This blind cannot be disabled",
+                },
+            },
+            dd_akyrs_forgotten_blind  = {
+                name="Forgotten Blind",
+                text={
+                    "This blind can only appear in Negative Antes",
+                },
+            },
+            dd_akyrs_word_blind  = {
+                name="Word Blind",
+                text={
+                    "This blind can only appear",
+                    "when it is possible to",
+                    "play words",
+                },
+            },
+            dd_akyrs_puzzle_blind  = {
+                name="Puzzle Blind",
+                text={
+                    "This blind can only be defeated",
+                    "by completing certain criteria",
+                },
+            },
+            dd_akyrs_postwin_blind  = {
+                name="Post Win Blind",
+                text={
+                    "This blind appears on Antes",
+                    "above winning Ante",
+                },
+            },
+            dd_akyrs_endless_blind  = {
+                name="Endless Blind",
+                text={
+                    "This blind only appears",
+                    "in Endless Mode",
+                },
+            },
         },
         Edition={
             e_akyrs_texelated = {
@@ -954,6 +1036,10 @@ return {
 
             k_akyrs_cannot_be_disabled = "Cannot Be Disabled",
             k_akyrs_cannot_be_rerolled = "Cannot Be Rerolled",
+            k_akyrs_blind_difficult_expert = "Expert Blinds",
+            k_akyrs_blind_difficult_master = "Master Blinds",
+            k_akyrs_blind_difficult_ultima = "Ultima Blinds",
+            k_akyrs_blind_difficult_remaster = "Re:Master Blinds",
 
             k_akyrs_confrontation_has_face_in_hand_warning = "Must not hold face cards in hand",
 

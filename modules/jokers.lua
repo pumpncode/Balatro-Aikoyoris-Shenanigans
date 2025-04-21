@@ -1318,7 +1318,7 @@ SMODS.Joker{
         
     end,
     calculate = function (self, card, context)
-        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] and card == context.card_triggering 
+        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] 
         and not (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_akyrs_ash_joker") then
             return {
                 func = function ()
@@ -1469,7 +1469,7 @@ SMODS.Joker{
             }
         end
 
-        if context.akyrs_card_remove and card == context.card_triggering 
+        if context.akyrs_card_remove 
         and (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_popcorn") then
             return {
                 message = localize("k_upgrade_ex"),

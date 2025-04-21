@@ -95,25 +95,6 @@ overwrite = true
 match_indent = true
 
 
-[[patches]]
-[patches.pattern]
-target = "functions/UI_definitions.lua"
-pattern = """        {n=G.UIT.R, config={align = "cm",padding = 0.15}, nodes={"""
-position = "at"
-payload = """
-        {n=G.UIT.R, config={align = "cm",padding = 0.15}, nodes = (G.GAME.current_round.advanced_blind) and SPECIAL_BOSSS_BLIND(G, stake_sprite) or {
-"""
-overwrite = true
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "functions/UI_definitions.lua"
-pattern = """            {n=G.UIT.R, config={align = "cm",r = 0.1, padding = 0.05, minw = 3.1, colour = G.C.BLACK, emboss = 0.05}, nodes={"""
-position = "at"
-payload = """            {n=G.UIT.R, config={align = "cm",r = 0.1, padding = 0.05, minw = 3.1, colour = G.C.BLACK, emboss = 0.05}, nodes= (blind_choice.config.debuff.special_blind) and SPECIAL_BOSSS_BLIND_SELECT(G, stake_sprite, disabled,_reward,blind_choice) or {"""
-overwrite = true
-match_indent = true
 
 [[patches]]
 [patches.pattern]
@@ -238,7 +219,7 @@ pattern = """        ability_text[1] and {n=G.UIT.R, config={align = "cm", paddi
       }}"""
 position = "after"
 payload = """
-AKYRS.add_blind_extra_info(blind,ability_text,{text_size = 0.25})
+AKYRS.add_blind_extra_info(blind,ability_text,{text_size = 0.25, difficulty_text_size = 0.3, full_ui = true})
 """
 overwrite = true
 match_indent = true
@@ -250,20 +231,21 @@ target = "functions/UI_definitions.lua"
 pattern = """  local run_info_colour = run_info and (blind_state == 'Defeated' and G.C.GREY or blind_state == 'Skipped' and G.C.BLUE or blind_state == 'Upcoming' and G.C.ORANGE or blind_state == 'Current' and G.C.RED or G.C.GOLD)"""
 position = "before"
 payload = """
-AKYRS.add_blind_extra_info(blind_choice.config,blind_desc_nodes,{text_size = 0.25,border_size = 0.75})
+AKYRS.add_blind_extra_info(blind_choice.config,blind_desc_nodes,{text_size = 0.25, difficulty_text_size = 0.3,border_size = 0.75})
 """
 overwrite = true
 match_indent = true
-
 
 [[patches]]
 [patches.pattern]
-target = '=[SMODS _ "src/overrides.lua"]'
-pattern = """	e.UIBox:recalculate()"""
+target = "blind.lua"
+pattern = """                            G.HUD_blind:get_UIE_by_ID("HUD_blind_count"):juice_up()"""
 position = "before"
 payload = """
-AKYRS.add_blind_extra_info(G.GAME.blind,e,{text_size = 0.35,border_size = 0.6, set_parent_child = true})
+local akyrs_blind_thing = G.HUD_blind:get_UIE_by_ID("akyrs_blind_attributes")
+if akyrs_blind_thing then
+    akyrs_blind_thing.states.visible = true
+end
 """
 overwrite = true
 match_indent = true
-

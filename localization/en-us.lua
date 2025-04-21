@@ -70,7 +70,7 @@ return {
             bl_akyrs_the_nature= {
                 name = "The Nature",
                 text = {
-                    "Face cards all",
+                    "Face cards (both held and played)",
                     "give X#1# Mult each",
                 }
             },
@@ -127,6 +127,71 @@ return {
                     "By Final Score divided by Blind Requirement"
                 }
             },
+            bl_akyrs_expert_confrontation = {
+                name = "Confrontation",
+                text = {
+                    "Face cards must not be held in hand",
+                }
+            },
+            bl_akyrs_expert_fluctuation = {
+                name = "Fluctuation",
+                text = {
+                    "Randomly multiply score by",
+                    "between #1# and #2# before hand played",
+                }
+            },
+            bl_akyrs_expert_straightforwardness = {
+                name = "Straightforwardness",
+                text = {
+                    "All Hands starts with",
+                    "base #1# Chip and #2# Mult",
+                }
+            },
+            bl_akyrs_expert_entanglement = {
+                name = "Entanglement",
+                text = {
+                    "All but one cards from each suit",
+                    "are drawn face down",
+                }
+            },
+            bl_akyrs_expert_manuscript = {
+                name = "Manuscript",
+                text = {
+                    "Lose money per hand equal to",
+                    "played Poker Hand's Base Mult",
+                }
+            },
+            bl_akyrs_expert_inflation = {
+                name = "Inflation",
+                text = {
+                    "Absurdly large blind",
+                }
+            },
+            bl_akyrs_the_choice = {
+                name = "The Choice",
+                text = {
+                    "Played words must contain '#1#'",
+                }
+            },
+            bl_akyrs_the_reject = {
+                name = "The Reject",
+                text = {
+                    "Played words must not contain '#1#'",
+                }
+            },
+            bl_akyrs_the_redo = {
+                name = "The Redo",
+                text = {
+                    "Played words must not contain letter",
+                    "from last played words this Blind",
+                }
+            },
+            bl_akyrs_the_reverse = {
+                name = "The Reverse",
+                text = {
+                    "Words must be played in reverse",
+                }
+            },
         },
         DescriptionDummy={
             dd_akyrs_maxwell_example={
@@ -160,7 +225,76 @@ return {
                     "{X:dark_edition,C:white}3{} - Hearts",
                     "{X:dark_edition,C:white}4{} - 5",
                 },
-            }
+            },
+            dd_akyrs_expert_blind  = {
+                name="Expert Blind",
+                text={
+                    "Blind with higher",
+                    "difficulty than usual",
+                },
+            },
+            dd_akyrs_master_blind  = {
+                name="Master Blind",
+                text={
+                    "Blind with even higher",
+                    "difficulty level",
+                },
+            },
+            dd_akyrs_ultima_blind  = {
+                name="Ultima Blind",
+                text={
+                    "Extremely difficult blind",
+                    "{scale:0.7,C:inactive}(I feel like I've seen this somewhere)",
+                },
+            },
+            dd_akyrs_remaster_blind  = {
+                name="Re:Master Blind",
+                text={
+                    "Buffed version of existing blinds",
+                    "{scale:0.7,C:inactive}(I feel like I've seen this somewhere too)",
+                },
+            },
+            dd_akyrs_lunatic_blind  = {
+                name="Lunatic Blind",
+                text={
+                    "Even more difficult than Ultima Blinds",
+                    "{scale:0.7,C:inactive}(I feel like I've seen this somewhere as well)",
+                },
+            },
+            dd_akyrs_no_reroll  = {
+                name="No Rerolling",
+                text={
+                    "This boss cannot be rerolled",
+                },
+            },
+            dd_akyrs_no_disabling  = {
+                name="No Disabling",
+                text={
+                    "This boss cannot be disabled",
+                },
+            },
+            dd_akyrs_forgotten_blind  = {
+                name="Forgotten Blind",
+                text={
+                    "This boss only appears in Negative Antes",
+                },
+            },
+            dd_akyrs_word_blind  = {
+                name="Word Blind",
+                text={
+                    "This boss can only appear",
+                    "when it is possible to",
+                    "play words",
+                },
+            },
+            dd_akyrs_puzzle_blind  = {
+                name="Puzzle Blind",
+                text={
+                    "This boss can only be defeated",
+                    "by completing certain criteria",
+                    "(Score usually does not matter in this)",
+                },
+            },
         },
         Edition={
             e_akyrs_texelated = {
@@ -254,7 +388,7 @@ return {
                     "{C:chips}Chips{} or {C:mult}Mult{} value changes",
                     "{s:0.8}Times needed increases by {C:attention}#5#{}",
                     "{s:0.8}every time this Joker gains {C:mult}Mult{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{} Mult{C:inactive}){}" }
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}" }
             },
             j_akyrs_quasi_connectivity = {
                 name = "Quasi Connectivity",
@@ -876,7 +1010,6 @@ return {
             k_akyrs_hibana_change = "Nanana...",
             k_akyrs_with = "with",
             k_akyrs_credits = "Credits",
-            k_akyrs_title = "Aikoyori's Shenanigans",
             k_akyrs_created_by = "Created by",
             k_akyrs_additional_art_by = "Additional Art by",
             k_akyrs_difficult = "Difficult",
@@ -885,6 +1018,20 @@ return {
             k_akyrs_growth = "Growth!",
             k_akyrs_back = "Reverse!",
             k_akyrs_cinema = "Cinema!",
+
+            k_akyrs_random_letter = "randomly selected letter",
+
+            k_akyrs_cannot_be_disabled = "Cannot Be Disabled",
+            k_akyrs_cannot_be_rerolled = "Cannot Be Rerolled",
+            k_akyrs_blind_difficult_expert = "Expert Blinds",
+            k_akyrs_blind_difficult_master = "Master Blinds",
+            k_akyrs_blind_difficult_ultima = "Ultima Blinds",
+            k_akyrs_blind_difficult_remaster = "Re:Master Blinds",
+
+            k_akyrs_confrontation_has_face_in_hand_warning = "Must not hold face cards in hand",
+
+            k_akyrs_title = "Aikoyori's Shenanigans",
+            k_akyrs_join_akyrs_discord = "Join my Discord",
 
             k_akyrs_hardcore_challenge_mode = "Hardcore Challenge Mode",
             k_akyrs_hardcore_challenge_mode_flavour = "Tough and completely optional Challenges",

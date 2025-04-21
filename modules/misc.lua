@@ -640,6 +640,7 @@ function AKYRS.adjust_rounding(num)
 end
 
 function AKYRS.does_hand_only_contain_symbols(cardarea)
+    if G.deck and G.deck.cards and #G.deck.cards > 0 then return false end
     for i,k in ipairs(cardarea.cards) do
         if tonumber(k.ability.aikoyori_letters_stickers) then
             return false
@@ -1085,8 +1086,18 @@ function AKYRS.maxwell_word_to_enhancement_map(word)
     return nil
 end
 
+function AKYRS.remove_comma(string)
+    return string.gsub(string, ",", "")
+end
+
 function AKYRS.score_catches_fire_or_not()
     if not G.GAME or not G.GAME.blind then return false end
+
+    if type(G.GAME.blind.chips) == "string" then
+        local stud = tonumber(AKYRS.remove_comma(G.GAME.blind.chips))
+        G.GAME.blind.chips = Talisman and to_big(stud) or stud
+
+        end
     return G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult > G.GAME.blind.chips
 end
 
@@ -1108,4 +1119,161 @@ AKYRS.get_letter_freq_from_cards = function(listofcards)
         wordArray[w] = wordArray[w] and wordArray[w] + 1 or 1
     end
     return wordArray
+end
+AKYRS.icons_pos = {
+    ["expert"]          = { x = 0, y = 1},
+    ["master"]          = { x = 1, y = 1},
+    ["ultima"]          = { x = 2, y = 1},
+    ["remaster"]        = { x = 3, y = 1},
+    ["lunatic"]         = { x = 4, y = 1},
+    ["no_reroll"]       = { x = 0, y = 0},
+    ["no_disabling"]    = { x = 1, y = 0},
+    ["no_face"]         = { x = 2, y = 0},
+    ["forgotten_blind"] = { x = 5, y = 1},
+    ["word_blind"]      = { x = 6, y = 1},
+    ["puzzle_blind"]    = { x = 7, y = 1},
+}
+AKYRS.icon_sprites = {}
+AKYRS.full_ui_add = function(nodes, key, scale)
+    local m = G.localization.descriptions["DescriptionDummy"][key]
+    local l = {
+        {
+            n = G.UIT.R,
+            nodes = {
+                { n = G.UIT.T, config = { text = m.name, colour = G.C.UI.TEXT_LIGHT, scale = scale*1.2 }},
+            }
+        }
+    }
+    if m.text then
+        for i, tx in ipairs(m.text) do
+            table.insert(l, 
+                {
+                    n = G.UIT.R,
+                    nodes = {
+                        { n = G.UIT.T, config = { text = tx, colour = G.C.UI.TEXT_LIGHT, scale = scale }},
+                    }
+                }
+            )
+        end
+    end
+    
+    local x = {
+        n = G.UIT.C,
+        config = { align = "lm", padding = 0.1 },
+        nodes = {
+            { n = G.UIT.R, config = {}, nodes = l },
+            
+        }
+    }
+    table.insert(nodes, x)
+end
+AKYRS.generate_icon_blinds = function(key, config)
+    if not key then return end
+    local z = config.table or {}
+    local cache = config.cache or false
+    local icon_size = config.icon_size or false
+    local full_ui = config.full_ui or false
+    local fsz = config.font_size or false
+    local dfctysz = config.text_size_for_full or false
+    local sprite = nil
+    if cache then
+        AKYRS.icon_sprites[key] = AKYRS.icon_sprites[key] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[key])
+        sprite = AKYRS.icon_sprites[key]
+    else
+        sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[key])
+    end
+    z[#z+1] = {
+        n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies["dd_akyrs_"..key] },
+        nodes = {
+            {n=G.UIT.O, config={object = sprite, scale = fsz}},
+        }
+    }
+    if full_ui then
+        AKYRS.full_ui_add(z[#z].nodes, "dd_akyrs_"..key, dfctysz)
+    end
+end
+AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
+    extras = extras or {}
+    local icon_size = extras.icon_size or 0.5
+    local fsz = extras.text_size or 0.5
+    local dfctysz = extras.difficulty_text_size or 0.5
+    local bsz = extras.border_size or 1
+    local set_parent_child = extras.set_parent_child or false
+    local cache = extras.cached_icons or false
+    local full_ui = extras.full_ui or false
+    local hide = extras.hide or {  }
+    local row = extras.row or false
+    local z = {}
+
+    if blind and blind.debuff then
+        if blind.debuff.akyrs_blind_difficulty and not hide.difficulty then
+            local sprite = nil
+            if cache then
+                AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] = AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[blind.debuff.akyrs_blind_difficulty])
+                sprite = AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty]
+            else
+                sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[blind.debuff.akyrs_blind_difficulty])
+            end
+    
+            local blind_txt_dmy = "dd_akyrs_"..blind.debuff.akyrs_blind_difficulty.."_blind"
+            z[#z+1] = {
+                n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies[blind_txt_dmy] },
+                nodes = {
+                    {n=G.UIT.O, config={object = sprite, scale = fsz}},
+                }
+            }
+            if full_ui then
+                AKYRS.full_ui_add(z[#z].nodes, blind_txt_dmy, dfctysz)
+            end
+        end
+        if blind.debuff.akyrs_cannot_be_disabled and not hide.disabled then
+            AKYRS.generate_icon_blinds("no_disabling",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
+        if blind.debuff.akyrs_cannot_be_rerolled and not hide.reroll then
+            AKYRS.generate_icon_blinds("no_reroll",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
+        if blind.debuff.akyrs_is_forgotten_blind and not hide.forgotten_blind then
+            AKYRS.generate_icon_blinds("forgotten_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
+        if blind.debuff.akyrs_is_word_blind and not hide.word_blind then
+            AKYRS.generate_icon_blinds("word_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
+        if blind.debuff.akyrs_is_puzzle_blind and not hide.puzzle_blind then
+            AKYRS.generate_icon_blinds("puzzle_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
+    end
+    if z and #z > 0 and blind and ability_text_table then
+        local xd = {
+            n = full_ui and G.UIT.R or G.UIT.R,
+            config = { align = "cm", padding = 0.1, can_collide = true, hover = true},
+            nodes = z
+        }
+        if set_parent_child then
+            ability_text_table.UIBox:set_parent_child(xd, ability_text_table)
+            --print("CHILD = "..#ability_text_table.children)
+            ability_text_table.UIBox:recalculate()
+        else
+            ability_text_table[#ability_text_table+1] = xd
+        end
+    end
+    if z then return z end
+end
+
+AKYRS.hand_sort_function = function (a,b)
+    if G.GAME and G.GAME.words_reversed then
+        return a.T.x > b.T.x
+    end
+    return a.T.x < b.T.x    
+end
+
+G.FUNCS.go_to_aikoyori_discord_server = function(e)
+    love.system.openURL( "https://discord.gg/JVg8Bynm7k" )
+end
+
+AKYRS.shallow_indexed_table_copy = function(t)
+    local t2 = {}
+    for i,k in ipairs(t) do
+        table.insert(t2,k)
+    end
+    return t2
 end

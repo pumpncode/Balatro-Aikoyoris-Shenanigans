@@ -43,6 +43,7 @@ assert(SMODS.load_file("./modules/compat/talisman.lua"))()
 assert(SMODS.load_file("./modules/compat/jokerdisplay.lua"))()
 assert(SMODS.load_file("./modules/compat/cartomancer.lua"))()
 assert(SMODS.load_file("./modules/compat/notjustyet.lua"))()
+assert(SMODS.load_file("./modules/compat/togasstuff.lua"))()
 
 assert(SMODS.load_file("./modules/pokerhands.lua"))()
 assert(SMODS.load_file("./modules/challenges.lua"))()

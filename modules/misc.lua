@@ -1126,6 +1126,7 @@ AKYRS.icons_pos = {
     ["ultima"]          = { x = 2, y = 1},
     ["remaster"]        = { x = 3, y = 1},
     ["lunatic"]         = { x = 4, y = 1},
+    ["dx"]              = { x = 0, y = 2},
     ["no_reroll"]       = { x = 0, y = 0},
     ["no_disabling"]    = { x = 1, y = 0},
     ["no_face"]         = { x = 2, y = 0},
@@ -1150,7 +1151,7 @@ AKYRS.full_ui_add = function(nodes, key, scale)
             }
         }
     }
-    if m.text then
+    if m.text and false then
         for i, tx in ipairs(m.text) do
             table.insert(l, 
                 {
@@ -1181,6 +1182,7 @@ AKYRS.generate_icon_blinds = function(key, config)
     local full_ui = config.full_ui or false
     local fsz = config.font_size or false
     local dfctysz = config.text_size_for_full or false
+    local info_queue = config.info_queue or {}
     local sprite = nil
     if cache then
         AKYRS.icon_sprites[key] = AKYRS.icon_sprites[key] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[key])
@@ -1188,14 +1190,16 @@ AKYRS.generate_icon_blinds = function(key, config)
     else
         sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[key])
     end
+    local keyed = "dd_akyrs_"..key
     z[#z+1] = {
-        n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = full_ui and "lc" or "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies["dd_akyrs_"..key] },
+        n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = full_ui and "lc" or "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies[keyed] },
         nodes = {
             {n=G.UIT.O, config={object = sprite, scale = fsz}},
         }
     }
     if full_ui then
         AKYRS.full_ui_add(z[#z].nodes, "dd_akyrs_"..key, dfctysz)
+        info_queue[#info_queue+1] = AKYRS.DescriptionDummies[keyed]
     end
 end
 AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
@@ -1209,6 +1213,7 @@ AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
     local full_ui = extras.full_ui or false
     local hide = extras.hide or {  }
     local row = extras.row or false
+    local info_queue = extras.info_queue or {}
     local z = {}
 
     if blind and blind.debuff then
@@ -1230,28 +1235,29 @@ AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
             }
             if full_ui then
                 AKYRS.full_ui_add(z[#z].nodes, blind_txt_dmy, dfctysz)
+                info_queue[#info_queue+1] = AKYRS.DescriptionDummies[blind_txt_dmy]
             end
         end
         if blind.debuff.akyrs_cannot_be_disabled and not hide.disabled then
-            AKYRS.generate_icon_blinds("no_disabling",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+            AKYRS.generate_icon_blinds("no_disabling",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
         end
         if blind.debuff.akyrs_cannot_be_rerolled and not hide.reroll then
-            AKYRS.generate_icon_blinds("no_reroll",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+            AKYRS.generate_icon_blinds("no_reroll",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
         end
         if blind.debuff.akyrs_is_forgotten_blind and not hide.forgotten_blind then
-            AKYRS.generate_icon_blinds("forgotten_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+            AKYRS.generate_icon_blinds("forgotten_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
         end
         if blind.debuff.akyrs_is_word_blind and not hide.word_blind then
-            AKYRS.generate_icon_blinds("word_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+            AKYRS.generate_icon_blinds("word_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
         end
         if blind.debuff.akyrs_is_puzzle_blind and not hide.puzzle_blind then
-            AKYRS.generate_icon_blinds("puzzle_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+            AKYRS.generate_icon_blinds("puzzle_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
         end
         if blind.debuff.akyrs_is_endless_blind and not hide.endless_blind then
-            AKYRS.generate_icon_blinds("endless_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+            AKYRS.generate_icon_blinds("endless_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
         end
         if blind.debuff.akyrs_is_postwin_blind and not hide.postwin_blind then
-            AKYRS.generate_icon_blinds("postwin_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+            AKYRS.generate_icon_blinds("postwin_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
         end
     end
     if z and #z > 0 and blind and ability_text_table then
@@ -1308,3 +1314,4 @@ function AKYRS.search_UIT_for_id(uit, id)
     end
     return nil
 end
+

@@ -210,6 +210,9 @@ AKYRS.DescriptionDummy{
 AKYRS.DescriptionDummy{
     key = "lunatic_blind"
 }
+AKYRS.DescriptionDummy{
+    key = "dx_blind"
+}
 
 AKYRS.DescriptionDummy{
     key = "no_disabling"
@@ -225,6 +228,9 @@ AKYRS.DescriptionDummy{
 }
 AKYRS.DescriptionDummy{
     key = "forgotten_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "postwin_blind"
 }
 AKYRS.DescriptionDummy{
     key = "endless_blind"

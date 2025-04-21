@@ -669,3 +669,42 @@ function create_UIBox_blind_choice(type, run_info)
     end
     return x
 end
+
+
+local ogBlindUIPopup = create_UIBox_blind_popup
+function create_UIBox_blind_popup(bl, disco, vars)
+    local x = ogBlindUIPopup(bl,disco,vars)
+    
+    local info_queue = {}
+    AKYRS.add_blind_extra_info(bl,nil,{text_size = 0.25, difficulty_text_size = 0.3, full_ui = true, info_queue = info_queue})
+    if #info_queue > 0 then
+        local noders = {}
+        local all_nodes = {}
+        x.n = G.UIT.R
+        --table.insert(noders,x)
+        for i, valueinfo in ipairs(info_queue) do
+            local full_UI_table = {
+                main = {},
+                info = {},
+                type = {},
+                name = 'done',
+                badges = {}
+            }
+            local desc = generate_card_ui(valueinfo, full_UI_table)
+            table.insert(noders,{
+                n = G.UIT.R, config = { align = "cm"}, nodes = {
+                    {n=G.UIT.C, config={align = "cm", colour = lighten(G.C.JOKER_GREY, 0.5), r = 0.1, padding = 0.05, emboss = 0.05}, nodes={
+                        info_tip_from_rows(desc.info[1], desc.info[1].name)
+                    }}
+                }
+            })
+        end
+        table.insert(all_nodes,
+        { n = G.UIT.C, config={align = "cm", func = 'show_infotip',object = Moveable(),ref_table = next(noders) and noders or nil}, nodes = {
+            x
+        }})
+        --table.insert(all_nodes,x)
+        return {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR}, nodes=all_nodes}
+    end
+    return x
+end

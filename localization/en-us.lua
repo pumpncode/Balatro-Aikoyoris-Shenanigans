@@ -261,6 +261,13 @@ return {
                     "{scale:0.7,C:inactive}(I feel like I've seen this somewhere as well)",
                 },
             },
+            dd_akyrs_dx_blind  = {
+                name="DX Blind",
+                text={
+                    "Upgraded Ante 8 Blinds",
+                    "from More Fluff",
+                },
+            },
             dd_akyrs_no_reroll  = {
                 name="No Rerolling",
                 text={
@@ -276,7 +283,8 @@ return {
             dd_akyrs_forgotten_blind  = {
                 name="Forgotten Blind",
                 text={
-                    "This blind can only appear in Negative Antes",
+                    "This blind can only appear",
+                    "in Negative Antes"
                 },
             },
             dd_akyrs_word_blind  = {
@@ -634,6 +642,26 @@ return {
                     "{s:0.7,C:inactive}teteteteto teto tetete tetoris!{}"
                 }
             },
+            -- toga
+            j_akyrs_toga_charmap = {
+                
+                name = "Character Map",
+                text = { 
+                    "If played word has a {C:attention}single",
+                    "most common letter",
+                    "create an {C:attention}Alphabet{} card",
+                    "of alphabet on that card"
+                }
+            },
+            j_akyrs_toga_winword = {
+                
+                name = "Microsoft Word",
+                text = { 
+                    "This Joker gains {X:mult,C:white} X#1# {} Mult",
+                    "per letter if a word is played",
+                    "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+                }
+            }
         },
         Other={
             akyrs_self_destructs={

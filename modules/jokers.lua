@@ -1443,7 +1443,7 @@ SMODS.Joker{
         x = 9, y = 2
     },
     rarity = 2,
-    cost = 0,
+    cost = 4,
     config = {
         name = "Chicken Jockey",
         extras = {
@@ -1499,7 +1499,7 @@ AKYRS.LetterJoker {
         x = 0, y = 3
     },
     rarity = 3,
-    cost = 4,
+    cost = 7,
     config = {
         name = "Tetoris",
         extras = {

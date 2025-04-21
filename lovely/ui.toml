@@ -219,7 +219,7 @@ pattern = """        ability_text[1] and {n=G.UIT.R, config={align = "cm", paddi
       }}"""
 position = "after"
 payload = """
-AKYRS.add_blind_extra_info(blind,ability_text,{text_size = 0.25, difficulty_text_size = 0.3, full_ui = true})
+AKYRS.add_blind_extra_info(blind,ability_text,{text_size = 0.25, difficulty_text_size = 0.3, full_ui = true, info_queue = info_queue})
 """
 overwrite = true
 match_indent = true

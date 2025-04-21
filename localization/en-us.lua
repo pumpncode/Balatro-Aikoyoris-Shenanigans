@@ -646,11 +646,9 @@ return {
             j_akyrs_toga_charmap = {
                 
                 name = "Character Map",
-                text = { 
-                    "If played word has a {C:attention}single",
-                    "most common letter",
-                    "create an {C:attention}Alphabet{} card",
-                    "of alphabet on that card"
+                text = {
+                    "Create an Alphabet {C:attention}Alphabet{} card for the most",
+                    "common letter played if there's only {C:attention}one{} most common letter"
                 }
             },
             j_akyrs_toga_winword = {

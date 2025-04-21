@@ -16,7 +16,7 @@ if togabalatro then
         },
         blueprint_compat = true,
         calculate = function (self, card, context)
-            if context.joker_main then
+            if context.joker_main and G.GAME.akyrs_character_stickers_enabled then
                 local w = AKYRS.get_letter_freq_from_cards(G.play.cards)
                 local max_freq = 0
                 local most_common_letter = nil

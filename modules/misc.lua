@@ -1132,8 +1132,14 @@ AKYRS.icons_pos = {
     ["forgotten_blind"] = { x = 5, y = 1},
     ["word_blind"]      = { x = 6, y = 1},
     ["puzzle_blind"]    = { x = 7, y = 1},
+    ["postwin_blind"]   = { x = 8, y = 1},
+    ["endless_blind"]   = { x = 9, y = 1},
 }
 AKYRS.icon_sprites = {}
+
+AKYRS.remove_formatting = function(string_in)
+    return string.gsub(string_in, "{.-}", "")
+end
 AKYRS.full_ui_add = function(nodes, key, scale)
     local m = G.localization.descriptions["DescriptionDummy"][key]
     local l = {
@@ -1150,7 +1156,7 @@ AKYRS.full_ui_add = function(nodes, key, scale)
                 {
                     n = G.UIT.R,
                     nodes = {
-                        { n = G.UIT.T, config = { text = tx, colour = G.C.UI.TEXT_LIGHT, scale = scale }},
+                        { n = G.UIT.T, config = { text = AKYRS.remove_formatting(tx), colour = G.C.UI.TEXT_LIGHT, scale = scale }},
                     }
                 }
             )
@@ -1183,7 +1189,7 @@ AKYRS.generate_icon_blinds = function(key, config)
         sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[key])
     end
     z[#z+1] = {
-        n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies["dd_akyrs_"..key] },
+        n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = full_ui and "lc" or "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies["dd_akyrs_"..key] },
         nodes = {
             {n=G.UIT.O, config={object = sprite, scale = fsz}},
         }
@@ -1241,6 +1247,12 @@ AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
         if blind.debuff.akyrs_is_puzzle_blind and not hide.puzzle_blind then
             AKYRS.generate_icon_blinds("puzzle_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
         end
+        if blind.debuff.akyrs_is_endless_blind and not hide.endless_blind then
+            AKYRS.generate_icon_blinds("endless_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
+        if blind.debuff.akyrs_is_postwin_blind and not hide.postwin_blind then
+            AKYRS.generate_icon_blinds("postwin_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz})
+        end
     end
     if z and #z > 0 and blind and ability_text_table then
         local xd = {
@@ -1276,4 +1288,23 @@ AKYRS.shallow_indexed_table_copy = function(t)
         table.insert(t2,k)
     end
     return t2
+end
+
+AKYRS.get_current_blind_config = function()
+    return G.P_BLINDS[G.GAME.round_resets.blind_choices[G.GAME.blind_on_deck]]
+end
+
+function AKYRS.search_UIT_for_id(uit, id)
+    if not id or not uit then return nil end
+    for _, node in ipairs(uit.nodes or {}) do
+        if node.config and node.config.id == id then
+            return node
+        elseif node.nodes then
+            local result = AKYRS.search_UIT_for_id(node, id)
+            if result then
+                return result
+            end
+        end
+    end
+    return nil
 end

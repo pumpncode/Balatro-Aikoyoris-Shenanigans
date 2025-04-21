@@ -618,12 +618,28 @@ function create_UIBox_HUD_blind()
     local blind_setup = G.P_BLINDS[G.GAME.round_resets.blind_choices[G.GAME.blind_on_deck]]
     local shit = AKYRS.add_blind_extra_info(blind_setup,nil,{text_size = 0.35,border_size = 0.3, difficulty_text_size = 0.3, cached_icons = true, row = true})
 
+    local bldis = G.GAME.blind and G.GAME.blind.disabled or false
+
     --print(inspect(G.GAME.blind))
+
     
+    local bl = G.P_BLINDS[G.GAME.round_resets.blind_choices[G.GAME.blind_on_deck]]
+    local elem = x.nodes[2].nodes[2].nodes[2]
+    if bl and bl.debuff.special_blind and elem and not bldis then
+        local blindloc = getSpecialBossBlindText(G.GAME.round_resets.blind_choices[G.GAME.blind_on_deck] or "nololxd")
+        local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
+        elem.nodes[1].nodes[1].config.text = blindloc[1]
+        elem.nodes[2].nodes = {
+            { n = G.UIT.O, config = { w = 0.5, h = 0.5, colour = G.C.BLUE, object = stake_sprite, hover = true, can_collide = false } },
+            { n = G.UIT.B, config = { h = 0.1, w = 0.1 } },
+            { n = G.UIT.T, config = { text = blindloc[2], scale = 0.4, colour = G.C.RED, id = 'HUD_blind_count', shadow = true } }
+        }
+    end    
+
     table.insert(x.nodes[2].nodes,2,{
         n = G.UIT.R, config = { align = "cm", id = "akyrs_blind_attributes"}, nodes = shit
     })
-    
+    table.insert(x.nodes[2].nodes,2, { n = G.UIT.B, config = { h = 0.1, w = 0.1 } })
 
     return x
 end
@@ -632,5 +648,24 @@ local blindSetTextHook = Blind.set_text
 function Blind:set_text()
     local x = blindSetTextHook(self)
     G.HUD_blind:recalculate()
+    return x
+end
+
+local ogBlindSel = create_UIBox_blind_choice
+function create_UIBox_blind_choice(type, run_info)
+    local x = ogBlindSel(type, run_info)
+    local bl = G.P_BLINDS[G.GAME.round_resets.blind_choices[type]]
+    local elem = AKYRS.search_UIT_for_id(x, "blind_desc")
+    if bl and bl.debuff.special_blind and elem then
+        local blindloc = getSpecialBossBlindText(G.GAME.round_resets.blind_choices[type] or "nololxd")
+        local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
+        elem.nodes[2].nodes[1].nodes[1].config.text = blindloc[1]
+        elem.nodes[2].nodes[2].nodes = {
+            
+            { n = G.UIT.O, config = { w = 0.5, h = 0.5, colour = G.C.BLUE, object = stake_sprite, hover = true, can_collide = false } },
+            { n = G.UIT.B, config = { h = 0.1, w = 0.1 } },
+            { n = G.UIT.T, config = { text = blindloc[2], scale = 0.4, colour = G.C.RED, shadow = true } }
+        }
+    end
     return x
 end

@@ -264,25 +264,25 @@ return {
             dd_akyrs_no_reroll  = {
                 name="No Rerolling",
                 text={
-                    "This boss cannot be rerolled",
+                    "This blind cannot be rerolled",
                 },
             },
             dd_akyrs_no_disabling  = {
                 name="No Disabling",
                 text={
-                    "This boss cannot be disabled",
+                    "This blind cannot be disabled",
                 },
             },
             dd_akyrs_forgotten_blind  = {
                 name="Forgotten Blind",
                 text={
-                    "This boss only appears in Negative Antes",
+                    "This blind can only appear in Negative Antes",
                 },
             },
             dd_akyrs_word_blind  = {
                 name="Word Blind",
                 text={
-                    "This boss can only appear",
+                    "This blind can only appear",
                     "when it is possible to",
                     "play words",
                 },
@@ -290,9 +290,22 @@ return {
             dd_akyrs_puzzle_blind  = {
                 name="Puzzle Blind",
                 text={
-                    "This boss can only be defeated",
+                    "This blind can only be defeated",
                     "by completing certain criteria",
-                    "(Score usually does not matter in this)",
+                },
+            },
+            dd_akyrs_postwin_blind  = {
+                name="Post Win Blind",
+                text={
+                    "This blind appears on Antes",
+                    "above winning Ante",
+                },
+            },
+            dd_akyrs_endless_blind  = {
+                name="Endless Blind",
+                text={
+                    "This blind only appears",
+                    "in Endless Mode",
                 },
             },
         },

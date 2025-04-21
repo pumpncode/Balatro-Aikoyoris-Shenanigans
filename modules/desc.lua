@@ -217,3 +217,15 @@ AKYRS.DescriptionDummy{
 AKYRS.DescriptionDummy{
     key = "no_reroll"
 }
+AKYRS.DescriptionDummy{
+    key = "word_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "puzzle_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "forgotten_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "endless_blind"
+}

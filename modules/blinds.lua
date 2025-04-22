@@ -899,6 +899,9 @@ SMODS.Blind {
         }
     end,
     modify_hand = function (self, cards, poker_hands, text, mult, hand_chips)
+        if Talisman then
+            return to_big(self.debuff.mul), to_big(self.debuff.ch), true
+        end
         return self.debuff.mul, self.debuff.ch, true
         -- return mult, hand_chips, false
     end,

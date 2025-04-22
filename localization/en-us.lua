@@ -30,6 +30,15 @@ return {
                     "",
                 },
             },
+            b_akyrs_cry_misprint_ultima={
+                name="Ultima Misprint Deck",
+				text = {
+					"Values of cards",
+					"and poker hands",
+					"are {C:attention}randomized{}",
+                    "{C:inactive}(From X#1# to X#2#)"
+				},
+            },
         },
         Blind={
             bl_akyrs_the_thought= {

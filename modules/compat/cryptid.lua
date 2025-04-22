@@ -18,7 +18,7 @@ if Cryptid then -- TODO: Ask Cryptid Discord so I can hook this up properly
     SMODS.Back{
         key = "cry_misprint_ultima",
         atlas = "deckBacks",
-        pos = { x = 2, y = 0},
+        pos = { x = 6, y = 0},
         config = { cry_misprint_min = 1e-4, cry_misprint_max = 1e4 },
         set_badges = function (self, card, badges)
             SMODS.create_mod_badges(Cryptid, badges)

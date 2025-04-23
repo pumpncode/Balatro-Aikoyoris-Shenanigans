@@ -210,10 +210,28 @@ AKYRS.DescriptionDummy{
 AKYRS.DescriptionDummy{
     key = "lunatic_blind"
 }
+AKYRS.DescriptionDummy{
+    key = "dx_blind"
+}
 
 AKYRS.DescriptionDummy{
     key = "no_disabling"
 }
 AKYRS.DescriptionDummy{
     key = "no_reroll"
+}
+AKYRS.DescriptionDummy{
+    key = "word_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "puzzle_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "forgotten_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "postwin_blind"
+}
+AKYRS.DescriptionDummy{
+    key = "endless_blind"
 }

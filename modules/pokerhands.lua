@@ -112,7 +112,7 @@ for i = 3, 31 do
             local hand = AKYRS.shallow_indexed_table_copy(hand_in)
             table.sort(hand, AKYRS.hand_sort_function)
             for _, v in pairs(hand) do
-                if not v.ability then return {} end
+                if not v.ability or not v.ability.aikoyori_letters_stickers then return {} end
                 local alpha = v.ability.aikoyori_letters_stickers:lower()
                 if alpha == "#" and v.ability.aikoyori_pretend_letter then
                     -- if wild is set fr tbh
@@ -189,7 +189,7 @@ SMODS.PokerHand{
         local hand = AKYRS.shallow_indexed_table_copy(hand_in)
         table.sort(hand, AKYRS.hand_sort_function)
         for _, v in pairs(hand) do
-            if not v.ability then return {} end
+            if not v.ability or not v.ability.aikoyori_letters_stickers then return {} end
             local alpha = v.ability.aikoyori_letters_stickers:lower()
             if alpha == "#" and v.ability.aikoyori_pretend_letter then
                 -- if wild is set fr tbh
@@ -239,7 +239,7 @@ SMODS.PokerHand{
         local hand = AKYRS.shallow_indexed_table_copy(hand_in)
         table.sort(hand, AKYRS.hand_sort_function)
         for _, v in pairs(hand) do
-            if not v.ability then return {} end
+            if not v.ability or not v.ability.aikoyori_letters_stickers then return {} end
             local alpha = v.ability.aikoyori_letters_stickers:lower()
             if alpha == "#" and v.ability.aikoyori_pretend_letter then
                 -- if wild is set fr tbh
@@ -294,7 +294,7 @@ SMODS.PokerHand{
         local hand = AKYRS.shallow_indexed_table_copy(hand_in)
         table.sort(hand, AKYRS.hand_sort_function)
         for _, v in pairs(hand) do
-            if not v.ability then return {} end
+            if not v.ability or not v.ability.aikoyori_letters_stickers then return {} end
             local alpha = v.ability.aikoyori_letters_stickers:lower()
             if alpha == "#" and v.ability.aikoyori_pretend_letter then
                 -- if wild is set fr tbh

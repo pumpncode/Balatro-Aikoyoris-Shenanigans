@@ -6,12 +6,9 @@ priority = 0
 [[patches]]
 [patches.pattern]
 target = "functions/common_events.lua"
-pattern = """   end
-
-    if main_end then 
-        desc_nodes[#desc_nodes+1] = main_end 
-    end"""
-position = "before"
+pattern = """       end
+       localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}"""
+position = "after"
 payload = """    
     elseif _c.set == 'AikoyoriExtraBases' then
         if _c.is_null then

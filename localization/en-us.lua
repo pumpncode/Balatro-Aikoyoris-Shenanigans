@@ -30,6 +30,15 @@ return {
                     "",
                 },
             },
+            b_akyrs_cry_misprint_ultima={
+                name="Ultima Misprint Deck",
+				text = {
+					"Values of cards",
+					"and poker hands",
+					"are {C:attention}randomized{}",
+                    "{C:inactive}(From X#1# to X#2#)"
+				},
+            },
         },
         Blind={
             bl_akyrs_the_thought= {
@@ -261,28 +270,36 @@ return {
                     "{scale:0.7,C:inactive}(I feel like I've seen this somewhere as well)",
                 },
             },
+            dd_akyrs_dx_blind  = {
+                name="DX Blind",
+                text={
+                    "Upgraded Ante 8 Blinds",
+                    "from More Fluff",
+                },
+            },
             dd_akyrs_no_reroll  = {
                 name="No Rerolling",
                 text={
-                    "This boss cannot be rerolled",
+                    "This blind cannot be rerolled",
                 },
             },
             dd_akyrs_no_disabling  = {
                 name="No Disabling",
                 text={
-                    "This boss cannot be disabled",
+                    "This blind cannot be disabled",
                 },
             },
             dd_akyrs_forgotten_blind  = {
                 name="Forgotten Blind",
                 text={
-                    "This boss only appears in Negative Antes",
+                    "This blind can only appear",
+                    "in Negative Antes"
                 },
             },
             dd_akyrs_word_blind  = {
                 name="Word Blind",
                 text={
-                    "This boss can only appear",
+                    "This blind can only appear",
                     "when it is possible to",
                     "play words",
                 },
@@ -290,9 +307,22 @@ return {
             dd_akyrs_puzzle_blind  = {
                 name="Puzzle Blind",
                 text={
-                    "This boss can only be defeated",
+                    "This blind can only be defeated",
                     "by completing certain criteria",
-                    "(Score usually does not matter in this)",
+                },
+            },
+            dd_akyrs_postwin_blind  = {
+                name="Post Win Blind",
+                text={
+                    "This blind appears on Antes",
+                    "above winning Ante",
+                },
+            },
+            dd_akyrs_endless_blind  = {
+                name="Endless Blind",
+                text={
+                    "This blind only appears",
+                    "in Endless Mode",
                 },
             },
         },
@@ -621,6 +651,24 @@ return {
                     "{s:0.7,C:inactive}teteteteto teto tetete tetoris!{}"
                 }
             },
+            -- toga
+            j_akyrs_toga_charmap = {
+                
+                name = "Character Map",
+                text = {
+                    "Create an Alphabet {C:attention}Alphabet{} card for the most",
+                    "common letter played if there's only {C:attention}one{} most common letter"
+                }
+            },
+            j_akyrs_toga_winword = {
+                
+                name = "Microsoft Word",
+                text = { 
+                    "This Joker gains {X:mult,C:white} X#1# {} Mult",
+                    "per letter if a word is played",
+                    "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+                }
+            }
         },
         Other={
             akyrs_self_destructs={

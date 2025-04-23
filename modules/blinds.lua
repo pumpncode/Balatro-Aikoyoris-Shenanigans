@@ -796,6 +796,7 @@ SMODS.Blind {
     debuff = {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 9, max = 10},
@@ -820,7 +821,7 @@ SMODS.Blind {
     end,
     in_pool = function (self)
         local pseudocard = AKYRS.PseudoCard("8",8,"Hearts")
-        return G.GAME.round_resets.ante > 8 and not Card.is_face(pseudocard)
+        return G.GAME.round_resets.ante > G.GAME.win_ante and not Card.is_face(pseudocard)
     end,
     get_loc_debuff_text = function (self)
         return localize("k_akyrs_confrontation_has_face_in_hand_warning")
@@ -837,6 +838,7 @@ SMODS.Blind {
         mult_max = 1.1,
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -872,6 +874,7 @@ SMODS.Blind {
     debuff = {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
         ch = 1,
         mul = 1
     },
@@ -896,6 +899,9 @@ SMODS.Blind {
         }
     end,
     modify_hand = function (self, cards, poker_hands, text, mult, hand_chips)
+        if Talisman then
+            return to_big(self.debuff.mul), to_big(self.debuff.ch), true
+        end
         return self.debuff.mul, self.debuff.ch, true
         -- return mult, hand_chips, false
     end,
@@ -908,6 +914,7 @@ SMODS.Blind {
     debuff = {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     stay_flipped = function (self, area, card)
         if area == G.hand and G.hand.cards then
@@ -945,6 +952,7 @@ SMODS.Blind {
     debuff = {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -975,6 +983,7 @@ SMODS.Blind {
     debuff = {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
+        akyrs_is_postwin_blind = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 

@@ -15,7 +15,8 @@ function Game:init_game_object()
     ret.aiko_last_mult = 0
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
-    ret.aiko_current_word = nil
+    ret.aiko_current_wordaiko_current_word = nil
+    ret.aiko_current_word_table = {}
     ret.aiko_words_played = {}
     ret.letters_to_give = {}
     ret.aiko_letters_consumable_rate = 0
@@ -546,6 +547,7 @@ G.FUNCS.evaluate_play = function()
         --print(wordData)
         if wordData.valid then
             G.GAME.aiko_current_word = wordData.word
+            G.GAME.aiko_current_word_table = aiko_current_word_split
             G.GAME.aiko_words_played[wordData.word] = true
             G.GAME.current_round.aiko_round_played_words[wordData.word] = true
             if AKYRS.config.wildcard_behaviour == 4 then -- set letters in hand  on mode 4 lol !!!
@@ -655,6 +657,8 @@ G.FUNCS.evaluate_play = function()
     G.GAME.aikoyori_variable_to_set = nil
     G.GAME.aikoyori_value_to_set_to_variable = nil
     G.GAME.aiko_current_word = nil
+    
+    G.GAME.aiko_current_word_table = {}
     return ret
 end
 

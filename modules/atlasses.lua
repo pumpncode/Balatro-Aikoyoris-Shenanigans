@@ -121,6 +121,14 @@ SMODS.Atlas({
 })
 
 
+SMODS.Atlas {
+    key = "togasstuff_crossmod",
+    path = "crossmod/togasstuff.png",
+    px = 72,
+    py = 95
+}
+
+
 SMODS.Shader{
     key = "texelated",
     path = "texelated.fs"

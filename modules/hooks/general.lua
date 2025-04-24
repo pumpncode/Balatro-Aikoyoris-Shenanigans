@@ -807,6 +807,8 @@ function CardArea:align_cards()
                     card.states.collide.can = true
                     card.states.drag.can = true
                     card.states.click.can = true
+                    card.following_cards = nil
+                    card.card_held = nil
                     if card.facing == 'back' then
                         card:flip()
                         card.sprite_facing = card.facing

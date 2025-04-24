@@ -14,8 +14,14 @@ function SolitaireCard:click()
     if self.akyrs_double_click_wait and self.akyrs_double_click_wait > 0 and self.ability.akyrs_part_of_solitaire and self.facing == "front" then
         self.following_cards = nil
         --print("double click detected")
-        --self:akyrs_calculate_following_cards()
-        --AKYRS.SOL.klondike_quick_stack(self)
+        self:akyrs_calculate_following_cards()
+        AKYRS.simple_event_add(
+            function ()
+                
+                AKYRS.SOL.klondike_quick_stack(self)
+                return true
+            end, 0
+        )
         self.akyrs_double_click_wait = 0
     else
         self.akyrs_double_click_wait = 2
@@ -92,9 +98,9 @@ function Card:akyrs_bring_following_cards(area)
     if self.following_cards then
         for i,k in ipairs(self.following_cards) do
             if k.akyrs_card_held and k.akyrs_card_held:is(Card) then
-                k.akyrs_card_held.following_cards = nil
                 k.akyrs_card_held.area:remove_card(k)
                 k.akyrs_card_held.area:align_cards()
+                k.is_being_pulled = false
             end
             
             k.akyrs_stay_on_top = nil

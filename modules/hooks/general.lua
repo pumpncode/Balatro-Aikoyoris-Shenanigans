@@ -795,18 +795,25 @@ function CardArea:align_cards()
     end
     if self.config.type == 'akyrs_solitaire_tableau' then
         for k, card in ipairs(self.cards) do
+            self.is_something_being_held = false
             if not card.states.drag.is and not card.is_being_pulled then 
                 --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
 
                 card.T.y = self.T.y + 0.5 * (k-1)
                 card.T.x = self.T.x
             end
+            
+            if not card.is_being_pulled and not card.akyrs_card_held then
+                card.states.collide.can = true
+                card.states.drag.can = true
+                card.states.click.can = true
+            else
+                
+                self.is_something_being_held = true 
+            end
+
             if (AKYRS.SOL.current_state ~= AKYRS.SOL.states.START_DRAW and AKYRS.SOL.current_state ~= AKYRS.SOL.states.INACTIVE) then
                 if k == #self.cards then
-                    
-                    card.states.collide.can = true
-                    card.states.drag.can = true
-                    card.states.click.can = true
                     card.following_cards = nil
                     card.card_held = nil
                     if card.facing == 'back' then
@@ -828,7 +835,6 @@ function CardArea:align_cards()
                     end
                 end 
             else
-                
                 card.states.collide.can = false
                 card.states.drag.can = false
                 card.states.click.can = false

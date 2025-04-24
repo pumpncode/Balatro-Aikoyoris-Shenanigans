@@ -11,17 +11,13 @@ function SolitaireCard:click()
     if self.area == AKYRS.SOL.stockCardArea then
         AKYRS.SOL.draw_from_stock_to_waste(1)
     end
-    if self.akyrs_double_click_wait and self.akyrs_double_click_wait > 0 and self.ability.akyrs_part_of_solitaire and self.facing == "front" then
+    if self.akyrs_double_click_wait and self.akyrs_double_click_wait > 0 and self.ability.akyrs_part_of_solitaire and self.facing == "front" and not self.is_being_pulled then
         self.following_cards = nil
         --print("double click detected")
-        self:akyrs_calculate_following_cards()
-        AKYRS.simple_event_add(
-            function ()
-                
-                AKYRS.SOL.klondike_quick_stack(self)
-                return true
-            end, 0
-        )
+       -- self:akyrs_calculate_following_cards()
+        
+        --AKYRS.SOL.klondike_quick_stack(self)
+        
         self.akyrs_double_click_wait = 0
     else
         self.akyrs_double_click_wait = 2
@@ -41,6 +37,9 @@ end
 
 function SolitaireCard:drag(off)
     local c = Card.drag(self,off)
+    if self.area then 
+        self.area.is_something_being_held = true
+    end
     self:akyrs_calculate_following_cards()
 
     return c
@@ -48,6 +47,7 @@ end
 
 function SolitaireCard:stop_drag()
     local area = self.area
+    self.states.drag.can = false
     for i, k in ipairs(G.CONTROLLER.collision_list) do
         if (k:is(CardArea)) then
             if k.config.akyrs_emplace_func and k.config.akyrs_emplace_func(k, self) then
@@ -72,6 +72,17 @@ function SolitaireCard:stop_drag()
     end
     self:akyrs_bring_following_cards(area)
     local c = Card.stop_drag(self)
+    AKYRS.simple_event_add(
+        function ()
+            
+            if self.area then 
+                self.area.is_something_being_held = false
+            end
+            self.states.drag.can = true
+            self.states.click.can = true
+            return true
+        end,0
+    )
     return c
 end
 
@@ -111,14 +122,22 @@ function Card:akyrs_bring_following_cards(area)
         
             if not k.area then k.area = area end
             if not AKYRS.is_in_table(area.cards,k) then
-                area:emplace(k)
+                AKYRS.simple_event_add(
+                    function ()
+                        area:emplace(k)
+                        return true
+                    end,0
+                )
             end
-            k.states.click.can = true
-            k.states.drag.can = true
+
+            k.states.click.can = false
+            k.states.drag.can = false
             k.following_cards = nil
             k.is_being_pulled = false
         end
         self.following_cards = nil
+        
+        self.states.drag.can = true
         
     end
 end

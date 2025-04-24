@@ -341,7 +341,7 @@ function AKYRS.SOL.klondike_quick_stack(card)
                 card.following_cards = nil
                 card:akyrs_calculate_following_cards(function(x) return x == card end)
                 --print(card.following_cards and #card.following_cards or "fuck you")
-                AKYRS.draw_card(card.area,ca,1,"down",nil,card,0.05)
+                AKYRS.draw_card(card.area,ca,1,"down",nil,card,0.0)
                 card:akyrs_bring_following_cards(ca)
                 
                 return

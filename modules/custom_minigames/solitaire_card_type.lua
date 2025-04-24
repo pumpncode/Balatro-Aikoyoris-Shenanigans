@@ -88,6 +88,8 @@ function Card:akyrs_calculate_following_cards(func)
             k.T.y = self.T.y + 0.5 * i
             k.is_being_pulled = true
             k.akyrs_stay_on_top = i
+            k.states.click.can = false
+            k.states.drag.can = false
         end
         if self.area then
             self.area:align_cards()
@@ -98,6 +100,7 @@ function Card:akyrs_bring_following_cards(area)
     if self.following_cards then
         for i,k in ipairs(self.following_cards) do
             if k.akyrs_card_held and k.akyrs_card_held:is(Card) then
+                k.akyrs_card_held.following_cards = nil
                 k.akyrs_card_held.area:remove_card(k)
                 k.akyrs_card_held.area:align_cards()
                 k.is_being_pulled = false
@@ -108,13 +111,10 @@ function Card:akyrs_bring_following_cards(area)
         
             if not k.area then k.area = area end
             if not AKYRS.is_in_table(area.cards,k) then
-                AKYRS.simple_event_add(
-                    function ()
-                        area:emplace(k)
-                        return true
-                    end, 0
-                )
+                area:emplace(k)
             end
+            k.states.click.can = true
+            k.states.drag.can = true
             k.following_cards = nil
             k.is_being_pulled = false
         end

@@ -36,7 +36,8 @@ return {
 					"Values of cards",
 					"and poker hands",
 					"are {C:attention}randomized{}",
-                    "{C:inactive}(From X#1# to X#2#)"
+                    "{C:inactive}(From X#1# to X#2#)",
+                    "The challenge is to not crash the game."
 				},
             },
         },

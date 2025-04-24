@@ -87,7 +87,7 @@ AKYRS.SOL.fill_stock_with_fresh_cards = function()
             card.states.collide.can = false
             AKYRS.SOL.stockCardArea:emplace(card)
         end
-        AKYRS.SOL.stockCardArea:shuffle(pseudoseed('aikoyorisoiltaires'..tostring(os.time())))
+        AKYRS.SOL.stockCardArea:shuffle(pseudoseed('aikoyorisoiltaires'))
     end
 end
 AKYRS.SOL.initial_setup = function()
@@ -329,20 +329,17 @@ function AKYRS.SOL.tableau_check(cardarea, card)
 end
 
 function AKYRS.SOL.klondike_quick_stack(card)
-    if card.following_cards then
-        --print("yep definitely there is card following rn "..#card.following_cards)
-    end
     
     
     if not card then return end
     for _,ap in ipairs(AKYRS.SOL.card_area_priority) do
         for i, ca in ipairs(AKYRS.SOL.cardAreas[ap]) do
             if ca.config.akyrs_emplace_func and ca.config.akyrs_emplace_func(ca,card) and ca ~= card.area then
+                AKYRS.draw_card(card.area,ca,1,"down",nil,card,0.05)
                 card.following_cards = nil
                 card:akyrs_calculate_following_cards(function(x) return x == card end)
                 --print(card.following_cards and #card.following_cards or "fuck you")
-                AKYRS.draw_card(card.area,ca,1,"down",nil,card,0.05)
-                card:akyrs_bring_following_cards(ca)
+                card:akyrs_bring_following_cards(card.area)
                 
                 return
             end

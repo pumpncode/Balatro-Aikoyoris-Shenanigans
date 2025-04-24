@@ -21,7 +21,7 @@ if Cryptid then -- TODO: Ask Cryptid Discord so I can hook this up properly
         pos = { x = 6, y = 0},
         config = { cry_misprint_min = 1e-4, cry_misprint_max = 1e4 },
         set_badges = function (self, card, badges)
-            SMODS.create_mod_badges(Cryptid, badges)
+            SMODS.create_mod_badges({ mod = Cryptid }, badges)
         end,
         loc_vars = function (self, info_queue, card)
             return {

@@ -190,8 +190,8 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     vec4 col = HSL(tex);
     col.b *= 0.4 - 0.4 * (smoothstep(rnd,0.1,0.5)) + sin(burnt.y) * 0.001;
     col.g *= 0.0;
-    tex.b *= 1-step(0.04,rnd);
-    if(burnt.y != 0) {
+    tex.b *= 1.-step(0.04,rnd);
+    if(burnt.y != 0.) {
         col.r += sin(burnt.y)*0.01;
     }
     tex = RGB(col);

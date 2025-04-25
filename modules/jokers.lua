@@ -845,6 +845,9 @@ SMODS.Joker{
         akyrs_priority_draw_conditions = nil,
     },
     loc_vars = function(self, info_queue, card)
+        if card.ability.akyrs_cycler ~= 1 and card.ability.akyrs_cycler ~= 2 and card.ability.akyrs_cycler ~= 3 and card.ability.akyrs_cycler ~= 4 then
+            card.ability.akyrs_cycler = 1
+        end
         local table = card.ability.extra.possible_table[math.floor(card.ability.akyrs_cycler)]
         info_queue[#info_queue+1] = { key = "dd_akyrs_hibana_conditions", set = "DescriptionDummy"}
         return {
@@ -856,7 +859,9 @@ SMODS.Joker{
     end,
     calculate = function (self, card, context)
         if context.end_of_round and context.cardarea == G.jokers then
-            card.ability.akyrs_cycler = math.floor(card.ability.akyrs_cycler)
+            if card.ability.akyrs_cycler ~= 1 and card.ability.akyrs_cycler ~= 2 and card.ability.akyrs_cycler ~= 3 and card.ability.akyrs_cycler ~= 4 then
+                card.ability.akyrs_cycler = 1
+            end
             card.ability.akyrs_priority_draw_rank = nil
             card.ability.akyrs_priority_draw_suit = nil
             card.ability.akyrs_priority_draw_conditions = nil

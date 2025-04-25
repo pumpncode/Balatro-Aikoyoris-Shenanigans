@@ -344,8 +344,12 @@ function AKYRS.SOL.klondike_quick_stack(card)
                 --print(card.following_cards and #card.following_cards or "fuck you")
                 AKYRS.draw_card(card.area,ca,1,"down",nil,card,0.0)
                 card.states.drag.can = false
-                card:akyrs_bring_following_cards(ca)
-                
+                AKYRS.simple_event_add(
+                    function()
+                        card:akyrs_bring_following_cards(ca)
+                        return true
+                    end, 0
+                )
                 return
             end
         end

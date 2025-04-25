@@ -795,10 +795,31 @@ function CardArea:align_cards()
     end
     if self.config.type == 'akyrs_solitaire_tableau' then
         for k, card in ipairs(self.cards) do
-            self.is_something_being_held = false
             if not card.states.drag.is and not card.is_being_pulled then 
                 --card.T.r = 0.2*(-#self.cards/2 - 0.5 + k)/(#self.cards)+ (G.SETTINGS.reduced_motion and 0 or 1)*0.02*math.sin(2*G.TIMERS.REAL+card.T.x)
+                local face_down_cards = {}
+                local face_up_cards = {}
 
+                for _, card in ipairs(self.cards) do
+                    if card.area == self then
+                        if card.facing == 'back' then
+                            table.insert(face_down_cards, card)
+                        else
+                            table.insert(face_up_cards, card)
+                        end
+                    end
+
+                end
+
+                table.sort(face_up_cards, function(a, b)
+                    return a.base.id > b.base.id
+                end)
+
+                for _, card in ipairs(face_up_cards) do
+                    table.insert(face_down_cards, card)
+                end
+
+                self.cards = face_down_cards
                 card.T.y = self.T.y + 0.5 * (k-1)
                 card.T.x = self.T.x
             end
@@ -809,7 +830,6 @@ function CardArea:align_cards()
                 card.states.click.can = true
             else
                 
-                self.is_something_being_held = true 
             end
 
             if (AKYRS.SOL.current_state ~= AKYRS.SOL.states.START_DRAW and AKYRS.SOL.current_state ~= AKYRS.SOL.states.INACTIVE) then

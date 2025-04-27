@@ -909,7 +909,7 @@ SMODS.Blind {
 SMODS.Blind {
     key = "expert_entanglement",
     dollars = 10,
-    mult = 2,
+    mult = 3,
     boss_colour = HEX('1fb643'),
     debuff = {
         akyrs_cannot_be_disabled = true,

@@ -409,7 +409,7 @@ SMODS.Joker {
     },
     key = "tsunagite",
     rarity = 4,
-    cost = 12,
+    cost = 30,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = {key = "akyrs_chip_mult_xchip_xmult", set = 'Other', vars = { 
             card.ability.extra.chips,
@@ -1210,7 +1210,7 @@ SMODS.Joker{
     config = {
         name = "Ghastling",
         extras = {
-            rounds_left = 20,
+            rounds_left = 10,
             mult = 21.6
         }
     },
@@ -1277,7 +1277,7 @@ SMODS.Joker{
         x = 5, y = 2
     },
     rarity = 3,
-    cost = 6,
+    cost = 10,
     config = {
         name = "Happy Ghast",
         extras = {

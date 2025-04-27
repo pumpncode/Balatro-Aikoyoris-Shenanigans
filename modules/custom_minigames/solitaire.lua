@@ -355,3 +355,7 @@ function AKYRS.SOL.klondike_quick_stack(card)
         end
     end
 end
+
+function G.FUNCS.solitaire_state_update()
+
+end

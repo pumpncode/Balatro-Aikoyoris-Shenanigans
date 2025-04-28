@@ -56,7 +56,7 @@ payload = """
             localize{type = 'descriptions', key = "lettersWildSet", set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
         end
     elseif _c.set == 'DescriptionDummy' then
-        localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes}
+        localize{type = 'descriptions', key = _c.key, set = _c.set, nodes = desc_nodes, vars = _c.vars or loc_vars}
 """
 overwrite = true
 match_indent = true

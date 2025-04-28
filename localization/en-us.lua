@@ -597,7 +597,6 @@ return {
                     "{C:red}Self-destructs{}",
                     "Decreses by {C:blue}1{} more every hand",
                     "per {T:j_ice_cream,C:blue}Ice Cream{} present",
-                    "Increases by {C:blue}#3#{} every time score catches fire",
                 }
             },
             j_akyrs_happy_ghast = {

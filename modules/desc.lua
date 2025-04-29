@@ -196,6 +196,9 @@ AKYRS.DescriptionDummy{
 }
 
 AKYRS.DescriptionDummy{
+    key = "tldr_tldr",
+}
+AKYRS.DescriptionDummy{
     key = "expert_blind"
 }
 AKYRS.DescriptionDummy{

@@ -105,7 +105,7 @@ function Card:stop_drag()
         G.deck:shuffle()
     end
     return c
-end
+end 
 
 function Card:get_letter_with_pretend()
     local letter = self.ability.aikoyori_letters_stickers

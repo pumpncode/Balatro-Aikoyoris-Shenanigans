@@ -30,6 +30,15 @@ return {
                     "",
                 },
             },
+            b_akyrs_scuffed_misprint={
+                name="Scuffed Misprint Deck",
+				text = {
+					"Values of jokers",
+					"are {C:attention}randomized{}",
+                    "{C:inactive}(From X#1# to X#2#)",
+                    "The challenge is to not crash the game."
+				},
+            },
             b_akyrs_cry_misprint_ultima={
                 name="Ultima Misprint Deck",
 				text = {
@@ -234,6 +243,28 @@ return {
                     "{X:dark_edition,C:white}2{} - Face Cards",
                     "{X:dark_edition,C:white}3{} - Hearts",
                     "{X:dark_edition,C:white}4{} - 5",
+                },
+            },
+            dd_akyrs_tldr_tldr={
+                name="Too Long; Ain't reading allat",
+                text={
+                    "{C:mult}+#1#{} Mult per card",
+                    "played and in hand",
+                },
+            },
+            dd_akyrs_aikoyori_base_ability={
+                name="Base Ability",
+                text={
+                    "{X:mult,C:white} X#1# {} Mult per",
+                    "{C;attention}non-face{} cards scored",
+                },
+            },
+            dd_akyrs_placeholder_art={
+                name="Placeholder Art",
+                text={
+                    "This card is using a",
+                    "{C:attention}Placeholder art.",
+                    "It will be changed later",
                 },
             },
             dd_akyrs_expert_blind  = {
@@ -597,7 +628,6 @@ return {
                     "{C:red}Self-destructs{}",
                     "Decreses by {C:blue}1{} more every hand",
                     "per {T:j_ice_cream,C:blue}Ice Cream{} present",
-                    "Increases by {C:blue}#3#{} every time score catches fire",
                 }
             },
             j_akyrs_happy_ghast = {
@@ -668,6 +698,13 @@ return {
                     "This Joker gains {X:mult,C:white} X#1# {} Mult",
                     "per letter if a word is played",
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+                }
+            },
+            j_akyrs_aikoyori = {
+                name = "Aikoyori",
+                text = { 
+                    "This Joker gains more abilities",
+                    "the {C:attention}more{} mods you installed",
                 }
             }
         },

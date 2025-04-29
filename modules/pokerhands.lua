@@ -45,6 +45,7 @@ elseif AKYRS.config.wildcard_behaviour == 4 then
 end
 
 function AKYRS.check_word(str_arr_in)
+    --print("what")
     local wild_positions = {}
     local wild_count = 0
 

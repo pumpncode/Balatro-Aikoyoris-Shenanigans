@@ -409,7 +409,7 @@ SMODS.Joker {
     },
     key = "tsunagite",
     rarity = 4,
-    cost = 12,
+    cost = 30,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = {key = "akyrs_chip_mult_xchip_xmult", set = 'Other', vars = { 
             card.ability.extra.chips,
@@ -553,6 +553,7 @@ SMODS.Joker {
     cost = 2,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_tldr_tldr", vars = {card.ability.extra.mult}}
         return {
             vars = { 
                 card.ability.extra.mult,
@@ -1210,7 +1211,7 @@ SMODS.Joker{
     config = {
         name = "Ghastling",
         extras = {
-            rounds_left = 20,
+            rounds_left = 10,
             mult = 21.6
         }
     },
@@ -1254,17 +1255,6 @@ SMODS.Joker{
                 mult = card.ability.extras.mult
             }
         end
-        if context.final_scoring_step and not context.blueprint then
-            if AKYRS.score_catches_fire_or_not() then
-                return {
-                    message = localize("k_akyrs_back"),
-                    func = function ()
-                        card.ability.extras.rounds_left = card.ability.extras.rounds_left + 3
-                        card.ability.do_not_decrease = true
-                    end
-                }
-            end
-        end
     end,
     blueprint_compat = true
 }
@@ -1277,7 +1267,7 @@ SMODS.Joker{
         x = 5, y = 2
     },
     rarity = 3,
-    cost = 6,
+    cost = 10,
     config = {
         name = "Happy Ghast",
         extras = {
@@ -1319,6 +1309,7 @@ SMODS.Joker{
         }
     },
     loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
         info_queue[#info_queue+1] = G.P_CENTERS["e_akyrs_burnt"]
         
     end,
@@ -1383,6 +1374,7 @@ SMODS.Joker{
         }
     },
     loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
         return {
             vars = {
                 card.ability.extras.chips,
@@ -1420,6 +1412,7 @@ AKYRS.LetterJoker{
         }
     },
     loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
         return {
             vars = {
                 card.ability.extras.chips,
@@ -1459,6 +1452,7 @@ SMODS.Joker{
     },
     loc_vars = function (self, info_queue, card)
         info_queue[#info_queue+1] = localize{set = "Joker", key = "j_popcorn"}
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
         return {
             vars = {
                 card.ability.extras.xmult_inc,
@@ -1533,6 +1527,42 @@ AKYRS.LetterJoker {
             if (c["l"] or c["s"] or c["o"] or c["z"] or c["j"] or c["i"] or c["t"]) and G.GAME.akyrs_character_stickers_enabled then
                 return {
                     xchips = card.ability.extras.xchips,
+                }
+            end
+        end
+    end
+}
+SMODS.Joker {
+    key = "aikoyori",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 1, y = 3
+    },
+    soul_pos = {
+        x = 2, y = 3
+    },
+    rarity = 4,
+    cost = 7,
+    config = {
+        name = "Aikoyori",
+        extras = {
+            base = {
+                xmult = 1.984
+            }
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_base_ability", vars = {card.ability.extras.base.xmult}}
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+            
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play then
+            if not context.other_card:is_face() then
+                return {
+                    xmult = card.ability.extras.base.xmult
                 }
             end
         end

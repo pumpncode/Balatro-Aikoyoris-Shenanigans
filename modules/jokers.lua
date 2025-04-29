@@ -1553,7 +1553,6 @@ SMODS.Joker {
     },
     loc_vars = function (self, info_queue, card)
         info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_base_ability", vars = {card.ability.extras.base.xmult}}
-        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
         return {
             
         }

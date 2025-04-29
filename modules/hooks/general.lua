@@ -1085,7 +1085,7 @@ function CardArea:shuffle(_seed)
             for j, l in ipairs(priorityqueue) do
                 if 
                 (l[2] == "suit" and k:is_suit(l[3])) or
-                (l[2] == "rank" and k.base.value == l[3] and not SMODS.has_no_suit(k)) or
+                (l[2] == "rank" and k:get_id() == SMODS.Ranks[l[3]].id and not SMODS.has_no_suit(k)) or
                 (l[2] == "face" and k:is_face() == l[3])
                  then
                     --print(k.base.name, l[1], l[2], l[3])
@@ -1189,7 +1189,7 @@ end
 local XmainMenuHook = Game.main_menu
 function Game:main_menu(ctx)
     local r = XmainMenuHook(self,ctx)
-    local card = AKYRS.word_to_cards("A")[1]
+    local card = SMODS.create_card({ area = self.title_top, key = "j_akyrs_aikoyori", set = "Joker"})
     card.T.w = card.T.w * 1.4
     card.T.h = card.T.h * 1.4
     
@@ -1199,6 +1199,7 @@ function Game:main_menu(ctx)
     card.no_ui = true
     card.states.visible = false
     self.title_top:emplace(card)
+    self.title_top:align_cards()
     G.E_MANAGER:add_event(
         Event{
             delay = 0.5,

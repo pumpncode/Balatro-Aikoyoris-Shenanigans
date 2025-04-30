@@ -436,8 +436,33 @@ function AKYRS.embedded_ui_sprite( sprite_atlas, sprite_pos, desc_nodes, config 
     end
     return uiEX
 end
-
 AKYRS.mod_card_values = function(table_in, config)
+    if not config then config = {} end
+    local add = config.add or 0
+    local multiply = config.multiply or 1
+    local keywords = config.keywords or {}
+    local unkeyword = config.unkeywords or {}
+    local reference = config.reference or table_in
+    local function modify_values(table_in, ref)
+        for k, v in pairs(table_in) do
+            if type(v) == "number" then
+                if (keywords[k] or #keywords < 1) and not unkeyword[k] then
+                    if ref and ref[k] then
+                        table_in[k] = (ref[k] + add) * multiply
+                    end
+                end
+            elseif type(v) == "table" and ref and k then
+                modify_values(v, ref[k])
+            end
+        end
+    end
+    if table_in == nil then
+        return
+    end
+    modify_values(table_in, reference)
+end
+
+AKYRS.mod_card_values_misprint = function(table_in, config)
     if not config then config = {} end
     local add = config.add or 0
     local multiply = config.multiply or 1

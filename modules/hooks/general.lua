@@ -1189,7 +1189,7 @@ end
 local XmainMenuHook = Game.main_menu
 function Game:main_menu(ctx)
     local r = XmainMenuHook(self,ctx)
-    local card = SMODS.create_card({ area = self.title_top, key = "j_akyrs_aikoyori", set = "Joker"})
+    local card = create_card("Joker",self.title_top,nil,nil,true,true,"j_akyrs_aikoyori")
     card.T.w = card.T.w * 1.4
     card.T.h = card.T.h * 1.4
     

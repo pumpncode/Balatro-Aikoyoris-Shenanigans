@@ -1189,32 +1189,36 @@ end
 local XmainMenuHook = Game.main_menu
 function Game:main_menu(ctx)
     local r = XmainMenuHook(self,ctx)
-    local card = create_card("Joker",self.title_top,nil,nil,true,true,"j_akyrs_aikoyori")
-    card.T.w = card.T.w * 1.4
-    card.T.h = card.T.h * 1.4
-    
-    G.title_top.T.w = G.title_top.T.w * 1.7675
-    G.title_top.T.x = G.title_top.T.x - 0.8
-    card:set_sprites(card.config.center)
-    card.no_ui = true
-    card.states.visible = false
-    self.title_top:emplace(card)
-    self.title_top:align_cards()
-    G.E_MANAGER:add_event(
-        Event{
-            delay = 0.5,
-            func = function ()
-				if ctx == "splash" then
-					card.states.visible = true
-					card:start_materialize({ G.C.WHITE, G.C.WHITE }, true, 2.5)
-				else
-					card.states.visible = true
-					card:start_materialize({ G.C.WHITE, G.C.WHITE }, nil, 1.2)
-				end
-				return true
-            end
-        }
-    )
+    if self.title_top then
+        local tg = self.title_top
+        local card = Card(tg.T.x,tg.T.y,G.CARD_W,G.CARD_H,nil,G.P_CENTERS['j_akyrs_aikoyori'])
+        card.T.w = card.T.w * 1.4
+        card.T.h = card.T.h * 1.4
+        
+        G.title_top.T.w = G.title_top.T.w * 1.7675
+        G.title_top.T.x = G.title_top.T.x - 0.8
+        card:set_sprites(card.config.center)
+        card.no_ui = true
+        card.states.visible = false
+        self.title_top:emplace(card)
+        self.title_top:align_cards()
+        G.E_MANAGER:add_event(
+            Event{
+                delay = 0.5,
+                func = function ()
+                    if ctx == "splash" then
+                        card.states.visible = true
+                        card:start_materialize({ G.C.WHITE, G.C.WHITE }, true, 2.5)
+                    else
+                        card.states.visible = true
+                        card:start_materialize({ G.C.WHITE, G.C.WHITE }, nil, 1.2)
+                    end
+                    return true
+                end
+            }
+        )
+    end
+
 
     return r
 end

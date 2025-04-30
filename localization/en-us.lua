@@ -33,10 +33,10 @@ return {
             b_akyrs_scuffed_misprint={
                 name="Scuffed Misprint Deck",
 				text = {
-					"Values of jokers",
+					"Values of most cards",
 					"are {C:attention}randomized{}",
                     "{C:inactive}(From X#1# to X#2#)",
-                    "The challenge is to not crash the game."
+                    "me vs the guy she tells you not to worry about"
 				},
             },
             b_akyrs_cry_misprint_ultima={

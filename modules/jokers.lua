@@ -1314,7 +1314,7 @@ SMODS.Joker{
         
     end,
     calculate = function (self, card, context)
-        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] 
+        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] and context.card_getting_removed ~= card
         and not (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_akyrs_ash_joker") then
             return {
                 func = function ()

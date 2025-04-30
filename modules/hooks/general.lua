@@ -736,7 +736,7 @@ end
 function Card:akyrs_mod_card_value_init()
     if G.GAME.modifiers.akyrs_misprint then
         local x = AKYRS.deep_copy(self.ability)
-        AKYRS.mod_card_values(x,{random = {digits_min = -4, digits_max = 4, min = 1e-4, max = 1e4,scale = 1, can_negate = false}})
+        AKYRS.mod_card_values_misprint(x,{random = {digits_min = -4, digits_max = 4, min = 1e-4, max = 1e4,scale = 1, can_negate = false}})
         x.x_chips = self.ability.x_chips == 1 and 1 or self.ability.x_chips
         x.h_x_chips = self.ability.h_x_chips == 1 and 1 or self.ability.h_x_chips
         x.x_mult = self.ability.x_mult == 1 and 1 or self.ability.x_mult
@@ -1085,7 +1085,7 @@ function CardArea:shuffle(_seed)
             for j, l in ipairs(priorityqueue) do
                 if 
                 (l[2] == "suit" and k:is_suit(l[3])) or
-                (l[2] == "rank" and k.base.value == l[3] and not SMODS.has_no_suit(k)) or
+                (l[2] == "rank" and k:get_id() == SMODS.Ranks[l[3]].id and not SMODS.has_no_suit(k)) or
                 (l[2] == "face" and k:is_face() == l[3])
                  then
                     --print(k.base.name, l[1], l[2], l[3])
@@ -1189,31 +1189,36 @@ end
 local XmainMenuHook = Game.main_menu
 function Game:main_menu(ctx)
     local r = XmainMenuHook(self,ctx)
-    local card = AKYRS.word_to_cards("A")[1]
-    card.T.w = card.T.w * 1.4
-    card.T.h = card.T.h * 1.4
-    
-    G.title_top.T.w = G.title_top.T.w * 1.7675
-    G.title_top.T.x = G.title_top.T.x - 0.8
-    card:set_sprites(card.config.center)
-    card.no_ui = true
-    card.states.visible = false
-    self.title_top:emplace(card)
-    G.E_MANAGER:add_event(
-        Event{
-            delay = 0.5,
-            func = function ()
-				if ctx == "splash" then
-					card.states.visible = true
-					card:start_materialize({ G.C.WHITE, G.C.WHITE }, true, 2.5)
-				else
-					card.states.visible = true
-					card:start_materialize({ G.C.WHITE, G.C.WHITE }, nil, 1.2)
-				end
-				return true
-            end
-        }
-    )
+    if self.title_top then
+        local tg = self.title_top
+        local card = Card(tg.T.x,tg.T.y,G.CARD_W,G.CARD_H,nil,G.P_CENTERS['j_akyrs_aikoyori'])
+        card.T.w = card.T.w * 1.4
+        card.T.h = card.T.h * 1.4
+        
+        G.title_top.T.w = G.title_top.T.w * 1.7675
+        G.title_top.T.x = G.title_top.T.x - 0.8
+        card:set_sprites(card.config.center)
+        card.no_ui = true
+        card.states.visible = false
+        self.title_top:emplace(card)
+        self.title_top:align_cards()
+        G.E_MANAGER:add_event(
+            Event{
+                delay = 0.5,
+                func = function ()
+                    if ctx == "splash" then
+                        card.states.visible = true
+                        card:start_materialize({ G.C.WHITE, G.C.WHITE }, true, 2.5)
+                    else
+                        card.states.visible = true
+                        card:start_materialize({ G.C.WHITE, G.C.WHITE }, nil, 1.2)
+                    end
+                    return true
+                end
+            }
+        )
+    end
+
 
     return r
 end

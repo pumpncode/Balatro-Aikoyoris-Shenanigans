@@ -33,10 +33,10 @@ return {
             b_akyrs_scuffed_misprint={
                 name="Scuffed Misprint Deck",
 				text = {
-					"Values of jokers",
+					"Values of most cards",
 					"are {C:attention}randomized{}",
                     "{C:inactive}(From X#1# to X#2#)",
-                    "The challenge is to not crash the game."
+                    "me vs the guy she tells you not to worry about"
 				},
             },
             b_akyrs_cry_misprint_ultima={
@@ -257,6 +257,44 @@ return {
                 text={
                     "{X:mult,C:white} X#1# {} Mult per",
                     "{C;attention}non-face{} cards scored",
+                },
+            },
+            dd_akyrs_aikoyori_cryptid_ability={
+                name="Cryptid Ability",
+                text={
+                    "If hand only contains {C:attention}a single Ace{}",
+                    "Create a {C:dark_edition}Negative{} {C:green}Code{} card",
+                },
+            },
+            dd_akyrs_aikoyori_more_fluff_ability={
+                name="More Fluff Ability",
+                text={
+                    "Add {C:attention}1{} round to {C:colourcard}Colour Cards{}",
+                    "when they gain a round",
+                },
+            },
+            dd_akyrs_aikoyori_entropy_ability={
+                name="Entropy Ability",
+                text={
+                    "If {C:attention}full hand{} contains at least",
+                    "{C:attention}4{} cards of different rank and suit,",
+                    "create a {C:dark_edition}Negative{} {C:spectral}Flipside{}",
+                },
+            },
+            dd_akyrs_aikoyori_sdmstuff_ability={
+                name="SDM_0's Stuff Ability",
+                text={
+                    "If {C:attention}played hand{} contains",
+                    "a {C:attention}Full House{}, create a",
+                    "{C:dark_edition}Negative{} {C:attention}Bakery{} card",
+                },
+            },
+            dd_akyrs_aikoyori_togasstuff_ability={
+                name="TOGA's Stuff Ability",
+                text={
+                    "If you gain less than {C:money}$10{}",
+                    "at the end of the round,",
+                    "create a {C:attention}Spare CD{} Tag",
                 },
             },
             dd_akyrs_placeholder_art={
@@ -623,8 +661,8 @@ return {
                 name = "Ghastling",
                 text = { 
                     "{C:mult}+#2#{} Mult",
-                    "After playing {C:attention}#1#{} hands",
-                    "Creates a {T:j_akyrs_happy_ghast,C:purple}Happy Ghast{}",
+                    "And after playing {C:attention}#1#{} hands,",
+                    "creates a {T:j_akyrs_happy_ghast,C:purple}Happy Ghast{}",
                     "{C:red}Self-destructs{}",
                     "Decreses by {C:blue}1{} more every hand",
                     "per {T:j_ice_cream,C:blue}Ice Cream{} present",

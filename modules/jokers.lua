@@ -469,7 +469,7 @@ SMODS.Joker {
 
         end		
         if context.using_consumeable then
-            if context.consumeable.key == 'c_wheel_of_fortune' then
+            if context.consumeable.config.center_key == 'c_wheel_of_fortune' then
                 card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.gain_chips 
                 card.ability.extra.Xchips = card.ability.extra.Xchips + card.ability.extra.gain_Xchips 
                 card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.gain_mult 
@@ -1314,7 +1314,7 @@ SMODS.Joker{
         
     end,
     calculate = function (self, card, context)
-        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] 
+        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] and context.card_getting_removed ~= card
         and not (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_akyrs_ash_joker") then
             return {
                 func = function ()
@@ -1553,16 +1553,68 @@ SMODS.Joker {
     },
     loc_vars = function (self, info_queue, card)
         info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_base_ability", vars = {card.ability.extras.base.xmult}}
+        if Cryptid then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_cryptid_ability"}
+        end
+        if SMODS.find_mod("MoreFluff") then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_more_fluff_ability"}
+        end
+        if Entropy then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_entropy_ability"}
+            info_queue[#info_queue+1] = G.P_CENTERS["c_entr_flipside"]
+        end
+        if SDM_0s_Stuff_Mod then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_sdmstuff_ability"}
+        end
+        if togabalatro then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_togasstuff_ability"}
+            info_queue[#info_queue+1] = {set = "Tag", key = "tag_toga_togajokershop"}
+        end
         return {
             
         }
     end,
     calculate = function (self, card, context)
+        if context.before then
+            if Cryptid and #G.play.cards == 1 and G.play.cards[1]:get_id() == 14 then
+                SMODS.add_card({set = "Code", area = G.consumeables, edition = "e_negative"})
+            end
+            if Entropy and #context.full_hand >= 4 then
+                local suits_in_hand = {}
+                local ranks_in_hand = {}
+                local all_card_unique = true
+                for i, k in ipairs(context.full_hand) do
+                    if not SMODS.has_no_suit(k) and not SMODS.has_no_rank(k) then
+                        if not suits_in_hand[k.base.suit] and not ranks_in_hand[k:get_id()] then
+                            suits_in_hand[k.base.suit] = true
+                            ranks_in_hand[k:get_id()] = true
+                        else
+                            all_card_unique = false
+                            break
+                        end
+                    end
+                end
+                if all_card_unique then
+                    SMODS.add_card({set = "Spectral", key = "c_entr_flipside", area = G.consumeables, edition = "e_negative"})
+                end
+            end
+            if SDM_0s_Stuff_Mod then
+                if next(context.poker_hands["Full House"]) then
+                    SMODS.add_card({set = "Bakery", area = G.consumeables, edition = "e_negative"})
+                end
+            end
+        end
         if context.individual and context.cardarea == G.play then
             if not context.other_card:is_face() then
                 return {
                     xmult = card.ability.extras.base.xmult
                 }
+            end
+        end
+        if context.akyrs_round_eval then
+            if togabalatro and context.dollars < 10 then
+                local tag = Tag("tag_toga_togajokershop")
+                add_tag(tag)
             end
         end
     end

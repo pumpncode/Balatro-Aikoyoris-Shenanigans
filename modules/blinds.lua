@@ -820,8 +820,7 @@ SMODS.Blind {
         }
     end,
     in_pool = function (self)
-        local pseudocard = AKYRS.PseudoCard("8",8,"Hearts")
-        return G.GAME.round_resets.ante > G.GAME.win_ante and not Card.is_face(pseudocard)
+        return G.GAME.round_resets.ante > G.GAME.win_ante
     end,
     get_loc_debuff_text = function (self)
         return localize("k_akyrs_confrontation_has_face_in_hand_warning")
@@ -854,6 +853,9 @@ SMODS.Blind {
         return {
             vars = { 0.01, 1.1 }
         }
+    end,
+    in_pool = function (self)
+        return G.GAME.round_resets.ante > G.GAME.win_ante
     end,
     calculate = function (self, blind, context)
         if context.before then
@@ -897,6 +899,9 @@ SMODS.Blind {
                 1, 1
             }
         }
+    end,
+    in_pool = function (self)
+        return G.GAME.round_resets.ante > G.GAME.win_ante
     end,
     modify_hand = function (self, cards, poker_hands, text, mult, hand_chips)
         if Talisman then
@@ -959,6 +964,9 @@ SMODS.Blind {
     boss = {min = 9, max = 10},
     pos = { x = 0, y = 22 },
     
+    in_pool = function (self)
+        return G.GAME.round_resets.ante > G.GAME.win_ante
+    end,
     modify_hand = function (self, cards, poker_hands, text, mult, hand_chips)
         ease_dollars(-mult)
         return mult, hand_chips, true
@@ -986,6 +994,9 @@ SMODS.Blind {
         akyrs_is_postwin_blind = true,
     },
     
+    in_pool = function (self)
+        return G.GAME.round_resets.ante > G.GAME.win_ante
+    end,
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 12, max = 10},
     pos = { x = 0, y = 23 },

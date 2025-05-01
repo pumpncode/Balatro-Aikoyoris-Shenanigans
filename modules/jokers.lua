@@ -1556,7 +1556,7 @@ SMODS.Joker {
         if Cryptid then
             info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_cryptid_ability"}
         end
-        if SMODS.find_mod("MoreFluff") then
+        if SMODS.Mods.MoreFluff then
             info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_more_fluff_ability"}
         end
         if Entropy then

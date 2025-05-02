@@ -722,14 +722,18 @@ end
 
 local cardAreaEmplaceFunction = CardArea.emplace
 function CardArea:emplace(c,l,fl)
-    c.akyrs_lastcardarea = self
+    if c and type(c) == "table" then
+        c.akyrs_lastcardarea = self
+    end
     return cardAreaEmplaceFunction(self,c,l,fl)
 end
 
 local setCAHook = Card.set_card_area
 function Card:set_card_area(area)
     local x = setCAHook(self,area)
-    self.akyrs_lastcardarea = area
+    if area and type(area) == "table" then
+        self.akyrs_lastcardarea = area
+    end
     return x
 end
 

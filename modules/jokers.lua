@@ -1542,7 +1542,7 @@ SMODS.Joker {
         x = 2, y = 3
     },
     rarity = 4,
-    cost = 7,
+    cost = 50,
     config = {
         name = "Aikoyori",
         extras = {

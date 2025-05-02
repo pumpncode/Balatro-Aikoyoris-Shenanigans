@@ -15,6 +15,7 @@ function Game:init_game_object()
     ret.aiko_last_mult = 0
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
+    ret.akyrs_any_drag = false
     ret.aiko_current_wordaiko_current_word = nil
     ret.aiko_current_word_table = {}
     ret.aiko_words_played = {}
@@ -236,6 +237,17 @@ function Game:start_run(args)
     end
     recalculateHUDUI()
     recalculateBlindUI()
+    if G.GAME.akyrs_any_drag then
+        AKYRS.simple_event_add(
+            function()
+                G.jokers.states.collide.can = true
+                G.consumeables.states.collide.can = true
+                G.hand.states.collide.can = true
+                G.deck.states.collide.can = true
+                return true
+            end
+        )
+    end
     return ret
 end
 
@@ -722,14 +734,18 @@ end
 
 local cardAreaEmplaceFunction = CardArea.emplace
 function CardArea:emplace(c,l,fl)
-    c.akyrs_lastcardarea = self
+    if c and type(c) == "table" then
+        c.akyrs_lastcardarea = self
+    end
     return cardAreaEmplaceFunction(self,c,l,fl)
 end
 
 local setCAHook = Card.set_card_area
 function Card:set_card_area(area)
     local x = setCAHook(self,area)
-    self.akyrs_lastcardarea = area
+    if area and type(area) == "table" then
+        self.akyrs_lastcardarea = area
+    end
     return x
 end
 
@@ -984,6 +1000,19 @@ function Back:apply_to_run()
     end
     if self.effect.config.akyrs_no_skips then
         G.GAME.akyrs_no_skips = self.effect.config.akyrs_no_skips
+    end
+
+    if self.effect.config.akyrs_any_drag then
+        G.GAME.akyrs_any_drag = self.effect.config.akyrs_any_drag
+        AKYRS.simple_event_add(
+            function()
+                G.jokers.states.collide.can = true
+                G.consumeables.states.collide.can = true
+                G.hand.states.collide.can = true
+                G.deck.states.collide.can = true
+                return true
+            end
+        )
     end
 
     if self.effect.config.akyrs_math_threshold then

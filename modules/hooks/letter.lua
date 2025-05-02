@@ -92,12 +92,39 @@ function AKYRS.aikoyori_draw_extras(card, layer)
     end
 end
 
+
 -- parse hand on cards rearrangement
 
 local cardReleaseRecalcHook = Card.stop_drag
 function Card:stop_drag()
+    local area = self.area
+    self.akyrs_oldarea = self.area or self.akyrs_oldarea
+    for i, k in ipairs(G.CONTROLLER.collision_list) do
+        if (k:is(CardArea)) then
+            if (k.config.akyrs_emplace_func and k.config.akyrs_emplace_func(k, self)) or AKYRS.card_any_drag() then
+                area = k
+                break
+            end
+        end
+        
+        if (k:is(Card)) and false then
+            if (k.area and k.area.config.akyrs_emplace_func and k.area.config.akyrs_emplace_func(k.area, self)) or AKYRS.card_any_drag() then
+                area = k.area
+                break
+            end
+        end
+    end
+    if area and area ~= self.area then
+        if area.config.card_limit + AKYRS.edition_extend_card_limit(self) >= #area.cards + 1 or area == G.hand or area == G.deck then
+            self.akyrs_oldarea:remove_card(self)
+            AKYRS.draw_card(self.area, area, 1, 'up', nil, self ,0)
+            area:align_cards()
+        end
+        --print("TARGET SUSPECT")
+
+    end
     local c = cardReleaseRecalcHook(self)
-    --print("CARD RELEASED!!!!")
+
     if G.hand and self.area and self.area == G.hand and G.STATE == G.STATES.SELECTING_HAND then
         self.area:parse_highlighted()
     end

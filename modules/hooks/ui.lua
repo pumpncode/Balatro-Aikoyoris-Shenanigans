@@ -78,9 +78,11 @@ end
 
 function recalculateBlindUI()
     if G.HUD_blind then
-        G.HUD_blind.definition = nil
-        G.HUD_blind.definition = create_UIBox_HUD_blind()
-        G.HUD_blind:set_parent_child(G.HUD_blind.definition, nil)
+        local conf = G.HUD_blind.config
+        G.HUD_blind = UIBox{
+            definition = create_UIBox_HUD_blind(),
+            config = conf
+        }
         G.HUD_blind:recalculate()
     end
 end
@@ -735,3 +737,9 @@ SMODS.DrawStep:take_ownership('floating_sprite',{
         end
     end
 })
+
+local locHooker = localize
+function localize(args, misc_cat)
+    if not args then args = {} end
+    return locHooker(args, misc_cat)
+end

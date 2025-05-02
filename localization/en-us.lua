@@ -39,6 +39,14 @@ return {
                     "me vs the guy she tells you not to worry about"
 				},
             },
+            b_akyrs_freedom={
+                name="Freedom Deck",
+				text = {
+					"You can drag cards",
+					"to place it anywhere.",
+                    "ART IN PROGRESS"
+				},
+            },
             b_akyrs_cry_misprint_ultima={
                 name="Ultima Misprint Deck",
 				text = {

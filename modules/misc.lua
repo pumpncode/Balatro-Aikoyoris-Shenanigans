@@ -1136,7 +1136,12 @@ function AKYRS.score_catches_fire_or_not()
         local stud = tonumber(AKYRS.remove_comma(G.GAME.blind.chips))
         G.GAME.blind.chips = Talisman and to_big(stud) or stud
 
-        end
+    end
+    if Talisman then
+        G.GAME.current_round.current_hand.chips = to_big(G.GAME.current_round.current_hand.chips)
+        G.GAME.current_round.current_hand.mult = to_big(G.GAME.current_round.current_hand.mult)
+        G.GAME.blind.chips = to_big(G.GAME.blind.chips)
+    end
     return G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult > G.GAME.blind.chips
 end
 

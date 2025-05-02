@@ -177,3 +177,13 @@ SMODS.Back{
     end,
 
 }
+SMODS.Back{
+    key = "freedom",
+    atlas = "deckBacks",
+    pos = { x = 3, y = 0},
+    config = { akyrs_any_drag = true },
+    set_badges = function (self, card, badges)
+    end,
+    loc_vars = function (self, info_queue, card)
+    end,
+}

@@ -1364,3 +1364,22 @@ AKYRS.blacklist_mod = {
     ["akyrs_cycler"] = true,
     ["immutable"] = true,
 }
+
+
+AKYRS.edition_extend_card_limit = function(card)
+    if card then
+        if card.edition then
+            if card.edition.key == "e_negative" then
+                return 1
+            end
+            if card.edition.key == "e_akyrs_noire" then
+                return 2
+            end
+        end
+    end
+    return 0
+end
+
+AKYRS.card_any_drag = function()
+    return G and G.GAME and G.GAME.akyrs_any_drag and not G.OVERLAY_MENU
+end

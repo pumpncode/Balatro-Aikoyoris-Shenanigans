@@ -13,6 +13,7 @@ assert(SMODS.load_file("./func/word_utils.lua"))()
 assert(SMODS.load_file("./modules/misc.lua"))()
 assert(SMODS.load_file("./modules/custom_minigames/solitaire_card_type.lua"))()
 assert(SMODS.load_file("./modules/hooks/general.lua"))() -- misc hook
+assert(SMODS.load_file("./modules/hooks/card.lua"))() -- misc hook
 assert(SMODS.load_file("./modules/hooks/letter.lua"))() -- for letter & null cards mechanics
 assert(SMODS.load_file("./modules/hooks/scoring.lua"))() -- pure scoring
 assert(SMODS.load_file("./modules/hooks/debug.lua"))() -- debug

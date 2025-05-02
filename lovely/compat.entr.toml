@@ -1,0 +1,30 @@
+[manifest]
+version = "1.2"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS entr "items/misc/seals.lua"]'
+pattern = """        if (card.seal == "entr_crimson" and not G.GAME.crimson_seal) or (card.seal ~= "entr_crimson" and G.GAME.crimson_seal) then return end
+            local in_scoring = scoring_hand and SMODS.in_scoring(card, context.scoring_hand)"""
+position = "before"
+payload = """if G.GAME.cards_played and card.base and G.GAME.cards_played[card.base.value] and G.GAME.cards_played[card.base.value].total then"""
+overwrite = true
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS entr "items/misc/seals.lua"]'
+pattern = """                else
+                    SMODS.score_card(card, context)
+                end
+            end"""
+position = "after"
+payload = """end"""
+overwrite = true
+match_indent = true
+
+

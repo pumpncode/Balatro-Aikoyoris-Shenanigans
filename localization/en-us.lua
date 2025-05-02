@@ -1094,6 +1094,34 @@ return {
                     "{C:red}+#3#{} Extra Discards",
              }
             },
+            sleeve_akyrs_freedom={
+                name="Freedom Sleeve",
+				text = {
+					"You can drag cards",
+					"to place it anywhere.",
+                    "ART IN PROGRESS"
+				},
+            },
+            sleeve_akyrs_cry_misprint_ultima={
+                name="Ultima Misprint Sleeve",
+				text = {
+					"Values of cards",
+					"and poker hands",
+					"are {C:attention}randomized{}",
+                    "{C:inactive}(From X#1# to X#2#)",
+                    "The challenge is to not crash the game."
+				},
+            },
+            sleeve_akyrs_cry_misprint_ultima_alt={
+                name="Ultima Misprint Sleeve+",
+				text = {
+					"Values of cards",
+					"and poker hands",
+					"are {C:attention}super randomized{}",
+                    "{C:inactive}(With extra X#1# to X#2#)",
+                    "The challenge is to not crash the game."
+				},
+            },
         }
     },
     misc = {

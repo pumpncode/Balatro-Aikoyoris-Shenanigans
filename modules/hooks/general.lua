@@ -1011,7 +1011,19 @@ function Back:apply_to_run()
                 G.hand.states.collide.can = true
                 G.deck.states.collide.can = true
                 return true
-            end
+            end, 0.5
+        )
+    end
+    if G.GAME.starting_params.akyrs_any_drag then
+        G.GAME.akyrs_any_drag = G.GAME.starting_params.akyrs_any_drag
+        AKYRS.simple_event_add(
+            function()
+                G.jokers.states.collide.can = true
+                G.consumeables.states.collide.can = true
+                G.hand.states.collide.can = true
+                G.deck.states.collide.can = true
+                return true
+            end, 0.5
         )
     end
 

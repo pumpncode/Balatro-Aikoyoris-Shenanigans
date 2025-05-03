@@ -28,6 +28,12 @@ AKYRS.DescriptionDummy = SMODS.Center:extend{
 AKYRS.C = {
     DARKER_TRANS = HEX('22222299'),
     TRANSPARENCY_TEST = HEX('22222222'),
+    JOKER_LC = HEX('c93c60'),
+    JOKER_HC = HEX('ff2181'),
+    CONSU_LC = HEX('8a6a45'),
+    CONSU_HC = HEX('59331f'),
+    THING_LC = HEX('4d6961'),
+    THING_HC = HEX('5dbaa0'),
 }
 
 SMODS.optional_features.cardareas.unscored = true

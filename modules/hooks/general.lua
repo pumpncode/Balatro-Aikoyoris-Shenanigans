@@ -759,6 +759,17 @@ function Card:akyrs_mod_card_value_init()
         x.h_x_mult = self.ability.h_x_mult == 1 and 1 or self.ability.h_x_mult
         self.ability = x
     end
+    if G.GAME.akyrs_any_drag then
+        if not self.base.value and self.ability.set ~= 'Enhanced' and self.ability.set ~= 'Default' then
+            if self.ability.consumeable then
+                self = SMODS.change_base(self,"akyrs_consumable","akyrs_non_playing")
+            elseif self.ability.set == "Joker" then
+                self = SMODS.change_base(self,"akyrs_joker","akyrs_non_playing")
+            else
+                self = SMODS.change_base(self,"akyrs_thing","akyrs_non_playing")
+            end
+        end
+    end
     if #SMODS.find_card("j_akyrs_chicken_jockey") > 0 and self.config.center_key == "j_popcorn" then
         local jj = SMODS.find_card("j_akyrs_chicken_jockey")
         local val = jj[#jj].ability.extras.decrease_popcorn

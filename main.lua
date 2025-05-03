@@ -27,6 +27,7 @@ assert(SMODS.load_file("./modules/custom_minigames/solitaire.lua"))() -- solitai
 assert(SMODS.load_file("./modules/custom_minigames/solitaire_ui.lua"))()
 
 assert(SMODS.load_file("./modules/draw_step.lua"))()
+assert(SMODS.load_file("./modules/card_attrib.lua"))()
 assert(SMODS.load_file("./modules/consumables.lua"))()
 assert(SMODS.load_file("./modules/boosters.lua"))()
 assert(SMODS.load_file("./modules/stickers.lua"))()

@@ -242,7 +242,7 @@ end
 local noRankHook = SMODS.has_no_rank
 function SMODS.has_no_rank(card)
     if card.is_null then return true end
-    if card.base.value and card.base.value == "akyrs_non_playing" then return true end
+    --if card.base.value and card.base.value == "akyrs_non_playing" then return true end
     local ret = noRankHook(card)
     return ret
 end
@@ -250,7 +250,7 @@ end
 local noSuitHook = SMODS.has_no_suit
 function SMODS.has_no_suit(card)
     if card.is_null then return true end
-    if card.base.value and card.base.value == "akyrs_non_playing" then return true end
+    --if card.base.value and card.base.value == "akyrs_non_playing" then return true end
     local ret = noSuitHook(card)
     return ret
 end

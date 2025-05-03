@@ -13,7 +13,7 @@ local l = SMODS.Rank{
         ignore = true
     },
     in_pool = function (self, args)
-        if args.suit == '' and G.GAME.akyrs_any_drag then
+        if args and args.suit == '' and G.GAME.akyrs_any_drag then
             return true
         end
         return false
@@ -39,7 +39,7 @@ SMODS.Suit{
     lc_colour = AKYRS.C.JOKER_LC,
     hc_colour = AKYRS.C.JOKER_HC,
     in_pool = function (self, args)
-        if args.rank == '' and G.GAME.akyrs_any_drag then
+        if args and args.rank == '' and G.GAME.akyrs_any_drag then
             return true
         end
         return false
@@ -61,7 +61,7 @@ SMODS.Suit{
     lc_colour = AKYRS.C.CONSU_LC,
     hc_colour = AKYRS.C.CONSU_HC,
     in_pool = function (self, args)
-        if args.rank == '' and G.GAME.akyrs_any_drag then
+        if args and args.rank == '' and G.GAME.akyrs_any_drag then
             return true
         end
         return false
@@ -83,7 +83,7 @@ SMODS.Suit{
     lc_colour = AKYRS.C.THING_LC,
     hc_colour = AKYRS.C.THING_HC,
     in_pool = function (self, args)
-        if args.rank == '' and G.GAME.akyrs_any_drag then
+        if args and args.rank == '' and G.GAME.akyrs_any_drag then
             return true
         end
         return false

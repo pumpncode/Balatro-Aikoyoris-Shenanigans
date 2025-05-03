@@ -726,7 +726,7 @@ SMODS.DrawStep:take_ownership('floating_sprite',{
                     for k, v in pairs(G.P_CENTER_POOLS.Edition) do
                         if v.apply_to_float then
                             if self.edition[v.key:sub(3)] then
-                                self.children.floating_sprite:draw_shader(v.shader, nil, nil, nil, self.children.center, scale_mod, rotate_mod)
+                                self.children.floating_sprite:draw_shader(v.shader, nil, nil, nil, self.children.center, scale_mod, rotate_mod,xmod,ymod-0.2)
                             end
                         end
                     end

@@ -1069,7 +1069,7 @@ SMODS.Joker{
     end,
     calculate = function (self, card, context)
         if context.individual and context.cardarea == G.play and not context.blueprint then
-            if context.other_card:is_suit("Hearts") or (context.other_card:is_suit("Spades") and SMODS.find_card("j_akyrs_evilneuro")) then
+            if context.other_card:is_suit("Hearts") or ((context.other_card:is_suit("Spades") and next(SMODS.find_card("j_akyrs_evilneuro")))) then
                 return {
                     message = localize("k_upgrade_ex"),
                     func = function ()
@@ -1112,7 +1112,7 @@ SMODS.Joker{
     end,
     calculate = function (self, card, context)
         if context.individual and context.cardarea == G.play and not context.blueprint then
-            if context.other_card:is_suit("Clubs") or (context.other_card:is_suit("Diamonds") and SMODS.find_card("j_akyrs_neurosama")) then
+            if context.other_card:is_suit("Clubs") or ((context.other_card:is_suit("Diamonds") and next(SMODS.find_card("j_akyrs_neurosama")))) then
                 return {
                     message = localize("k_upgrade_ex"),
                     func = function ()

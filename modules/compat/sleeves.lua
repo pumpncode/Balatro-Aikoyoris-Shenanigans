@@ -68,11 +68,24 @@ if CardSleeves then
     CardSleeves.Sleeve {
         key = "freedom",
         atlas = "aikoyoriSleeves",
-        pos = { x = 2, y = 0},
-        config = { akyrs_any_drag = true },
+        pos = { x = 2, y = 0 },
+        config = { akyrs_any_drag = true,akyrs_ultimate_freedom = true },
+        
+        loc_vars = function (self, info_queue, card)
+            local key = self.key
+            if self.get_current_deck_key() == "b_akyrs_freedom" then
+                key = self.key .. "_alt"
+            end
+            return {
+                key = key
+            }
+        end,
         apply = function(self, sleeve)
             if (sleeve.config.akyrs_any_drag) then
                 G.GAME.starting_params.akyrs_any_drag = sleeve.config.akyrs_any_drag
+            end
+            if self.get_current_deck_key() == "b_akyrs_freedom" then
+                G.GAME.starting_params.akyrs_ultimate_freedom = sleeve.config.akyrs_ultimate_freedom
             end
             CardSleeves.Sleeve.apply(sleeve)
         end

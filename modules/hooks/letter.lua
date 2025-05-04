@@ -115,7 +115,7 @@ function Card:stop_drag()
         end
     end
     if area and area ~= self.area then
-        if area.config.card_limit + AKYRS.edition_extend_card_limit(self) >= #area.cards + 1 or area == G.hand or area == G.deck then
+        if (area.config.card_limit + AKYRS.edition_extend_card_limit(self) >= #area.cards + 1 or area == G.hand or area == G.deck) or G.GAME.akyrs_ultimate_freedom then
             if self.akyrs_oldarea == G.hand or self.akyrs_oldarea == G.deck then
                 AKYRS.remove_value_from_table(G.playing_cards,self)
             end

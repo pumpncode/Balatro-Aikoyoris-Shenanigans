@@ -43,8 +43,7 @@ return {
                 name="Freedom Deck",
 				text = {
 					"You can drag cards",
-					"to place it anywhere.",
-                    "ART IN PROGRESS"
+					"to place them anywhere.",
 				},
             },
             b_akyrs_cry_misprint_ultima={
@@ -750,7 +749,7 @@ return {
                 name = "Aikoyori",
                 text = { 
                     "This Joker gains more abilities",
-                    "the {C:attention}more{} mods you installed",
+                    "the more {C:attention}mods{} you installed",
                 }
             }
         },
@@ -1097,9 +1096,15 @@ return {
             sleeve_akyrs_freedom={
                 name="Freedom Sleeve",
 				text = {
-					"You can drag cards",
-					"to place it anywhere.",
-                    "ART IN PROGRESS"
+					"You can {C:attention}drag{} cards",
+					"to place them anywhere.",
+				},
+            },
+            sleeve_akyrs_freedom_alt={
+                name="Ultimate Freedom",
+				text = {
+					"You can drag {C:attention}any{} cards",
+					"to place them anywhere.",
 				},
             },
             sleeve_akyrs_cry_misprint_ultima={

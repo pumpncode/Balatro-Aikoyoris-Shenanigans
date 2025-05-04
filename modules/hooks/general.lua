@@ -16,6 +16,7 @@ function Game:init_game_object()
     ret.aiko_last_chips = 0
     ret.aiko_has_quasi = false
     ret.akyrs_any_drag = false
+    ret.akyrs_ultimate_freedom = false
     ret.aiko_current_wordaiko_current_word = nil
     ret.aiko_current_word_table = {}
     ret.aiko_words_played = {}
@@ -684,6 +685,10 @@ function CardArea:init(X, Y, W, H, config)
         end
         table.insert(AKYRS.all_card_areas,self)
     end
+    
+    if G.GAME.akyrs_ultimate_freedom and not self.states.collide.can then
+        self.states.collide.can = true
+    end
     return r
 end
 
@@ -946,8 +951,20 @@ function CardArea:align_cards()
         end
         --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
     end
+    if G.GAME.akyrs_ultimate_freedom and not self.states.collide.can and self ~= G.play and self ~= G.consumeables then
+        self.states.collide.can = true
+    end
     return r
 end
+
+local cardUpdateHook = Card.update
+function Card:update(dt)
+    local x = cardUpdateHook(self,dt)
+    if G.GAME.akyrs_ultimate_freedom and not self.states.drag.can then
+        self.states.drag.can = true
+    end
+end
+
 local cardAreaDrawHook = CardArea.draw
 function CardArea:draw()
     local r = cardAreaDrawHook(self)
@@ -1036,6 +1053,9 @@ function Back:apply_to_run()
                 return true
             end, 0.5
         )
+    end
+    if G.GAME.starting_params.akyrs_ultimate_freedom then
+        G.GAME.akyrs_ultimate_freedom = G.GAME.starting_params.akyrs_ultimate_freedom
     end
 
     if self.effect.config.akyrs_math_threshold then

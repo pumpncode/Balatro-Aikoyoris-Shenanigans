@@ -1381,5 +1381,5 @@ AKYRS.edition_extend_card_limit = function(card)
 end
 
 AKYRS.card_any_drag = function()
-    return G and G.GAME and G.GAME.akyrs_any_drag and not G.OVERLAY_MENU
+    return G and G.GAME and ((G.GAME.akyrs_any_drag and not G.OVERLAY_MENU) or G.GAME.akyrs_ultimate_freedom)
 end

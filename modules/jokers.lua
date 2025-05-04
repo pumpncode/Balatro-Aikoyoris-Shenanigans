@@ -845,6 +845,11 @@ SMODS.Joker{
         akyrs_priority_draw_suit = nil,
         akyrs_priority_draw_conditions = nil,
     },
+    set_ability = function (self, card, initial, delay_sprites)
+        if card.ability.akyrs_cycler ~= 1 and card.ability.akyrs_cycler ~= 2 and card.ability.akyrs_cycler ~= 3 and card.ability.akyrs_cycler ~= 4 then
+            card.ability.akyrs_cycler = 1
+        end
+    end,
     loc_vars = function(self, info_queue, card)
         if card.ability.akyrs_cycler ~= 1 and card.ability.akyrs_cycler ~= 2 and card.ability.akyrs_cycler ~= 3 and card.ability.akyrs_cycler ~= 4 then
             card.ability.akyrs_cycler = 1
@@ -1064,7 +1069,7 @@ SMODS.Joker{
     end,
     calculate = function (self, card, context)
         if context.individual and context.cardarea == G.play and not context.blueprint then
-            if context.other_card:is_suit("Hearts") or (context.other_card:is_suit("Spades") and SMODS.find_card("j_akyrs_evilneuro")) then
+            if context.other_card:is_suit("Hearts") or ((context.other_card:is_suit("Spades") and next(SMODS.find_card("j_akyrs_evilneuro")))) then
                 return {
                     message = localize("k_upgrade_ex"),
                     func = function ()
@@ -1107,7 +1112,7 @@ SMODS.Joker{
     end,
     calculate = function (self, card, context)
         if context.individual and context.cardarea == G.play and not context.blueprint then
-            if context.other_card:is_suit("Clubs") or (context.other_card:is_suit("Diamonds") and SMODS.find_card("j_akyrs_neurosama")) then
+            if context.other_card:is_suit("Clubs") or ((context.other_card:is_suit("Diamonds") and next(SMODS.find_card("j_akyrs_neurosama")))) then
                 return {
                     message = localize("k_upgrade_ex"),
                     func = function ()

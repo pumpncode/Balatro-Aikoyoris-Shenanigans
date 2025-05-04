@@ -845,6 +845,11 @@ SMODS.Joker{
         akyrs_priority_draw_suit = nil,
         akyrs_priority_draw_conditions = nil,
     },
+    set_ability = function (self, card, initial, delay_sprites)
+        if card.ability.akyrs_cycler ~= 1 and card.ability.akyrs_cycler ~= 2 and card.ability.akyrs_cycler ~= 3 and card.ability.akyrs_cycler ~= 4 then
+            card.ability.akyrs_cycler = 1
+        end
+    end,
     loc_vars = function(self, info_queue, card)
         if card.ability.akyrs_cycler ~= 1 and card.ability.akyrs_cycler ~= 2 and card.ability.akyrs_cycler ~= 3 and card.ability.akyrs_cycler ~= 4 then
             card.ability.akyrs_cycler = 1

@@ -1317,9 +1317,19 @@ return {
             ["akyrs_assignment"] = "Assignment",
         },
         quips={},
-        ranks={},
-        suits_plural={},
-        suits_singular={},
+        ranks={
+            akyrs_non_playing = "A kind"
+        },
+        suits_plural={
+            akyrs_joker = "Jokers",
+            akyrs_consumable = "Consumables",
+            akyrs_thing = "Something"
+        },
+        suits_singular={
+            akyrs_joker = "Joker",
+            akyrs_consumable = "Consumable",
+            akyrs_thing = "Something"
+        },
         tutorial={},
         v_dictionary={},
         v_text={

@@ -116,6 +116,12 @@ function Card:stop_drag()
     end
     if area and area ~= self.area then
         if area.config.card_limit + AKYRS.edition_extend_card_limit(self) >= #area.cards + 1 or area == G.hand or area == G.deck then
+            if self.akyrs_oldarea == G.hand or self.akyrs_oldarea == G.deck then
+                AKYRS.remove_value_from_table(G.playing_cards,self)
+            end
+            if area == G.hand or area == G.deck then
+                table.insert(G.playing_cards,self)
+            end
             self.akyrs_oldarea:remove_card(self)
             AKYRS.draw_card(self.area, area, 1, 'up', nil, self ,0)
             AKYRS.simple_event_add(
@@ -235,14 +241,16 @@ end
 
 local noRankHook = SMODS.has_no_rank
 function SMODS.has_no_rank(card)
-    if card.is_null then return false end
+    if card.is_null then return true end
+    --if card.base.value and card.base.value == "akyrs_non_playing" then return true end
     local ret = noRankHook(card)
     return ret
 end
 
 local noSuitHook = SMODS.has_no_suit
 function SMODS.has_no_suit(card)
-    if card.is_null then return false end
+    if card.is_null then return true end
+    --if card.base.value and card.base.value == "akyrs_non_playing" then return true end
     local ret = noSuitHook(card)
     return ret
 end

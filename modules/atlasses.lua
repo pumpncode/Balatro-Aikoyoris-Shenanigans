@@ -137,6 +137,20 @@ SMODS.Atlas {
     py = 95
 }
 
+SMODS.Atlas {
+    key = "blank",
+    path = "blank.png",
+    px = 71,
+    py = 95
+}
+
+SMODS.Atlas {
+    key = "18blank",
+    path = "blank.png",
+    px = 18,
+    py = 18
+}
+
 
 SMODS.Shader{
     key = "texelated",

@@ -951,8 +951,11 @@ function CardArea:align_cards()
         end
         --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
     end
-    if G.GAME.akyrs_ultimate_freedom and not self.states.collide.can and self ~= G.play and self ~= G.consumeables then
+    if G.GAME.akyrs_ultimate_freedom and not self.states.collide.can then
         self.states.collide.can = true
+    end
+    if G.GAME.akyrs_ultimate_freedom and self == G.play and self.states.collide.can then
+        self.states.collide.can = false
     end
     return r
 end
@@ -962,6 +965,9 @@ function Card:update(dt)
     local x = cardUpdateHook(self,dt)
     if G.GAME.akyrs_ultimate_freedom and not self.states.drag.can then
         self.states.drag.can = true
+    end
+    if G.GAME.akyrs_ultimate_freedom and not self.states.click.can then
+        self.states.click.can = true
     end
 end
 

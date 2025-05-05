@@ -119,10 +119,14 @@ function Card:stop_drag()
             if self.akyrs_oldarea == G.hand or self.akyrs_oldarea == G.deck then
                 AKYRS.remove_value_from_table(G.playing_cards,self)
             end
+            for i, cardarea in ipairs(AKYRS.all_card_areas) do
+                if cardarea and cardarea.cards then
+                    cardarea:remove_card(self)
+                end
+            end
             if area == G.hand or area == G.deck then
                 table.insert(G.playing_cards,self)
             end
-            self.akyrs_oldarea:remove_card(self)
             AKYRS.draw_card(self.area, area, 1, 'up', nil, self ,0)
             AKYRS.simple_event_add(
                 function ()

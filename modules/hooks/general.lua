@@ -766,7 +766,11 @@ function Card:akyrs_mod_card_value_init()
     end
     if G.GAME.akyrs_any_drag then
         if not self.base.value and self.ability.set ~= 'Enhanced' and self.ability.set ~= 'Default' then
-            if self.ability.consumeable then
+            if self.ability.set == "Voucher" then
+                self = SMODS.change_base(self,"akyrs_voucher","akyrs_non_playing")
+            elseif self.ability.set == "Booster" then
+                self = SMODS.change_base(self,"akyrs_booster","akyrs_non_playing")
+            elseif self.ability.consumeable then
                 self = SMODS.change_base(self,"akyrs_consumable","akyrs_non_playing")
             elseif self.ability.set == "Joker" then
                 self = SMODS.change_base(self,"akyrs_joker","akyrs_non_playing")

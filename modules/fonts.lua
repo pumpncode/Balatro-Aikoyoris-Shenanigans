@@ -51,3 +51,13 @@ AKYRS.Font{
     squish = 1, 
     DESCSCALE = 1
 }
+AKYRS.Font{
+    key = "MochiyPopOne",
+    path = "MochiyPopOne-Regular.ttf",
+    render_scale = 6.4,
+    TEXT_HEIGHT_SCALE = 0.9,
+    TEXT_OFFSET = {x=10,y=-10},
+    FONTSCALE = 0.11,
+    squish = 1,
+    DESCSCALE = 1
+}

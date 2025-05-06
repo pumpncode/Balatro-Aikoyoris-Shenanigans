@@ -547,8 +547,7 @@ return {
                 text = { 
                     "Retrigger each played {C:attention}4{} and {C:attention}7{}",
                     "{C:attention}#1#{} additional times",
-                    "{C:inactive,s:0.9}naraba odoranya son{}",
-                    "{C:inactive,s:0.9}odoranya son desu{}",
+                    "{C:inactive,s:0.9,font:akyrs_MochiyPopOne}ならば踊らにゃ損、踊らにゃ損です!{}",
                 }
             },
             j_akyrs_tldr_joker = {
@@ -724,7 +723,7 @@ return {
                     "{C:attention}L{}, {C:attention}S{}, {C:attention}O{}, {C:attention}Z{}, {C:attention}J{}, {C:attention}I{}, and {C:attention}T{}",
                     "gives {C:chips}+#1#{} Chips when scored",
                     "and {X:chips,C:white}X#2#{} Chips if any one those is present.",
-                    "{s:0.7,C:inactive}teteteteto teto tetete tetoris!{}"
+                    "{s:0.9,C:inactive,font:akyrs_MochiyPopOne}テテテテト テト テテテテトリス!{}"
                 }
             },
             -- toga

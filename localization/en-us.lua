@@ -745,7 +745,7 @@ return {
                 }
             },
             j_akyrs_aikoyori = {
-                name = "Aikoyori",
+                name = "{C:dark_edition}Aikoyori",
                 text = { 
                     "This Joker gains more abilities",
                     "the more {C:attention}mods{} you installed",

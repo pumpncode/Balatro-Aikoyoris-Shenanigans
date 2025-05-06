@@ -1653,7 +1653,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.using_consumeable and context.other_card.config.center_key == "c_star" then
+        if context.using_consumeable and context.consumeable.config.center_key == "c_star" then
             card.ability.extras.mult = card.ability.extras.mult + card.ability.extras.mult_add
             return {
                 message = localize("k_upgrade_ex"),

@@ -43,6 +43,15 @@ match_indent = true
 
 [[patches]]
 [patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = """  if ret_string then return ret_string end"""
+position = "before"
+payload = """  if ret_string and type(ret_string) == 'string' then ret_string = string.gsub(ret_string, "{.-}", "") end"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
 target = "engine/ui.lua"
 pattern = """        self.config.text_drawable = love.graphics.newText(self.config.lang.font.FONT, {G.C.WHITE,self.config.text})"""
 position = "before"

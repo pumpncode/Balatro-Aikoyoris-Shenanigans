@@ -750,6 +750,14 @@ return {
                     "This Joker gains more abilities",
                     "the more {C:attention}mods{} you installed",
                 }
+            },
+            j_akyrs_mukuroju_no_hakamori = {
+                name = "{font:5}躯樹の墓守",
+                text = { 
+                    "{font:5}このジョーカーは、{font:5,C:tarot}星{font:5}を使用するたびに",
+                    "{font:5}倍率 {C:mult}+#1#{font:5} を得る",
+                    "{C:inactive}({C:inactive,font:5}現在 倍率{C:mult}+#2#{C:inactive}）",
+                }
             }
         },
         Other={

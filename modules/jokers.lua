@@ -1627,3 +1627,43 @@ SMODS.Joker {
         end
     end
 }
+
+SMODS.Joker{
+    key = "mukuroju_no_hakamori",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 3, y = 3
+    },
+    rarity = 3,
+    cost = 7,
+    config = {
+        name = "躯樹の墓守",
+        extras = {
+            mult = 0,
+            mult_add = 8,
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS['c_star']
+        return {
+            vars = {
+                card.ability.extras.mult_add,
+                card.ability.extras.mult
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.using_consumeable and context.other_card.config.center_key == "c_star" then
+            card.ability.extras.mult = card.ability.extras.mult + card.ability.extras.mult_add
+            return {
+                message = localize("k_upgrade_ex"),
+            }
+        end
+        if context.joker_main then
+            return {
+                mult = card.ability.extras.mult
+            }
+        end
+    end
+
+}

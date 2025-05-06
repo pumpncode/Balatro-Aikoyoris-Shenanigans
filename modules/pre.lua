@@ -32,6 +32,10 @@ AKYRS.C = {
     JOKER_HC = HEX('ff2181'),
     CONSU_LC = HEX('8a6a45'),
     CONSU_HC = HEX('59331f'),
+    VOUCH_LC = HEX('ff9d69'),
+    VOUCH_HC = HEX('d95f1e'),
+    BOOST_LC = HEX('73f080'),
+    BOOST_HC = HEX('29a35c'),
     THING_LC = HEX('4d6961'),
     THING_HC = HEX('5dbaa0'),
 }

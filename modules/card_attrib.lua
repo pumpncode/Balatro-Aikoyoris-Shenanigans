@@ -28,10 +28,11 @@ SMODS.Suit{
     card_key = "j",
     pos = { y = 0 },
     ui_pos = { x = 0, y = 0 },
+    akyrs_hidden = true,
     lc_atlas = 'blank',
     hc_atlas = 'blank',
-    lc_ui_atlas  = '18blank',
-    hc_ui_atlas  = '18blank',
+    lc_ui_atlas  = 'special_suit_icon',
+    hc_ui_atlas  = 'special_suit_icon',
     
     inject = function(self)
         SMODS.inject_p_card(self, SMODS.Ranks[l.key])
@@ -49,11 +50,12 @@ SMODS.Suit{
     key = "consumable",
     card_key = "c",
     pos = { y = 0 },
-    ui_pos = { x = 0, y = 0 },
+    ui_pos = { x = 1, y = 0 },
+    akyrs_hidden = true,
     lc_atlas = 'blank',
     hc_atlas = 'blank',
-    lc_ui_atlas  = '18blank',
-    hc_ui_atlas  = '18blank',
+    lc_ui_atlas  = 'special_suit_icon',
+    hc_ui_atlas  = 'special_suit_icon',
     
     inject = function(self)
         SMODS.inject_p_card(self, SMODS.Ranks[l.key])
@@ -68,14 +70,61 @@ SMODS.Suit{
     end
 }
 SMODS.Suit{
+    key = "booster",
+    card_key = "b",
+    pos = { y = 0 },
+    ui_pos = { x = 2, y = 0 },
+    akyrs_hidden = true,
+    lc_atlas = 'blank',
+    hc_atlas = 'blank',
+    lc_ui_atlas  = 'special_suit_icon',
+    hc_ui_atlas  = 'special_suit_icon',
+    
+    inject = function(self)
+        SMODS.inject_p_card(self, SMODS.Ranks[l.key])
+    end,
+    lc_colour = AKYRS.C.BOOST_LC,
+    hc_colour = AKYRS.C.BOOST_HC,
+    in_pool = function (self, args)
+        if args and args.rank == '' and G.GAME.akyrs_any_drag then
+            return true
+        end
+        return false
+    end
+}
+SMODS.Suit{
+    key = "voucher",
+    card_key = "v",
+    pos = { y = 0 },
+    ui_pos = { x = 3, y = 0 },
+    akyrs_hidden = true,
+    lc_atlas = 'blank',
+    hc_atlas = 'blank',
+    lc_ui_atlas  = 'special_suit_icon',
+    hc_ui_atlas  = 'special_suit_icon',
+    
+    inject = function(self)
+        SMODS.inject_p_card(self, SMODS.Ranks[l.key])
+    end,
+    lc_colour = AKYRS.C.VOUCH_LC,
+    hc_colour = AKYRS.C.VOUCH_HC,
+    in_pool = function (self, args)
+        if args and args.rank == '' and G.GAME.akyrs_any_drag then
+            return true
+        end
+        return false
+    end
+}
+SMODS.Suit{
     key = "thing",
     card_key = "th",
     pos = { y = 0 },
-    ui_pos = { x = 0, y = 0 },
+    ui_pos = { x = 4, y = 0 },
+    akyrs_hidden = true,
     lc_atlas = 'blank',
     hc_atlas = 'blank',
-    lc_ui_atlas  = '18blank',
-    hc_ui_atlas  = '18blank',
+    lc_ui_atlas  = 'special_suit_icon',
+    hc_ui_atlas  = 'special_suit_icon',
     
     inject = function(self)
         SMODS.inject_p_card(self, SMODS.Ranks[l.key])

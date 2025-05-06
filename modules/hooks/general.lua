@@ -765,13 +765,17 @@ function Card:akyrs_mod_card_value_init()
         self.ability = x
     end
     if G.GAME.akyrs_any_drag then
-        if not self.base.value and self.ability.set ~= 'Enhanced' and self.ability.set ~= 'Default' then
-            if self.ability.consumeable then
-                self = SMODS.change_base(self,"akyrs_consumable","akyrs_non_playing")
+        if not self.base.value and not self.base.suit then
+            if self.ability.set == "Voucher" then
+                self:set_base(AKYRS.construct_case_base("akyrs_voucher","akyrs_non_playing"), true)
+            elseif self.ability.set == "Booster" then
+                self:set_base(AKYRS.construct_case_base("akyrs_booster","akyrs_non_playing"), true)
+            elseif self.ability.consumeable then
+                self:set_base(AKYRS.construct_case_base("akyrs_consumable","akyrs_non_playing"), true)
             elseif self.ability.set == "Joker" then
-                self = SMODS.change_base(self,"akyrs_joker","akyrs_non_playing")
+                self:set_base(AKYRS.construct_case_base("akyrs_joker","akyrs_non_playing"), true)
             else
-                self = SMODS.change_base(self,"akyrs_thing","akyrs_non_playing")
+                self:set_base(AKYRS.construct_case_base("akyrs_thing","akyrs_non_playing"), true)
             end
         end
     end
@@ -951,8 +955,11 @@ function CardArea:align_cards()
         end
         --table.sort(self.cards, function (a, b) return a.T.y + a.T.y/2 < b.T.y + b.T.y/2 end)
     end
-    if G.GAME.akyrs_ultimate_freedom and not self.states.collide.can and self ~= G.play and self ~= G.consumeables then
+    if G.GAME.akyrs_ultimate_freedom and not self.states.collide.can then
         self.states.collide.can = true
+    end
+    if G.GAME.akyrs_ultimate_freedom and self == G.play and self.states.collide.can then
+        self.states.collide.can = false
     end
     return r
 end
@@ -962,6 +969,9 @@ function Card:update(dt)
     local x = cardUpdateHook(self,dt)
     if G.GAME.akyrs_ultimate_freedom and not self.states.drag.can then
         self.states.drag.can = true
+    end
+    if G.GAME.akyrs_ultimate_freedom and not self.states.click.can then
+        self.states.click.can = true
     end
 end
 

@@ -151,6 +151,13 @@ SMODS.Atlas {
     py = 18
 }
 
+SMODS.Atlas {
+    key = "special_suit_icon",
+    path = "specialsuiticons.png",
+    px = 18,
+    py = 18
+}
+
 
 SMODS.Shader{
     key = "texelated",

@@ -1165,21 +1165,25 @@ AKYRS.get_letter_freq_from_cards = function(listofcards)
     return wordArray
 end
 AKYRS.icons_pos = {
-    ["expert"]          = { x = 0, y = 1},
-    ["master"]          = { x = 1, y = 1},
-    ["ultima"]          = { x = 2, y = 1},
-    ["remaster"]        = { x = 3, y = 1},
-    ["lunatic"]         = { x = 4, y = 1},
-    ["dx"]              = { x = 0, y = 2},
-    ["no_reroll"]       = { x = 0, y = 0},
-    ["no_disabling"]    = { x = 1, y = 0},
-    ["no_face"]         = { x = 2, y = 0},
-    ["forgotten_blind"] = { x = 5, y = 1},
-    ["word_blind"]      = { x = 6, y = 1},
-    ["puzzle_blind"]    = { x = 7, y = 1},
-    ["postwin_blind"]   = { x = 8, y = 1},
-    ["endless_blind"]   = { x = 9, y = 1},
 }
+AKYRS.blind_icons_pos = function (key)
+    
+    if key == "expert" then          return  { x = 0, y = 1} end
+    if key == "master" then          return  { x = 1, y = 1} end
+    if key == "ultima" then          return  { x = 2, y = 1} end
+    if key == "remaster" then        return  { x = 3, y = 1} end
+    if key == "lunatic" then         return  { x = 4, y = 1} end
+    if key == "dx" then              return  { x = 0, y = 2} end
+    if key == "no_reroll" then       return  { x = 0, y = 0} end
+    if key == "no_disabling" then    return  { x = 1, y = 0} end
+    if key == "no_face" then         return  { x = 2, y = 0} end
+    if key == "forgotten_blind" then return  { x = 5, y = 1} end
+    if key == "word_blind" then      return  { x = 6, y = 1} end
+    if key == "puzzle_blind" then    return  { x = 7, y = 1} end
+    if key == "postwin_blind" then   return  { x = 8, y = 1} end
+    if key == "endless_blind" then   return  { x = 9, y = 1} end
+    return {x = 9, y = 9}
+end
 AKYRS.icon_sprites = {}
 
 AKYRS.remove_formatting = function(string_in)
@@ -1223,16 +1227,17 @@ AKYRS.generate_icon_blinds = function(key, config)
     local z = config.table or {}
     local cache = config.cache or false
     local icon_size = config.icon_size or false
+    local atlas = config.atlas or "akyrs_aikoyoriMiscIcons"
     local full_ui = config.full_ui or false
     local fsz = config.font_size or false
     local dfctysz = config.text_size_for_full or false
     local info_queue = config.info_queue or {}
     local sprite = nil
     if cache then
-        AKYRS.icon_sprites[key] = AKYRS.icon_sprites[key] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[key])
+        AKYRS.icon_sprites[key] = AKYRS.icon_sprites[key] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS[atlas],AKYRS.blind_icons_pos(key))
         sprite = AKYRS.icon_sprites[key]
     else
-        sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[key])
+        sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS[atlas],AKYRS.blind_icons_pos(key))
     end
     local keyed = "dd_akyrs_"..key
     z[#z+1] = {
@@ -1250,6 +1255,7 @@ AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
     extras = extras or {}
     local icon_size = extras.icon_size or 0.5
     local fsz = extras.text_size or 0.5
+    local atlas = extras.atlas or "akyrs_aikoyoriMiscIcons"
     local dfctysz = extras.difficulty_text_size or 0.5
     local bsz = extras.border_size or 1
     local set_parent_child = extras.set_parent_child or false
@@ -1264,10 +1270,10 @@ AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
         if blind.debuff.akyrs_blind_difficulty and not hide.difficulty then
             local sprite = nil
             if cache then
-                AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] = AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[blind.debuff.akyrs_blind_difficulty])
+                AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] = AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS[atlas],AKYRS.blind_icons_pos(blind.debuff.akyrs_blind_difficulty))
                 sprite = AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty]
             else
-                sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS["akyrs_aikoyoriMiscIcons"],AKYRS.icons_pos[blind.debuff.akyrs_blind_difficulty])
+                sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS[atlas],AKYRS.blind_icons_pos(blind.debuff.akyrs_blind_difficulty))
             end
     
             local blind_txt_dmy = "dd_akyrs_"..blind.debuff.akyrs_blind_difficulty.."_blind"
@@ -1382,4 +1388,14 @@ end
 
 AKYRS.card_any_drag = function()
     return G and G.GAME and ((G.GAME.akyrs_any_drag and not G.OVERLAY_MENU) or G.GAME.akyrs_ultimate_freedom)
+end
+
+AKYRS.construct_case_base = function(suit, rank)
+    
+    local _suit = SMODS.Suits[suit]
+    local _rank = SMODS.Ranks[rank]
+    if not _suit or not _rank then
+        return nil, ('Tried to call SMODS.change_base with invalid arguments: suit="%s", rank="%s"'):format(suit, rank)
+    end
+    return G.P_CARDS[('%s_%s'):format(_suit.card_key, _rank.card_key)]
 end

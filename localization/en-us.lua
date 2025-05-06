@@ -1328,11 +1328,15 @@ return {
         suits_plural={
             akyrs_joker = "Jokers",
             akyrs_consumable = "Consumables",
+            akyrs_booster = "Boosters",
+            akyrs_voucher = "Vouchers",
             akyrs_thing = "Something"
         },
         suits_singular={
             akyrs_joker = "Joker",
             akyrs_consumable = "Consumable",
+            akyrs_booster = "Booster",
+            akyrs_voucher = "Vouchers",
             akyrs_thing = "Something"
         },
         tutorial={},

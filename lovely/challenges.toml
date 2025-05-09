@@ -212,7 +212,7 @@ target = "functions/UI_definitions.lua"
 pattern = """  for k, v in ipairs(nu_base_modifiers) do"""
 position = "before"
 payload = """
-if challenge.stake and challenge.stake > 1 and AKYRS.find_stake_from_level(challenge.stake) then
+if challenge.stake and challenge.stake ~= 1 and AKYRS.find_stake_from_level(challenge.stake) then
     modded_starts = modded_starts or {}
     local stake_key, stake_obj = AKYRS.find_stake_from_level(challenge.stake)
     modded_starts[#modded_starts + 1] = {

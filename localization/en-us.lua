@@ -312,6 +312,14 @@ return {
                     "It will be changed later",
                 },
             },
+            dd_akyrs_mukuroju_en = {
+                name = "Mukuroju no Hakamori",
+                text = { 
+                    "This Joker gains {C:mult}+#1#{} Mult",
+                    "per {C:tarot}The Star{} used",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+                }
+            },
             dd_akyrs_expert_blind  = {
                 name="Expert Blind",
                 text={
@@ -1150,6 +1158,8 @@ return {
             hc_akyrs_detroit = "Detroit",
             hc_akyrs_detroit_2 = "Detroit II",
             hc_akyrs_detroit_3 = "Detroit III",
+            hc_akyrs_detroit_4 = "Detroit IV",
+            hc_akyrs_detroit_5 = "Detroit: Become Human",
             hc_akyrs_half_life = "Half-Life",
             hc_akyrs_half_life_2 = "Half-Life 2",
             hc_akyrs_thin_yo_deck = "thin yo deck bro",
@@ -1366,6 +1376,9 @@ return {
             },
             ch_c_akyrs_idea_by_astrapboy={
                 "Idea by {C:attention}astrapboy",
+            },
+            ch_c_akyrs_idea_by_missingnumber={
+                "Idea by {C:attention}missingnumber",
             },
         },
     },

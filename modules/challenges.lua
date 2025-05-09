@@ -113,7 +113,7 @@ AKYRS.HardcoreChallenge{
         }
     },
     difficulty = 4,
-    stake = 8
+    stake = "stake_gold",
 }
 AKYRS.HardcoreChallenge{
     key = "detroit",
@@ -127,7 +127,7 @@ AKYRS.HardcoreChallenge{
             {id = 'consumable_slots', value = -1e200},
         }
     },
-    stake = 2,
+    stake = "stake_gold",
     jokers = {
         
         AKYRS.crypternity{
@@ -194,7 +194,7 @@ AKYRS.HardcoreChallenge{
             {id = 'consumable_slots', value = -1e200},
         }
     },
-    stake = 8,
+    stake = "stake_gold",
     jokers = {
     },
     consumeables = {
@@ -246,7 +246,7 @@ AKYRS.HardcoreChallenge{
             {id = 'consumable_slots', value = -1e200},
         }
     },
-    stake = 8,
+    stake = "stake_gold",
     jokers = {
     },
     consumeables = {
@@ -282,6 +282,7 @@ AKYRS.HardcoreChallenge{
     },
     difficulty = 10,
 }
+
 
 AKYRS.HardcoreChallenge{
     key = "half_life",
@@ -384,5 +385,5 @@ AKYRS.HardcoreChallenge{
         }
     },
     difficulty = 6,
-    stake = 8,
+    stake = "stake_gold",
 }

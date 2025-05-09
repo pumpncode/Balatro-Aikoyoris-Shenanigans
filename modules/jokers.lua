@@ -1314,7 +1314,6 @@ SMODS.Joker{
         }
     },
     loc_vars = function (self, info_queue, card)
-        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
         info_queue[#info_queue+1] = G.P_CENTERS["e_akyrs_burnt"]
         
     end,
@@ -1379,7 +1378,6 @@ SMODS.Joker{
         }
     },
     loc_vars = function (self, info_queue, card)
-        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
         return {
             vars = {
                 card.ability.extras.chips,
@@ -1417,7 +1415,6 @@ AKYRS.LetterJoker{
         }
     },
     loc_vars = function (self, info_queue, card)
-        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
         return {
             vars = {
                 card.ability.extras.chips,
@@ -1640,11 +1637,15 @@ SMODS.Joker{
         name = "躯樹の墓守",
         extras = {
             mult = 0,
-            mult_add = 8,
+            mult_add = 12,
         }
     },
     loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {key = 'dd_akyrs_mukuroju_en', vars = { card.ability.extras.mult_add, card.ability.extras.mult }, set = "DescriptionDummy"}
         info_queue[#info_queue+1] = G.P_CENTERS['c_star']
+        if SMODS.Mods.MoreFluff then
+            info_queue[#info_queue+1] = G.P_CENTERS['c_mf_rot_star']
+        end
         return {
             vars = {
                 card.ability.extras.mult_add,
@@ -1653,7 +1654,10 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.using_consumeable and context.consumeable.config.center_key == "c_star" then
+        if context.using_consumeable and (
+        context.consumeable.config.center_key == "c_star" or
+        context.consumeable.config.center_key == "c_mf_rot_star"
+        ) then
             card.ability.extras.mult = card.ability.extras.mult + card.ability.extras.mult_add
             return {
                 message = localize("k_upgrade_ex"),

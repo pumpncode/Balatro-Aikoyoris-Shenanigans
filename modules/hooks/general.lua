@@ -518,7 +518,7 @@ end
 
 
 local eval_hook = G.FUNCS.evaluate_play
-G.FUNCS.evaluate_play = function()
+G.FUNCS.evaluate_play = function(e)
     if G.GAME.aikoyori_evaluation_value then
         attention_text({
             scale =  1.5, text = ""..G.GAME.aikoyori_evaluation_value, hold = 15, align = 'tm',
@@ -649,7 +649,7 @@ G.FUNCS.evaluate_play = function()
             end
         end
     end
-    local ret = eval_hook()
+    local ret = eval_hook(e)
     
     if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled and word_split then
         EMPTY(G.GAME.akyrs_last_played_letters)

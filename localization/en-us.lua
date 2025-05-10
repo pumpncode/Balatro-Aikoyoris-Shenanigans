@@ -110,8 +110,8 @@ return {
             bl_akyrs_final_periwinkle_pinecone= {
                 name = "Periwinkle Pinecone",
                 text = {
-                    "Sealed cards are",
-                    "permanently debuffed",
+                    "Sealed cards",
+                    "are debuffed",
                 }
             },
             bl_akyrs_final_razzle_raindrop = {

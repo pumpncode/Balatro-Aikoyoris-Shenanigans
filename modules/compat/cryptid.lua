@@ -96,17 +96,17 @@ if Cryptid then -- TODO: Ask Cryptid Discord so I can hook this up properly
                 {id = 'no_shop_jokers'},
                 {id = 'akyrs_no_tarot_except_twof'},
                 {id = 'akyrs_allow_duplicates'},
-                {id = 'discard_cost', value = 2e20},
+                {id = 'discard_cost', value = 5},
                 {id = 'no_reward_specific', value = 'Small'},
                 {id = 'no_reward_specific', value = 'Big'},
                 {id = 'no_reward_specific', value = 'Boss'},
                 {id = 'no_extra_hand_money'},
-                {id = 'no_interest'},
                 {id = 'chips_dollar_cap'},
             },
             modifiers = {
-                {id = 'hands', value = 1},
-                {id = 'discards', value = 1},
+                {id = 'hands', value = 2},
+                {id = 'discards', value = 7},
+                { id = "dollars", value = 50 },
                 {id = 'joker_slots', value = -1e300},
                 {id = 'consumable_slots', value = -1e300},
             }
@@ -120,7 +120,12 @@ if Cryptid then -- TODO: Ask Cryptid Discord so I can hook this up properly
         },
         deck = {
             type = "Hardcore Challenge Deck",
-            cards = {}
+            cards = {
+                { s = "C", r = "A"},
+                { s = "D", r = "A"},
+                { s = "H", r = "A"},
+                { s = "S", r = "A"},
+            }
         },
         restrictions = {
             banned_cards = {

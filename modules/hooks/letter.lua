@@ -202,6 +202,7 @@ end
 local isSuitHook = Card.is_suit
 function Card:is_suit(suit, bypass_debuff, flush_calc)
     if self and self.is_null then return false end
+    if not self then return false end
     local c = isSuitHook(self, suit, bypass_debuff, flush_calc)
     return c
 end

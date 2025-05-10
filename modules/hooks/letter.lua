@@ -200,11 +200,10 @@ function copy_card(other, new_card, card_scale, playing_card, strip_edition)
 end
 
 local isSuitHook = Card.is_suit
-function Card:is_suit(suit, bypass_debuff, flush_calc)
+function Card:is_suit(...)
     if self and self.is_null then return false end
-    if not self then return false end
-    local c = isSuitHook(self, suit, bypass_debuff, flush_calc)
-    return c
+    if not self then print("AKYRS > HOW IS IT NIL???") return false end
+    return isSuitHook(self, ...)
 end
 
 local getIDHook = Card.get_id

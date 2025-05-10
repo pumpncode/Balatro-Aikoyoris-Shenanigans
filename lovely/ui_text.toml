@@ -37,7 +37,8 @@ pattern = """    loc_target = G.localization.descriptions[(args.set or args.node
 position = "at"
 payload = """
 loc_target = loc_target or {}
-loc_target.name_parsed = {loc_parse_string(G.localization.descriptions[(args.set or args.node.config.center.set)][args.key or args.node.config.center.key].name)}"""
+if pcall(function() loc_target.name_parsed = {loc_parse_string(G.localization.descriptions[(args.set or args.node.config.center.set)][args.key or args.node.config.center.key].name)} end) then
+else loc_target.name_parsed = {} end"""
 overwrite = true
 match_indent = true
 

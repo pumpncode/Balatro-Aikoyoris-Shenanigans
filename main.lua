@@ -39,6 +39,9 @@ assert(SMODS.load_file("./modules/ui.lua"))()
 assert(SMODS.load_file("./modules/challenges_ui.lua"))()
 assert(SMODS.load_file("./modules/jokers.lua"))()
 
+assert(SMODS.load_file("./modules/challenges.lua"))()
+assert(SMODS.load_file("./modules/pokerhands.lua"))()
+
 assert(SMODS.load_file("./modules/compat/cryptid.lua"))()
 assert(SMODS.load_file("./modules/compat/sleeves.lua"))()
 assert(SMODS.load_file("./modules/compat/talisman.lua"))()
@@ -47,5 +50,3 @@ assert(SMODS.load_file("./modules/compat/cartomancer.lua"))()
 assert(SMODS.load_file("./modules/compat/notjustyet.lua"))()
 assert(SMODS.load_file("./modules/compat/togasstuff.lua"))()
 
-assert(SMODS.load_file("./modules/pokerhands.lua"))()
-assert(SMODS.load_file("./modules/challenges.lua"))()

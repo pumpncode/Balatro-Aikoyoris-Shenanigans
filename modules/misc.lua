@@ -600,6 +600,12 @@ AKYRS.HardcoreChallenge = SMODS.Challenge:extend {
 
 function AKYRS.find_stake_from_level(level)
     for i, k in pairs(G.P_STAKES) do 
+        if k == level then
+            return i, k
+        end
+        if k.key == level then
+            return i, k
+        end
         if k.stake_level == level then
             return i, k
         end

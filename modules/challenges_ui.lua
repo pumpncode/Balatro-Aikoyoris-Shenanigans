@@ -170,9 +170,15 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
     if G.CONTROLLER.focused.target and G.CONTROLLER.focused.target.config.id == 'challenge_page' then snapped = true end
     local challenge_completed =  G.PROFILES[G.SETTINGS.profile].challenge_progress.completed[v.id or '']
     local difficultyString = ''
+    local numberDiff = nil
     if v.difficulty and v.difficulty > 0 then
-        for i = 1, v.difficulty do
-            difficultyString = difficultyString.."⭐"
+        if v.difficulty > 15 then
+            difficultyString = "⭐"
+            numberDiff = tostring(v.difficulty)
+        else
+            for i = 1, v.difficulty do
+                difficultyString = difficultyString.."⭐"
+            end
         end
     end
     
@@ -180,6 +186,11 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
         scale = 0.3,
         colours = {G.C.UI.TEXT_LIGHT},
         string = {localize("k_akyrs_hardcore_challenge_difficulty").." "},
+    }
+    local dynaTextFakeAhhDiff = DynaText{
+        scale = 0.3,
+        colours = {G.C.UI.TEXT_LIGHT},
+        string = {numberDiff or ""},
     }
     local dynaTextObject = DynaText{
         scale = 0.3,
@@ -226,6 +237,7 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
             },
                 {n=G.UIT.R, config={align = '', minw = 0.8, padding = 0.05}, nodes = {
                     {n=G.UIT.O, config={object = difficultyDynaText}},
+                    {n=G.UIT.O, config={object = dynaTextFakeAhhDiff}},
                     {n=G.UIT.O, config={object = dynaTextObject}},
                 }}
             }}
@@ -315,7 +327,7 @@ end
 
 G.FUNCS.akys_start_hc_challenge_run = function(e)
     if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
-    local stake = e.config.stake or 1
+    local stake = (G.P_STAKES[e.config.stake] and G.P_STAKES[e.config.stake].stake_level) or (type(e.config.stake) == "number" and e.config.stake) or 1
     G.FUNCS.start_run(e, {stake = stake, challenge = AKYRS.HC_CHALLENGES[e.config.id]})
 end
 
@@ -325,8 +337,8 @@ G.FUNCS.start_challenge_run = function(e)
         local ret = startChallengeRunHook(e)
     else
         if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
-        local stake = e.config.stake or 1
-        G.FUNCS.start_run(e, {stake = 1, challenge = G.CHALLENGES[e.config.id]})
+        local stake = (G.P_STAKES[e.config.stake] and G.P_STAKES[e.config.stake].stake_level) or (type(e.config.stake) == "number" and e.config.stake) or 1
+        G.FUNCS.start_run(e, {stake = stake, challenge = G.CHALLENGES[e.config.id]})
     end
   end
   

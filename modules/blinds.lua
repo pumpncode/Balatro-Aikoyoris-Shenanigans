@@ -955,6 +955,6 @@ SMODS.Blind {
         return G.GAME.round_resets.ante > G.GAME.win_ante
     end,
     atlas = 'aikoyoriBlindsChips', 
-    boss = {min = 12, max = 10},
+    boss = {min = 10, max = 10},
     pos = { x = 0, y = 23 },
 }

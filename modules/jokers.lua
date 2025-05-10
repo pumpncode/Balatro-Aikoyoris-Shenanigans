@@ -61,7 +61,7 @@ SMODS.Joker {
     cost = 5,
     config = {
         extra = {
-            mult_stored = 2,
+            mult_stored = 0,
             mult = 4,
             times = 2,
             total_times = 2,

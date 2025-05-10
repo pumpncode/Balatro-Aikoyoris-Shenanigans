@@ -1572,6 +1572,9 @@ SMODS.Joker {
             info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_togasstuff_ability"}
             info_queue[#info_queue+1] = {set = "Tag", key = "tag_toga_togajokershop"}
         end
+        if SMODS.Mods.cryptposting then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_cryptposting_ability"}
+        end
         return {
             
         }

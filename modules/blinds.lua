@@ -958,3 +958,148 @@ SMODS.Blind {
     boss = {min = 10, max = 10},
     pos = { x = 0, y = 23 },
 }
+SMODS.Blind {
+    key = "master_faraway_island",
+    dollars = 14,
+    mult = 8,
+    boss_colour = HEX('4bbdff'),
+    debuff = {
+        akyrs_cannot_be_disabled = true,
+        akyrs_cannot_be_rerolled = true,
+        akyrs_blind_difficulty = "master",
+        akyrs_is_endless_blind = true,
+    },
+    
+    in_pool = function (self)
+        return G.GAME.round_resets.ante >= self.boss.min and G.GAME.won
+    end,
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 12, max = 10},
+    pos = { x = 0, y = 3 },
+    debuff_hand = function (self, cards, hand, handname, check)
+        for i, c in ipairs(cards) do
+            if SMODS.has_no_rank(c) and SMODS.has_no_suit(c) then
+                return false
+            end
+        end
+        return true
+    end
+}
+SMODS.Blind {
+    key = "master_plywood_forest",
+    dollars = 14,
+    mult = 8,
+    boss_colour = HEX('f74d4d'),
+    debuff = {
+        akyrs_cannot_be_disabled = true,
+        akyrs_cannot_be_rerolled = true,
+        akyrs_blind_difficulty = "master",
+        akyrs_is_endless_blind = true,
+        akyrs_destroy_unplayed = true,
+    },
+    
+    in_pool = function (self)
+        return G.GAME.round_resets.ante >= self.boss.min and G.GAME.won
+    end,
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 12, max = 10},
+    pos = { x = 0, y = 4 },
+}
+SMODS.Blind {
+    key = "master_golden_jade",
+    dollars = 14,
+    mult = 8,
+    boss_colour = HEX('d0521a'),
+    debuff = {
+        akyrs_cannot_be_disabled = true,
+        akyrs_cannot_be_rerolled = true,
+        akyrs_blind_difficulty = "master",
+        akyrs_is_endless_blind = true,
+        akyrs_deduct_mult = 0.1,
+    },
+    loc_vars = function (self)
+        return {
+            vars = {self.debuff.akyrs_deduct_mult}
+        }
+    end,
+
+    collection_loc_vars = function (self)
+        return {
+            vars = { 0.1 }
+        }
+    end,    
+    in_pool = function (self)
+        return G.GAME.round_resets.ante >= self.boss.min and G.GAME.won
+    end,
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 12, max = 10},
+    pos = { x = 0, y = 5 },
+    calculate = function (self, blind, context)
+        if context.individual and context.cardarea == G.play then
+            
+            blind.debuff.current_money = blind.debuff.current_money or G.GAME.dollars
+            local old_money = blind.debuff.current_money or G.GAME.dollars
+            blind.debuff.current_money = blind.debuff.current_money * blind.debuff.akyrs_deduct_mult
+            ease_dollars(-old_money + blind.debuff.current_money)
+        end
+    end
+}
+SMODS.Blind {
+    key = "master_milk_crown_on_sonnetica",
+    dollars = 14,
+    mult = 8,
+    boss_colour = HEX('5f848c'),
+    debuff = {
+        akyrs_cannot_be_disabled = true,
+        akyrs_cannot_be_rerolled = true,
+        akyrs_blind_difficulty = "master",
+        akyrs_is_endless_blind = true,
+    },
+    
+    in_pool = function (self)
+        return G.GAME.round_resets.ante >= self.boss.min and G.GAME.won
+    end,
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 12, max = 10},
+    pos = { x = 0, y = 6 },
+    calculate = function (self, blind, context)
+        if context.individual and context.cardarea == G.play then
+            if context.other_card:get_id() == 13 then
+                return {
+                    xmult = 0
+                }
+            end
+        end
+    end
+}
+SMODS.Blind {
+    key = "master_bug",
+    dollars = 14,
+    mult = 8,
+    boss_colour = HEX('4de740'),
+    debuff = {
+        akyrs_cannot_be_disabled = true,
+        akyrs_cannot_be_rerolled = true,
+        akyrs_blind_difficulty = "master",
+        akyrs_is_endless_blind = true,
+    },
+    
+    in_pool = function (self)
+        return G.GAME.round_resets.ante >= self.boss.min and G.GAME.won
+    end,
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 12, max = 10},
+    pos = { x = 0, y = 7 },
+    calculate = function (self, blind, context)
+        if context.individual and context.cardarea == G.play and not context.repetition then
+            local card_to_destroy = pseudorandom_element(G.jokers.cards,pseudoseed("bl_bug_akyrs"))
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+                    return true
+                end,
+                delay = 0.5,
+            }), 'base')
+        end
+    end
+}

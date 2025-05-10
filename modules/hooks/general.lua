@@ -23,6 +23,7 @@ function Game:init_game_object()
     ret.letters_to_give = {}
     ret.aiko_letters_consumable_rate = 0
     AKYRS.replenishLetters()
+    ret.current_round.akyrs_round_played_cards = {}
     ret.current_round.aiko_round_played_words = {}
     ret.current_round.aiko_round_correct_letter = {}
     ret.current_round.aiko_round_misaligned_letter = {}
@@ -295,6 +296,24 @@ end
 
 local endRoundHook = end_round
 function end_round()
+    local x = G.playing_cards
+    for i, card in ipairs(x) do
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                if not card.ability.akyrs_played_this_round and G.GAME.blind.debuff.akyrs_destroy_unplayed then
+                    card.area:remove_card(card)
+                    
+                    card:start_dissolve({ G.C.RED }, nil, 1.6)
+                    AKYRS.remove_value_from_table(G.playing_cards, card)
+                end
+                card.ability.akyrs_played_this_round = false
+                return true
+            end,
+            delay = 0.5,
+        }), 'base')
+    end
+    
+    
     if (G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win) and (G.GAME.current_round.hands_left > 0)
     then
         G.STATE_COMPLETE = true
@@ -309,6 +328,7 @@ function end_round()
                         G.E_MANAGER:add_event(Event({
                             func = function()
                                 card:start_dissolve({ G.C.RED }, nil, 1.6)
+                                AKYRS.remove_value_from_table(G.playing_cards,card)
                                 return true
                             end,
                             delay = 0.5,
@@ -519,6 +539,9 @@ end
 
 local eval_hook = G.FUNCS.evaluate_play
 G.FUNCS.evaluate_play = function(e)
+    for i, c in ipairs(G.play.cards) do
+        c.ability.akyrs_played_this_round = true
+    end
     if G.GAME.aikoyori_evaluation_value then
         attention_text({
             scale =  1.5, text = ""..G.GAME.aikoyori_evaluation_value, hold = 15, align = 'tm',

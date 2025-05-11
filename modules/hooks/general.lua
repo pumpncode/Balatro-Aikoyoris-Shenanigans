@@ -296,23 +296,26 @@ end
 
 local endRoundHook = end_round
 function end_round()
-    local x = G.playing_cards
-    for i, card in ipairs(x) do
-        G.E_MANAGER:add_event(Event({
-            trigger = "after",
-            func = function()
-                if not card.ability.akyrs_played_this_round and G.GAME.blind.debuff.akyrs_destroy_unplayed then
-                    card.area:remove_card(card)
-                    
-                    card:start_dissolve({ G.C.RED }, nil, 1.6)
-                    AKYRS.remove_value_from_table(G.playing_cards, card)
-                end
-                card.ability.akyrs_played_this_round = false
-                return true
-            end,
-            delay = 0,
-        }), 'base')
+    if G.GAME.blind.debuff.akyrs_destroy_unplayed then
+        local x = G.playing_cards
+        for i, card in ipairs(x) do
+            G.E_MANAGER:add_event(Event({
+                trigger = "after",
+                func = function()
+                    if not card.ability.akyrs_played_this_round and G.GAME.blind.debuff.akyrs_destroy_unplayed then
+                        card.area:remove_card(card)
+                        
+                        card:start_dissolve({ G.C.RED }, nil, 1.6)
+                        AKYRS.remove_value_from_table(G.playing_cards, card)
+                    end
+                    card.ability.akyrs_played_this_round = false
+                    return true
+                end,
+                delay = 0,
+            }), 'base')
+        end
     end
+    
     
     
     if (G.GAME.current_round.advanced_blind and not G.GAME.aiko_puzzle_win) and (G.GAME.current_round.hands_left > 0)

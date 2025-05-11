@@ -91,17 +91,6 @@ function recalculateBlindUI()
             end
             return true
           end
-        })) 
-        G.E_MANAGER:add_event(Event({
-          trigger = 'after',
-          delay = 0,
-          func = function()
-            if G.SHOP_SIGN then
-                G.SHOP_SIGN:remove()
-                G.SHOP_SIGN = nil
-            end
-            return true
-          end
         }))
     end
 end

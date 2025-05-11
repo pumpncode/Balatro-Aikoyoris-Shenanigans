@@ -115,7 +115,7 @@ function Card:stop_drag()
         end
     end
     if area and area ~= self.area then
-        if (area.config.card_limit + AKYRS.edition_extend_card_limit(self) >= #area.cards + 1 or area == G.hand or area == G.deck) or G.GAME.akyrs_ultimate_freedom then
+        if G.GAME.akyrs_ultimate_freedom or (area.config.card_limit + AKYRS.edition_extend_card_limit(self) >= #area.cards + 1 or area == G.hand or area == G.deck) then
             if self.akyrs_oldarea == G.hand or self.akyrs_oldarea == G.deck then
                 AKYRS.remove_value_from_table(G.playing_cards,self)
             end
@@ -200,10 +200,10 @@ function copy_card(other, new_card, card_scale, playing_card, strip_edition)
 end
 
 local isSuitHook = Card.is_suit
-function Card:is_suit(suit, bypass_debuff, flush_calc)
+function Card:is_suit(...)
     if self and self.is_null then return false end
-    local c = isSuitHook(self, suit, bypass_debuff, flush_calc)
-    return c
+    if not self then print("AKYRS > HOW IS IT NIL???") return false end
+    return isSuitHook(self, ...)
 end
 
 local getIDHook = Card.get_id

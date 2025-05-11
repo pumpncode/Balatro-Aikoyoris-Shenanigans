@@ -110,8 +110,8 @@ return {
             bl_akyrs_final_periwinkle_pinecone= {
                 name = "Periwinkle Pinecone",
                 text = {
-                    "Sealed cards are",
-                    "permanently debuffed",
+                    "Sealed cards",
+                    "are debuffed",
                 }
             },
             bl_akyrs_final_razzle_raindrop = {
@@ -218,6 +218,39 @@ return {
                     "Words must be played in reverse",
                 }
             },
+            bl_akyrs_master_faraway_island = {
+                name = "Faraway Island",
+                text = {
+                    "Hand must contain at least",
+                    "one card with no suit and rank",
+                }
+            },
+            bl_akyrs_master_plywood_forest = {
+                name = "Plywood Forest",
+                text = {
+                    "All unplayed cards are destroyed",
+                    "at the end of the round"
+                }
+            },
+            bl_akyrs_master_golden_jade = {
+                name = "Golden Jade",
+                text = {
+                    "X#1# your money per card scored",
+                }
+            },
+            bl_akyrs_master_milk_crown_on_sonnetica = {
+                name = "Milk Crown on Sonnetica",
+                text = {
+                    "Set Mult to 0 if a King is scored",
+                }
+            },
+            bl_akyrs_master_bug = {
+                name = "Bug",
+                text = {
+                    "One Random Joker destroyed",
+                    "per card played"
+                }
+            },
         },
         DescriptionDummy={
             dd_akyrs_maxwell_example={
@@ -302,6 +335,12 @@ return {
                     "If you gain less than {C:money}$10{}",
                     "at the end of the round,",
                     "create a {C:attention}Spare CD{} Tag",
+                },
+            },
+            dd_akyrs_cryptposting_ability={
+                name="Cryptposting Ability",
+                text={
+                    "???"
                 },
             },
             dd_akyrs_placeholder_art={

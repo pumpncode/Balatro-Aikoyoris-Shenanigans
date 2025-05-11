@@ -61,7 +61,7 @@ SMODS.Joker {
     cost = 5,
     config = {
         extra = {
-            mult_stored = 2,
+            mult_stored = 0,
             mult = 4,
             times = 2,
             total_times = 2,
@@ -1571,6 +1571,9 @@ SMODS.Joker {
         if togabalatro then
             info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_togasstuff_ability"}
             info_queue[#info_queue+1] = {set = "Tag", key = "tag_toga_togajokershop"}
+        end
+        if SMODS.Mods.cryptposting then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_cryptposting_ability"}
         end
         return {
             

@@ -78,12 +78,30 @@ end
 
 function recalculateBlindUI()
     if G.HUD_blind then
-        local conf = G.HUD_blind.config
-        G.HUD_blind = UIBox{
-            definition = create_UIBox_HUD_blind(),
-            config = conf
-        }
+        G.HUD_blind.definition = nil
+        G.HUD_blind.definition = create_UIBox_HUD_blind()
+        G.HUD_blind:set_parent_child(G.HUD_blind.definition, nil)
         G.HUD_blind:recalculate()
+        G.E_MANAGER:add_event(Event({
+          trigger = 'immediate',
+          func = function()
+            if G.SHOP_SIGN then
+                G.SHOP_SIGN.alignment.offset.y = -15
+            end
+            return true
+          end
+        })) 
+        G.E_MANAGER:add_event(Event({
+          trigger = 'after',
+          delay = 0.5,
+          func = function()
+            if G.SHOP_SIGN then
+                G.SHOP_SIGN:remove()
+                G.SHOP_SIGN = nil
+            end
+            return true
+          end
+        }))
     end
 end
 

@@ -1091,21 +1091,19 @@ SMODS.Blind {
     boss = {min = 12, max = 10},
     pos = { x = 0, y = 7 },
     calculate = function (self, blind, context)
-        if context.individual and context.cardarea == G.play and not context.repetition then
-            return {
-                func = function()
-                    local attempts = 0
-                    local card_to_destroy
-                    repeat
-                        card_to_destroy = pseudorandom_element(G.jokers.cards, pseudoseed("bl_bug_akyrs"))
-                        attempts = attempts + 1
-                    until card_to_destroy and not card_to_destroy.akyrs_removed or attempts >= #G.jokers.cards
-                    if card_to_destroy and not card_to_destroy.akyrs_removed then
-                        card_to_destroy.akyrs_removed = true
-                        card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-                    end
+        if context.after and not context.repetition then
+            for i = 1, #G.play.cards do
+                local attempts = 0
+                local card_to_destroy
+                repeat
+                    card_to_destroy = pseudorandom_element(G.jokers.cards, pseudoseed("bl_bug_akyrs"))
+                    attempts = attempts + 1
+                until card_to_destroy and not card_to_destroy.akyrs_removed or attempts >= #G.jokers.cards
+                if card_to_destroy and not card_to_destroy.akyrs_removed then
+                    card_to_destroy.akyrs_removed = true
+                    card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
                 end
-            }
+            end
         end
     end
 }

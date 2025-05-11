@@ -107,8 +107,9 @@ end
 
 local setBlindHook = Blind.set_blind
 function Blind:set_blind(y, z)
-    --recalculateBlindUI()
-    return setBlindHook(self,y,z)
+    local abc = setBlindHook(self,y,z)
+    recalculateBlindUI()
+    return abc
 end
 
 function recalculateHUDUI()

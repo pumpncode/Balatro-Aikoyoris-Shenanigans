@@ -106,9 +106,10 @@ function recalculateBlindUI()
 end
 
 local setBlindHook = Blind.set_blind
-function Blind:set_blind(y, z)
-    local abc = setBlindHook(self,y,z)
-    recalculateBlindUI()
+function Blind:set_blind(x, y, z)
+    local abc = setBlindHook(self,x ,y,z)
+    if x then recalculateBlindUI() end
+    
     return abc
 end
 

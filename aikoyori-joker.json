@@ -5,11 +5,11 @@
 	"description": "Adds a bunch of stuff I want to add to the game.",
 	"prefix": "akyrs",
 	"main_file": "main.lua",
-	"priority": 300,
+	"priority": 700,
 	"badge_colour": "ff475a",
 	"badge_text_colour": "edefff",
 	"display_name": "AikoShenanigans",
-	"version": "0.2.0-alpha-250511g",
+	"version": "0.2.0-alpha-250511h",
 	"dependencies": [
 		"Steamodded (>=1.0.0~BETA-0506a)", 
 		"Lovely (*)", 

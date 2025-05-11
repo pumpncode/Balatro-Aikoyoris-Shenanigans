@@ -1091,15 +1091,13 @@ SMODS.Blind {
     boss = {min = 12, max = 10},
     pos = { x = 0, y = 7 },
     calculate = function (self, blind, context)
-        if context.individual and context.cardarea == G.play and not context.repetition then
+        if context.after and context.cardarea == G.play and not context.repetition then
             local card_to_destroy = pseudorandom_element(G.jokers.cards,pseudoseed("bl_bug_akyrs"))
-            G.E_MANAGER:add_event(Event({
+            return {
                 func = function()
                     card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
-                    return true
-                end,
-                delay = 0.5,
-            }), 'base')
+                end
+            }
         end
     end
 }

@@ -296,8 +296,8 @@ end
 
 local endRoundHook = end_round
 function end_round()
+    local x = G.playing_cards
     if G.GAME.blind.debuff.akyrs_destroy_unplayed then
-        local x = G.playing_cards
         for i, card in ipairs(x) do
             G.E_MANAGER:add_event(Event({
                 trigger = "after",
@@ -313,6 +313,10 @@ function end_round()
                 end,
                 delay = 0,
             }), 'base')
+        end
+    else
+        for i, card in ipairs(x) do
+            card.ability.akyrs_played_this_round = false
         end
     end
     

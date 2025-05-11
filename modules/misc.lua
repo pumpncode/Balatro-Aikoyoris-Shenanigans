@@ -1405,3 +1405,40 @@ AKYRS.construct_case_base = function(suit, rank)
     end
     return G.P_CARDS[('%s_%s'):format(_suit.card_key, _rank.card_key)]
 end
+
+
+function AKYRS.remove_all(t, predicate)
+    for i=#t, 1, -1 do
+        local v=t[i]
+        table.remove(t, i)
+        if v and predicate(v) and v.children then
+            AKYRS.remove_all(v.children, predicate)
+        end
+        if v and predicate(v) then v:remove() end
+        v = nil
+    end
+    for _, v in pairs(t) do
+        if predicate(v) then
+            if v.children then 
+                AKYRS.remove_all(v.children, predicate)
+            end
+            v:remove()
+            v = nil
+        end
+    end
+end
+
+
+function AKYRS.akyrs_remove(uibox,predicate)
+    
+    if uibox == G.OVERLAY_MENU then G.REFRESH_ALERTS = true end
+    uibox.UIRoot:remove()
+    for k, v in pairs(G.I[uibox.config.instance_type or 'UIBOX']) do
+        if v == uibox then
+            table.remove(G.I[uibox.config.instance_type or 'UIBOX'], k)
+            break;
+        end
+    end
+    AKYRS.remove_all(uibox.children, predicate)
+    Moveable.remove(uibox)
+end

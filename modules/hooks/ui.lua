@@ -83,7 +83,8 @@ function recalculateBlindUI()
         G.HUD_blind:set_parent_child(G.HUD_blind.definition, nil)
         G.HUD_blind:recalculate()
         G.E_MANAGER:add_event(Event({
-          trigger = 'immediate',
+            trigger = 'after',
+            delay = 0,
           func = function()
             if G.SHOP_SIGN then
                 G.SHOP_SIGN.alignment.offset.y = -15
@@ -93,7 +94,7 @@ function recalculateBlindUI()
         })) 
         G.E_MANAGER:add_event(Event({
           trigger = 'after',
-          delay = 0.5,
+          delay = 0,
           func = function()
             if G.SHOP_SIGN then
                 G.SHOP_SIGN:remove()
@@ -103,6 +104,12 @@ function recalculateBlindUI()
           end
         }))
     end
+end
+
+local setBlindHook = Blind.set_blind
+function Blind:set_blind(y, z)
+    recalculateBlindUI()
+    return setBlindHook(self,y,z)
 end
 
 function recalculateHUDUI()

@@ -247,7 +247,7 @@ function Game:start_run(args)
                 G.hand.states.collide.can = true
                 G.deck.states.collide.can = true
                 return true
-            end
+            end, 0.5
         )
     end
     return ret
@@ -299,6 +299,7 @@ function end_round()
     local x = G.playing_cards
     for i, card in ipairs(x) do
         G.E_MANAGER:add_event(Event({
+            trigger = "after",
             func = function()
                 if not card.ability.akyrs_played_this_round and G.GAME.blind.debuff.akyrs_destroy_unplayed then
                     card.area:remove_card(card)
@@ -309,7 +310,7 @@ function end_round()
                 card.ability.akyrs_played_this_round = false
                 return true
             end,
-            delay = 0.5,
+            delay = 0,
         }), 'base')
     end
     

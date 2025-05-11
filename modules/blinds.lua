@@ -1092,9 +1092,9 @@ SMODS.Blind {
     pos = { x = 0, y = 7 },
     calculate = function (self, blind, context)
         if context.after and context.cardarea == G.play and not context.repetition then
-            local card_to_destroy = pseudorandom_element(G.jokers.cards,pseudoseed("bl_bug_akyrs"))
             return {
                 func = function()
+                    local card_to_destroy = pseudorandom_element(G.jokers.cards,pseudoseed("bl_bug_akyrs"))
                     card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
                 end
             }

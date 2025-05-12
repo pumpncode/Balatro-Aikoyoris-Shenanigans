@@ -78,31 +78,39 @@ end
 
 function recalculateBlindUI()
     if G.HUD_blind then
+        --[[
+            local conf = AKYRS.deep_copy(G.HUD_blind.config)
+            AKYRS.akyrs_remove(G.HUD_blind,function(v) print("A") return v and v.config and (v.config.object ~= G.GAME.blind) end)
+            G.HUD_blind:remove()
+            G.HUD_blind = UIBox{
+                definition = create_UIBox_HUD_blind(),
+                config = conf
+            }
+        ]]
+        --AKYRS.remove_all(G.HUD_blind.children,function(v) print("A") return v and v.config and (v.config.object ~= G.GAME.blind) end)
         G.HUD_blind.definition = nil
         G.HUD_blind.definition = create_UIBox_HUD_blind()
         G.HUD_blind:set_parent_child(G.HUD_blind.definition, nil)
         G.HUD_blind:recalculate()
         G.E_MANAGER:add_event(Event({
-          trigger = 'immediate',
+            trigger = 'after',
+            delay = 0,
           func = function()
             if G.SHOP_SIGN then
                 G.SHOP_SIGN.alignment.offset.y = -15
             end
             return true
           end
-        })) 
-        G.E_MANAGER:add_event(Event({
-          trigger = 'after',
-          delay = 0.5,
-          func = function()
-            if G.SHOP_SIGN then
-                G.SHOP_SIGN:remove()
-                G.SHOP_SIGN = nil
-            end
-            return true
-          end
         }))
     end
+end
+
+local setBlindHook = Blind.set_blind
+function Blind:set_blind(x, y, z)
+    local abc = setBlindHook(self,x ,y,z)
+    if x then recalculateBlindUI() end
+    
+    return abc
 end
 
 function recalculateHUDUI()
@@ -728,33 +736,6 @@ function create_UIBox_blind_popup(bl, disco, vars)
     end
     return x
 end
-
-local origSoulRender = SMODS.DrawSteps.floating_sprite.func
-SMODS.DrawStep:take_ownership('floating_sprite',{
-    func = function (self, layer)
-        if self.config and self.config.center_key and self.config.center_key == "j_akyrs_aikoyori" then
-            if self.config.center.soul_pos and (self.config.center.discovered or self.bypass_discovery_center) then
-                local scale_mod = 0.1
-                local rotate_mod = 0.08*math.cos(1.94236*G.TIMERS.REAL)
-                local xmod = 0
-                local ymod = 0.1*math.sin(2.1654*G.TIMERS.REAL) - 0.1
-                self.children.floating_sprite:draw_shader('dissolve',0, nil, nil, self.children.center,scale_mod, rotate_mod,xmod,ymod,nil, 0.6)
-                self.children.floating_sprite:draw_shader('dissolve', nil, nil, nil, self.children.center, scale_mod, rotate_mod,xmod,ymod-0.2)
-                if self.edition then 
-                    for k, v in pairs(G.P_CENTER_POOLS.Edition) do
-                        if v.apply_to_float then
-                            if self.edition[v.key:sub(3)] then
-                                self.children.floating_sprite:draw_shader(v.shader, nil, nil, nil, self.children.center, scale_mod, rotate_mod,xmod,ymod-0.2)
-                            end
-                        end
-                    end
-                end
-            end
-        else
-            origSoulRender(self,layer)
-        end
-    end
-})
 
 local locHooker = localize
 function localize(args, misc_cat)

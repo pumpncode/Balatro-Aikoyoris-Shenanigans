@@ -88,25 +88,75 @@ function EventManager:update(dt, forced)
         end
     end
     --print(collectgarbage("count"))
-    if (math.floor((G.TIMERS.REAL) * 10 + 0.5) / 10) == math.floor(G.TIMERS.REAL * 10) / 10 then
+    if (math.floor((G.TIMERS.REAL) * 100 + 0.5) / 100) == math.floor(G.TIMERS.REAL) then
         AKYRS.expensive_calculation()
     end
 
     return s
 end
 
+local cardUpdateHook = Card.update
+function Card:update(dt)
+    local x = cardUpdateHook(self,dt)
+    if G.GAME.akyrs_ultimate_freedom and not self.states.drag.can then
+        self.states.drag.can = true
+    end
+    if G.GAME.akyrs_ultimate_freedom and not self.states.click.can then
+        self.states.click.can = true
+    end
+    if G.STATE == G.STATES.HAND_PLAYED then
+        self.ability.akyrs_executed_debuff = false
+        for suitkey, suit in pairs(SMODS.Suits) do
+            if(suitkey ~= nil and self:is_suit(suitkey) and G.GAME.current_round.aiko_played_suits) then
+                G.GAME.current_round.aiko_played_suits[suitkey] = true
+            end
+        end
+    end
+    if G.STATE == G.STATES.SELECTING_HAND then
+        if not self.ability.akyrs_executed_debuff and G.GAME.blind and not G.GAME.blind.disabled then
+            if G.GAME.blind.debuff.akyrs_suit_debuff_hand then
+                for suit, _ in pairs(G.GAME.current_round.aiko_played_suits) do
+                    if self:is_suit(suit) then
+                        self:set_debuff(true)
+                    end
+                end
+            end
+            if G.GAME.blind.debuff.akyrs_all_seals_perma_debuff then
+                if self.seal and not self.ability.akyrs_undebuffable then
+                    self.ability.akyrs_perma_debuff = true
+                end
+            end
+            self.ability.akyrs_executed_debuff = true
+        end
+    end
+    -- permanent debuff shenanigans
+    if self.ability.akyrs_undebuffable then
+        self.ability.akyrs_perma_debuff = false
+        self.ability.perma_debuff = false
+        self:set_debuff(false)
+    end
+    if self.ability.akyrs_perma_debuff and not self.ability.akyrs_undebuffable then
+        self:set_debuff(true)
+    end
+    if self.ability.akyrs_forced_selection and not self.ability.akyrs_undebuffable then
+        local isAlreadyInHighlighted = false
+        for gg,gk in ipairs(self.area.highlighted) do
+            if gk == self then
+                isAlreadyInHighlighted = true
+                break
+            end
+        end
+        if not isAlreadyInHighlighted and #self.area.highlighted < self.area.config.highlighted_limit then
+            self:highlight(true)
+            self.area:add_to_highlighted(self)
+            self.ability.forced_selection = true
+        end
+    end
+end
+
 function AKYRS.expensive_calculation()
     if G.STATE == G.STATES.HAND_PLAYED then
         G.GAME.current_round.akyrs_executed_debuff = false
-        for suitkey, suit in pairs(SMODS.Suits) do
-            for _, card in ipairs(G.play.cards) do
-                if(suitkey ~= nil and card:is_suit(suitkey) and G.GAME.current_round.aiko_played_suits) then
-                    G.GAME.current_round.aiko_played_suits[suitkey] = true
-                    goto akyrs_suit_check_continue
-                end
-            end
-            ::akyrs_suit_check_continue::
-        end
 
         if G.GAME.aiko_last_chips ~= G.GAME.current_round.current_hand.chips or G.GAME.aiko_last_mult ~=
             G.GAME.current_round.current_hand.mult then
@@ -139,41 +189,6 @@ function AKYRS.expensive_calculation()
             G.GAME.blind.debuff.initial_action_acted = false
             G.GAME.blind.debuff.initial_action_act_set = true
         end
-        if not G.GAME.current_round.akyrs_executed_debuff and AKYRS.all_card_areas and G.GAME.blind and not G.GAME.blind.disabled  then
-            if G.GAME.blind.debuff.akyrs_suit_debuff_hand then
-                if AKYRS.all_card_areas then 
-                    for suit, _ in pairs(G.GAME.current_round.aiko_played_suits) do
-                        for _,area in ipairs(G.I.CARDAREA) do
-                            if (area and area.cards) then
-                                for j,c in ipairs(area.cards) do
-                                    if c:is_suit(suit) then
-                                        c:set_debuff(true)
-                                    end
-                                end
-                            end
-                
-                        end
-                        
-                    end
-                end
-            end
-            if G.GAME.blind.debuff.akyrs_all_seals_perma_debuff and not G.GAME.blind.disabled then
-                if AKYRS.all_card_areas then 
-                    for _,area in ipairs(AKYRS.all_card_areas) do
-                        if (area and area.cards) then
-                            for j,c in ipairs(area.cards) do
-                                if c.seal and not c.ability.akyrs_undebuffable then
-                                    c.ability.akyrs_perma_debuff = true
-                                end
-                            end
-                        end
-            
-                    end
-                        
-                end
-            end
-            G.GAME.current_round.akyrs_executed_debuff = true
-        end
 
         if  G.GAME.blind.debuff.akyrs_pick_cards and not G.GAME.blind.disabled then
             if AKYRS.picker_initial_action and not G.GAME.blind.debuff.initial_action_acted then
@@ -183,39 +198,6 @@ function AKYRS.expensive_calculation()
         end
     end
     
-    -- permanent debuff shenanigans
-    
-    if AKYRS.all_card_areas then 
-        for i,k in ipairs(AKYRS.all_card_areas) do
-            if (k and k.cards) then
-                for j,l in ipairs(k.cards) do
-                    if l.ability.akyrs_undebuffable then
-                        l.ability.akyrs_perma_debuff = false
-                        l.ability.perma_debuff = false
-                        l:set_debuff(false)
-                    end
-                    if l.ability.akyrs_perma_debuff and not l.ability.akyrs_undebuffable then
-                        l:set_debuff(true)
-                    end
-                    if l.ability.akyrs_forced_selection and not l.ability.akyrs_undebuffable then
-                        local isAlreadyInHighlighted = false
-                        for gg,gk in ipairs(l.area.highlighted) do
-                            if gk == l then
-                                isAlreadyInHighlighted = true
-                                break
-                            end
-                        end
-                        if not isAlreadyInHighlighted and #l.area.highlighted < l.area.config.highlighted_limit then
-                            l:highlight(true)
-                            l.area:add_to_highlighted(l)
-                            l.ability.forced_selection = true
-                        end
-                    end
-                end
-            end
-        end
-    end
-
 
 end
 
@@ -1002,17 +984,6 @@ function CardArea:align_cards()
         self.states.collide.can = false
     end
     return r
-end
-
-local cardUpdateHook = Card.update
-function Card:update(dt)
-    local x = cardUpdateHook(self,dt)
-    if G.GAME.akyrs_ultimate_freedom and not self.states.drag.can then
-        self.states.drag.can = true
-    end
-    if G.GAME.akyrs_ultimate_freedom and not self.states.click.can then
-        self.states.click.can = true
-    end
 end
 
 local cardAreaDrawHook = CardArea.draw

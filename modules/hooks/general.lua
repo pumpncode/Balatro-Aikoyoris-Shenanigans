@@ -87,6 +87,15 @@ function EventManager:update(dt, forced)
             G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
         end
     end
+    --print(collectgarbage("count"))
+    if (math.floor((G.TIMERS.REAL) * 10 + 0.5) / 10) == math.floor(G.TIMERS.REAL * 10) / 10 then
+        AKYRS.expensive_calculation()
+    end
+
+    return s
+end
+
+function AKYRS.expensive_calculation()
     if G.STATE == G.STATES.HAND_PLAYED then
         G.GAME.current_round.akyrs_executed_debuff = false
         for suitkey, suit in pairs(SMODS.Suits) do
@@ -134,7 +143,7 @@ function EventManager:update(dt, forced)
             if G.GAME.blind.debuff.akyrs_suit_debuff_hand then
                 if AKYRS.all_card_areas then 
                     for suit, _ in pairs(G.GAME.current_round.aiko_played_suits) do
-                        for _,area in ipairs(AKYRS.all_card_areas) do
+                        for _,area in ipairs(G.I.CARDAREA) do
                             if (area and area.cards) then
                                 for j,c in ipairs(area.cards) do
                                     if c:is_suit(suit) then
@@ -175,6 +184,7 @@ function EventManager:update(dt, forced)
     end
     
     -- permanent debuff shenanigans
+    
     if AKYRS.all_card_areas then 
         for i,k in ipairs(AKYRS.all_card_areas) do
             if (k and k.cards) then
@@ -207,7 +217,6 @@ function EventManager:update(dt, forced)
     end
 
 
-    return s
 end
 
 function customDeckHooks(self, card_protos)
@@ -411,7 +420,7 @@ function Game:update_hand_played(dt)
     if self.aiko_wordle then
         self.aiko_wordle:remove(); self.aiko_wordle = nil
     end
-    if not self.aiko_wordle then
+    if not self.aiko_wordle and AKYRS.isBlindKeyAThing() == "bl_akyrs_the_thought" then
         self.aiko_wordle = UIBox {
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
             config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
@@ -1435,9 +1444,9 @@ end
 
 local blindDefeatHook = Blind.defeat
 function Blind:defeat(silent)
-    local x = blindDefeatHook(self,silent)
-    if self.boss then
+    if self then
         G.GAME.akyrs_blind_just_defeated = true
     end
+    local x = blindDefeatHook(self,silent)
     return x
 end

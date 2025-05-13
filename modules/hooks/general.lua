@@ -75,6 +75,7 @@ local gameUpdate = EventManager.update
 
 function EventManager:update(dt, forced)
     local s = gameUpdate(self, dt, forced)
+    G.GAME.alphabet_rate = G.GAME.alphabet_rate or 0
     if (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled) and G.GAME.alphabet_rate == 0 then
         G.GAME.alphabet_rate = 1
     end

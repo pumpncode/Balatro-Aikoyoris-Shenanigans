@@ -42,7 +42,7 @@ end
 function SMODS.current_mod.reset_game_globals(run_start)
     G.GAME.current_round.discards_sub = 0
     G.GAME.current_round.hands_sub = 0
-    if G.GAME.akyrs_last_ante ~= G.GAME.round_resets.ante then
+    if G.GAME.akyrs_last_ante ~= G.GAME.round_resets.ante or G.GAME.akyrs_letter_target then
         G.GAME.akyrs_letter_target = pseudorandom_element(AKYRS.raw_scrabble_letters, pseudoseed(G.GAME.pseudorandom.seed.."akyrs".."letter_pick"))
         G.GAME.akyrs_last_ante = G.GAME.round_resets.ante
     end

@@ -268,6 +268,7 @@ end
 
 local cashOutHook = G.FUNCS.cash_out
 G.FUNCS.cash_out = function(e)
+    SMODS.calculate_context({akyrs_round_eval = true, dollars = G.GAME.current_round.dollars})
     if not G.GAME.current_round.advanced_blind or G.GAME.aiko_puzzle_win then
         local ret = cashOutHook(e)
         G.GAME.aiko_puzzle_win = nil

@@ -158,7 +158,6 @@ SMODS.Atlas {
     py = 18
 }
 
-
 SMODS.Shader{
     key = "texelated",
     path = "texelated.fs"

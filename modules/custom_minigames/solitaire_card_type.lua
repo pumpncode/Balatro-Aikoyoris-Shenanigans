@@ -48,14 +48,14 @@ function SolitaireCard:stop_drag()
     self.states.drag.can = false
     for i, k in ipairs(G.CONTROLLER.collision_list) do
         if (k:is(CardArea)) then
-            if k.config.akyrs_emplace_func and k.config.akyrs_emplace_func(k, self) then
+            if k.config.akyrs_sol_emplace_func and k.config.akyrs_sol_emplace_func(k, self) then
                 area = k
                 break
             end
         end
         
         if (k:is(Card)) and false then
-            if k.area and k.area.config.akyrs_emplace_func and k.area.config.akyrs_emplace_func(k.area, self) then
+            if k.area and k.area.config.akyrs_sol_emplace_func and k.area.config.akyrs_sol_emplace_func(k.area, self) then
                 area = k.area
                 break
             end
@@ -111,8 +111,10 @@ function Card:akyrs_bring_following_cards(area)
         for i,k in ipairs(self.following_cards) do
             if k.akyrs_card_held and k.akyrs_card_held:is(Card) then
                 k.akyrs_card_held.following_cards = nil
-                k.akyrs_card_held.area:remove_card(k)
-                k.akyrs_card_held.area:align_cards()
+                if akyrs_card_held.area then
+                    k.akyrs_card_held.area:remove_card(k)
+                    k.akyrs_card_held.area:align_cards()
+                end
                 k.is_being_pulled = false
             end
             

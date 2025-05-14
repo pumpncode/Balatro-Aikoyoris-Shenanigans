@@ -354,9 +354,9 @@ return {
             dd_akyrs_mukuroju_en = {
                 name = "Mukuroju no Hakamori",
                 text = { 
-                    "This Joker gains {C:mult}+#1#{} Mult",
+                    "This Joker gains {X:mult,C:white} X#1# {} Mult",
                     "per {C:tarot}The Star{} used",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult)",
+                    "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
                 }
             },
             dd_akyrs_expert_blind  = {
@@ -631,8 +631,8 @@ return {
             j_akyrs_kyoufuu_all_back = {
                 name = "Kyoufuu All Back",
                 text = { 
-                    "Return previously {C:attention}discarded Cards",
-                    "back to deck on {C:attention}final discard{}"
+                    "Return previously {C:attention}discarded",
+                    "{C:attention and played{} cards back to deck"
                 }
             },
             j_akyrs_2fa = {
@@ -641,7 +641,7 @@ return {
                     "{C:attention}All Played Cards'{} Rank",
                     "and Suit are {C:attention}randomized{} after scoring",
                     "and gains {C:chips}+#1#{} Chips per card played",
-                    "{C:attention}Resets{} at the end of the round.",
+                    "{C:attention}Halves{} at the end of the round.",
                     "{C:inactive}(Currently {C:chips}+#2#{C:inactive} Chips)",
                     "{C:inactive,s:0.8}PSA: Please enable 2FA on all your online accounts!",
                 }
@@ -669,6 +669,7 @@ return {
                     "If at least {C:attention}3{} cards were played",
                     "First and last card {C:attention}+#1#{} Rank",
                     "all other cards {C:attention}-#1#{} Rank",
+                    "Gives {C:chips}+#2#{} Chips per card played",
                 }
             },
             j_akyrs_henohenomoheji = {
@@ -802,9 +803,102 @@ return {
                 name = "{font:5}躯樹の墓守",
                 text = { 
                     "{font:5}このジョーカーは、{font:5,C:tarot}星{font:5}を使用するたびに",
-                    "{font:5}倍率 {C:mult}+#1#{font:5} を得る",
-                    "{C:inactive}({C:inactive,font:5}現在 倍率 {C:mult}+#2#{C:inactive})",
+                    "{font:5}倍率 {X:mult,C:white} X#1# {font:5} を得る",
+                    "{C:inactive}({C:inactive,font:5}現在 倍率 {X:mult,C:white} X#2# {C:inactive})",
                 }
+            },
+            j_akyrs_emerald = {
+                name = "Emerald",
+                text = { 
+                    "This joker sells for {X:money,C:black}X#1#{}",
+                    "its buy cost ({C:money}$#2#{})",
+                    "{C:inactive}placeholder ability",
+                }
+            },
+            j_akyrs_shimmer_bucket = {
+                name = "Shimmer Bucket",
+                text = { 
+                    "After exiting the shop,",
+                    "Destroy and Create {C:attention}#1#{} Jokers",
+                    "with the {C:attention}same{} rarity as the Joker",
+                    "{C:attention}immediately to the left{} of this joker",
+                    "{C:red}Self-destructs{}",
+                }
+            },
+            j_akyrs_space_elevator = {
+                name = "Space Elevator",
+                text = { 
+                    "{s:1.3,C:attention}Phase {s:1.3,C:blue}#3#",
+                    "Play {C:attention}#1# {C:blue}#2#s{} {C:inactive}(#4#){}",
+                    "to move on to the next {C:attention}Phase",
+                    "Completing each {C:attention}Phase",
+                    "grants you a {C:dark_edition}Negative Spectral Card",
+                    "Finishing Phase {C:blue}6",
+                    "grants you a {C:dark_edition}Negative Soul Card",
+                    "and resets to Phase {C:blue}1",
+                }
+            },
+            j_akyrs_turret = {
+                name = "Turret",
+                text = { 
+                    "Sell this Joker to destroy",
+                    "Joker {C:attention}to the right",
+                    "Gives its {C:attention}purchase{} cost back {C:inactive}({C:money}$#1#{C:inactive}){}",
+                    "{E:1,C:red}Bypasses Eternal",
+                }
+            },
+            j_akyrs_aether_portal = {
+                name = "Aether Portal",
+                text = { 
+                    "When Blind is Selected",
+                    "Joker {C:attention}to the left{}",
+                    "gains a {C:attention}new{} edition",
+                    "{C:green}#1# in #2#{} chance to {C:red}destroy",
+                    "this Joker in the process",
+                    "{C:inactive}(All editions weighted equally)",
+                }
+            },
+            j_akyrs_corkscrew = {
+                name = "Corkscrew",
+                text = { 
+                    "{C:white,X:mult} X#1#{} Mult",
+                    "{C:attention}Moves itself{}",
+                    "after clicking Play",
+                }
+            },
+            j_akyrs_goodbye_sengen = {
+                name = "Goodbye Sengen",
+                text = { 
+                    "If hand has {C:attention}a single{} card,",
+                    "destroy it and create a {C:tarot}Justice{}",
+                    "{C:inactive}(Must have room){}",
+                    "{C:inactive,font:5}引きこもり絶対ジャスティス俺の私だけの折の中で{}",
+                }
+            },
+            j_akyrs_liar_dancer = {
+                name = "Liar Dancer",
+                text = { 
+                    "If hand does not contain a {C:attention}Straight{}",
+                    "{C:attention}reduce{} the level of it by {C:red}-#1#{}",
+                    "and level up {C:attention}Straight{} and",
+                    "{C:attention}Straight Flush{} by {C:blue}#2#{}",
+                    "{C:inactive}(Hand cannot be downgraded below 1){}",
+                    "{C:inactive,font:5}(踊れ 踊れ 嘘に踊れ){}",
+                }
+            },
+        },
+        Partner = {
+            pnr_akyrs_aikoyori = {
+                
+                name = "smol Aiko",
+                text = {
+                    "Retrigger {C:attention}every{} cards {C:attention}#1#{} times",
+                },
+                unlock={
+                    "Used {C:attention}Aikoyori",
+                    "to win on {C:attention}Gold",
+                    "{C:attention}Stake{} difficulty",
+                },
             }
         },
         Other={
@@ -1203,7 +1297,8 @@ return {
             hc_akyrs_half_life_2 = "Half-Life 2",
             hc_akyrs_thin_yo_deck = "thin yo deck bro",
             hc_akyrs_thin_yo_deck_2 = "for the love of god thin your deck",
-            hc_akyrs_national_debt = "National Debt"
+            hc_akyrs_national_debt = "National Debt",
+            hc_akyrs_extra_defensive_bulwark = "Extra Defensive Bulwark"
         },
         collabs={},
         dictionary={
@@ -1239,6 +1334,8 @@ return {
             k_akyrs_growth = "Growth!",
             k_akyrs_back = "Reverse!",
             k_akyrs_cinema = "Cinema!",
+            k_akyrs_received = "Received",
+            k_akyrs_sendoff = "Blast Off!",
 
             k_akyrs_random_letter = "randomly selected letter",
 
@@ -1410,6 +1507,18 @@ return {
             ch_c_akyrs_no_tarot_except_twof={
                 "No {C:tarot}Tarot{} Cards will spawn except {C:tarot,T:c_wheel_of_fortune}Wheel of Fortune{}",
             },
+            ch_c_akyrs_no_tarot={
+                "No {C:tarot}Tarot{} Cards will spawn",
+            },
+            ch_c_akyrs_no_planet={
+                "No {C:planet}Planet{} Cards will spawn",
+            },
+            ch_c_akyrs_no_jokers={
+                "No {C:red}Jokers{} will spawn",
+            },
+            ch_c_akyrs_all_cards_are_stone={
+                "All cards are {C:purple}Stone{} cards",
+            },
             ch_c_akyrs_allow_duplicates={
                 "{C:attention}Duplicates{} can spawn",
             },
@@ -1418,6 +1527,9 @@ return {
             },
             ch_c_akyrs_idea_by_missingnumber={
                 "Idea by {C:attention}missingnumber",
+            },
+            ch_c_akyrs_idea_by_saharabat={
+                "Idea by {C:attention}saharabat",
             },
         },
     },

@@ -387,3 +387,80 @@ AKYRS.HardcoreChallenge{
     difficulty = 6,
     stake = "stake_gold",
 }
+
+AKYRS.HardcoreChallenge{
+    key = "extra_defensive_bulwark",
+    jokers = {
+    },
+    vouchers = {
+    },
+    deck = {
+        type = "Hardcore Challenge Deck",
+        cards = {
+            { s = "H", r = "2", e = "m_stone"},
+            { s = "H", r = "2", e = "m_stone"},
+            { s = "H", r = "2", e = "m_stone"},
+            { s = "H", r = "2", e = "m_stone"},
+            { s = "H", r = "2", e = "m_stone"},
+        }
+    },
+    rules = {
+        custom = {
+            {id = 'no_shop_jokers'},
+            {id = 'akyrs_no_jokers'},
+            {id = 'akyrs_no_tarot'},
+            {id = 'akyrs_no_planet'},
+            {id = 'akyrs_all_cards_are_stone'},
+            {id = 'akyrs_can_buy_playing_cards'},
+            {id = 'akyrs_allow_duplicates'},
+            {id = 'akyrs_idea_by_saharabat'},
+        },
+        modifiers = {
+        }
+    },
+    restrictions = {
+        banned_cards = {
+            {id = 'c_judgement'},
+            {id = 'c_wraith'},
+            {id = 'c_soul'},
+            {id = 'v_telescope'},
+            {id = 'v_observatory'},
+            {id = 'v_tarot_merchant'},
+            {id = 'v_tarot_tycoon'},
+            {id = 'v_planet_merchant'},
+            {id = 'v_planet_tycoon'},
+            {id = 'v_antimatter'},
+            {id = 'p_buffoon_normal_1', ids = {
+                'p_buffoon_normal_1','p_buffoon_normal_2','p_buffoon_jumbo_1','p_buffoon_mega_1',
+            }},
+            {id = 'p_arcana_normal_1', ids = {
+                'p_arcana_normal_1','p_arcana_normal_2','p_arcana_jumbo_1','p_arcana_mega_1',
+                'p_arcana_normal_3','p_arcana_normal_4','p_arcana_jumbo_2','p_arcana_mega_2',
+            }},
+            {id = 'p_celestial_normal_1', ids = {
+                'p_celestial_normal_1','p_celestial_normal_2','p_celestial_jumbo_1','p_celestial_mega_1',
+                'p_celestial_normal_3','p_celestial_normal_4','p_celestial_jumbo_2','p_celestial_mega_2',
+            }},
+        },
+        banned_tags = {
+            {id = 'tag_rare'},
+            {id = 'tag_uncommon'},
+            {id = 'tag_holo'},
+            {id = 'tag_polychrome'},
+            {id = 'tag_negative'},
+            {id = 'tag_foil'},
+            {id = 'tag_buffoon'},
+            {id = 'tag_top_up'},
+            {id = 'tag_charm'},
+            {id = 'tag_meteor'},
+
+        },
+        banned_other = {
+            {id = 'bl_final_acorn', type = 'blind'},
+            {id = 'bl_final_heart', type = 'blind'},
+            {id = 'bl_final_leaf', type = 'blind'}
+        }
+    },
+    difficulty = 8,
+    stake = "stake_gold",
+}

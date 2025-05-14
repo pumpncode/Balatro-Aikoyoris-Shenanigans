@@ -1098,8 +1098,8 @@ SMODS.Blind {
                 repeat
                     card_to_destroy = pseudorandom_element(G.jokers.cards, pseudoseed("bl_bug_akyrs"))
                     attempts = attempts + 1
-                until card_to_destroy and not card_to_destroy.akyrs_removed or attempts >= #G.jokers.cards
-                if card_to_destroy and not card_to_destroy.akyrs_removed then
+                until card_to_destroy and (not card_to_destroy.akyrs_removed and not card_to_destroy.eternal and card_to_destroy.cry_absolute) or attempts >= #G.jokers.cards
+                if card_to_destroy and not card_to_destroy.akyrs_removed and not card_to_destroy.eternal and card_to_destroy.cry_absolute then
                     card_to_destroy.akyrs_removed = true
                     card_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
                 end

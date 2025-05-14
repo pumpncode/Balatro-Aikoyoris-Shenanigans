@@ -3,7 +3,7 @@ SMODS.Edition{
     shader = "akyrs_texelated",
     config = {
         extra = {
-            mult = -50,
+            x_chip = 0.8,
             x_mult = 2;
         }
     },
@@ -11,13 +11,13 @@ SMODS.Edition{
     calculate =  function (self, card, context)
         if context.main_scoring and context.cardarea == G.play then
             return {
-                mult = card.edition.extra.mult,
+                mult = card.edition.extra.x_chip,
                 Xmult = card.edition.extra.x_mult
             }
         end
         if context.pre_joker and (context.cardarea == G.jokers)  then
             return {
-                mult = card.edition.extra.mult,
+                mult = card.edition.extra.x_chip,
                 Xmult = card.edition.extra.x_mult
             }
         end
@@ -25,7 +25,7 @@ SMODS.Edition{
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
-                card.edition.extra.mult,
+                card.edition.extra.x_chip,
                 card.edition.extra.x_mult,
             }
         }

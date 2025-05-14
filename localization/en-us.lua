@@ -454,14 +454,14 @@ return {
             e_akyrs_texelated = {
                 name = "Texelated",
                 text = {
-                    "{C:mult}#1#{} Mult",
+                    "{C:white,X:chips}X#1#{} Chips",
                     "{C:white,X:mult}X#2#{} Mult"
                 }
             },
             e_akyrs_noire = {
                 name = "Noire",
                 text = {
-                    "{C:dark_edition}+#1#{} Card Limit for where this card is",
+                    "{C:dark_edition}+#1#{} Card Limit",
                     "{C:white,X:mult}X#2#{} Mult"
                 }
             },

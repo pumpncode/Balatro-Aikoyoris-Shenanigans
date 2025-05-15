@@ -1631,7 +1631,7 @@ SMODS.Joker {
             local v = Talisman and to_big(10) or 10
             local c = Talisman and d:lt(v) or d < v
             if togabalatro and c then
-                local tag = Tag(pseudorandom_element(toga_tags,"akyrs_aikoyori_toga_tags"))
+                local tag = Tag(pseudorandom_element(toga_tags,pseudoseed("akyrs_aikoyori_toga_tags")))
                 add_tag(tag)
             end
             if PTASaka then

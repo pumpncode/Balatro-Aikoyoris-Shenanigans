@@ -706,11 +706,12 @@ AKYRS.make_new_card_area = function(config)
     local akyrs_pile_drag = config.pile_drag or nil
     local highlight_limit = config.highlight_limit or 0
     local emplace_func = config.emplace_func or nil
+    local sol_emplace_func = config.sol_emplace_func or nil
     local use_room = config.use_room or true
     local ca = CardArea(
         (use_room and G.ROOM.T.x or 0) + margin_left * (use_room and G.ROOM.T.w or 1), (use_room and G.ROOM.T.h or 0) + margin_top
         , width , height,
-        {card_limit = card_limit, type = type, highlight_limit = highlight_limit, akyrs_emplace_func = emplace_func, temporary = temporary, akyrs_pile_drag=akyrs_pile_drag }
+        {card_limit = card_limit, type = type, highlight_limit = highlight_limit, akyrs_emplace_func = emplace_func, akyrs_sol_emplace_func = sol_emplace_func, temporary = temporary, akyrs_pile_drag=akyrs_pile_drag }
     )
     ca.states.collide.can = true
     ca.states.release_on.can = true
@@ -1441,4 +1442,17 @@ function AKYRS.akyrs_remove(uibox,predicate)
     end
     AKYRS.remove_all(uibox.children, predicate)
     Moveable.remove(uibox)
+end
+
+function AKYRS.get_p_card_ranks(not_r)
+    not_r = not_r or {}
+    local ranks = {}
+    if not G.playing_cards then return {} end
+    for i,j in ipairs(G.playing_cards) do
+        --print(j.base.value)
+        if j and not SMODS.has_no_rank(j) and j.base.value and SMODS.Ranks[j.base.value] and not not_r[j.base.value] and not AKYRS.find_index(ranks,SMODS.Ranks[j.base.value]) then
+            table.insert(ranks,SMODS.Ranks[j.base.value])
+        end
+    end
+    return ranks
 end

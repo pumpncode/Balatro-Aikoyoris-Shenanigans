@@ -113,6 +113,10 @@ function Card:update(dt)
             end
         end
     end
+    
+    if self.config.center_key == "j_akyrs_emerald" and self.sell_cost ~= self.cost * self.ability.extras.xcost then
+        self.sell_cost = self.cost * self.ability.extras.xcost
+    end
     if G.STATE == G.STATES.SELECTING_HAND then
         if not self.ability.akyrs_executed_debuff and G.GAME.blind and not G.GAME.blind.disabled then
             if G.GAME.blind.debuff.akyrs_suit_debuff_hand then
@@ -228,6 +232,27 @@ function Game:start_run(args)
                 G.GAME.banned_keys[v.key] = true
             end
         end
+        G.GAME.planet_rate = 0
+    end
+    if self.GAME.modifiers.akyrs_no_joker then
+        for k, v in ipairs(G.P_CENTER_POOLS.Joker) do
+            G.GAME.banned_keys[v.key] = true
+        end
+    end
+    if self.GAME.modifiers.akyrs_no_tarot then
+        for k, v in ipairs(G.P_CENTER_POOLS.Tarot) do
+            G.GAME.banned_keys[v.key] = true
+        end
+        G.GAME.tarot_rate = 0
+    end
+    if self.GAME.modifiers.akyrs_no_planet then
+        for k, v in ipairs(G.P_CENTER_POOLS.Planet) do
+            G.GAME.banned_keys[v.key] = true
+        end
+        G.GAME.planet_rate = 0
+    end
+    if self.GAME.modifiers.akyrs_can_buy_playing_cards then
+        G.GAME.playing_card_rate = 4
     end
     recalculateHUDUI()
     recalculateBlindUI()
@@ -806,6 +831,17 @@ function Card:akyrs_mod_card_value_init()
         local jj = SMODS.find_card("j_akyrs_chicken_jockey")
         local val = jj[#jj].ability.extras.decrease_popcorn
         self.ability.extra = val
+    end
+    if self.config.center_key == "j_akyrs_emerald" then
+        self.sell_cost = self.cost * self.ability.extras.xcost
+    end
+    if G.GAME.modifiers.akyrs_all_cards_are_stone then
+        if self.ability.set == "Default" or self.ability.set == "Enhanced" then
+            self:set_ability(G.P_CENTERS["m_stone"],true)
+            if self.ability.bonus == 0 then
+                self.ability.bonus = 50
+            end
+        end
     end
   
 end

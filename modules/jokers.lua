@@ -17,7 +17,7 @@ SMODS.Joker {
     config = {
         extra = {
             mult_stored = 1,
-            mult = 2,
+            mult = 2.5,
             starting_mult = 1
         }
     },
@@ -626,7 +626,7 @@ SMODS.Joker {
         },
     },
     calculate = function(self, card, context)
-        if context.pre_discard and G.GAME.current_round.discards_left == 1 then
+        if context.pre_discard then
             return {
                 message = localize('k_akyrs_drawn_discard'),
                 func = function()
@@ -683,7 +683,7 @@ SMODS.Joker {
             return {
                 message = localize("k_akyrs_2fa_reset"),
                 func = function ()
-                    card.ability.extra.chips = 0
+                    card.ability.extra.chips = card.ability.extra.chips / 2
                 end
             }
         end
@@ -971,13 +971,15 @@ SMODS.Joker{
     cost = 2,
     config = {
         extra = {
-            rank_delta = 1
+            rank_delta = 1,
+            chips = 4,
         }
     },
     loc_vars = function (self, info_queue, card)
         return {
             vars = {
-                1
+                1,
+                card.ability.extra.chips
             }
         }
     end,
@@ -1023,6 +1025,7 @@ SMODS.Joker{
             end
             delay(0.5*AKYRS.get_speed_mult(card)+0.2*#G.play.cards)
             return {
+                chips = card.ability.chips * #G.play.cards,
                 message = localize("k_akyrs_centrifuged")
             }
         end
@@ -1306,8 +1309,8 @@ SMODS.Joker{
     pos = {
         x = 6, y = 2
     },
-    rarity = 2,
-    cost = 6,
+    rarity = 3,
+    cost = 12,
     config = {
         name = "Charred Roach",
         extras = {
@@ -1442,14 +1445,14 @@ SMODS.Joker{
     pos = {
         x = 9, y = 2
     },
-    rarity = 2,
+    rarity = 3,
     cost = 4,
     config = {
         name = "Chicken Jockey",
         extras = {
             xmult = 1,
             xmult_inc = 2,
-            decrease_popcorn = 10,
+            decrease_popcorn = 9,
         }
     },
     loc_vars = function (self, info_queue, card)
@@ -1472,12 +1475,14 @@ SMODS.Joker{
 
         if context.akyrs_card_remove 
         and (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_popcorn") then
-            return {
-                message = localize("k_upgrade_ex"),
-                func = function ()
-                    card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_inc
-                end
-            }
+            if context.card_getting_removed.ability.mult - context.card_getting_removed.ability.extra <= 0 then
+                return {
+                    message = localize("k_upgrade_ex"),
+                    func = function ()
+                        card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_inc
+                    end
+                }
+            end
         end
     end
 }
@@ -1639,8 +1644,8 @@ SMODS.Joker{
     config = {
         name = "躯樹の墓守",
         extras = {
-            mult = 0,
-            mult_add = 12,
+            xmult = 1,
+            xmult_add = 0.5,
         }
     },
     loc_vars = function (self, info_queue, card)
@@ -1651,8 +1656,8 @@ SMODS.Joker{
         end
         return {
             vars = {
-                card.ability.extras.mult_add,
-                card.ability.extras.mult
+                card.ability.extras.xmult_add,
+                card.ability.extras.xmult
             }
         }
     end,
@@ -1668,9 +1673,358 @@ SMODS.Joker{
         end
         if context.joker_main then
             return {
-                mult = card.ability.extras.mult
+                xmult = card.ability.extras.xmult
             }
         end
     end
 
+}
+SMODS.Joker{
+    key = "emerald",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 4, y = 3
+    },
+    rarity = 1,
+    cost = 2,
+    config = {
+        name = "Emerald",
+        extras = {
+            xcost = 4,
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+            vars = {
+                card.ability.extras.xcost,
+                card.sell_cost,
+            }
+        }
+    end,
+    in_pool = function (self, args)
+        return true, {
+            allow_duplicates = true
+        }       
+    end
+}
+SMODS.Joker{
+    key = "shimmer_bucket",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 5, y = 3
+    },
+    rarity = 3,
+    cost = 15,
+    config = {
+        name = "Shimmer Bucket",
+        extras = {
+            create_factor = 2,
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+            vars = {
+                card.ability.extras.create_factor,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.ending_shop then
+            local index = AKYRS.find_index(G.jokers.cards,card)
+            if index and #G.jokers.cards > 1 and G.jokers.cards[index-1] and index > 1 then
+                local othercard = G.jokers.cards[index-1]
+                if not othercard.eternal and not othercard.cry_absolute then
+                    return {
+                        func = function ()
+                            local rarity = othercard.config.center.rarity
+                            othercard:start_dissolve({G.C.PLAYABLE},1.1)
+                            othercard:remove_from_deck()
+                            for i=1, card.ability.extras.create_factor do
+                                SMODS.add_card{rarity = rarity, set = "Joker", legendary = true}
+                            end
+                            card:start_dissolve({G.C.PLAYABLE},1.1)
+                        end
+                    }
+                end
+            end
+        end
+    end,
+    eternal_compat = false
+}
+
+SMODS.Joker{
+    key = "space_elevator",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 6, y = 3
+    },
+    rarity = 2,
+    cost = 7,
+    config = {
+        name = "Space Elevator",
+        extras = {
+            phase = 1,
+            target_play = 10,
+            played = 0,
+            target_rank = nil,
+            ranks_chosen = {}
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        card.ability.extras.phase = math.floor(card.ability.extras.phase)
+        card.ability.extras.target_play = math.floor(card.ability.extras.target_play)
+        
+        if card.ability.extras.phase > 6 or card.ability.extras.phase < 1 then 
+            card.ability.extras.phase = 1
+        end
+        return {
+            vars = {
+                card.ability.extras.target_play,
+                localize(card.ability.extras.target_rank,"ranks"),
+                card.ability.extras.phase,
+                card.ability.extras.played,
+            }
+        }
+    end,
+    set_ability = function (self, card, initial, delay_sprites)
+        if initial then
+            local r = pseudorandom_element(AKYRS.get_p_card_ranks(card.ability.extras.ranks_chosen),pseudoseed("akyrs_space_elevator")) 
+                or pseudorandom_element(SMODS.Ranks,pseudoseed("akyrs_space_elevator")) 
+            if r then
+                card.ability.extras.target_rank = r.key
+                card.ability.extras.ranks_chosen[r.key] = true
+            end
+            card.ability.extras.played = 0
+        end
+    end,
+    calculate = function (self, card, context)
+        if context.individual and not context.forcetrigger and not context.repetition and not context.repetition_only and not context.retrigger_joker and context.cardarea == G.play then
+            if not SMODS.has_no_rank(context.other_card) and context.other_card.base.value then
+                if context.other_card.base.value == card.ability.extras.target_rank then
+                    card.ability.extras.played = card.ability.extras.played + 1
+                    --print(card.ability.extras.played)
+                    if card.ability.extras.played >= card.ability.extras.target_play then
+                        card.ability.extras.phase = card.ability.extras.phase + 1
+                        local r = pseudorandom_element(AKYRS.get_p_card_ranks(card.ability.extras.ranks_chosen),pseudoseed("akyrs_space_elevator"))
+                        if not r then
+                            EMPTY(card.ability.extras.ranks_chosen)
+                            r = pseudorandom_element(AKYRS.get_p_card_ranks(card.ability.extras.ranks_chosen),pseudoseed("akyrs_space_elevator"))
+                        end
+                        if r then
+                            card.ability.extras.target_rank = r.key
+                            card.ability.extras.ranks_chosen[r.key] = true
+                        end
+                        if card.ability.extras.phase > 6 then
+                            SMODS.add_card{ key = "c_soul", set = "Spectral", edition = "e_negative"}
+                            card.ability.extras.phase = 1
+                        else
+                            SMODS.add_card{ set = "Spectral", edition = "e_negative" }
+                        end
+                        card.ability.extras.target_play = pseudorandom(pseudoseed("akyrs_space_elevator_num"),10*card.ability.extras.phase,15*card.ability.extras.phase)
+                        card.ability.extras.played = 0
+                        return {
+                            message = localize("k_akyrs_sendoff")
+                        }
+                    else
+                        return {
+                            message = localize("k_akyrs_received")
+                        }
+                    end
+                end
+            end
+        end
+    end,
+    perishable_compat = false
+}
+
+
+SMODS.Joker{
+    key = "turret",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 7, y = 3
+    },
+    rarity = 2,
+    cost = 4, 
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        if G.jokers then
+            local index = AKYRS.find_index(G.jokers.cards,card)
+            if index and #G.jokers.cards > 1 and G.jokers.cards[index+1] and index < #G.jokers.cards then
+                local othercard = G.jokers.cards[index+1]
+                return {
+                    vars = 
+                    {
+                        othercard.cost
+                    }
+                }
+            end
+        end
+        return {
+            vars = {
+                "??"
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.selling_card and context.card == card then
+            
+            local index = AKYRS.find_index(G.jokers.cards,card)
+            if index and #G.jokers.cards > 1 and G.jokers.cards[index+1] and index < #G.jokers.cards then
+                local othercard = G.jokers.cards[index+1]
+                return {
+                    func = function ()
+                        othercard:start_dissolve({G.C.RED},1.6)
+                    end,
+                    dollars = othercard.cost
+                }
+            end
+        end
+    end,
+    eternal_compat = false,
+}
+SMODS.Joker{
+    key = "aether_portal",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 8, y = 3
+    },
+    rarity = 2,
+    cost = 7, 
+    config = {
+        extras = {
+            odds = 4
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+            vars = {
+                G.GAME.probabilities.normal,
+                card.ability.extras.odds
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.setting_blind then
+            
+            local index = AKYRS.find_index(G.jokers.cards,card)
+            if index and #G.jokers.cards > 1 and G.jokers.cards[index-1] and index > 1 then
+                local other = G.jokers.cards[index-1]
+                local edition = pseudorandom_element(G.P_CENTER_POOLS.Edition,pseudoseed("akyrs_aether_chance"))
+                other:set_edition(edition.key)
+                if pseudorandom('akyrs_aether_portal') < G.GAME.probabilities.normal/card.ability.extras.odds then
+                    card:start_dissolve({G.C.BLUE},1.6)
+                end
+            end
+        end
+    end
+}
+
+SMODS.Joker{
+    key = "corkscrew",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 9, y = 3
+    },
+    rarity = 1,
+    cost = 3,
+    config = {
+        extras = { xmult = 2 }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+            vars = {
+                card.ability.extras.xmult
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.before then
+            if card.area then
+                local where = pseudorandom("akyrs_corkscrew_move_target",1,#card.area.cards)
+                local current = AKYRS.find_index(card.area.cards,card)
+                card.area.cards[where],card.area.cards[current] = card.area.cards[current],card.area.cards[where]
+                card.area:align_cards()
+            end
+        end
+        if context.joker_main then
+            return {
+                xmult = card.ability.extras.xmult
+            }
+        end
+    end
+}
+SMODS.Joker{
+    key = "goodbye_sengen",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 0, y = 4
+    },
+    rarity = 3,
+    cost = 8,
+    config = {
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["c_justice"]
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            if #context.full_hand == 1 and #G.consumeables.cards < G.consumeables.config.card_limit then
+               SMODS.add_card{ key = "c_justice", set = "Tarot" } 
+            end
+        end
+        if context.destroy_card and context.cardarea == G.play and #context.full_hand == 1 then
+            return {
+                remove = true
+            }
+        end
+    end
+}
+
+SMODS.Joker{
+    key = "liar_dancer",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 1, y = 4
+    },
+    rarity = 3,
+    cost = 7,
+    config = {
+        extras = {
+            level_down = 1,
+            level_up_mult = 3,
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+            vars = {
+                card.ability.extras.level_down,
+                card.ability.extras.level_down * card.ability.extras.level_up_mult
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.before then
+            local cx = false
+            if Talisman then
+                cx = G.GAME.hands[context.scoring_name].level:gt(to_big(1))
+            else
+                cx = G.GAME.hands[context.scoring_name].level > 1
+            end
+            if not context.poker_hands["Straight"] or (context.poker_hands["Straight"] and not next(context.poker_hands["Straight"])) and cx then
+                level_up_hand(card,context.scoring_name,nil,-card.ability.extras.level_down)
+                level_up_hand(card,"Straight",nil,card.ability.extras.level_down * card.ability.extras.level_up_mult)
+                level_up_hand(card,"Straight Flush",nil,card.ability.extras.level_down * card.ability.extras.level_up_mult)
+            end
+        end
+    end
 }

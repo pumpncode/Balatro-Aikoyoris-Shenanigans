@@ -175,7 +175,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "foundation1" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.foundationArea1) end
         AKYRS.SOL.foundationArea1 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", emplace_func = AKYRS.SOL.foundation_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", sol_emplace_func = AKYRS.SOL.foundation_check}
         table.insert(AKYRS.SOL.cardAreas.foundations, AKYRS.SOL.foundationArea1)
         
         return AKYRS.SOL.foundationArea1
@@ -183,21 +183,21 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "foundation2" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.foundationArea2) end
         AKYRS.SOL.foundationArea2 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", emplace_func = AKYRS.SOL.foundation_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", sol_emplace_func = AKYRS.SOL.foundation_check}
         table.insert(AKYRS.SOL.cardAreas.foundations, AKYRS.SOL.foundationArea2)
         return AKYRS.SOL.foundationArea2
     end
     if cardarea == "foundation3" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.foundationArea3) end
         AKYRS.SOL.foundationArea3 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", emplace_func = AKYRS.SOL.foundation_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", sol_emplace_func = AKYRS.SOL.foundation_check}
         table.insert(AKYRS.SOL.cardAreas.foundations, AKYRS.SOL.foundationArea3)
         return AKYRS.SOL.foundationArea3
     end
     if cardarea == "foundation4" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.foundationArea4) end
         AKYRS.SOL.foundationArea4 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", emplace_func = AKYRS.SOL.foundation_check}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H, type = "akyrs_solitaire_foundation", sol_emplace_func = AKYRS.SOL.foundation_check}
         table.insert(AKYRS.SOL.cardAreas.foundations, AKYRS.SOL.foundationArea4)
         return AKYRS.SOL.foundationArea4
     end
@@ -205,7 +205,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau1" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea1) end
         AKYRS.SOL.tableauArea1 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", sol_emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea1)
         return AKYRS.SOL.tableauArea1
@@ -213,7 +213,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau2" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea2) end
         AKYRS.SOL.tableauArea2 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", sol_emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
         
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea2)
         return AKYRS.SOL.tableauArea2
@@ -221,7 +221,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau3" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea3) end
         AKYRS.SOL.tableauArea3 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", sol_emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea3)
         return AKYRS.SOL.tableauArea3
@@ -229,7 +229,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau4" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea4) end
         AKYRS.SOL.tableauArea4 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", sol_emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea4)
         return AKYRS.SOL.tableauArea4
@@ -237,7 +237,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau5" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea5) end
         AKYRS.SOL.tableauArea5 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", sol_emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea5)
         return AKYRS.SOL.tableauArea5
@@ -245,7 +245,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau6" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea6) end
         AKYRS.SOL.tableauArea6 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", sol_emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
             
             
         table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea6)
@@ -254,7 +254,7 @@ function AKYRS.SOL.initialize_card_area(cardarea, destroy)
     if cardarea == "tableau7" then
         if destroy then AKYRS.destroy_existing_cards(AKYRS.SOL.tableauArea7) end
         AKYRS.SOL.tableauArea7 = 
-            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
+            AKYRS.make_new_card_area{ w = G.CARD_W , h = G.CARD_H* 2.5, type = "akyrs_solitaire_tableau", sol_emplace_func = AKYRS.SOL.tableau_check, pile_drag = true}
             
             table.insert(AKYRS.SOL.cardAreas.tableau, AKYRS.SOL.tableauArea7)
         AKYRS.SOL.cardarea_initialized = true -- jank
@@ -338,7 +338,7 @@ function AKYRS.SOL.klondike_quick_stack(card)
     if card.area.cards[#card.area.cards] ~= card then return end
     for _,ap in ipairs(AKYRS.SOL.card_area_priority) do
         for i, ca in ipairs(AKYRS.SOL.cardAreas[ap]) do
-            if ca.config.akyrs_emplace_func and ca.config.akyrs_emplace_func(ca,card) and ca ~= card.area then
+            if ca.config.akyrs_sol_emplace_func and ca.config.akyrs_sol_emplace_func(ca,card) and ca ~= card.area then
                 card.following_cards = nil
                 card:akyrs_calculate_following_cards(function(x) return x == card end)
                 --print(card.following_cards and #card.following_cards or "fuck you")

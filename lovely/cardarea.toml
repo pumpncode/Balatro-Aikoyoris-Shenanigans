@@ -25,6 +25,7 @@ pattern = """    self.config.sort = config.sort or 'desc'"""
 position = "after"
 payload = """
 self.config.akyrs_emplace_func = config.akyrs_emplace_func or nil
+self.config.akyrs_sol_emplace_func = config.akyrs_sol_emplace_func or nil
 self.config.akyrs_pile_drag = config.akyrs_pile_drag or nil
 """
 overwrite = true

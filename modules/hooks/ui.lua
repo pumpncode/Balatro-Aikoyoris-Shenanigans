@@ -145,6 +145,14 @@ function Card:hover()
     local ret = cardHoverHook(self)
     return ret
 end
+local nodeHoverHook = Node.hover
+function Node:hover()
+    if next(SMODS.find_card("j_akyrs_no_hints_here")) then
+        self.config.h_popup = nil
+    end
+    local ret = nodeHoverHook(self)
+    return ret
+end
 
 local cardStopHoverHook = Card.stop_hover
 function Card:stop_hover()

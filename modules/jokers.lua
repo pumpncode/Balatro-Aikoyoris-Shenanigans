@@ -1539,6 +1539,8 @@ AKYRS.LetterJoker {
         end
     end
 }
+
+local toga_tags = {"tag_toga_togajokerbooster","tag_toga_togajokerziparchive","tag_toga_togarararchive","tag_toga_togacardcabarchive","tag_toga_togaxcopydnaarchive",}
 SMODS.Joker {
     key = "aikoyori",
     atlas = 'AikoyoriJokers',
@@ -1575,7 +1577,10 @@ SMODS.Joker {
         end
         if togabalatro then
             info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_togasstuff_ability"}
-            info_queue[#info_queue+1] = {set = "Tag", key = "tag_toga_togajokershop"}
+            info_queue[#info_queue+1] = {set = "Tag", key = "tag_toga_togajokerbooster"}
+        end
+        if PTASaka then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_pta_ability"}
         end
         if SMODS.Mods.cryptposting then
             info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_cryptposting_ability"}
@@ -1626,11 +1631,15 @@ SMODS.Joker {
             local v = Talisman and to_big(10) or 10
             local c = Talisman and d:lt(v) or d < v
             if togabalatro and c then
-                local tag = Tag("tag_toga_togajokershop")
+                local tag = Tag(pseudorandom_element(toga_tags,"akyrs_aikoyori_toga_tags"))
                 add_tag(tag)
             end
+            if PTASaka then
+                ease_pyrox(context.dollars)
+            end
         end
-    end
+    end,
+    blueprint_compat = true
 }
 
 SMODS.Joker{
@@ -1662,7 +1671,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.using_consumeable and (
+        if context.using_consumeable and not context.blueprint and (
         context.consumeable.config.center_key == "c_star" or
         context.consumeable.config.center_key == "c_mf_rot_star"
         ) then
@@ -1676,7 +1685,9 @@ SMODS.Joker{
                 xmult = card.ability.extras.xmult
             }
         end
-    end
+    end,
+    blueprint_compat = true,
+    perishable_compat = false,
 
 }
 SMODS.Joker{
@@ -1731,7 +1742,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.ending_shop then
+        if context.ending_shop and not context.blueprint then
             local index = AKYRS.find_index(G.jokers.cards,card)
             if index and #G.jokers.cards > 1 and G.jokers.cards[index-1] and index > 1 then
                 local othercard = G.jokers.cards[index-1]
@@ -1801,7 +1812,7 @@ SMODS.Joker{
         end
     end,
     calculate = function (self, card, context)
-        if context.individual and not context.forcetrigger and not context.repetition and not context.repetition_only and not context.retrigger_joker and context.cardarea == G.play then
+        if context.individual and not context.forcetrigger and not context.repetition and not context.repetition_only and not context.blueprint and not context.retrigger_joker and context.cardarea == G.play then
             if not SMODS.has_no_rank(context.other_card) and context.other_card.base.value then
                 if context.other_card.base.value == card.ability.extras.target_rank then
                     card.ability.extras.played = card.ability.extras.played + 1
@@ -1870,7 +1881,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.selling_card and context.card == card then
+        if context.selling_card and context.card == card and not context.blueprint then
             
             local index = AKYRS.find_index(G.jokers.cards,card)
             if index and #G.jokers.cards > 1 and G.jokers.cards[index+1] and index < #G.jokers.cards then
@@ -1909,13 +1920,18 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.setting_blind then
+        if context.setting_blind and not context.blueprint then
             
             local index = AKYRS.find_index(G.jokers.cards,card)
             if index and #G.jokers.cards > 1 and G.jokers.cards[index-1] and index > 1 then
                 local other = G.jokers.cards[index-1]
                 local edition = pseudorandom_element(G.P_CENTER_POOLS.Edition,pseudoseed("akyrs_aether_chance"))
-                other:set_edition(edition.key)
+                repeat
+                local edition = pseudorandom_element(G.P_CENTER_POOLS.Edition,pseudoseed("akyrs_aether_chance"))
+                until edition and edition.weight > 0 
+                if edition then
+                    other:set_edition(edition.key)
+                end
                 if pseudorandom('akyrs_aether_portal') < G.GAME.probabilities.normal/card.ability.extras.odds then
                     card:start_dissolve({G.C.BLUE},1.6)
                 end
@@ -1957,7 +1973,8 @@ SMODS.Joker{
                 xmult = card.ability.extras.xmult
             }
         end
-    end
+    end,
+    blueprint_compat = true
 }
 SMODS.Joker{
     key = "goodbye_sengen",
@@ -2013,7 +2030,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.before then
+        if context.before and not context.blueprint then
             local cx = false
             if Talisman then
                 cx = G.GAME.hands[context.scoring_name].level:gt(to_big(1))
@@ -2027,4 +2044,245 @@ SMODS.Joker{
             end
         end
     end
+}
+SMODS.Joker{
+    key = "pissandshittium",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 4, y = 4
+    },
+    rarity = 1,
+    cost = 2,
+    config = {
+        extras = {
+            mult = 4
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+            vars = {
+                card.ability.extras.mult
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                message = localize("k_akyrs_pissandshittium"),
+                colour = AKYRS.C.PISSANDSHITTIUM,
+                remove_default_message = true,
+                mult = card.ability.extras.mult
+            }
+        end
+    end,
+    blueprint_compat = true
+}
+SMODS.Joker{
+    key = "pandora_paradoxx",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 5, y = 4
+    },
+    rarity = 3,
+    cost = 9,
+    config = {
+        extras = {
+            odds = 3
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        info_queue[#info_queue+1] = {set = "Tag", key = "tag_standard"}
+        return {
+            vars = {
+                G.GAME.probabilities.normal,
+                card.ability.extras.odds
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.playing_card_added then
+            return {
+                message = localize("k_akyrs_pandora_give_tag"),
+                func = function ()
+                    for i = 1, #context.cards do
+                        if pseudorandom('akyrs_pandora_paradoxx') < G.GAME.probabilities.normal/card.ability.extras.odds then
+                            local tag = Tag("tag_standard")
+                            add_tag(tag)
+                        end
+                    end
+                end
+            }
+        end
+    end,
+    blueprint_compat = true
+}
+SMODS.Joker{
+    key = "story_of_undertale",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 6, y = 4
+    },
+    rarity = 2,
+    cost = 6,
+    config = {
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        info_queue[#info_queue+1] = {set = "Tag", key = "tag_standard"}
+    end,
+    calculate = function (self, card, context)
+        if context.setting_blind then
+            SMODS.calculate_effect({
+                card = card,
+                message = localize("k_akyrs_woah_undertale"),
+            })
+            return {
+                message = localize("k_akyrs_story_of_undertale"),
+                func = function ()
+                    local destructable_jokers = {}
+                    for i = 1, #G.jokers.cards do
+                        if G.jokers.cards[i] ~= card and not G.jokers.cards[i].ability.eternal and not G.jokers.cards[i].ability.cry_absolute and not G.jokers.cards[i].getting_sliced then destructable_jokers[#destructable_jokers+1] = G.jokers.cards[i] end
+                    end
+                    local joker_to_destroy = #destructable_jokers > 0 and pseudorandom_element(destructable_jokers, pseudoseed('madness')) or nil
+    
+                    if joker_to_destroy and not (context.blueprint_card or card).getting_sliced then 
+                        joker_to_destroy.getting_sliced = true
+                        G.E_MANAGER:add_event(Event({func = function()
+                            (context.blueprint_card or card):juice_up(0.8, 0.8)
+                            local digits = 0
+                            if Talisman then
+                                digits = math.log(to_number(joker_to_destroy.sell_cost),10)
+                            else
+                                digits = math.log(joker_to_destroy.sell_cost,10)
+                            end
+                            for i = 1,digits + 1 do
+                                SMODS.add_card{ key = "j_mr_bones", set = "Joker", edition = "e_negative"}
+                            end
+                            joker_to_destroy:start_dissolve({G.C.RED}, nil, 1.6)
+                            card:start_dissolve({G.C.RED}, nil, 1.6)
+                        return true end }))
+                    end
+                end
+            }
+        end
+    end,
+    blueprint_compat = false
+}
+SMODS.Joker{
+    key = "no_hints_here",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 7, y = 4
+    },
+    rarity = 2,
+    cost = 6,
+    config = {
+        extras = {
+            xmult = 3,
+            emult = 2
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        if Cryptid then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_nhh_cryptid", vars = {card.ability.extras.emult}}
+        end
+        return {
+            vars = {
+                card.ability.extras.xmult,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.joker_main then
+            if Cryptid then
+                return {
+                    emult = card.ability.extras.emult
+                }
+            else
+                return {
+                    xmult = card.ability.extras.xmult
+                }
+            end
+        end
+    end,
+    blueprint_compat = true
+}
+SMODS.Joker{
+    key = "brushing_clothes_pattern",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 8, y = 4
+    },
+    rarity = 2,
+    cost = 7,
+    config = {
+        extras = {
+            xchips = 1,
+            xchips_gain = 0.4
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+            vars = {
+                card.ability.extras.xchips_gain,
+                card.ability.extras.xchips,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and context.cardarea == G.play and next(context.poker_hands["Flush"]) and not context.blueprint then
+            if context.other_card.ability.name == "Wild Card" then
+                card.ability.extras.xchips = card.ability.extras.xchips + card.ability.extras.xchips_gain
+                return {
+                    message = localize("k_upgrade_ex"),
+                    message_card = card,
+                    func = function ()
+                    end
+                }
+            end
+        end
+        if context.joker_main then                
+            return {
+                xchips = card.ability.extras.xchips
+            }
+        end
+    end,
+    blueprint_compat = true
+}
+SMODS.Joker{
+    key = "you_tried",
+    atlas = 'AikoyoriJokers',
+    pos = {
+        x = 9, y = 4
+    },
+    rarity = 3,
+    cost = 12,
+    config = {
+        extras = {
+            ante_set = 1,
+        }
+    },
+    loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        return {
+            vars = {
+                card.ability.extras.ante_set,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.end_of_round and context.game_over and not context.blueprint then
+            card:start_dissolve({G.C.YELLOW},1.6)
+            return {
+                saved = true,
+                func = function ()
+                    ease_ante(-G.GAME.round_resets.ante+card.ability.extras.ante_set)
+                end
+            }
+        end
+    end,
 }

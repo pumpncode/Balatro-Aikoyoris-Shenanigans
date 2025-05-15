@@ -65,19 +65,3 @@ position = "at"
 payload = '''func = (function(t) return AKYRS.adjust_rounding(t) end)
 '''
 match_indent = true
-
-# thanks SleepyG
-[[patches]]
-[patches.pattern]
-target = "game.lua"
-pattern = '''for k, v in pairs(self.MOVEABLES) do'''
-position = "before"
-payload = '''
-local __new_moveables = {}
-for k, v in pairs(self.MOVEABLES) do
-    if not v.REMOVED then table.insert(__new_moveables, v) end
-end
-self.MOVEABLES = __new_moveables
-'''
-match_indent = true
-times = 1

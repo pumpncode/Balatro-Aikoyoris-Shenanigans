@@ -80,19 +80,29 @@ payload = """
 local top_cards = {}
 for k, v in pairs(self.I.CARD) do
     if (v.akyrs_stay_on_top) then -- PATCHED BY AIKOYORI :D
-        table.insert(top_cards, v)
+        love.graphics.push()
+        v:translate_container()
+        v:draw()
+        love.graphics.pop()
     end
-end
-table.sort(top_cards, function(a, b)
-    return (a.akyrs_stay_on_top or 0) < (b.akyrs_stay_on_top or 0)
-end)
-for i,v in ipairs(top_cards) do
-    love.graphics.push()
-    v:translate_container()
-    v:draw()
-    love.graphics.pop()
 end
 """
 overwrite = true
 match_indent = true
 
+
+# thanks SleepyG
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = '''for k, v in pairs(self.MOVEABLES) do'''
+position = "before"
+payload = '''
+local __new_moveables = {}
+for k, v in pairs(self.MOVEABLES) do
+    if not v.REMOVED then table.insert(__new_moveables, v) end
+end
+self.MOVEABLES = __new_moveables
+'''
+match_indent = true
+times = 1

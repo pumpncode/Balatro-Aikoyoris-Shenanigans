@@ -38,6 +38,7 @@ AKYRS.C = {
     BOOST_HC = HEX('29a35c'),
     THING_LC = HEX('4d6961'),
     THING_HC = HEX('5dbaa0'),
+    PISSANDSHITTIUM = HEX("68211d"),
 }
 
 SMODS.optional_features.cardareas.unscored = true

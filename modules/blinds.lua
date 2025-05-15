@@ -237,7 +237,7 @@ SMODS.Blind{
     end,
     
 }
-local to_big = not to_big and function(x) return x end or to_big
+
 SMODS.Blind{
     key = "the_libre",
     dollars = 5,
@@ -250,7 +250,7 @@ SMODS.Blind{
         disable_chip_x = 4
     },
     loc_vars = function(self)
-        local orig_chips = to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling)
+        local orig_chips = Talisman and to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling) or get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling
         return { vars = {orig_chips * self.debuff.disable_chip_x}, key = self.key }
     end,
     collection_loc_vars = function(self)
@@ -265,9 +265,7 @@ SMODS.Blind{
         return true
     end,
     disable = function(self)
-        local to_big = not to_big and function(x) return x end or to_big
-        G.GAME.blind.chips = get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling * self.debuff.disable_chip_x
-
+        G.GAME.blind.chips = Talisman and to_big(get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling) or get_blind_amount(G.GAME.round_resets.ante)*self.mult*G.GAME.starting_params.ante_scaling
         G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
             
     end,

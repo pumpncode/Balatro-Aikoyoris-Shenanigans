@@ -1635,7 +1635,7 @@ SMODS.Joker {
                 add_tag(tag)
             end
             if PTASaka then
-                ease_pyrox(context.dollars)
+                ease_pyrox(to_number(context.dollars))
             end
         end
     end,

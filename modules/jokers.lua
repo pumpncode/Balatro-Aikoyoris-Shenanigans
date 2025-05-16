@@ -295,7 +295,7 @@ SMODS.Joker {
     end,
     config = {
         name = "Playable Cards",
-        play_mod = 1,
+        play_mod = 3,
     },
     add_to_deck = function(self, card, from_debuff)
         G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable + card.ability.play_mod
@@ -2083,7 +2083,7 @@ SMODS.Joker{
     blueprint_compat = true
 }
 SMODS.Joker{
-    key = "pandora_paradoxx",
+    key = "pandora_paradoxxx",
     atlas = 'AikoyoriJokers',
     pos = {
         x = 5, y = 4
@@ -2133,6 +2133,7 @@ SMODS.Joker{
     config = {
     },
     loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS['j_mr_bones']
         info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
     end,
     calculate = function (self, card, context)

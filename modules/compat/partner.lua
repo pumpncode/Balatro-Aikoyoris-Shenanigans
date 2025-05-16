@@ -20,15 +20,16 @@ if Partner_API then
         loc_vars = function(self, info_queue, card)
             local rtx = 1
             local me = SMODS.find_card("j_akyrs_aikoyori")
-            if next(me) then rtx = rtx * #me end
+            if next(me) then rtx = rtx * #me + 1 end
             return { vars = {card.ability.extra.retrigg*rtx} }
         end,
         calculate = function(self, card, context)
             if context.repetition and not context.repetition_only then
                 local rtx = 1
                 local me = SMODS.find_card("j_akyrs_aikoyori")
-                if next(me) then rtx = rtx * #me end
+                if next(me) then rtx = rtx * #me + 1 end
                 return {
+                    message_card = card,
                     repetitions = card.ability.extra.retrigg * rtx
                 }
             end

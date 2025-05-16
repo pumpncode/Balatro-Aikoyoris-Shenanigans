@@ -142,7 +142,7 @@ function Card:stop_drag()
     end
     local c = cardReleaseRecalcHook(self)
 
-    if G.hand and self.area and self.area == G.hand and G.STATE == G.STATES.SELECTING_HAND then
+    if G.hand and self.area and self.area == G.hand and G.STATE == G.STATES.SELECTING_HAND and G.GAME.akyrs_character_stickers_enabled then
         self.area:parse_highlighted()
     end
     if G.deck and self.area and self.area == G.jokers and self.config.center_key == "j_akyrs_hibana" then

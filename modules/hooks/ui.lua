@@ -145,6 +145,14 @@ function Card:hover()
     local ret = cardHoverHook(self)
     return ret
 end
+local nodeHoverHook = Node.hover
+function Node:hover()
+    if next(SMODS.find_card("j_akyrs_no_hints_here")) then
+        self.config.h_popup = nil
+    end
+    local ret = nodeHoverHook(self)
+    return ret
+end
 
 local cardStopHoverHook = Card.stop_hover
 function Card:stop_hover()
@@ -770,4 +778,16 @@ G.FUNCS.HUD_blind_debuff = function(e)
 	end
 	e.UIBox:recalculate()
 
+end
+
+local moveableRemoveHook = Moveable.remove
+function Moveable:remove()
+    if self.children and type(self.children) == 'table' then
+        for i, ch in pairs(self.children) do
+            ch.REMOVED = true
+            ch:remove()
+        end
+    end
+    self.REMOVED = true
+    return moveableRemoveHook(self)
 end

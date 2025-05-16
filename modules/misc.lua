@@ -1456,3 +1456,7 @@ function AKYRS.get_p_card_ranks(not_r)
     end
     return ranks
 end
+
+AKYRS.sort_top = function(a, b)
+    return (a.akyrs_stay_on_top or 0) < (b.akyrs_stay_on_top or 0)
+end

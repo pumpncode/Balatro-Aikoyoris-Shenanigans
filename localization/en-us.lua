@@ -334,13 +334,21 @@ return {
                 text={
                     "If you gain less than {C:money}$10{}",
                     "at the end of the round,",
-                    "create a {C:attention}Spare CD{} Tag",
+                    "create a random Booster tag",
+                    "from {C:attention}TOGA's Stuff{}",
                 },
             },
             dd_akyrs_cryptposting_ability={
                 name="Cryptposting Ability",
                 text={
                     "???"
+                },
+            },
+            dd_akyrs_aikoyori_pta_ability={
+                name="Paya's Terrible Additions Ability",
+                text={
+                    "Earn extra {C:blue}Pyroxenes{}",
+                    "equal to {C:money}money{} earned this round"
                 },
             },
             dd_akyrs_placeholder_art={
@@ -357,6 +365,12 @@ return {
                     "This Joker gains {X:mult,C:white} X#1# {} Mult",
                     "per {C:tarot}The Star{} used",
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+                }
+            },
+            dd_akyrs_nhh_cryptid = {
+                name = "If Cryptid is installed...",
+                text = { 
+                    "Gives {X:dark_edition,C:white} ^#1# {} Mult instead",
                 }
             },
             dd_akyrs_expert_blind  = {
@@ -886,13 +900,64 @@ return {
                     "{C:inactive,font:5}(踊れ 踊れ 嘘に踊れ){}",
                 }
             },
+            j_akyrs_pissandshittium = {
+                name = "Pissandshittium",
+                text = { 
+                    "Tells the URL where to download",
+                    "{X:akyrs_pissandshittium,C:white}Pissandshittium{}",
+                    "{C:akyrs_pissandshittium}+#1#{} Mult",
+                }
+            },
+            j_akyrs_pandora_paradoxx = {
+                name = "PANDORA PARADOXX",
+                text = { 
+                    "{C:green}#1# in #2#{} to give {C:attention}Standard Tag",
+                    "per {C:attention}playing card{} added to deck",
+                }
+            },
+            j_akyrs_story_of_undertale = {
+                name = "Story of Undertale",
+                text = { 
+                    "When blind is selected",
+                    "Destroy a random {C:attention}Joker{}",
+                    "and create {C:dark_edition}Negative {C:attention}Mr.Bones{}",
+                    "equal to the {C:attention}number of digits{} in",
+                    "that Joker's {C:attention}sell price",
+                    "{E:2,C:red}Self-destructs",
+                }
+            },
+            j_akyrs_no_hints_here = {
+                name = "No Hints Here!",
+                text = { 
+                    "{X:mult,C:white} X#1# {} Mult",
+                    "Hides {C:attention}all{} tooltips",
+                }
+            },
+            j_akyrs_brushing_clothes_pattern = {
+                name = "Brushing Clothes Pattern",
+                text = { 
+                    "If played hand contains a {C:attention}Flush",
+                    "and at least one of them is {C:attention}Wild Card",
+                    "and gain {X:chips,C:white} X#1# {} Chips",
+                    "per {C:attention}Wild Cards{} scored",
+                    "{C:inactive}(Currently {X:chips,C:white} X#2# {C:inactive} Chips)",
+                }
+            },
+            j_akyrs_you_tried = {
+                name = "You Tried",
+                text = { 
+                    "{C:attention}Prevents death",
+                    "Set Ante to {C:attention}#1#{}",
+                    "then {E:1,C:red}self-desructs",
+                }
+            },
         },
         Partner = {
             pnr_akyrs_aikoyori = {
                 
                 name = "smol Aiko",
                 text = {
-                    "Retrigger {C:attention}every{} cards {C:attention}#1#{} times",
+                    "Retrigger {C:attention}every{} card {C:attention}#1#{} times",
                 },
                 unlock={
                     "Used {C:attention}Aikoyori",
@@ -913,7 +978,7 @@ return {
                 name="Debuff Seal",
                 text={
                     "{C:red}Debuffs itself{}",
-                    "when drawn to hand",
+                    "when something is drawn to hand after",
                 },
             },
             akyrs_chip_mult_xchip_xmult={
@@ -1336,6 +1401,10 @@ return {
             k_akyrs_cinema = "Cinema!",
             k_akyrs_received = "Received",
             k_akyrs_sendoff = "Blast Off!",
+            k_akyrs_pissandshittium = "https://pissandshittium.org/",
+            k_akyrs_pandora_give_tag = "Re:MASTER 15",
+            k_akyrs_woah_undertale = "Woah..",
+            k_akyrs_story_of_undertale = "Story of Undertale..",
 
             k_akyrs_random_letter = "randomly selected letter",
 

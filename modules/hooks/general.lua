@@ -89,9 +89,7 @@ function EventManager:update(dt, forced)
         end
     end
     --print(collectgarbage("count"))
-    if (math.floor((G.TIMERS.REAL) * 100 + 0.5) / 100) == math.floor(G.TIMERS.REAL) then
-        AKYRS.expensive_calculation()
-    end
+    AKYRS.expensive_calculation()
 
     return s
 end
@@ -308,6 +306,7 @@ function Card:remove()
     end
 
     local l = cardRemoveHook(self)
+    self.REMOVED = true
     return l
 end
 

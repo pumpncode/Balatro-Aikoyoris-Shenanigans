@@ -9,7 +9,8 @@ priority = 0
 target = "globals.lua"
 pattern = """DARK_EDITION = {0,0,0,1},"""
 position = "after"
-payload = """PLAYABLE = HEX("ee36ff"),"""
+payload = """PLAYABLE = HEX("ee36ff"),
+PISSANDSHITTIUM = HEX("68211d"),"""
 overwrite = true
 match_indent = true
 
@@ -18,7 +19,9 @@ match_indent = true
 target = "functions/misc_functions.lua"
 pattern = """    inactive = G.C.UI.TEXT_INACTIVE,"""
 position = "after"
-payload = """playable = G.C.PLAYABLE,"""
+payload = """playable = G.C.PLAYABLE,
+akyrs_pissandshittium = G.C.PISSANDSHITTIUM,
+"""
 overwrite = true
 match_indent = true
 

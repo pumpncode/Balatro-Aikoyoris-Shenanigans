@@ -28,7 +28,9 @@ SMODS.Seal{
     sound = { sound = 'generic1', per = 1.2, vol = 0.4 },
 
     calculate = function(self, card, context)
-        card.debuff = true
+        if context.cardarea == G.hand and context.hand_drawn then
+            card.debuff = true
+        end
     end,
 
 }

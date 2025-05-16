@@ -908,8 +908,8 @@ return {
                     "{C:akyrs_pissandshittium}+#1#{} Mult",
                 }
             },
-            j_akyrs_pandora_paradoxx = {
-                name = "PANDORA PARADOXX",
+            j_akyrs_pandora_paradoxxx = {
+                name = "PANDORA PARADOXXX",
                 text = { 
                     "{C:green}#1# in #2#{} to give {C:attention}Standard Tag",
                     "per {C:attention}playing card{} added to deck",
@@ -938,7 +938,7 @@ return {
                 text = { 
                     "If played hand contains a {C:attention}Flush",
                     "and at least one of them is {C:attention}Wild Card",
-                    "and gain {X:chips,C:white} X#1# {} Chips",
+                    "This joker gains {X:chips,C:white} X#1# {} Chips",
                     "per {C:attention}Wild Cards{} scored",
                     "{C:inactive}(Currently {X:chips,C:white} X#2# {C:inactive} Chips)",
                 }

@@ -14,7 +14,8 @@ if SMODS.DrawStep then
       func = function(self, layer)
         if not self.is_null then
             old_draw_step_front(self,layer)
-        else
+        elseif self.children.front then
+            self.children.front:remove()
             self.children.front = nil
         end
       end,

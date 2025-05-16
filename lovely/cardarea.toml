@@ -91,7 +91,7 @@ overwrite = true
 match_indent = true
 
 
-# thanks SleepyG
+# thanks SleepyG11
 [[patches]]
 [patches.pattern]
 target = "game.lua"

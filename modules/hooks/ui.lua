@@ -779,3 +779,15 @@ G.FUNCS.HUD_blind_debuff = function(e)
 	e.UIBox:recalculate()
 
 end
+
+local moveableRemoveHook = Moveable.remove
+function Moveable:remove()
+    if self.children and type(self.children) == 'table' then
+        for i, ch in pairs(self.children) do
+            ch.REMOVED = true
+            ch:remove()
+        end
+    end
+    self.REMOVED = true
+    return moveableRemoveHook(self)
+end

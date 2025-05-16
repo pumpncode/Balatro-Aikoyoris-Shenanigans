@@ -306,6 +306,7 @@ function Card:remove()
     end
 
     local l = cardRemoveHook(self)
+    self.REMOVED = true
     return l
 end
 

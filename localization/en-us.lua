@@ -978,7 +978,7 @@ return {
                 name="Debuff Seal",
                 text={
                     "{C:red}Debuffs itself{}",
-                    "when drawn to hand",
+                    "when something is drawn to hand after",
                 },
             },
             akyrs_chip_mult_xchip_xmult={

@@ -1662,7 +1662,7 @@ SMODS.Joker{
         }
     },
     loc_vars = function (self, info_queue, card)
-        info_queue[#info_queue+1] = {key = 'dd_akyrs_mukuroju_en', vars = { card.ability.extras.mult_add, card.ability.extras.mult }, set = "DescriptionDummy"}
+        info_queue[#info_queue+1] = {key = 'dd_akyrs_mukuroju_en', vars = { card.ability.extras.xmult_add, card.ability.extras.xmult }, set = "DescriptionDummy"}
         info_queue[#info_queue+1] = G.P_CENTERS['c_star']
         if SMODS.Mods.MoreFluff then
             info_queue[#info_queue+1] = G.P_CENTERS['c_mf_rot_star']

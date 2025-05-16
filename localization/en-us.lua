@@ -1402,7 +1402,7 @@ return {
             k_akyrs_received = "Received",
             k_akyrs_sendoff = "Blast Off!",
             k_akyrs_pissandshittium = "https://pissandshittium.org/",
-            k_akyrs_pandora_give_tag = "MASTER 15",
+            k_akyrs_pandora_give_tag = "Re:MASTER 15",
             k_akyrs_woah_undertale = "Woah..",
             k_akyrs_story_of_undertale = "Story of Undertale..",
 

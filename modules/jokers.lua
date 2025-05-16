@@ -2134,7 +2134,6 @@ SMODS.Joker{
     },
     loc_vars = function (self, info_queue, card)
         info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
-        info_queue[#info_queue+1] = {set = "Tag", key = "tag_standard"}
     end,
     calculate = function (self, card, context)
         if context.setting_blind then

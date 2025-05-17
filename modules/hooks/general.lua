@@ -71,25 +71,28 @@ function CardArea:aiko_change_playable(delta)
     end
 end
 
-local gameUpdate = EventManager.update
+local gameUpdate = Game.update
 
-function EventManager:update(dt, forced)
-    local s = gameUpdate(self, dt, forced)
-    G.GAME.alphabet_rate = G.GAME.alphabet_rate or 0
-    if (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled) and G.GAME.alphabet_rate == 0 then
-        G.GAME.alphabet_rate = 1
-    end
-    if not (G.GAME.akyrs_character_stickers_enabled or G.GAME.akyrs_wording_enabled) and G.GAME.alphabet_rate > 0 then
-        G.GAME.alphabet_rate = 0
-    end
-    if G.GAME.blind and G.GAME.blind.debuff.requirement_scale and not G.GAME.blind.disabled then
-        if G.GAME.current_round.hands_left >= 1 and G.GAME.current_round.hands_played > 0 then
-            G.GAME.blind.chips = G.GAME.chips * G.GAME.blind.debuff.requirement_scale
-            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+function Game:update(dt)
+    if G.GAME then
+        local s = gameUpdate(self, dt)
+        G.GAME.alphabet_rate = G.GAME.alphabet_rate or 0
+        if (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled) and G.GAME.alphabet_rate == 0 then
+            G.GAME.alphabet_rate = 1
         end
+        if not (G.GAME.akyrs_character_stickers_enabled or G.GAME.akyrs_wording_enabled) and G.GAME.alphabet_rate > 0 then
+            G.GAME.alphabet_rate = 0
+        end
+        if G.GAME.blind and G.GAME.blind.debuff.requirement_scale and not G.GAME.blind.disabled then
+            if G.GAME.current_round.hands_left >= 1 and G.GAME.current_round.hands_played > 0 then
+                G.GAME.blind.chips = G.GAME.chips * G.GAME.blind.debuff.requirement_scale
+                G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+            end
+        end
+        AKYRS.expensive_calculation()
     end
+
     --print(collectgarbage("count"))
-    AKYRS.expensive_calculation()
 
     return s
 end
@@ -253,7 +256,9 @@ function Game:start_run(args)
         G.GAME.playing_card_rate = 4
     end
     recalculateHUDUI()
-    recalculateBlindUI()
+    if G.GAME.current_round.advanced_blind then
+        recalculateBlindUI()
+    end
     if G.GAME.akyrs_any_drag then
         AKYRS.simple_event_add(
             function()
@@ -344,7 +349,7 @@ function end_round()
         G.STATE = G.STATES.SELECTING_HAND
     else
         local ret = endRoundHook()
-        for _, cardarea in ipairs(AKYRS.all_card_areas) do
+        for _, cardarea in ipairs(G.I.CARDAREA) do
             if cardarea and cardarea.cards then
                 for i, card in ipairs(cardarea.cards) do
 
@@ -406,9 +411,6 @@ local updateSelectHandHook = Game.update_selecting_hand
 function Game:update_selecting_hand(dt)
     local ret = updateSelectHandHook(self, dt)
     
-    if G.GAME.aiko_current_word ~= nil then
-        G.GAME.aiko_current_word = nil
-    end
 
 
     if not self.aiko_wordle and AKYRS.isBlindKeyAThing() == "bl_akyrs_the_thought" then
@@ -416,7 +418,10 @@ function Game:update_selecting_hand(dt)
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
             config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
         }
+    elseif G.GAME.aiko_current_word ~= nil then
+        G.GAME.aiko_current_word = nil
     end
+
 
     return ret
 end
@@ -725,28 +730,9 @@ end
 
 local cardAreaInitHook = CardArea.init
 function CardArea:init(X, Y, W, H, config)
-    local r = cardAreaInitHook(self,X,Y,W,H,config)
-    if not config.temporary and not config.collection then
-        if not AKYRS.all_card_areas then
-            AKYRS.all_card_areas = {}
-        end
-        table.insert(AKYRS.all_card_areas,self)
-    end
-    
+    local r = cardAreaInitHook(self,X,Y,W,H,config)    
     if G.GAME.akyrs_ultimate_freedom and not self.states.collide.can then
         self.states.collide.can = true
-    end
-    return r
-end
-
-local cardAreaRemoveHook = CardArea.remove
-function CardArea:remove()
-    local r = cardAreaRemoveHook(self)
-    if not AKYRS.all_card_areas then return end
-    for k, v in pairs(AKYRS.all_card_areas) do
-        if v == self then
-            table.remove(AKYRS.all_card_areas, k)
-        end
     end
     return r
 end
@@ -1243,7 +1229,7 @@ local evalRnd = G.FUNCS.evaluate_round
 G.FUNCS.evaluate_round = function()
     if G.GAME.modifiers.akyrs_half_debuff then
         local slf = {}
-        for x, ca in ipairs(AKYRS.all_card_areas) do
+        for x, ca in ipairs(G.I.CARDAREA) do
             if ca and ca.cards and ca ~= G.vouchers then
                 for i, k in ipairs(ca.cards) do
                     if not k.akyrs_self_destructs then
@@ -1270,7 +1256,7 @@ G.FUNCS.evaluate_round = function()
     local ret = evalRnd()
     if G.GAME.modifiers.akyrs_half_self_destruct then
         local slf = {}
-        for x, ca in ipairs(AKYRS.all_card_areas) do
+        for x, ca in ipairs(G.I.CARDAREA) do
             if ca and ca.cards and ca ~= G.vouchers then
                 for i, k in ipairs(ca.cards) do
                     if not k.akyrs_self_destructs then

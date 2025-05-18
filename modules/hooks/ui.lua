@@ -156,11 +156,22 @@ function Card:hover()
 end
 local nodeHoverHook = Node.hover
 function Node:hover()
-    if next(SMODS.find_card("j_akyrs_no_hints_here")) then
+    if AKYRS.should_hide_ui() then
+        if self.config.h_popup then
+            AKYRS.remove_objects_in_nodes(self.config.h_popup.nodes)
+        end
         self.config.h_popup = nil
     end
     local ret = nodeHoverHook(self)
     return ret
+end
+
+local genCardUIHook = generate_card_ui
+function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
+    if AKYRS.should_hide_ui() then
+        return nil
+    end
+    return genCardUIHook(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
 end
 
 local cardStopHoverHook = Card.stop_hover

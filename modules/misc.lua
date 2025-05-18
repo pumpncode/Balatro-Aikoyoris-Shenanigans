@@ -1197,3 +1197,19 @@ end
 AKYRS.sort_top = function(a, b)
     return (a.akyrs_stay_on_top or 0) < (b.akyrs_stay_on_top or 0)
 end
+
+AKYRS.should_hide_ui = function()
+    return next(SMODS.find_card("j_akyrs_no_hints_here")) or nil
+end
+
+AKYRS.remove_objects_in_nodes = function(nodes)
+    if #nodes <= 0 then return end
+    for _, node in ipairs(nodes) do
+        if node.config and node.config.object then 
+            node.config.object:remove()
+        end
+        if node.nodes then
+            AKYRS.remove_objects_in_nodes(node.nodes)
+        end
+    end
+end

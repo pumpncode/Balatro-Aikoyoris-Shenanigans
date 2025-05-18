@@ -224,6 +224,9 @@ AKYRS.DescriptionDummy{
     key = "no_reroll"
 }
 AKYRS.DescriptionDummy{
+    key = "no_overriding"
+}
+AKYRS.DescriptionDummy{
     key = "word_blind"
 }
 AKYRS.DescriptionDummy{

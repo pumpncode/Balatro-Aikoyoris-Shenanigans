@@ -608,6 +608,7 @@ SMODS.Blind {
         ante_scaler = 2,
         current_ante = nil,
         akyrs_is_forgotten_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -646,6 +647,7 @@ SMODS.Blind {
     debuff = {
         ante_scaler = 1,
         akyrs_is_forgotten_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -682,6 +684,7 @@ SMODS.Blind {
     debuff = {
         hand_shrinker = 1,
         akyrs_is_forgotten_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -716,6 +719,7 @@ SMODS.Blind {
     debuff = {
         discard_dealer = 1,
         akyrs_is_forgotten_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -752,6 +756,7 @@ SMODS.Blind {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
         akyrs_is_postwin_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 9, max = 10},
@@ -793,6 +798,7 @@ SMODS.Blind {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
         akyrs_is_postwin_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -832,6 +838,7 @@ SMODS.Blind {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
         akyrs_is_postwin_blind = true,
+        akyrs_cannot_be_overridden = true,
         ch = 1,
         mul = 1
     },
@@ -875,6 +882,7 @@ SMODS.Blind {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
         akyrs_is_postwin_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     stay_flipped = function (self, area, card)
         if area == G.hand and G.hand.cards then
@@ -913,6 +921,7 @@ SMODS.Blind {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
         akyrs_is_postwin_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -947,6 +956,7 @@ SMODS.Blind {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
         akyrs_is_postwin_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     in_pool = function (self)
@@ -966,6 +976,7 @@ SMODS.Blind {
         akyrs_cannot_be_rerolled = true,
         akyrs_blind_difficulty = "master",
         akyrs_is_endless_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     in_pool = function (self)
@@ -994,6 +1005,7 @@ SMODS.Blind {
         akyrs_blind_difficulty = "master",
         akyrs_is_endless_blind = true,
         akyrs_destroy_unplayed = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     in_pool = function (self)
@@ -1013,6 +1025,7 @@ SMODS.Blind {
         akyrs_cannot_be_rerolled = true,
         akyrs_blind_difficulty = "master",
         akyrs_is_endless_blind = true,
+        akyrs_cannot_be_overridden = true,
         akyrs_deduct_mult = 0.1,
     },
     loc_vars = function (self)
@@ -1052,6 +1065,7 @@ SMODS.Blind {
         akyrs_cannot_be_rerolled = true,
         akyrs_blind_difficulty = "master",
         akyrs_is_endless_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     in_pool = function (self)
@@ -1080,6 +1094,7 @@ SMODS.Blind {
         akyrs_cannot_be_rerolled = true,
         akyrs_blind_difficulty = "master",
         akyrs_is_endless_blind = true,
+        akyrs_cannot_be_overridden = true,
     },
     
     in_pool = function (self)

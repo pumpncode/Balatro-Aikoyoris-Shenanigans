@@ -75,24 +75,30 @@ function Card:generate_UIBox_ability_table()
     end
     return ret
 end
+function Blind:remove()
+    if not AKYRS.do_not_remove_blind then
+        Moveable.remove(self)
+    end
+end
 
 function recalculateBlindUI()
     if G.HUD_blind then
-        --[[
-            local conf = AKYRS.deep_copy(G.HUD_blind.config)
-            AKYRS.akyrs_remove(G.HUD_blind,function(v) print("A") return v and v.config and (v.config.object ~= G.GAME.blind) end)
-            G.HUD_blind:remove()
-            G.HUD_blind = UIBox{
-                definition = create_UIBox_HUD_blind(),
-                config = conf
-            }
-        ]]
+        AKYRS.do_not_remove_blind = true
+        local conf = (G.HUD_blind.config)
+        G.HUD_blind:remove()
+        G.HUD_blind = UIBox{
+            definition = create_UIBox_HUD_blind(),
+            config = conf
+        }
+    
         --AKYRS.remove_all(G.HUD_blind.children,function(v) print("A") return v and v.config and (v.config.object ~= G.GAME.blind) end)
         --[[
-        ]]
-        G.HUD_blind.definition = nil
+        G.HUD_blind.UIRoot:remove()
         G.HUD_blind.definition = create_UIBox_HUD_blind()
         G.HUD_blind:set_parent_child(G.HUD_blind.definition, nil)
+
+        ]]
+        AKYRS.do_not_remove_blind = nil
         G.HUD_blind:recalculate()
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
@@ -104,6 +110,7 @@ function recalculateBlindUI()
             return true
           end
         }))
+        G.GAME.akyrs_ui_should_recalculate = nil
     end
 end
 

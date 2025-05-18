@@ -1443,3 +1443,37 @@ function Blind:defeat(silent)
     local x = blindDefeatHook(self,silent)
     return x
 end
+
+local selectBlindHook = G.FUNCS.select_blind
+G.FUNCS.select_blind = function(e)
+    G.GAME.akyrs_ui_should_recalculate = true
+    return selectBlindHook(e)
+end
+
+local setBlindHook = Blind.set_blind
+function Blind:set_blind(blind, initial, silent)
+    
+
+    if blind and G.GAME.akyrs_ui_should_recalculate then
+        recalculateBlindUI()
+        G.GAME.akyrs_ui_should_recalculate = nil
+    end
+    if G.GAME.blind and G.GAME.blind.in_blind and not G.GAME.blind.defeated and G.GAME.blind.debuff.akyrs_cannot_be_overridden and 
+    (not G.GAME.blind.debuff.akyrs_can_be_replaced_by or G.GAME.blind.debuff.akyrs_can_be_replaced_by[blind.key])
+    then
+        play_sound("akyrs_loud_incorrect_buzzer",1,0.1)
+        attention_text({
+            text = localize("k_nope_ex"),
+            scale = 1, 
+            hold = 1.0,
+            rotate = math.pi / 8,
+            backdrop_colour = G.GAME.blind.boss_colour,
+            align = "cm",
+            major = G.GAME.blind,
+            offset = {x = 0, y = 0.1}
+        })
+        return
+    else
+        return setBlindHook(self,blind, initial, silent)
+    end
+end

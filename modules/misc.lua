@@ -847,12 +847,12 @@ function AKYRS.instant_draw_card(from, to, percent, dir, sort, card, mute, stay_
         
 end
 
-AKYRS.simple_event_add = function (func, delay)
+AKYRS.simple_event_add = function (func, delay, queue)
     G.E_MANAGER:add_event(Event{
         trigger = 'after',
         delay = delay or 0.1,
         func = func
-    })
+    }, queue)
 end
 
 AKYRS.check_type = function(d)
@@ -992,145 +992,6 @@ function AKYRS.capitalize(stringIn)
     return string.gsub(" " .. stringIn, "%W%l", string.upper):sub(2)
 end
 
-function AKYRS.maxwell_generate_card(cardtype, context)
-
-    local center,area,count,name = AKYRS.maxwell_card_to_area_map(string.lower(cardtype))
-    for i = 1, count do
-        if name == "Cards" then
-            local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
-            local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, G.P_CENTERS['c_base'], {playing_card = G.playing_card})
-            area:emplace(carder)
-            table.insert(G.playing_cards, carder)
-        elseif area == G.deck then
-            local front = pseudorandom_element(G.P_CARDS, pseudoseed('akyrs:maxwell'))
-            local carder = Card(G.deck.T.x, G.deck.T.y, G.CARD_W, G.CARD_H, front, pseudorandom_element(G.P_CENTER_POOLS.Enhanced,pseudoseed("maxwellrandom")), {playing_card = G.playing_card})
-            area:emplace(carder)
-            table.insert(G.playing_cards, carder)
-        elseif name then
-            --print(cardtype)
-            --print(name)
-            pcall(function()
-                local carder = create_card(name, area, nil, nil, nil, nil, nil, 'akyrs:maxwell')
-                if carder then
-                    area:emplace(carder)
-                end
-            end)
-        end 
-    end
-
-end
-
-function AKYRS.maxwell_enhance_card(enhancement, context)
-    local axd = AKYRS.capitalize(enhancement)
-    local da,baby = AKYRS.maxwell_word_to_edition_map(enhancement)
-    --print(da)
-    --print(baby)
-    if (da) then
-        context.other_card:set_edition(baby, false, false)
-    end
-
-    if (AKYRS.maxwell_word_to_enhancement_map(enhancement)) then
-        context.other_card:set_ability(AKYRS.maxwell_word_to_enhancement_map(enhancement),nil,true)
-    end
-end
-
-AKYRS.plural_centers = {
-    ["jokers"]    = "joker",
-    ["cards"]     = "card",
-    ["enhanceds"] = "enhanced",
-    ["vouchers"]  = "voucher",
-    ["tarots"]    = "tarot",
-    ["planets"]   = "planet",
-    ["spectrals"] = "spectral",
-}
-
-function AKYRS.maxwell_card_to_area_map(word)
-    local count = 1
-    local center = G.P_CENTER_POOLS.Tarot
-    local area = G.consumeables
-    local centerName = nil
-    if word == "joker" or word == "jokers" then
-        area = G.jokers
-        center = G.P_CENTER_POOLS.Joker
-        centerName = "Joker"
-    end
-    if word == "card" or word == "cards" then
-        area = G.deck
-        center = G.P_CARDS
-        centerName = "Cards"
-    end
-    if word == "enhanced" or word == "enhanceds"  then
-        area = G.deck
-        center = G.P_CENTER_POOLS.Enhanced
-    end
-    if word == "tarot" or word == "tarots" then
-        area = G.consumeables
-        center = G.P_CENTER_POOLS.Tarot
-        centerName = "Tarot"
-    end
-    if word == "planet" or word == "planets" then
-        area = G.consumeables
-        center = G.P_CENTER_POOLS.Planet
-        centerName = "Planet"
-    end
-    if word == "spectral" or word == "spectrals" then
-        area = G.consumeables
-        center = G.P_CENTER_POOLS.Spectral
-        centerName = "Spectral"
-    end
-    if AKYRS.plural_centers[word] then
-        count = count + pseudorandom(pseudoseed("maniwishiwassleeping"),0,9)
-    end
-    return center,area,count,centerName
-end
-
-function AKYRS.maxwell_word_to_edition_map(word)
-    if word == "neg" or word == "negs" or word == "negative" or word == "negatives" then return "Negative","e_negative" end
-    if word == "holo" or word == "holos" or word == "holographic" or word == "holographics" then return "Holographic","e_holo" end
-    if word == "poly" or word == "polies" or word == "polychrome" or word == "polychromes" then return "Polychrome","e_polychrome" end
-    if word == "foil" or word == "foils" or word == "foiled" or word == "foileds" then return "Foil","e_foil" end
-    if word == "sliced" then return "akyrs_sliced","e_akyrs_sliced" end
-    if word == "noir" then return "akyrs_noire","e_akyrs_noire" end
-    if word == "texel" then return "akyrs_texelated","e_akyrs_texelated" end
-    return nil,nil
-end
-
-function AKYRS.maxwell_word_to_enhancement_map(word)
-    if word == "gold" or word == "golden" or word == "aurum" or word == "aurums" or word == "golds" or word == "goldens" or word == "shiny" then
-        return G.P_CENTERS.m_gold
-    end
-    if word == "iron" or word == "steel" or word == "reinforced" or word == "irons" or word == "galvanised" or word == "galvanized" or word == "stainless" then
-        return G.P_CENTERS.m_steel
-    end
-    if word == "rock" or word == "rocky" or word == "stone" or word == "stoned" or word == "pebble" or word == "rocked" or word == "hard" then
-        return G.P_CENTERS.m_stone
-    end
-    if word == "lucky" or word == "clover" or word == "chance" or word == "gambling" or word == "lucked" or word == "luckier" or word == "luckiest" then
-        return G.P_CENTERS.m_lucky
-    end
-    if word == "glass" or word == "glasses" or word == "shatter" or word == "shatters" or word == "break" or word == "breaks" or word == "fragile" or word == "silicon" then
-        return G.P_CENTERS.m_glass
-    end
-    if word == "wild" or word == "wildcard" or word == "any" or word == "all" or word == "every" or word == "able" or word == "bewildered" then
-        return G.P_CENTERS.m_wild
-    end
-    if word == "multiply" or word == "mult" or word == "red" or word == "ding" then
-        return G.P_CENTERS.m_mult
-    end
-    if word == "chips" or word == "chip" or word == "blue" or word == "blip" or word == "bonus" then
-        return G.P_CENTERS.m_bonus
-    end
-    if word == "brick" or word == "heavy" or word == "bonk" or word == "throw" then
-        return G.P_CENTERS["m_akyrs_brick_card"]
-    end
-    if word == "scoreless" then
-        return G.P_CENTERS["m_akyrs_scoreless"]
-    end
-    if word == "base" or word == "plain" or word == "boring" or word == "nothing" or word == "undo" or word == "remove" or word == "delete" then
-        return G.P_CENTERS.c_base
-    end
-    return nil
-end
 
 function AKYRS.remove_comma(string)
     return string.gsub(string, ",", "")
@@ -1171,26 +1032,6 @@ AKYRS.get_letter_freq_from_cards = function(listofcards)
     end
     return wordArray
 end
-AKYRS.icons_pos = {
-}
-AKYRS.blind_icons_pos = function (key)
-    
-    if key == "expert" then          return  { x = 0, y = 1} end
-    if key == "master" then          return  { x = 1, y = 1} end
-    if key == "ultima" then          return  { x = 2, y = 1} end
-    if key == "remaster" then        return  { x = 3, y = 1} end
-    if key == "lunatic" then         return  { x = 4, y = 1} end
-    if key == "dx" then              return  { x = 0, y = 2} end
-    if key == "no_reroll" then       return  { x = 0, y = 0} end
-    if key == "no_disabling" then    return  { x = 1, y = 0} end
-    if key == "no_face" then         return  { x = 2, y = 0} end
-    if key == "forgotten_blind" then return  { x = 5, y = 1} end
-    if key == "word_blind" then      return  { x = 6, y = 1} end
-    if key == "puzzle_blind" then    return  { x = 7, y = 1} end
-    if key == "postwin_blind" then   return  { x = 8, y = 1} end
-    if key == "endless_blind" then   return  { x = 9, y = 1} end
-    return {x = 9, y = 9}
-end
 AKYRS.icon_sprites = {}
 
 AKYRS.remove_formatting = function(string_in)
@@ -1228,110 +1069,6 @@ AKYRS.full_ui_add = function(nodes, key, scale)
         }
     }
     table.insert(nodes, x)
-end
-AKYRS.generate_icon_blinds = function(key, config)
-    if not key then return end
-    local z = config.table or {}
-    local cache = config.cache or false
-    local icon_size = config.icon_size or false
-    local atlas = config.atlas or "akyrs_aikoyoriMiscIcons"
-    local full_ui = config.full_ui or false
-    local fsz = config.font_size or false
-    local dfctysz = config.text_size_for_full or false
-    local info_queue = config.info_queue or {}
-    local sprite = nil
-    if cache then
-        AKYRS.icon_sprites[key] = AKYRS.icon_sprites[key] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS[atlas],AKYRS.blind_icons_pos(key))
-        sprite = AKYRS.icon_sprites[key]
-    else
-        sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS[atlas],AKYRS.blind_icons_pos(key))
-    end
-    local keyed = "dd_akyrs_"..key
-    z[#z+1] = {
-        n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = full_ui and "lc" or "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies[keyed] },
-        nodes = {
-            {n=G.UIT.O, config={object = sprite, scale = fsz}},
-        }
-    }
-    if full_ui then
-        AKYRS.full_ui_add(z[#z].nodes, "dd_akyrs_"..key, dfctysz)
-        info_queue[#info_queue+1] = AKYRS.DescriptionDummies[keyed]
-    end
-end
-AKYRS.add_blind_extra_info = function(blind,ability_text_table,extras)
-    extras = extras or {}
-    local icon_size = extras.icon_size or 0.5
-    local fsz = extras.text_size or 0.5
-    local atlas = extras.atlas or "akyrs_aikoyoriMiscIcons"
-    local dfctysz = extras.difficulty_text_size or 0.5
-    local bsz = extras.border_size or 1
-    local set_parent_child = extras.set_parent_child or false
-    local cache = extras.cached_icons or false
-    local full_ui = extras.full_ui or false
-    local hide = extras.hide or {  }
-    local row = extras.row or false
-    local info_queue = extras.info_queue or {}
-    local z = {}
-
-    if blind and blind.debuff then
-        if blind.debuff.akyrs_blind_difficulty and not hide.difficulty then
-            local sprite = nil
-            if cache then
-                AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] = AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty] or Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS[atlas],AKYRS.blind_icons_pos(blind.debuff.akyrs_blind_difficulty))
-                sprite = AKYRS.icon_sprites[blind.debuff.akyrs_blind_difficulty]
-            else
-                sprite = Sprite(0,0,1*icon_size,1*icon_size, G.ASSET_ATLAS[atlas],AKYRS.blind_icons_pos(blind.debuff.akyrs_blind_difficulty))
-            end
-    
-            local blind_txt_dmy = "dd_akyrs_"..blind.debuff.akyrs_blind_difficulty.."_blind"
-            z[#z+1] = {
-                n = full_ui and G.UIT.R or G.UIT.C, config = { r = 0.2, align = "cm", can_collide = true, hover = true ,detailed_tooltip = AKYRS.DescriptionDummies[blind_txt_dmy] },
-                nodes = {
-                    {n=G.UIT.O, config={object = sprite, scale = fsz}},
-                }
-            }
-            if full_ui then
-                AKYRS.full_ui_add(z[#z].nodes, blind_txt_dmy, dfctysz)
-                info_queue[#info_queue+1] = AKYRS.DescriptionDummies[blind_txt_dmy]
-            end
-        end
-        if blind.debuff.akyrs_cannot_be_disabled and not hide.disabled then
-            AKYRS.generate_icon_blinds("no_disabling",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
-        end
-        if blind.debuff.akyrs_cannot_be_rerolled and not hide.reroll then
-            AKYRS.generate_icon_blinds("no_reroll",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
-        end
-        if blind.debuff.akyrs_is_forgotten_blind and not hide.forgotten_blind then
-            AKYRS.generate_icon_blinds("forgotten_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
-        end
-        if blind.debuff.akyrs_is_word_blind and not hide.word_blind then
-            AKYRS.generate_icon_blinds("word_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
-        end
-        if blind.debuff.akyrs_is_puzzle_blind and not hide.puzzle_blind then
-            AKYRS.generate_icon_blinds("puzzle_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
-        end
-        if blind.debuff.akyrs_is_endless_blind and not hide.endless_blind then
-            AKYRS.generate_icon_blinds("endless_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
-        end
-        if blind.debuff.akyrs_is_postwin_blind and not hide.postwin_blind then
-            AKYRS.generate_icon_blinds("postwin_blind",{table = z,cache = cache,icon_size = icon_size,full_ui = full_ui,font_size = fsz,text_size_for_full = dfctysz, info_queue = info_queue})
-        end
-    end
-    if z and #z > 0 and blind and ability_text_table then
-        local xd = {
-            n = full_ui and G.UIT.R or G.UIT.R,
-            config = { align = "cm", padding = 0.1, can_collide = true, hover = true},
-            nodes = z
-        }
-        if set_parent_child then
-            ability_text_table.UIBox:set_parent_child(xd, ability_text_table)
-            --print("CHILD = "..#ability_text_table.children)
-            ability_text_table.UIBox:recalculate()
-        else
-            ability_text_table[#ability_text_table+1] = xd
-        end
-    end
-    if z then return z end
 end
 
 AKYRS.hand_sort_function = function (a,b)

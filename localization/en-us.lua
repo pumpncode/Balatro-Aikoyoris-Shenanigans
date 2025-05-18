@@ -427,6 +427,13 @@ return {
                     "This blind cannot be disabled",
                 },
             },
+            dd_akyrs_no_overriding  = {
+                name="No Overriding",
+                text={
+                    "This blind cannot be overridden",
+                    "until its defeated",
+                },
+            },
             dd_akyrs_forgotten_blind  = {
                 name="Forgotten Blind",
                 text={

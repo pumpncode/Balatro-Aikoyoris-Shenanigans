@@ -88,6 +88,8 @@ function recalculateBlindUI()
             }
         ]]
         --AKYRS.remove_all(G.HUD_blind.children,function(v) print("A") return v and v.config and (v.config.object ~= G.GAME.blind) end)
+        --[[
+        ]]
         G.HUD_blind.definition = nil
         G.HUD_blind.definition = create_UIBox_HUD_blind()
         G.HUD_blind:set_parent_child(G.HUD_blind.definition, nil)
@@ -108,7 +110,7 @@ end
 local setBlindHook = Blind.set_blind
 function Blind:set_blind(x, y, z)
     local abc = setBlindHook(self,x ,y,z)
-    if x then recalculateBlindUI() end
+    --if x then recalculateBlindUI() end
     
     return abc
 end
@@ -518,7 +520,7 @@ function Card:highlight(is_higlighted)
                     offset = { x = 1, y = -0.75 },
                     parent = self }
             }
-        elseif self.children.use_button then
+        elseif self.children.use_button and self.highlighted then
             self.children.use_button:remove()
             self.children.use_button = nil
         end
@@ -608,12 +610,6 @@ G.FUNCS.can_play = function(e)
     end
 end
 
-local UIESetH = UIElement.set_values
-function UIElement:set_values(_T, recalculate)
-    local c = UIESetH(self,_T,recalculate)
-    self.states.release_on.can = true
-    return c
-end
 
 function UIBox:akyrs_set_parent_child_with_pos(node, parent, pos)
     local UIE = UIElement(parent, self, node.n, node.config)
@@ -661,6 +657,8 @@ function create_UIBox_HUD_blind()
     
     local bl = G.P_BLINDS[G.GAME.round_resets.blind_choices[G.GAME.blind_on_deck]]
     local elem = x.nodes[2].nodes[2].nodes[2]
+
+
     if bl and bl.debuff.special_blind and elem and not bldis then
         local blindloc = getSpecialBossBlindText(G.GAME.round_resets.blind_choices[G.GAME.blind_on_deck] or "nololxd")
         local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
@@ -671,11 +669,15 @@ function create_UIBox_HUD_blind()
             { n = G.UIT.T, config = { text = blindloc[2], scale = 0.4, colour = G.C.RED, id = 'HUD_blind_count', shadow = true } }
         }
     end    
-
-    table.insert(x.nodes[2].nodes,2,{
-        n = G.UIT.R, config = { align = "cm", id = "akyrs_blind_attributes"}, nodes = shit
-    })
-    table.insert(x.nodes[2].nodes,2, { n = G.UIT.B, config = { h = 0.1, w = 0.1 } })
+    if #shit > 0 then
+        G.akyrs_blind_icons = true
+        table.insert(x.nodes[2].nodes,2,{
+            n = G.UIT.R, config = { align = "cm", id = "akyrs_blind_attributes"}, nodes = shit
+        })
+        table.insert(x.nodes[2].nodes,2, { n = G.UIT.B, config = { h = 0.1, w = 0.1 } })
+    else
+        G.akyrs_blind_icons = nil
+    end
 
     return x
 end
@@ -770,16 +772,16 @@ G.FUNCS.HUD_blind_debuff = function(e)
 				{n = G.UIT.T, config = {ref_table = G.GAME.blind.loc_debuff_lines, ref_value = i, scale = scale * 0.9, colour = G.C.UI.TEXT_LIGHT}}}}
 			e.UIBox:set_parent_child(node_def, e)
 		end
-	elseif num_lines < #e.children then
+	elseif num_lines < #e.children + (G.skill_deck and 1 or 0) + (G.akyrs_blind_icons and 1 or 0) then
 		for i = num_lines+1, #e.children do
 			e.children[i]:remove()
 			e.children[i] = nil
 		end
 	end
+	assert(G.HUD_blind == e.UIBox)
 	e.UIBox:recalculate()
 
 end
-
 local moveableRemoveHook = Moveable.remove
 function Moveable:remove()
     if self.children and type(self.children) == 'table' then

@@ -487,8 +487,8 @@ SMODS.Blind {
     end
     --[[
     disable = function (self)
-        if AKYRS.all_card_areas then 
-            for _,area in ipairs(AKYRS.all_card_areas) do
+        if G.I.CARDAREA then 
+            for _,area in ipairs(G.I.CARDAREA) do
                 if (area and area.cards) then
                     for j,c in ipairs(area.cards) do
                         if c.seal then

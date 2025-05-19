@@ -111,7 +111,7 @@ SMODS.Edition{
         info_queue[#info_queue+1] = G.P_CENTERS["j_akyrs_ash_joker"]
         return {
             vars = {
-                G.GAME.probabilities.normal or 1,
+                G.GAME and G.GAME.probabilities.normal or 1,
                 card.edition.extras.odds,
             }
         }

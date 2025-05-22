@@ -290,3 +290,72 @@ position = "after"
 payload = """end"""
 overwrite = true
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = """        self.ability_UIBox_table = self:generate_UIBox_ability_table()
+        self.config.h_popup = G.UIDEF.card_h_popup(self)
+        self.config.h_popup_config = self:align_h_popup()"""
+position = "before"
+payload = """if not AKYRS.should_hide_ui() then"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = """        self.ability_UIBox_table = self:generate_UIBox_ability_table()
+        self.config.h_popup = G.UIDEF.card_h_popup(self)
+        self.config.h_popup_config = self:align_h_popup()"""
+position = "after"
+payload = """end"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "engine/node.lua"
+pattern = """    if self.config and self.config.h_popup then
+        if not self.children.h_popup then 
+            self.config.h_popup_config.instance_type = 'POPUP'
+            self.children.h_popup = UIBox{
+                definition = self.config.h_popup,
+                config = self.config.h_popup_config,
+            }
+            self.children.h_popup.states.collide.can = false
+            self.children.h_popup.states.drag.can = true
+        end
+    end"""
+position = "before"
+payload = """if not AKYRS.should_hide_ui() then"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "engine/node.lua"
+pattern = """    if self.config and self.config.h_popup then
+        if not self.children.h_popup then 
+            self.config.h_popup_config.instance_type = 'POPUP'
+            self.children.h_popup = UIBox{
+                definition = self.config.h_popup,
+                config = self.config.h_popup_config,
+            }
+            self.children.h_popup.states.collide.can = false
+            self.children.h_popup.states.drag.can = true
+        end
+    end"""
+position = "after"
+payload = """end"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """      local card_type = localize('k_'..string.lower(AUT.card_type))"""
+position = "before"
+payload = """if not AUT.card_type then return nil end"""
+overwrite = true
+match_indent = true

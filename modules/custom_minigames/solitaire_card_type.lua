@@ -111,7 +111,7 @@ function Card:akyrs_bring_following_cards(area)
         for i,k in ipairs(self.following_cards) do
             if k.akyrs_card_held and k.akyrs_card_held:is(Card) then
                 k.akyrs_card_held.following_cards = nil
-                if akyrs_card_held.area then
+                if k.akyrs_card_held.area then
                     k.akyrs_card_held.area:remove_card(k)
                     k.akyrs_card_held.area:align_cards()
                 end

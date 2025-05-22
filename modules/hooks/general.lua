@@ -114,6 +114,16 @@ function Card:update(dt)
             end
         end
     end
+    if self.ability.akyrs_stay_sigma then
+        self.getting_sliced = false
+        self.ability.akyrs_stay_sigma = true
+        self.ability.akyrs_sigma = true
+    end
+    if self.ability.akyrs_sigma then
+        self.ability.akyrs_stay_sigma = true
+        self.children.center.pinch.x = false
+        self.children.center.pinch.y = false
+    end
     
     if self.config.center_key == "j_akyrs_emerald" and self.sell_cost ~= self.cost * self.ability.extras.xcost then
         self.sell_cost = self.cost * self.ability.extras.xcost
@@ -255,6 +265,14 @@ function Game:start_run(args)
     if self.GAME.modifiers.akyrs_can_buy_playing_cards then
         G.GAME.playing_card_rate = 4
     end
+    if self.GAME.modifiers.akyrs_no_hints then
+        AKYRS.simple_event_add(
+            function()
+                G.GAME.akyrs_no_hints = true
+                return true
+            end, 0.5
+        )
+    end
     recalculateHUDUI()
     if G.GAME.current_round.advanced_blind then
         recalculateBlindUI()
@@ -295,25 +313,52 @@ end
 local cardSellHook = Card.sell_card
 
 function Card:sell_card()
-    self.akyrs_is_being_sold = true
-    local c = cardSellHook(self)
-    return c
+    if (not (AKYRS.non_removing_area(self.area) and self.ability.akyrs_sigma)) or (AKYRS.is_card_not_sigma(self)) then
+        self.akyrs_is_being_sold = true
+        return cardSellHook(self)
+    else
+        AKYRS.nope_buzzer(self,nil,G.C.playable)
+        self:highlight(false)
+    end
 end
-AKYRS.area_to_check_remove = function(area)
-    return area == G.play or area == G.hand or area == G.deck or area == G.jokers or area == G.consumeables or nil
-end
+
 local cardRemoveHook = Card.remove
 function Card:remove()
     local area = self.area or self.akyrs_lastcardarea
 
-    if not G.AKYRS_RUN_BEING_DELETED and not self.akyrs_is_being_sold and not (area and (area.config.collection or area.config.temporary or area.config.view_deck)) and area and AKYRS.area_to_check_remove(area) then
-        pcall(SMODS.calculate_context,{ akyrs_card_remove = true, card_getting_removed = self })
+    if (not (AKYRS.non_removing_area(area) and self.ability.akyrs_sigma)) or (AKYRS.is_card_not_sigma(self)) or area.being_removed then
+        --print("CARD CAN BE REMOVED SAFELY")
+        if not G.AKYRS_RUN_BEING_DELETED and not self.akyrs_is_being_sold and not (area and (area.config.collection or area.config.temporary or area.config.view_deck)) and area and AKYRS.game_areas(area) then
+            if not area.being_removed then
+
+                pcall(SMODS.calculate_context,{ akyrs_card_remove = true, card_getting_removed = self })
+            end
+        end
+
+        local l = cardRemoveHook(self)
+        self.REMOVED = true
+        return l
+    elseif not self.area then
+        local copy = copy_card(self)
+        cardRemoveHook(self)
+        AKYRS.simple_event_add(
+            function ()
+                area:emplace(copy)
+                return true
+            end, 0
+        )
+        AKYRS.nope_buzzer(self,nil,G.C.playable)
     end
 
-    local l = cardRemoveHook(self)
-    self.REMOVED = true
-    return l
 end
+
+local cardDissolveHook = Card.start_dissolve
+function Card:start_dissolve(dissolve_colours, silent, dissolve_time_fac, no_juice)
+    if (not (AKYRS.non_removing_area(self.area) and self.ability.akyrs_sigma)) or (AKYRS.is_card_not_sigma(self)) then
+        cardDissolveHook(self,dissolve_colours, silent, dissolve_time_fac, no_juice)
+    end
+end
+
 
 local endRoundHook = end_round
 function end_round()
@@ -487,6 +532,12 @@ function Moveable:a_cool_fucking_spin(time, radian)
             return t
         end)
     }))
+end
+
+local removeNode = Node.remove
+function Node:remove()
+    self.being_removed = true
+    return removeNode(self)
 end
 
 local add2highlightHook = CardArea.add_to_highlighted
@@ -740,6 +791,7 @@ end
 local setCardAbilityHook = Card.set_ability
 
 function Card:set_ability(c,i,d)
+    if self and self.ability and self.ability.akyrs_sigma then return end
     local r = setCardAbilityHook(self,c,i,d)
     
     if(i) then
@@ -1310,7 +1362,9 @@ function Game:main_menu(ctx)
         card.bypass_discovery_center = true
         card.T.w = card.T.w * 1.4
         card.T.h = card.T.h * 1.4
-        
+        if Entropy then
+            card:set_edition("e_entr_freaky")
+        end
         G.title_top.T.w = G.title_top.T.w * 1.7675
         G.title_top.T.x = G.title_top.T.x - 0.8
         card:set_sprites(card.config.center)
@@ -1324,10 +1378,10 @@ function Game:main_menu(ctx)
                 func = function ()
                     if ctx == "splash" then
                         card.states.visible = true
-                        card:start_materialize({ G.C.WHITE, G.C.WHITE }, true, 2.5)
+                        card:start_materialize({ G.C.WHITE, G.C.WHITE }, true, 0.5)
                     else
                         card.states.visible = true
-                        card:start_materialize({ G.C.WHITE, G.C.WHITE }, nil, 1.2)
+                        card:start_materialize({ G.C.WHITE, G.C.WHITE }, nil, 0.2)
                     end
                     return true
                 end
@@ -1364,17 +1418,7 @@ end
 local blindDisable = Blind.disable
 function Blind:disable()
     if self.debuff.akyrs_cannot_be_disabled then
-        play_sound("akyrs_loud_incorrect_buzzer",1,0.1)
-        attention_text({
-            text = localize("k_nope_ex"),
-            scale = 1, 
-            hold = 1.0,
-            rotate = math.pi / 8,
-            backdrop_colour = G.GAME.blind.boss_colour,
-            align = "cm",
-            major = G.GAME.blind,
-            offset = {x = 0, y = 0.1}
-        })
+        AKYRS.nope_buzzer()
         return
     end
     return blindDisable(self)
@@ -1390,17 +1434,7 @@ G.FUNCS.reroll_boss = function(e)
     
     if not AKYRS.can_boss_be_rerolled(G.GAME.round_resets.blind_choices.Boss) then
         local uib = G.blind_select_opts.boss:get_UIE_by_ID("blind_desc")
-        play_sound("akyrs_loud_incorrect_buzzer",1,0.1)
-        attention_text({
-            text = localize("k_nope_ex"),
-            scale = 1, 
-            hold = 1.0,
-            rotate = math.pi / 8,
-            backdrop_colour = G.GAME.blind.boss_colour,
-            align = "cm",
-            major =  uib and uib.children and uib.children[1] and uib.children[1].children[1].children[1] or nil,
-            offset = {x = 0, y = 0.1}
-        })
+        AKYRS.nope_buzzer(uib and uib.children and uib.children[1] and uib.children[1].children[1].children[1] or nil)
 
     else
         local x = rerollBossHook(e)
@@ -1461,18 +1495,7 @@ function Blind:set_blind(blind, initial, silent)
     if G.GAME.blind and G.GAME.blind.in_blind and not G.GAME.blind.defeated and G.GAME.blind.debuff.akyrs_cannot_be_overridden and 
     (not G.GAME.blind.debuff.akyrs_can_be_replaced_by or G.GAME.blind.debuff.akyrs_can_be_replaced_by[blind.key])
     then
-        play_sound("akyrs_loud_incorrect_buzzer",1,0.1)
-        attention_text({
-            text = localize("k_nope_ex"),
-            scale = 1, 
-            hold = 1.0,
-            rotate = math.pi / 8,
-            backdrop_colour = G.GAME.blind.boss_colour,
-            align = "cm",
-            major = G.GAME.blind,
-            offset = {x = 0, y = 0.1}
-        })
-        return
+        AKYRS.nope_buzzer()
     else
         return setBlindHook(self,blind, initial, silent)
     end

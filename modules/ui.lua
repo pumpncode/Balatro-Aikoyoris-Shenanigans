@@ -783,3 +783,6 @@ function AKYRS.UIBox_dynatext_button(args)
     but_UI_label
     }}}
 end
+
+function AKYRS.UIBox_HUD_villager_trading()
+end

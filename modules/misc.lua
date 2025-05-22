@@ -614,11 +614,7 @@ function AKYRS.find_stake_from_level(level)
 end
 
 AKYRS.crypternity = function (e)
-    if Cryptid then 
-        e.stickers = {"cry_absolute"}
-    else
-        e.eternal = true
-    end
+    e.akyrs_sigma = true
     return e
 end
 
@@ -1199,7 +1195,7 @@ AKYRS.sort_top = function(a, b)
 end
 
 AKYRS.should_hide_ui = function()
-    return next(SMODS.find_card("j_akyrs_no_hints_here")) or nil
+    return next(SMODS.find_card("j_akyrs_no_hints_here")) or G.GAME.akyrs_no_hints or nil
 end
 
 AKYRS.remove_objects_in_nodes = function(nodes)
@@ -1212,4 +1208,31 @@ AKYRS.remove_objects_in_nodes = function(nodes)
             AKYRS.remove_objects_in_nodes(node.nodes)
         end
     end
+end
+
+AKYRS.game_areas = function(area)
+    return area == G.play or area == G.hand or area == G.deck or area == G.discard or area == G.jokers or area == G.consumeables or nil
+end
+AKYRS.non_removing_area = function(area)
+    return area == G.hand or area == G.deck or area == G.discard or area == G.jokers or area == G.consumeables or nil
+end
+AKYRS.non_removing_play_state = function()
+    return G.STATE == G.STATES.DRAW_TO_HAND or G.STATE == G.STATES.SELECTING_HAND or G.STATE == G.STATES.HAND_PLAYED or G.STATE == G.STATES.ROUND_EVAL
+end
+AKYRS.is_card_not_sigma = function(card) 
+    return card.ability.consumeable or card.ability.set == "Booster" or card.ability.set == "Voucher" or nil
+end
+
+AKYRS.nope_buzzer = function(major, text, colour, rotate, scale, hold)
+    play_sound("akyrs_loud_incorrect_buzzer",1,0.2)
+    attention_text({
+        text = text or localize("k_nope_ex"),
+        scale = scale or 1, 
+        hold = hold or 1.0,
+        rotate = rotate or math.pi / 8,
+        backdrop_colour = colour or G.GAME.blind.boss_colour,
+        align = "cm",
+        major = major or G.GAME.blind,
+        offset = {x = 0, y = 0.1}
+    })
 end

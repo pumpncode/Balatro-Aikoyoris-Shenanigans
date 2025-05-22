@@ -431,7 +431,7 @@ return {
                 name="No Overriding",
                 text={
                     "This blind cannot be overridden",
-                    "until its defeated",
+                    "until it's defeated",
                 },
             },
             dd_akyrs_forgotten_blind  = {
@@ -833,7 +833,7 @@ return {
                 text = { 
                     "This joker sells for {X:money,C:black}X#1#{}",
                     "its buy cost ({C:money}$#2#{})",
-                    "{C:inactive}placeholder ability",
+                    "{C:inactive}(placeholder ability)",
                 }
             },
             j_akyrs_shimmer_bucket = {
@@ -918,8 +918,8 @@ return {
             j_akyrs_pandora_paradoxxx = {
                 name = "PANDORA PARADOXXX",
                 text = { 
-                    "{C:green}#1# in #2#{} to give {C:attention}Standard Tag",
-                    "per {C:attention}playing card{} added to deck",
+                    "{C:green}#1# in #2# chance{} to give {C:attention}Standard Tag",
+                    "when a {C:attention}playing card{} added to deck",
                 }
             },
             j_akyrs_story_of_undertale = {
@@ -979,6 +979,14 @@ return {
                 text={
                     "{C:red}Self-Destructs{} at ",
                     "the end of the round",
+                },
+            },
+            akyrs_sigma={
+                name="Sigma",
+                text={
+                    "{C:red}Unremovable{} and",
+                    "{C:red}Indestructible{}",
+                    "{C:inactive,s:0.8}how do i get him off",
                 },
             },
             akyrs_debuff_seal={
@@ -1370,7 +1378,9 @@ return {
             hc_akyrs_thin_yo_deck = "thin yo deck bro",
             hc_akyrs_thin_yo_deck_2 = "for the love of god thin your deck",
             hc_akyrs_national_debt = "National Debt",
-            hc_akyrs_extra_defensive_bulwark = "Extra Defensive Bulwark"
+            hc_akyrs_extra_defensive_bulwark = "Extra Defensive Bulwark",
+            hc_akyrs_no_hints_here = "Knowledge Test",
+            hc_akyrs_no_hints_here_gold_edition = "Close-Book Finals",
         },
         collabs={},
         dictionary={
@@ -1476,6 +1486,7 @@ return {
         high_scores={},
         labels={
             akyrs_self_destructs="Self-Destructive",
+            akyrs_sigma="Sigma",
             akyrs_debuff_seal="Seal-Debuffed",
             akyrs_texelated = "Texelated",
             akyrs_noire = "Noire",
@@ -1606,6 +1617,9 @@ return {
             },
             ch_c_akyrs_idea_by_saharabat={
                 "Idea by {C:attention}saharabat",
+            },
+            ch_c_akyrs_no_hints={
+                "{C:attention}All tooltips{} are {C:red}hidden",
             },
         },
     },

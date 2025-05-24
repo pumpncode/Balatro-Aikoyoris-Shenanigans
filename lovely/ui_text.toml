@@ -8,7 +8,7 @@ priority = 0
 target = "functions/misc_functions.lua"
 pattern = """              spacing = math.max(0, 0.32*(17 - #assembled_string)),"""
 position = "after"
-payload = """font = AKYRS.Fonts[part.control.font] and AKYRS.Fonts[part.control.font] or (tonumber(part.control.font) and G.FONTS[tonumber(part.control.font)]),"""
+payload = """font = AKYRS.Fonts[part.control.f] and AKYRS.Fonts[part.control.f] or (tonumber(part.control.f) and G.FONTS[tonumber(part.control.f)]),"""
 overwrite = true
 match_indent = true
 
@@ -17,7 +17,7 @@ match_indent = true
 target = "functions/misc_functions.lua"
 pattern = """            spacing = _spacing,"""
 position = "after"
-payload = """font = AKYRS.Fonts[part.control.font] and AKYRS.Fonts[part.control.font] or (tonumber(part.control.font) and G.FONTS[tonumber(part.control.font)]),"""
+payload = """font = AKYRS.Fonts[part.control.f] and AKYRS.Fonts[part.control.f] or (tonumber(part.control.f) and G.FONTS[tonumber(part.control.f)]),"""
 overwrite = true
 match_indent = true
 
@@ -26,7 +26,7 @@ match_indent = true
 target = "functions/misc_functions.lua"
 pattern = """                text = assembled_string,"""
 position = "after"
-payload = """font = AKYRS.Fonts[part.control.font] and AKYRS.Fonts[part.control.font] or (tonumber(part.control.font) and G.FONTS[tonumber(part.control.font)]),"""
+payload = """font = AKYRS.Fonts[part.control.f] and AKYRS.Fonts[part.control.f] or (tonumber(part.control.f) and G.FONTS[tonumber(part.control.f)]),"""
 overwrite = true
 match_indent = true
 

@@ -114,6 +114,11 @@ function Card:update(dt)
             end
         end
     end
+    if AKYRS.should_hide_ui() then
+        if JokerDisplay then
+            self:joker_display_remove()
+        end
+    end
     if self.ability.akyrs_stay_sigma then
         self.getting_sliced = false
         self.ability.akyrs_stay_sigma = true

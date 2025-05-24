@@ -245,7 +245,7 @@ return {
                 }
             },
             bl_akyrs_master_bug = {
-                name = "Bug",
+                name = "BUG",
                 text = {
                     "One Random Joker destroyed",
                     "per card played"
@@ -615,7 +615,7 @@ return {
                 text = { 
                     "Retrigger each played {C:attention}4{} and {C:attention}7{}",
                     "{C:attention}#1#{} additional times",
-                    "{C:inactive,s:0.9,font:akyrs_MochiyPopOne}ならば踊らにゃ損、踊らにゃ損です!{}",
+                    "{C:inactive,s:0.9,f:akyrs_MochiyPopOne}ならば踊らにゃ損、踊らにゃ損です!{}",
                 }
             },
             j_akyrs_tldr_joker = {
@@ -792,7 +792,7 @@ return {
                     "{C:attention}L{}, {C:attention}S{}, {C:attention}O{}, {C:attention}Z{}, {C:attention}J{}, {C:attention}I{}, and {C:attention}T{}",
                     "gives {C:chips}+#1#{} Chips when scored",
                     "and {X:chips,C:white}X#2#{} Chips if any one those is present.",
-                    "{s:0.9,C:inactive,font:akyrs_MochiyPopOne}テテテテト テト テテテテトリス!{}"
+                    "{s:0.9,C:inactive,f:akyrs_MochiyPopOne}テテテテト テト テテテテトリス!{}"
                 }
             },
             -- toga
@@ -821,11 +821,11 @@ return {
                 }
             },
             j_akyrs_mukuroju_no_hakamori = {
-                name = "{font:5}躯樹の墓守",
+                name = "{f:5}躯樹の墓守",
                 text = { 
-                    "{font:5}このジョーカーは、{font:5,C:tarot}星{font:5}を使用するたびに",
-                    "{font:5}倍率 {X:mult,C:white} X#1# {font:5} を得る",
-                    "{C:inactive}({C:inactive,font:5}現在 倍率 {X:mult,C:white} X#2# {C:inactive})",
+                    "{f:5}このジョーカーは、{f:5,C:tarot}星{f:5}を使用するたびに",
+                    "{f:5}倍率 {X:mult,C:white} X#1# {f:5} を得る",
+                    "{C:inactive}({C:inactive,f:5}現在 倍率 {X:mult,C:white} X#2# {C:inactive})",
                 }
             },
             j_akyrs_emerald = {
@@ -893,7 +893,7 @@ return {
                     "If hand has {C:attention}a single{} card,",
                     "destroy it and create a {C:tarot}Justice{}",
                     "{C:inactive}(Must have room){}",
-                    "{C:inactive,font:5}引きこもり絶対ジャスティス俺の私だけの折の中で{}",
+                    "{C:inactive,f:5}引きこもり絶対ジャスティス俺の私だけの折の中で{}",
                 }
             },
             j_akyrs_liar_dancer = {
@@ -904,7 +904,7 @@ return {
                     "and level up {C:attention}Straight{} and",
                     "{C:attention}Straight Flush{} by {C:blue}#2#{}",
                     "{C:inactive}(Hand cannot be downgraded below 1){}",
-                    "{C:inactive,font:5}(踊れ 踊れ 嘘に踊れ){}",
+                    "{C:inactive,f:5}(踊れ 踊れ 嘘に踊れ){}",
                 }
             },
             j_akyrs_pissandshittium = {

@@ -1025,7 +1025,7 @@ SMODS.Joker{
             end
             delay(0.5*AKYRS.get_speed_mult(card)+0.2*#G.play.cards)
             return {
-                chips = card.ability.chips * #G.play.cards,
+                chips = card.ability.extra.chips * #G.play.cards,
                 message = localize("k_akyrs_centrifuged")
             }
         end

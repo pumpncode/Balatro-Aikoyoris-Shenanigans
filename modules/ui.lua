@@ -785,4 +785,7 @@ function AKYRS.UIBox_dynatext_button(args)
 end
 
 function AKYRS.UIBox_HUD_villager_trading()
+  return {
+    
+  }
 end

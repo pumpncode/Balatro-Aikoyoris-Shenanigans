@@ -996,8 +996,12 @@ end
 function AKYRS.score_catches_fire_or_not()
     if not G.GAME or not G.GAME.blind then return false end
 
+
     if type(G.GAME.blind.chips) == "string" then
         local stud = tonumber(AKYRS.remove_comma(G.GAME.blind.chips))
+        if stud ~= stud then
+            return false
+        end
         G.GAME.blind.chips = Talisman and to_big(stud) or stud
 
     end

@@ -52,24 +52,6 @@ function SMODS.current_mod.reset_game_globals(run_start)
     G.GAME.current_round.aiko_played_suits = {}
 end
 
-function CardArea:aiko_change_playable(delta)
-    
-    self.config.highlighted_limit = self.config.highlighted_limit + delta
-    G.GAME.aiko_cards_playable = self.config.highlighted_limit
-    if Cryptid then
-        G.GAME.modifiers.cry_highlight_limit = self.config.highlighted_limit
-        
-    end
-
-    if delta ~= 0 then
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                G.hand:unhighlight_all()
-                return true
-            end
-        }))
-    end
-end
 
 local gameUpdate = Game.update
 
@@ -1095,11 +1077,15 @@ function Back:apply_to_run()
     local c = applyToRunBackHook(self)
 
 
-    if self.effect.config.selection then
-        G.GAME.aiko_cards_playable = math.max(G.GAME.aiko_cards_playable, self.effect.config.selection)
-        if Cryptid and G.GAME.modifiers.cry_highlight_limit then
-            G.GAME.modifiers.cry_highlight_limit = math.max(G.GAME.modifiers.cry_highlight_limit, self.effect.config.selection)
-        end
+    if self.effect.config.akyrs_selection then
+        AKYRS.simple_event_add(
+            function ()
+                
+                SMODS.change_play_limit(self.effect.config.akyrs_selection)
+                SMODS.change_discard_limit(self.effect.config.akyrs_selection)
+                return true
+            end
+        )
     end
     if self.effect.config.akyrs_start_with_no_cards then
         G.GAME.starting_params.akyrs_start_with_no_cards = true

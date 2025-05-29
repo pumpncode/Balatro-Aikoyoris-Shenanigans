@@ -1,5 +1,6 @@
 AKYRS.Fonts = {}
 
+
 -- modified from https://github.com/Steamodded/smods/blob/main/src/game_object.lua
 
 AKYRS.Font = SMODS.GameObject:extend {
@@ -40,6 +41,9 @@ AKYRS.Font = SMODS.GameObject:extend {
     end,
     process_loc_text = function() end,
 }
+
+
+if not SMODS.Font then SMODS.Font = AKYRS.Font end
 
 AKYRS.Font{
     key = "NotoEmoji",

@@ -458,9 +458,46 @@ AKYRS.HardcoreChallenge{
         banned_other = {
             {id = 'bl_final_acorn', type = 'blind'},
             {id = 'bl_final_heart', type = 'blind'},
-            {id = 'bl_final_leaf', type = 'blind'}
+            {id = 'bl_final_leaf', type = 'blind'},
+            {id = 'bl_akyrs_final_lilac_lasso', type = 'blind'}
         }
     },
     difficulty = 8,
+    stake = "stake_gold",
+}
+
+AKYRS.HardcoreChallenge{
+    key = "no_hints_here",
+    jokers = {
+    },
+    vouchers = {
+    },
+    deck = {
+        type = "Hardcore Challenge Deck",
+    },
+    rules = {
+        custom = {
+            {id = 'akyrs_no_hints'},
+        }
+    },
+    difficulty = 2,
+    stake = "stake_white",
+}
+
+AKYRS.HardcoreChallenge{
+    key = "no_hints_here_gold_edition",
+    jokers = {
+    },
+    vouchers = {
+    },
+    deck = {
+        type = "Hardcore Challenge Deck",
+    },
+    rules = {
+        custom = {
+            {id = 'akyrs_no_hints'},
+        }
+    },
+    difficulty = 3,
     stake = "stake_gold",
 }

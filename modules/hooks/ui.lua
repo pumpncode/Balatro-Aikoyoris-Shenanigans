@@ -75,10 +75,13 @@ function Card:generate_UIBox_ability_table()
     end
     return ret
 end
+
+local blindRemoveHook = Blind.remove
 function Blind:remove()
     if not AKYRS.do_not_remove_blind then
-        Moveable.remove(self)
+        return blindRemoveHook and blindRemoveHook(self) or Moveable.remove(self)
     end
+    
 end
 
 function recalculateBlindUI()
@@ -166,12 +169,42 @@ function Node:hover()
     return ret
 end
 
+local tagGenUI = Tag.generate_UI
+function Tag:generate_UI(_sz)
+    local x = {tagGenUI(self,_sz)}
+    if AKYRS.should_hide_ui() then
+        x[2].hover = function() end
+    end
+    return unpack(x)
+end
+local taghoverproxy = G.FUNCS.hover_tag_proxy
+G.FUNCS.hover_tag_proxy = function(e)
+    if not AKYRS.should_hide_ui() then
+        taghoverproxy(e)
+    end
+end
+
 local genCardUIHook = generate_card_ui
 function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
     if AKYRS.should_hide_ui() then
-        return nil
+        return {
+            main = {},
+            info = {},
+            type = {},
+            name = nil,
+            badges = badges or {}
+        }
     end
     return genCardUIHook(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
+end
+
+local uiboxspc = UIBox.set_parent_child
+
+function UIBox:set_parent_child(node, parent)
+    if node then
+        return uiboxspc(self,node,parent)
+    end
+
 end
 
 local cardStopHoverHook = Card.stop_hover
@@ -747,13 +780,15 @@ function create_UIBox_blind_popup(bl, disco, vars)
                 badges = {}
             }
             local desc = generate_card_ui(valueinfo, full_UI_table)
-            table.insert(noders,{
-                n = G.UIT.R, config = { align = "cm"}, nodes = {
-                    {n=G.UIT.C, config={align = "cm", colour = lighten(G.C.JOKER_GREY, 0.5), r = 0.1, padding = 0.05, emboss = 0.05}, nodes={
-                        info_tip_from_rows(desc.info[1], desc.info[1].name)
-                    }}
-                }
-            })
+            if desc then
+                table.insert(noders,{
+                    n = G.UIT.R, config = { align = "cm"}, nodes = {
+                        {n=G.UIT.C, config={align = "cm", colour = lighten(G.C.JOKER_GREY, 0.5), r = 0.1, padding = 0.05, emboss = 0.05}, nodes={
+                            info_tip_from_rows(desc.info[1], desc.info[1].name)
+                        }}
+                    }
+                })
+            end
         end
         table.insert(all_nodes,
         { n = G.UIT.C, config={align = "cm", func = 'show_infotip',object = Moveable(),ref_table = next(noders) and noders or nil}, nodes = {

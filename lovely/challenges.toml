@@ -28,7 +28,8 @@ match_indent = true
 target = "game.lua"
 pattern = """                            if v.pinned then _joker.pinned = true end"""
 position = "after"
-payload = """if v.akyrs_card_ability then 
+payload = """if v.akyrs_sigma then _joker.ability.akyrs_sigma = true end
+if v.akyrs_card_ability then 
     for i,k in pairs(v.akyrs_card_ability) do
         _joker.ability[i] = k
     end
@@ -47,7 +48,8 @@ match_indent = true
 target = "functions/UI_definitions.lua"
 pattern = """      if v.pinned then card.pinned = true end"""
 position = "after"
-payload = """if v.akyrs_card_ability then 
+payload = """if v.akyrs_sigma then card.ability.akyrs_sigma = true end
+if v.akyrs_card_ability then 
     for i,k in pairs(v.akyrs_card_ability) do
         card.ability[i] = k
     end

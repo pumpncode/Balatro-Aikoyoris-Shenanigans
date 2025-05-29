@@ -17,7 +17,6 @@ SMODS.Sticker{
         card.ability[self.key] = val
         card:set_cost()
     end
-
 }
 
 SMODS.Seal{
@@ -33,4 +32,29 @@ SMODS.Seal{
         end
     end,
 
+}
+
+
+SMODS.Sticker{
+    key = "sigma",
+    default_compat = true,
+    atlas = "aikoyoriStickers",
+    pos = {x = 3, y = 0},
+    rate = 0,
+    badge_colour = G.C.PLAYABLE,
+    sets =  all_sets,
+    calculate = function(self, card, context)
+    end,
+    apply = function(self, card, val)
+        card.ability[self.key] = val
+        card.ability.akyrs_stay_sigma = true
+        card:set_cost()
+    end,
+    
+    draw = function (self, card, layer)
+        G.shared_stickers[self.key].role.draw_major = card
+        G.shared_stickers[self.key]:draw_shader('dissolve', nil, nil, nil, card.children.center)
+        G.shared_stickers[self.key]:draw_shader('akyrs_texelated', nil, card.ARGS.send_to_shader, nil, card.children.center)
+        G.shared_stickers[self.key]:draw_shader('voucher', nil, card.ARGS.send_to_shader, nil, card.children.center)
+    end
 }

@@ -788,14 +788,7 @@ SMODS.Joker{
                 G.E_MANAGER:add_event(
                     Event{
                         func = function ()
-                            local comp = false
-                            if Talisman then
-                                comp = G.GAME.blind.chips:lt(G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult)
-                            else
-                                
-                                comp = G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult >= G.GAME.blind.chips
-                            end
-                            if comp then
+                            if AKYRS.score_catches_fire_or_not() then
                                 card.ability.extra.xmult = 1
                             else 
                                 card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.extra
@@ -1025,7 +1018,7 @@ SMODS.Joker{
             end
             delay(0.5*AKYRS.get_speed_mult(card)+0.2*#G.play.cards)
             return {
-                chips = card.ability.chips * #G.play.cards,
+                chips = card.ability.extra.chips * #G.play.cards,
                 message = localize("k_akyrs_centrifuged")
             }
         end

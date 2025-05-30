@@ -9,9 +9,9 @@
 	"badge_colour": "ff475a",
 	"badge_text_colour": "edefff",
 	"display_name": "AikoShenanigans",
-	"version": "0.2.0-alpha-250531a",
+	"version": "0.2.0-alpha-250531b",
 	"dependencies": [
-		"Steamodded (>=1.0.0~BETA-0506a)", 
+		"Steamodded (>=1.0.0~BETA-0530b)", 
 		"Lovely (*)", 
 		"Balatro (>=1.0.1o)"],
 	"conflicts": [

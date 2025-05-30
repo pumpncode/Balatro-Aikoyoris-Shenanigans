@@ -32,7 +32,7 @@ SMODS.Back{
     config = {
         akyrs_starting_letters = AKYRS.scrabble_letters,
         starting_deck_size = 100,
-        selection = 1e100,
+        akyrs_selection = 1e100,
         discards = 2,
         akyrs_start_with_no_cards = true,
         akyrs_letters_mult_enabled = true,
@@ -60,7 +60,7 @@ SMODS.Back{
         akyrs_mathematics_enabled = true,
         akyrs_character_stickers_enabled = true,
         akyrs_no_skips = true,
-        selection = 1e100,
+        akyrs_selection = 1e100,
         discards = 1,
         akyrs_math_threshold = 2,
         hand_size = 6,

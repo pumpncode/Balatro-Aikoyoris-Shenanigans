@@ -196,7 +196,7 @@ for k, v in ipairs(AKYRS.HC_CHALLENGES) do
         scale = 0.3,
         colours = {G.C.UI.TEXT_LIGHT},
         string = {difficultyString},
-        font = AKYRS.Fonts["akyrs_NotoEmoji"]
+        font = SMODS.Fonts["akyrs_NotoEmoji"]
     }
             challenge_list[#challenge_list + 1] =
             {n=G.UIT.R, config={align = '', padding = 0.08, colour = AKYRS.C.DARKER_TRANS, r = 0.2, minw = 0.8}, nodes = {{

@@ -298,12 +298,12 @@ SMODS.Joker {
         play_mod = 3,
     },
     add_to_deck = function(self, card, from_debuff)
-        G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable + card.ability.play_mod
-        G.hand:aiko_change_playable(card.ability.play_mod)
+        SMODS.change_play_limit(card.ability.play_mod)
+        SMODS.change_discard_limit(card.ability.play_mod)
     end,
     remove_from_deck = function(self, card, from_debuff)
-        G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable - card.ability.play_mod
-        G.hand:aiko_change_playable(-card.ability.play_mod)
+        SMODS.change_play_limit(-card.ability.play_mod)
+        SMODS.change_discard_limit(-card.ability.play_mod)
     end,
     blueprint_compat = false,
 }

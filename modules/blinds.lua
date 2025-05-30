@@ -703,7 +703,7 @@ SMODS.Blind {
         }
     end,
     calculate = function (self, blind, context)
-        if context.individual and not context.repetition and and context.cardarea == G.play then
+        if context.individual and not context.repetition and context.cardarea == G.play then
             return {
                 xmult = blind.debuff.akyrs_mult_per_played,
             }

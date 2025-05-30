@@ -509,13 +509,28 @@ SMODS.Blind {
     mult = 2,
     boss_colour = HEX('ff40ac'),
     debuff = {
-        akyrs_suit_debuff_hand = true
+        akyrs_rank_debuff_hand = true
     },
     
     atlas = 'aikoyoriBlindsChips', 
     boss = {min = 1, max = 10, showdown = true},
     pos = { x = 0, y = 11 },
 }
+
+SMODS.Blind {
+    key = "final_velvet_vapour",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('911468'),    
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 1, max = 10, showdown = true},
+    pos = { x = 0, y = 10 },
+    debuff = {
+        akyrs_rank_debuff_hand = true
+    },
+    
+}
+
 SMODS.Blind {
     key = "final_lilac_lasso",
     dollars = 8,
@@ -599,6 +614,9 @@ SMODS.Blind {
     end
 }
 
+
+
+-- forgotten blinds
 SMODS.Blind {
     key = "forgotten_weights_of_the_past",
     dollars = 8,
@@ -741,7 +759,11 @@ SMODS.Blind {
     end,
     calculate = function (self, blind, context)
         if context.blind_defeated and not blind.disabled then
-            ease_dollars(-G.GAME.chips / G.GAME.blind.chips)
+            return{
+                func = function ()
+                    ease_dollars(-G.GAME.chips / G.GAME.blind.chips)
+                end
+            }
         end
     end
 }
@@ -932,7 +954,12 @@ SMODS.Blind {
         return G.GAME.round_resets.ante > G.GAME.win_ante
     end,
     modify_hand = function (self, cards, poker_hands, text, mult, hand_chips)
-        ease_dollars(-mult)
+        AKYRS.simple_event_add(
+            function ()
+                ease_dollars(-mult)
+                return true
+            end, 0
+        )
         return mult, hand_chips, true
     end,
     --[[
@@ -1051,7 +1078,11 @@ SMODS.Blind {
             blind.debuff.current_money = blind.debuff.current_money or G.GAME.dollars
             local old_money = blind.debuff.current_money or G.GAME.dollars
             blind.debuff.current_money = blind.debuff.current_money * blind.debuff.akyrs_deduct_mult
-            ease_dollars(-old_money + blind.debuff.current_money)
+            return {
+                func = function ()
+                    ease_dollars(-old_money + blind.debuff.current_money)
+                end
+            }
         end
     end
 }

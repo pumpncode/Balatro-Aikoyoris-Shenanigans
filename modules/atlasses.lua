@@ -115,7 +115,7 @@ SMODS.Atlas {
     py = 320
 }
 
-local s = SMODS.Atlas {
+SMODS.Atlas {
     key = "aikoyoriTags",
     path = "aikoyoriTags.png",
     px = 34,
@@ -157,6 +157,14 @@ SMODS.Atlas {
     px = 18,
     py = 18
 }
+
+SMODS.Atlas {
+    key = 'villager',
+    path = 'villager.png',
+    px = 111,
+    py = 161
+}
+-- we glsling so hard rn 
 
 SMODS.Shader{
     key = "texelated",

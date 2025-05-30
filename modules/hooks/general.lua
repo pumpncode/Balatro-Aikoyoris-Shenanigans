@@ -30,6 +30,7 @@ function Game:init_game_object()
     ret.current_round.aiko_round_incorrect_letter = {}
     ret.current_round.aiko_played_suits = {}
     ret.current_round.aiko_played_ranks = {}
+    ret.current_round.aiko_played_ench = {}
     ret.current_round.akyrs_last_played_letters = {}
     ret.current_round.discards_sub = 0
     ret.current_round.hands_sub = 0
@@ -66,8 +67,10 @@ function SMODS.current_mod.reset_game_globals(run_start)
     
     EMPTY(G.GAME.akyrs_last_played_letters)
     G.GAME.akyrs_last_played_letters = {}
+    G.GAME.current_round.akyrs_last_action = nil
     G.GAME.current_round.aiko_played_suits = {}
     G.GAME.current_round.aiko_played_ranks = {}
+    G.GAME.current_round.aiko_played_ench = {}
 end
 
 
@@ -108,14 +111,20 @@ function Card:update(dt)
     end
     if G.STATE == G.STATES.HAND_PLAYED then
         self.ability.akyrs_executed_debuff = false
-        for suitkey, suit in pairs(SMODS.Suits) do
-            if(suitkey ~= nil and self:is_suit(suitkey) and G.GAME.current_round.aiko_played_suits) then
-                G.GAME.current_round.aiko_played_suits[suitkey] = true
+        if self.area == G.play then
+            for suitkey, suit in pairs(SMODS.Suits) do
+                if(suitkey ~= nil and self:is_suit(suitkey) and G.GAME.current_round.aiko_played_suits) then
+                    G.GAME.current_round.aiko_played_suits[suitkey] = true
+                end
+            end
+            if(self:get_id() and G.GAME.current_round.aiko_played_ranks) and self:get_id() then
+                G.GAME.current_round.aiko_played_ranks[self:get_id()] = true
+            end
+            if(self:get_id() and G.GAME.current_round.aiko_played_ench) and self.config.center_key then
+                G.GAME.current_round.aiko_played_ench[self.config.center_key] = true
             end
         end
-        if(self:get_id() and G.GAME.current_round.aiko_played_ranks) then
-            G.GAME.current_round.aiko_played_ranks[self:get_id()] = true
-        end
+
     end
     if AKYRS.should_hide_ui() then
         if JokerDisplay then
@@ -146,10 +155,13 @@ function Card:update(dt)
                 end
             end
             if G.GAME.blind.debuff.akyrs_rank_debuff_hand then
-                for rank, _ in pairs(G.GAME.current_round.aiko_played_ranks) do
-                    if rank == self:get_id() then
-                        self:set_debuff(true)
-                    end
+                if G.GAME.current_round.aiko_played_ranks[self:get_id()] and self:get_id() then
+                    self:set_debuff(true)
+                end
+            end
+            if G.GAME.blind.debuff.akyrs_enhancement_debuff_hand then
+                if self.config.center_key and self.ability.set == "Enhanced" and G.GAME.current_round.aiko_played_ench[self.config.center_key] then
+                    self:set_debuff(true)
                 end
             end
             if G.GAME.blind.debuff.akyrs_all_seals_perma_debuff then
@@ -600,10 +612,51 @@ local dcfhHook = G.FUNCS.discard_cards_from_highlighted
 G.FUNCS.discard_cards_from_highlighted = function (e,hook)
     if AKYRS.checkBlindKey("bl_akyrs_the_picker") and not G.GAME.blind.disabled then
         G.GAME.blind.debuff.primed = false
+    end    
+    if G.GAME.blind and not G.GAME.blind.disabled then
+        if G.GAME.blind.debuff.akyrs_alternate_action and G.GAME.current_round.akyrs_last_action == "discard" then
+            stop_use()
+            G.CONTROLLER:save_cardarea_focus('hand')
+            ease_discard(-1)
+            AKYRS.simple_event_add(
+                function ()
+                    for _,c in ipairs(G.hand.highlighted) do
+                        c:highlight(false)
+                    end
+                    G.buttons:get_UIE_by_ID("discard_button").disable_button = false
+                    G.hand.highlighted = {}
+                    return true
+                end, 0
+            )
+            return
+        end
+        if G.GAME.blind.debuff.akyrs_reduce_other then
+            ease_hands_played(-G.GAME.blind.debuff.akyrs_reduce_other)
+            AKYRS.simple_event_add(
+                function ()
+                    if G.GAME.current_round.hands_left <= 0 then
+                        end_round()
+                    end
+                    return true
+                end
+            )
+        end
     end
+    G.GAME.current_round.akyrs_last_action = "discard"
     local r = dcfhHook(e,hook)
     return r
 end
+
+local playCardEval = G.FUNCS.play_cards_from_highlighted
+
+G.FUNCS.play_cards_from_highlighted = function(e)
+    if G.GAME.blind.debuff.akyrs_reduce_other then
+        ease_discard(-G.GAME.blind.debuff.akyrs_reduce_other)
+    end
+    local ret = playCardEval(e)
+    return ret
+end
+
 
 local loadBlind = Blind.load
 function Blind:load(blindTable)
@@ -796,6 +849,8 @@ G.FUNCS.evaluate_play = function(e)
     G.GAME.aiko_current_word = nil
     
     G.GAME.aiko_current_word_table = {}
+    
+    G.GAME.current_round.akyrs_last_action = "play"
     return ret
 end
 

@@ -509,7 +509,7 @@ SMODS.Blind {
     mult = 2,
     boss_colour = HEX('ff40ac'),
     debuff = {
-        akyrs_rank_debuff_hand = true
+        akyrs_suit_debuff_hand = true
     },
     
     atlas = 'aikoyoriBlindsChips', 
@@ -527,6 +527,20 @@ SMODS.Blind {
     pos = { x = 0, y = 10 },
     debuff = {
         akyrs_rank_debuff_hand = true
+    },
+    
+}
+
+SMODS.Blind {
+    key = "final_chamomile_cloud",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('f0ae22'),    
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 1, max = 10, showdown = true},
+    pos = { x = 0, y = 9 },
+    debuff = {
+        akyrs_enhancement_debuff_hand = true
     },
     
 }
@@ -609,11 +623,94 @@ SMODS.Blind {
     disable = function (self)
         
         for i = 1, #G.jokers.cards do
-            G.jokers.cards[i]:set_debuff(true)
+            G.jokers.cards[i]:set_debuff(false)
         end 
     end
 }
 
+
+SMODS.Blind {
+    key = "final_salient_stream",
+    dollars = 8,
+    mult = 2,
+    boss_colour = HEX('358dff'),    
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 1, max = 10, showdown = true},
+    pos = { x = 0, y = 11 },
+    debuff = {
+        akyrs_alternate_action = true
+    },
+    debuff_hand = function (self, cards, hand, handname, check)
+        if G.GAME.current_round.akyrs_last_action and G.GAME.current_round.akyrs_last_action == "play" then
+            return true
+        end
+        return false
+    end,
+    
+}
+
+SMODS.Blind {
+    key = "final_luminous_lemonade",
+    dollars = 8,
+    mult = 3.5,
+    boss_colour = SMODS.Gradients['akyrs_luminous'],    
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 1, max = 10, showdown = true},
+    pos = { x = 0, y = 12 },
+    debuff = {
+        akyrs_reduce_other = 2
+    },
+    loc_vars = function (self)
+        return {
+            vars = {
+                self.debuff.akyrs_reduce_other
+            }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = {
+                2
+            }
+        }
+    end
+    
+}
+
+SMODS.Blind {
+    key = "final_glorious_glaive",
+    dollars = 8,
+    mult = 2,
+    boss_colour = SMODS.Gradients['akyrs_glorious'],    
+    atlas = 'aikoyoriBlindsChips2', 
+    boss = {min = 1, max = 10, showdown = true},
+    pos = { x = 0, y = 13 },
+    debuff = {
+        akyrs_mult_per_played = 0.8
+    },
+    loc_vars = function (self)
+        return {
+            vars = {
+                self.debuff.akyrs_mult_per_played
+            }
+        }
+    end,
+    collection_loc_vars = function (self)
+        return {
+            vars = {
+                0.8
+            }
+        }
+    end,
+    calculate = function (self, blind, context)
+        if context.individual and not context.repetition and and context.cardarea == G.play then
+            return {
+                xmult = blind.debuff.akyrs_mult_per_played,
+            }
+        end
+    end
+    
+}
 
 
 -- forgotten blinds

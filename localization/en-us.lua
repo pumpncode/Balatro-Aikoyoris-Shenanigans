@@ -138,22 +138,21 @@ return {
             bl_akyrs_final_salient_stream = {
                 name = "Salient Stream",
                 text = {
-                    "",
-                    "",
+                    "Must alternate between",
+                    "Play and Discard",
                 }
             },
             bl_akyrs_final_luminous_lemonade = {
                 name = "Luminous Lemonade",
                 text = {
-                    "",
-                    "",
+                    "-#1# Discards per hand played",
+                    "-#1# Hands per discards",
                 }
             },
             bl_akyrs_final_glorious_glaive = {
                 name = "Glorious Glaive",
                 text = {
-                    "",
-                    "",
+                    "X#1# Mult per card played",
                 }
             },
             bl_akyrs_final_lilac_lasso = {
@@ -764,7 +763,6 @@ return {
                     "for the next {C:blue}#1# rounds{}",
                     "and create {T:j_akyrs_ghastling,C:purple}Ghastling{}",
                     "{C:red}Self-destructs{}",
-                    "Resets back to {C:blue}#2#{} if score catches fire",
                 }
             },
             j_akyrs_ghastling = {

@@ -1192,17 +1192,6 @@ SMODS.Joker{
             end
 
         end
-        if context.final_scoring_step and not context.blueprint then
-            if AKYRS.score_catches_fire_or_not() then
-                return {
-                    message = localize("k_reset"),
-                    func = function ()
-                        card.ability.extras.rounds_left = 2
-                        card.ability.do_not_decrease = true
-                    end
-                }
-            end
-        end
     end,
 }
 

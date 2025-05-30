@@ -206,12 +206,6 @@ function SMODS.has_no_suit(card)
     return ret
 end
 
-local playCardEval = G.FUNCS.play_cards_from_highlighted
-
-G.FUNCS.play_cards_from_highlighted = function(e)
-    local ret = playCardEval(e)
-    return ret
-end
 
 local cashOutHook = G.FUNCS.cash_out
 G.FUNCS.cash_out = function(e)

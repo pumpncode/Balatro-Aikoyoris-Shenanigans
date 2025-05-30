@@ -542,26 +542,6 @@ AKYRS.word_to_cards = function(word)
     return cards
 end
 
-SMODS.Gradient{
-    key = "akyrs_mod_title",
-    colours = {
-        HEX("ef4444"),
-        HEX("eab308"),
-        HEX("2dd4bf"),
-    },
-    cycle = 5
-}
-
-SMODS.Gradient{
-    key = "akyrs_unset_letter",
-    colours = {
-        G.C.GREEN,
-        G.C.BLUE,
-        G.C.RED,
-    },
-    cycle = 1
-}
-
 AKYRS.HardcoreChallenge = SMODS.Challenge:extend {
     obj_table = AKYRS.HC_CHALLENGES,
     obj_buffer = {},

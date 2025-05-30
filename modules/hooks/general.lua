@@ -29,11 +29,28 @@ function Game:init_game_object()
     ret.current_round.aiko_round_misaligned_letter = {}
     ret.current_round.aiko_round_incorrect_letter = {}
     ret.current_round.aiko_played_suits = {}
+    ret.current_round.aiko_played_ranks = {}
     ret.current_round.akyrs_last_played_letters = {}
     ret.current_round.discards_sub = 0
     ret.current_round.hands_sub = 0
     ret.current_round.aiko_infinite_hack = "8"
     ret.current_round.advanced_blind = false
+    -- this one will get set to true once player has bought an Emerald OR used one of the Workstation Card
+    ret.akyrs_has_capability_to_trade = false
+    -- 
+    -- note to self (this is the first time i am going to bother document this so i don't hallucinate shit up)
+    -- this is an indexed table (array as we call it in literally other languages) each one representing villager workstation you redeem in the shop
+    -- each entry should contain information about each villager's trades
+    --  key : should contain data about the villager's profession ID (so to reference back). it should contain class prefix (profession) and also mod ID
+    --  level : villager's current level (as in ranks)
+    --  total_xp : total experience that a villager had gained
+    --  trades : another "array" containing trade entry which in itself contains
+    --    key : trade's registry key, for reference, again
+    --    stock_left : in Minecraft, there's a limit to how much
+    --    
+    --    
+    ret.akyrs_curent_trades = {}
+    ret.akyrs_trade_unlocked = {}
     ret.akyrs_last_ante = nil
 
     return ret
@@ -50,6 +67,7 @@ function SMODS.current_mod.reset_game_globals(run_start)
     EMPTY(G.GAME.akyrs_last_played_letters)
     G.GAME.akyrs_last_played_letters = {}
     G.GAME.current_round.aiko_played_suits = {}
+    G.GAME.current_round.aiko_played_ranks = {}
 end
 
 function CardArea:aiko_change_playable(delta)
@@ -113,6 +131,9 @@ function Card:update(dt)
                 G.GAME.current_round.aiko_played_suits[suitkey] = true
             end
         end
+        if(self:get_id() and G.GAME.current_round.aiko_played_ranks) then
+            G.GAME.current_round.aiko_played_ranks[self:get_id()] = true
+        end
     end
     if AKYRS.should_hide_ui() then
         if JokerDisplay then
@@ -142,12 +163,25 @@ function Card:update(dt)
                     end
                 end
             end
+            if G.GAME.blind.debuff.akyrs_rank_debuff_hand then
+                for rank, _ in pairs(G.GAME.current_round.aiko_played_ranks) do
+                    if rank == self:get_id() then
+                        self:set_debuff(true)
+                    end
+                end
+            end
             if G.GAME.blind.debuff.akyrs_all_seals_perma_debuff then
                 if self.seal and not self.ability.akyrs_undebuffable then
                     self.ability.akyrs_perma_debuff = true
                 end
             end
             self.ability.akyrs_executed_debuff = true
+        elseif G.GAME.blind and G.GAME.blind.disabled then
+            if G.GAME.blind.debuff.akyrs_suit_debuff_hand or G.GAME.blind.debuff.aiko_played_ranks then
+                self:set_debuff(false)
+            end
+            self.ability.akyrs_executed_debuff = true
+            
         end
     end
     -- permanent debuff shenanigans

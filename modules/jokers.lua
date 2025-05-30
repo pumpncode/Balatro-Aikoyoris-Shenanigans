@@ -630,7 +630,12 @@ SMODS.Joker {
             return {
                 message = localize('k_akyrs_drawn_discard'),
                 func = function()
-                    G.FUNCS.draw_from_discard_to_deck()
+                    AKYRS.simple_event_add(
+                        function ()
+                            G.FUNCS.draw_from_discard_to_deck()
+                            return true
+                        end, 0
+                    )
                 end
             }
         end
@@ -2052,7 +2057,7 @@ SMODS.Joker{
     cost = 2,
     config = {
         extras = {
-            mult = 4
+            mult = 4.000
         }
     },
     loc_vars = function (self, info_queue, card)

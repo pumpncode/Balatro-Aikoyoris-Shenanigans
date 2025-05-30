@@ -117,8 +117,43 @@ return {
             bl_akyrs_final_razzle_raindrop = {
                 name = "Razzle Raindrop",
                 text = {
-                    "Played suits are",
-                    "debuffed",
+                    "Suits already played",
+                    "this round are debuffed",
+                }
+            },
+            bl_akyrs_final_velvet_vapour = {
+                name = "Velvet Vapour",
+                text = {
+                    "Ranks already played",
+                    "this round are debuffed",
+                }
+            },
+            bl_akyrs_final_chamomile_cloud = {
+                name = "Chamomile Cloud",
+                text = {
+                    "Cards with enhancements already played",
+                    "this round are debuffed",
+                }
+            },
+            bl_akyrs_final_salient_stream = {
+                name = "Salient Stream",
+                text = {
+                    "",
+                    "",
+                }
+            },
+            bl_akyrs_final_luminous_lemonade = {
+                name = "Luminous Lemonade",
+                text = {
+                    "",
+                    "",
+                }
+            },
+            bl_akyrs_final_glorious_glaive = {
+                name = "Glorious Glaive",
+                text = {
+                    "",
+                    "",
                 }
             },
             bl_akyrs_final_lilac_lasso = {

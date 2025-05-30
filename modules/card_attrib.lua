@@ -13,9 +13,6 @@ local l = SMODS.Rank{
         ignore = true
     },
     in_pool = function (self, args)
-        if args and args.suit == '' and G.GAME.akyrs_any_drag then
-            return true
-        end
         return false
     end,
     inject = function(self)
@@ -40,9 +37,6 @@ SMODS.Suit{
     lc_colour = AKYRS.C.JOKER_LC,
     hc_colour = AKYRS.C.JOKER_HC,
     in_pool = function (self, args)
-        if args and args.rank == '' and G.GAME.akyrs_any_drag then
-            return true
-        end
         return false
     end
 }
@@ -63,9 +57,6 @@ SMODS.Suit{
     lc_colour = AKYRS.C.CONSU_LC,
     hc_colour = AKYRS.C.CONSU_HC,
     in_pool = function (self, args)
-        if args and args.rank == '' and G.GAME.akyrs_any_drag then
-            return true
-        end
         return false
     end
 }
@@ -86,9 +77,6 @@ SMODS.Suit{
     lc_colour = AKYRS.C.BOOST_LC,
     hc_colour = AKYRS.C.BOOST_HC,
     in_pool = function (self, args)
-        if args and args.rank == '' and G.GAME.akyrs_any_drag then
-            return true
-        end
         return false
     end
 }
@@ -109,9 +97,6 @@ SMODS.Suit{
     lc_colour = AKYRS.C.VOUCH_LC,
     hc_colour = AKYRS.C.VOUCH_HC,
     in_pool = function (self, args)
-        if args and args.rank == '' and G.GAME.akyrs_any_drag then
-            return true
-        end
         return false
     end
 }
@@ -132,9 +117,6 @@ SMODS.Suit{
     lc_colour = AKYRS.C.THING_LC,
     hc_colour = AKYRS.C.THING_HC,
     in_pool = function (self, args)
-        if args and args.rank == '' and G.GAME.akyrs_any_drag then
-            return true
-        end
         return false
     end
 }

@@ -298,12 +298,12 @@ SMODS.Joker {
         play_mod = 3,
     },
     add_to_deck = function(self, card, from_debuff)
-        G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable + card.ability.play_mod
-        G.hand:aiko_change_playable(card.ability.play_mod)
+        SMODS.change_play_limit(card.ability.play_mod)
+        SMODS.change_discard_limit(card.ability.play_mod)
     end,
     remove_from_deck = function(self, card, from_debuff)
-        G.GAME.aiko_cards_playable = G.GAME.aiko_cards_playable - card.ability.play_mod
-        G.hand:aiko_change_playable(-card.ability.play_mod)
+        SMODS.change_play_limit(-card.ability.play_mod)
+        SMODS.change_discard_limit(-card.ability.play_mod)
     end,
     blueprint_compat = false,
 }
@@ -630,7 +630,12 @@ SMODS.Joker {
             return {
                 message = localize('k_akyrs_drawn_discard'),
                 func = function()
-                    G.FUNCS.draw_from_discard_to_deck()
+                    AKYRS.simple_event_add(
+                        function ()
+                            G.FUNCS.draw_from_discard_to_deck()
+                            return true
+                        end, 0
+                    )
                 end
             }
         end
@@ -1186,17 +1191,6 @@ SMODS.Joker{
                 }
             end
 
-        end
-        if context.final_scoring_step and not context.blueprint then
-            if AKYRS.score_catches_fire_or_not() then
-                return {
-                    message = localize("k_reset"),
-                    func = function ()
-                        card.ability.extras.rounds_left = 2
-                        card.ability.do_not_decrease = true
-                    end
-                }
-            end
         end
     end,
 }
@@ -2052,7 +2046,7 @@ SMODS.Joker{
     cost = 2,
     config = {
         extras = {
-            mult = 4
+            mult = 4.000
         }
     },
     loc_vars = function (self, info_queue, card)

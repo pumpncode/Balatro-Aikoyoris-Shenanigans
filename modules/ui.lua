@@ -1015,7 +1015,7 @@ function AKYRS.UIBox_balancing_intro(page)
       { n = G.UIT.R, config = { h = 0.5, w = 0.1 }, nodes = {{ n = G.UIT.B, config = { h = 0.5, w = 0.1 } },}},
       { n = G.UIT.R, config = { padding = 0.1, align = "cl" }, nodes = {
         { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
-          create_toggle({label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'absurd', callback = G.FUNCS.akyrs_select_balance_checkbox}),
+          create_toggle({label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'absurd', callback = G.FUNCS.akyrs_select_balance_checkbox, toggle_active = Talisman}),
         }},
         { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
           { n = G.UIT.T, config = { colour = G.C.WHITE, text = localize('k_akyrs_balance_dialog_absurd_text'), scale = 0.8}}

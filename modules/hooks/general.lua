@@ -1471,6 +1471,7 @@ function Game:main_menu(ctx)
     AKYRS.simple_event_add(
         function()
             if not G.PROFILES[G.SETTINGS.profile].akyrs_balance then
+                G.SETTINGS.paused = true
                 G.FUNCS.overlay_menu({
                     definition = AKYRS.UIBox_balancing_intro("intro"),
                     config = {

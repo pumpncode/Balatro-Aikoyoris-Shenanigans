@@ -871,6 +871,7 @@ AKYRS.balance_intro_end = function (set)
   G:save_settings()
   G.akyrs_current_balancing_page = nil
   G.FUNCS.exit_overlay_menu()
+  G.SETTINGS.paused = false
   if G.AKYRS_AIKOYORI then
     G.akyrs_aiko_y = 20
     AKYRS.simple_event_add(
@@ -894,6 +895,7 @@ G.FUNCS.akyrs_balance_select_button_enabled = function(e)
 end
 
 AKYRS.balance_box = function(page)
+  G.SETTINGS.paused = true
   G.FUNCS.overlay_menu({
     definition = AKYRS.UIBox_balancing_intro(page),
     config = {
@@ -1003,7 +1005,7 @@ function AKYRS.UIBox_balancing_intro(page)
     child_elements = {
       { n = G.UIT.R, config = { padding = 0.1, align = "cl" }, nodes = {
         { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
-          create_toggle({label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'adequate', callback = G.FUNCS.akyrs_select_balance_checkbox}),
+          create_toggle({w = 0.5, label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'adequate', callback = G.FUNCS.akyrs_select_balance_checkbox}),
         }},
         { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
           { n = G.UIT.T, config = { colour = G.C.WHITE, text = localize('k_akyrs_balance_dialog_adequate_text'), scale = 0.8}}
@@ -1014,9 +1016,16 @@ function AKYRS.UIBox_balancing_intro(page)
       }},
       { n = G.UIT.R, config = { h = 0.5, w = 0.1 }, nodes = {{ n = G.UIT.B, config = { h = 0.5, w = 0.1 } },}},
       { n = G.UIT.R, config = { padding = 0.1, align = "cl" }, nodes = {
-        { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
-          create_toggle({label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'absurd', callback = G.FUNCS.akyrs_select_balance_checkbox, toggle_active = Talisman}),
-        }},
+        { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = Talisman and {
+          create_toggle({w = 0, label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'absurd', callback = G.FUNCS.akyrs_select_balance_checkbox}),
+        } or {
+          {
+            n = G.UIT.R, config = { align = "cm", minw = 0.5, minh = 0.5, padding = 0.2, colour = G.C.UI.TEXT_INACTIVE, outline = 1.5, outline_colour = G.C.WHITE, r = 0.2, emboss = 0.1 },
+            nodes = {
+              { n = G.UIT.T, config = { text = "-", colour = G.C.WHITE, scale = 0.3}}
+            }
+          }
+        },},
         { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
           { n = G.UIT.T, config = { colour = G.C.WHITE, text = localize('k_akyrs_balance_dialog_absurd_text'), scale = 0.8}}
         }}

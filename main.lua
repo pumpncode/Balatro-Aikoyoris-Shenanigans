@@ -45,6 +45,7 @@ assert(SMODS.load_file("./modules/jokers.lua"))()
 assert(SMODS.load_file("./modules/challenges.lua"))()
 assert(SMODS.load_file("./modules/pokerhands.lua"))()
 
+assert(SMODS.load_file("./modules/compat/malverk.lua"))()
 assert(SMODS.load_file("./modules/compat/cryptid.lua"))()
 assert(SMODS.load_file("./modules/compat/sleeves.lua"))()
 assert(SMODS.load_file("./modules/compat/talisman.lua"))()

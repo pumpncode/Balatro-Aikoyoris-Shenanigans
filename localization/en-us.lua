@@ -602,10 +602,10 @@ return {
             j_akyrs_quasi_connectivity_absurd = {
                 name = "Quasi Connectivity",
                 text = { "{C:white,X:dark_edition} ^#1# {} Mult", 
-                    "Disables two {C:attention}random Joker{}",
+                    "Disables two {C:attention}random Jokers{}",
                     "after a hand is played",
-                    "{s:0.8}Debuffs itself if you have less",
-                    "{s:0.8}than 2 Jokers"
+                    "{s:0.8}Debuffs itself if you have",
+                    "{s:0.8}2 Jokers or less"
                 }
             },
             j_akyrs_diamond_pickaxe = {

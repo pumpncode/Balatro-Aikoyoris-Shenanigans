@@ -164,6 +164,13 @@ SMODS.Atlas {
     px = 111,
     py = 161
 }
+
+SMODS.Atlas {
+    key = 'aikoyori_intro',
+    path = 'aikoyoriintro.png',
+    px = 761,
+    py = 1051
+}
 -- we glsling so hard rn 
 
 SMODS.Shader{

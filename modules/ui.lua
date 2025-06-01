@@ -340,34 +340,60 @@ G.FUNCS.akyrs_change_wildcard_behaviour = function (e)
   AKYRS.config_wildcard_desc_dyna_2:update()
 end
 
+G.FUNCS.akyrs_change_balance_toggle = function (e)
+  G.PROFILES[G.SETTINGS.profile].akyrs_balance = AKYRS.rev_balance_map[e.to_key]
+  if G.PROFILES[G.SETTINGS.profile].akyrs_balance == "absurd" and not Talisman then
+    G.PROFILES[G.SETTINGS.profile].akyrs_balance = "adequate"
+  end
+  G:save_settings()
+  AKYRS.config_balance_text_txt = localize('k_akyrs_balance_descriptions')[AKYRS.balance_map[G.PROFILES[G.SETTINGS.profile].akyrs_balance]]
+  AKYRS.config_balance_text:update_text(true)
+  AKYRS.config_balance_text:update()
+end
+
 G.FUNCS.akyrs_change_joker_preview_stuff = function (e)
   AKYRS.save_config(e)
 end
 
+AKYRS.balance_map = {
+  ["adequate"] = 1,
+  ["absurd"] = 2,
+}
+AKYRS.rev_balance_map = {
+  "adequate", "absurd"
+}
+
 SMODS.current_mod.config_tab = function ()
   AKYRS.config_dyna_desc_txt_1 = localize('k_akyrs_wildcard_behaviours_description')[AKYRS.config.wildcard_behaviour][1]
   AKYRS.config_dyna_desc_txt_2 = localize('k_akyrs_wildcard_behaviours_description')[AKYRS.config.wildcard_behaviour][2]
+  AKYRS.config_balance_text_txt = localize('k_akyrs_balance_descriptions')[AKYRS.balance_map[G.PROFILES[G.SETTINGS.profile].akyrs_balance]]
   AKYRS.config_wildcard_desc_dyna_1 = DynaText{
     scale = 0.4,
     colours = {G.C.UI.TEXT_LIGHT},
     string = {{ref_table = AKYRS ,ref_value = "config_dyna_desc_txt_1"}},
-    shadow = true, float = true, silent = true
+    shadow = true, float = false, silent = true
   }  
   AKYRS.config_wildcard_desc_dyna_2 = DynaText{
     scale = 0.4,
     colours = {G.C.UI.TEXT_LIGHT},
     string = {{ref_table = AKYRS ,ref_value = "config_dyna_desc_txt_2"}},
-    shadow = true, float = true, silent = true
+    shadow = true, float = false, silent = true
+  }
+  AKYRS.config_balance_text = DynaText{
+    scale = 0.4,
+    colours = {G.C.UI.TEXT_LIGHT},
+    string = {{ref_table = AKYRS ,ref_value = "config_balance_text_txt"}},
+    shadow = true, float = false, silent = true
   }
   return {
-    n = G.UIT.ROOT, config = { minw = 18, minh = 6 ,align = "tm",colour = G.C.UI.TRANSPARENT_DARK, r = 0.1 },
-      nodes = {
-        { n = G.UIT.R, config = {align = "tm"}, nodes = {
+    n = G.UIT.ROOT, config = { minw = 18, minh = 8 ,align = "tm",colour = G.C.UI.TRANSPARENT_DARK, r = 0.1 },
+    nodes = {
+      { n = G.UIT.R, config = {align = "tm"}, nodes = {
           { n = G.UIT.C, config = {
             align = "cm", padding = 0.2,
           }, nodes = {
             {n = G.UIT.T, config = {
-              text = "Wildcards Behaviour",
+              text = localize("k_akyrs_wildcard_behaviour_txt"),
               scale = 0.5,
               colour = G.C.UI.TEXT_LIGHT
             }}
@@ -416,6 +442,51 @@ SMODS.current_mod.config_tab = function ()
             config = {
               align = "cm",
               object = AKYRS.config_wildcard_desc_dyna_2
+            }
+          }
+        }
+      },
+      -- balance
+      { n = G.UIT.R, config = {align = "tm"}, nodes = {
+          { n = G.UIT.C, config = {
+            align = "cm", padding = 0.2,
+          }, nodes = {
+            {n = G.UIT.T, config = {
+              text = localize("k_akyrs_config_balance_txt"),
+              scale = 0.5,
+              colour = G.C.UI.TEXT_LIGHT
+            }}
+            }
+          },          
+          { n = G.UIT.C, config = {
+            align = "cm", padding = 0.2,
+            id = "akyrs_wildcard_behaviour_desc_dyna"
+          }, nodes = {
+              create_option_cycle({
+                options = localize('k_akyrs_balance_selects'),
+                scale = 0.7,
+                w = 4.5,
+                current_option = AKYRS.balance_map[G.PROFILES[G.SETTINGS.profile].akyrs_balance],
+                opt_callback = "akyrs_change_balance_toggle",
+                ref_table = G.PROFILES[G.SETTINGS.profile],
+                ref_value = "akyrs_balance"
+
+              })
+            }
+          },       
+        } 
+      },
+      -- wildcard description
+      {
+        n = G.UIT.R,{
+          align = "cm", padding = 0.2,
+        },
+        nodes = {
+          {
+            n = G.UIT.O,
+            config = {
+              align = "cm",
+              object = AKYRS.config_balance_text
             }
           }
         }
@@ -787,5 +858,202 @@ end
 function AKYRS.UIBox_HUD_villager_trading()
   return {
     
+  }
+end
+
+AKYRS.akyrs_selection = {
+  adequate = nil,
+  absurd = nil
+}
+
+AKYRS.balance_intro_end = function (set)
+  G.PROFILES[G.SETTINGS.profile].akyrs_balance = set
+  G:save_settings()
+  G.akyrs_current_balancing_page = nil
+  G.FUNCS.exit_overlay_menu()
+  if G.AKYRS_AIKOYORI then
+    G.akyrs_aiko_y = 20
+    AKYRS.simple_event_add(
+      function ()
+        G.AKYRS_AIKOYORI:remove()
+        G.AKYRS_AIKOYORI = nil
+        return true
+      end, 1
+    )
+  end
+end
+
+G.FUNCS.akyrs_balance_select_button_enabled = function(e)
+  if not AKYRS.akyrs_selection.adequate and not AKYRS.akyrs_selection.absurd then
+    e.config.colour = G.C.GREY
+    e.config.button = nil
+  else
+    e.config.colour = G.C.GREEN
+    e.config.button = "akyrs_advance_balance_intro"
+  end
+end
+
+AKYRS.balance_box = function(page)
+  G.FUNCS.overlay_menu({
+    definition = AKYRS.UIBox_balancing_intro(page),
+    config = {
+        align = "cm",
+        offset = {x=-2,y=10},
+        major = G.ROOM_ATTACH,
+        bond = 'Weak',
+        no_esc = true
+    }
+})
+end
+
+G.FUNCS.akyrs_select_balance_checkbox = function(val, e)
+  
+  if e.config.ref_table.ref_value == "adequate" or (e.config.ref_table.ref_value == "absurd" and not Talisman) then
+    AKYRS.akyrs_selection.adequate = true
+    AKYRS.akyrs_selection.absurd = false
+    
+  end
+  if e.config.ref_table.ref_value == "absurd" then
+    AKYRS.akyrs_selection.absurd = true
+    AKYRS.akyrs_selection.adequate = false
+  end
+end
+
+G.FUNCS.akyrs_advance_balance_intro = function(e)
+  --print(inspect(e.config))
+  if G.akyrs_current_balancing_page == "intro" then
+    if Cryptid then
+      AKYRS.balance_box("cryptid")
+    else
+      AKYRS.balance_box("details")
+    end
+  elseif G.akyrs_current_balancing_page == "cryptid" then
+    if e.config.id == "accept" then
+      AKYRS.balance_intro_end("absurd")
+    else
+      AKYRS.balance_box("details")
+    end
+  elseif G.akyrs_current_balancing_page == "details" then
+    AKYRS.balance_box("pick")
+  elseif G.akyrs_current_balancing_page == "pick" then
+    local picked = nil
+    if AKYRS.akyrs_selection.adequate then
+      picked = 'adequate'
+    end
+    if AKYRS.akyrs_selection.absurd then
+      picked = 'absurd'
+    end
+    if picked then
+      AKYRS.balance_intro_end(picked)
+    end
+  end
+end
+
+function AKYRS.UIBox_balancing_intro(page)
+  G.akyrs_current_balancing_page = page
+  local child_elements = {}
+  local buttons = {}
+    local shx = {}
+  if page == "intro" then
+    localize{type = "descriptions", key = "akyrs_balance_dialog_intro", set = "Akyrs_Dialog", default_col = G.C.WHITE, nodes = shx, vars = {}, scale = 2}
+    child_elements = {transparent_multiline_text(shx)}
+    buttons = {
+      UIBox_button({
+        label = {localize('k_akyrs_balance_dialog_intro_next')},
+        button = 'akyrs_advance_balance_intro',
+        page = page,
+        colour = G.C.BLUE,
+        minw = 4
+      }),
+    }
+  elseif page == "cryptid" then
+    localize{type = "descriptions", key = "akyrs_balance_dialog_cryptid", set = "Akyrs_Dialog", default_col = G.C.WHITE, nodes = shx, vars = {}, scale = 2}
+    child_elements = {transparent_multiline_text(shx)}
+    buttons = {
+      UIBox_button({
+        label = {localize('k_akyrs_balance_dialog_cryptid_decline')},
+        button = 'akyrs_advance_balance_intro',
+        page = page,
+        id = 'decline',
+        colour = G.C.RED,
+        minw = 4
+      }),
+      UIBox_button({
+        label = {localize('k_akyrs_balance_dialog_cryptid_accept')},
+        button = 'akyrs_advance_balance_intro',
+        page = page,
+        id = 'accept',
+        colour = G.C.GREEN,
+        minw = 4
+      }),
+    }
+  elseif page == "details" then
+    localize{type = "descriptions", key = "akyrs_balance_dialog_details", set = "Akyrs_Dialog", default_col = G.C.WHITE, nodes = shx, vars = {}, scale = 2}
+    child_elements = {transparent_multiline_text(shx)}
+    buttons = {
+      UIBox_button({
+        label = {localize('k_akyrs_balance_dialog_details_next')},
+        button = 'akyrs_advance_balance_intro',
+        page = page,
+        colour = G.C.BLUE,
+        minw = 4
+      }),
+    }
+  elseif page == "pick" then
+    child_elements = {
+      { n = G.UIT.R, config = { padding = 0.1, align = "cl" }, nodes = {
+        { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
+          create_toggle({label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'adequate', callback = G.FUNCS.akyrs_select_balance_checkbox}),
+        }},
+        { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
+          { n = G.UIT.T, config = { colour = G.C.WHITE, text = localize('k_akyrs_balance_dialog_adequate_text'), scale = 0.8}}
+        }}
+      }},
+      { n = G.UIT.R, nodes = {
+        { n = G.UIT.T, config = { colour = G.C.JOKER_GREY, text = localize('k_akyrs_balance_dialog_adequate_description'), scale = 0.5}}
+      }},
+      { n = G.UIT.R, config = { h = 0.5, w = 0.1 }, nodes = {{ n = G.UIT.B, config = { h = 0.5, w = 0.1 } },}},
+      { n = G.UIT.R, config = { padding = 0.1, align = "cl" }, nodes = {
+        { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
+          create_toggle({label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'absurd', callback = G.FUNCS.akyrs_select_balance_checkbox}),
+        }},
+        { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
+          { n = G.UIT.T, config = { colour = G.C.WHITE, text = localize('k_akyrs_balance_dialog_absurd_text'), scale = 0.8}}
+        }}
+      }},
+      { n = G.UIT.R, nodes = {
+        { n = G.UIT.T, config = { colour = G.C.JOKER_GREY, text = localize('k_akyrs_balance_dialog_absurd_description'), scale = 0.5}}
+      }},
+      
+      
+      
+    }
+    buttons = {
+      UIBox_button({
+        label = {localize('k_akyrs_balance_dialog_finish_wizard')},
+        button = 'akyrs_advance_balance_intro',
+        func = 'akyrs_balance_select_button_enabled',
+        page = page,
+        minw = 4
+      }),
+    }
+  end
+  return {
+    n = G.UIT.ROOT, config = { align = "cm", colour = {0.32,0.36,0.41,0.6}, padding = 32.01, r = 0.1, can_collide = true}, nodes = {
+      {
+        n = G.UIT.R, config = {padding = 0.0},  nodes = {
+          {
+            n = G.UIT.R, config = {align = "cm", r = 0.1, padding = 0.05, minh = G.ROOM.T.h - 3, minw = G.ROOM.T.w - 4, can_collide = true, colour = G.C.L_BLACK, outline_colour = G.C.JOKER_GREY, emboss = 0.1}, nodes = child_elements
+          },
+          {
+            n = G.UIT.R, config = {align = "cr", r = 0.1, padding = 0.2, minh = 1, minw = G.ROOM.T.w - 4, can_collide = true, colour = mix_colours(G.C.L_BLACK,G.C.BLACK,0.5), outline_colour = mix_colours(G.C.JOKER_GREY,G.C.BLACK,0.5), emboss = 0.1 }, nodes = {
+              {
+                n = G.UIT.C, config = { padding = 0.2 }, nodes = AKYRS.wrap_in_col(buttons)
+              }
+            }
+          },
+        }
+      }
+    }
   }
 end

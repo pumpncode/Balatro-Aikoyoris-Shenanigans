@@ -14,7 +14,7 @@ function mod_chips(_chips)
 end
 
 function Card.aiko_trigger_external(card)
-    if (card.ability.name == "Observer") then
+    if (card.config.center_key == "j_akyrs_observer") and AKYRS.bal() == "absurd" then
         card.ability.extra.times = card.ability.extra.times - 1
 
         card_eval_status_text(card, 'jokers', nil, 0.5, nil, {
@@ -26,7 +26,7 @@ function Card.aiko_trigger_external(card)
                 vars = { card.ability.extra.times }
             },
         })
-        update_hand_text({ immediate = true, nopulse = true, delay = 0 }, { mult_stored = stored })
+        --update_hand_text({ immediate = true, nopulse = true, delay = 0 }, { mult_stored = stored })
 
         if card.ability.extra.times <= 0 then
             card_eval_status_text(card, 'jokers', nil, 0.5, nil, {
@@ -40,7 +40,7 @@ function Card.aiko_trigger_external(card)
             })
             card.ability.extra.total_times = card.ability.extra.total_times + card.ability.extra.times_increment
             card.ability.extra.times = card.ability.extra.total_times
-            card.ability.extra.mult_stored = card.ability.extra.mult_stored + card.ability.extra.mult
+            card.ability.extra.xmult_stored = card.ability.extra.xmult_stored + card.ability.extra.xmult
         end
         card.ability.extra.mult_change = mult
         card.ability.extra.chip_change = chips

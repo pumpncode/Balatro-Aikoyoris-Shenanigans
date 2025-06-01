@@ -1220,3 +1220,21 @@ AKYRS.nope_buzzer = function(major, text, colour, rotate, scale, hold)
         offset = {x = 0, y = 0.1}
     })
 end
+
+AKYRS.wrap_in_col = function(table_ui)
+    local x = {}
+    for _,v in ipairs(table_ui) do
+        x[#x+1] = { n = G.UIT.C, nodes = {v}}
+    end
+    return x
+end
+
+
+AKYRS.bal = function()
+    return G.PROFILES[G.SETTINGS.profile].akyrs_balance
+end
+
+AKYRS.bal_val = function(adeq,absu)
+    if AKYRS.bal() == "adequate" then return adeq end
+    if AKYRS.bal() == "absurd" then return absu end
+end

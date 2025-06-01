@@ -561,19 +561,51 @@ return {
             }
         },
         Joker={
-            j_akyrs_utage_charts = {
-                name = "Utage Charts",
-                text = {
-                    "{C:playable}+#1#{} Hand Selection"
+            j_akyrs_redstone_repeater = {
+                name = "Redstone Repeater",
+                text = { "Swaps the current {C:white,X:mult} Mult {}", "with the stored {C:mult}Mult",
+                    "then {C:white,X:mult} X#2# {} Mult", "Start with X {C:white,X:mult}   #3#   {} {C:mult}Mult{}",
+                    "{C:inactive}(Currently X {C:white,X:mult}   #1#   {} {C:mult}Mult{}{C:inactive}){}" }
+            },
+            j_akyrs_redstone_repeater_absurd = {
+                name = "Redstone Repeater",
+                text = { "Swaps the current {C:white,X:mult} Mult {}", "with the stored {C:mult}Mult",
+                    "then {C:white,X:dark_edition} ^#2# {} Mult", "Start with X {C:white,X:mult}   #3#   {} {C:mult}Mult{}",
+                    "{C:inactive}(Currently X {C:white,X:mult}   #1#   {} {C:mult}Mult{}{C:inactive}){}" }
+            },
+            j_akyrs_observer = {
+                name = "Observer",
+                text = { "This Joker gains {C:mult}#1#{} Mult", "for every{C:attention} #4# {}times {C:inactive}(#3#)",
+                    "a card gets triggered.",
+                    "{s:0.8}Times needed increases by {C:attention}#5#{}",
+                    "{s:0.8}every time this Joker gains {C:mult}Mult{}",
+                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}" }
+            },
+            j_akyrs_observer_absurd = {
+                name = "Observer",
+                text = { "This Joker gains {X:mult,C:white} X#1# {} Mult", "for every{C:attention} #4# {}times {C:inactive}(#3#)",
+                    "{C:chips}Chips{} or {C:mult}Mult{} value changes",
+                    "{s:0.8}Times needed increases by {C:attention}#5#{}",
+                    "{s:0.8}every time this Joker gains {X:mult,C:white}XMult{}",
+                    "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult){}" 
                 }
             },
-            j_akyrs_netherite_pickaxe = {
-                name = "Netherite Pickaxe",
-                text = {
-                    "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
-                    "for every {C:attention}Stone{} Card scored",
-                    "{C:red,E:1}Destroy all scored",
-                    "{C:attention,E:1}Stone{C:red,E:1} cards afterwards"
+            j_akyrs_quasi_connectivity = {
+                name = "Quasi Connectivity",
+                text = { "{C:white,X:mult} X#1# {} Mult", 
+                    "Disables one {C:attention}random Joker{}",
+                    "after a hand is played",
+                    "{s:0.8}Debuffs itself if it's",
+                    "{s:0.8}the sole card"
+                }
+            },
+            j_akyrs_quasi_connectivity_absurd = {
+                name = "Quasi Connectivity",
+                text = { "{C:white,X:dark_edition} ^#1# {} Mult", 
+                    "Disables two {C:attention}random Joker{}",
+                    "after a hand is played",
+                    "{s:0.8}Debuffs itself if you have less",
+                    "{s:0.8}than 2 Jokers"
                 }
             },
             j_akyrs_diamond_pickaxe = {
@@ -585,26 +617,43 @@ return {
                     "to a random {C:attention}non-Stone Upgrades{}"
                 }
             },
-            j_akyrs_redstone_repeater = {
-                name = "Redstone Repeater",
-                text = { "Swaps the current {C:white,X:mult} Mult {}", "with the stored {C:mult}Mult",
-                    "then {C:white,X:mult} X#2# {} Mult", "Start with X {C:white,X:mult}   #3#   {} {C:mult}Mult{}",
-                    "{C:inactive}(Currently X {C:white,X:mult}   #1#   {} {C:mult}Mult{}{C:inactive}){}" }
+            j_akyrs_diamond_pickaxe_absurd = {
+                name = "Diamond Pickaxe",
+                text = {
+                    "After a hand is played, turn {C:attention}all{} cards",
+                    "you held into {C:attention}Stone Card{}",
+                    "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
+                    "for every {C:attention}Stone{} Card scored",
+                    "and change every scored {C:attention}Stone{} card",
+                    "to a random {C:attention}non-Stone Upgrades{}",
+                    
+                }
             },
-            j_akyrs_observer = {
-                name = "Observer",
-                text = { "This Joker gains {C:mult}#1#{} Mult", "for every{C:attention} #4# {}times {C:inactive}(#3#)",
-                    "{C:chips}Chips{} or {C:mult}Mult{} value changes",
-                    "{s:0.8}Times needed increases by {C:attention}#5#{}",
-                    "{s:0.8}every time this Joker gains {C:mult}Mult{}",
-                    "{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}" }
+            j_akyrs_netherite_pickaxe = {
+                name = "Netherite Pickaxe",
+                text = {
+                    "Gives {C:attention}#2#{} stacks of {C:chips}+#1#{} Chips",
+                    "for every {C:attention}Stone{} Card scored",
+                    "{C:red,E:1}Destroy all scored",
+                    "{C:attention,E:1}Stone{C:red,E:1} cards afterwards"
+                }
             },
-            j_akyrs_quasi_connectivity = {
-                name = "Quasi Connectivity",
-                text = { "{C:white,X:mult} X#1# {} Mult", "Disables one {C:attention}random Joker{}",
-                    "after a hand is played",
-                    "{s:0.8}Debuffs itself if it's",
-                    "{s:0.8}the sole card"
+            j_akyrs_netherite_pickaxe_absurd = {
+                name = "Netherite Pickaxe",
+                text = {
+                    "Turn {C:attention}all Discarded{} cards",
+                    "into {C:attention}Stone Cards{}",
+                    "Gains {C:attention}#2#{} stacks of {X:chips,C:white} X#1# {} Chips",
+                    "for every {C:attention}Stone{} Card scored",
+                    "{C:red,E:1}Destroy all scored",
+                    "{C:attention,E:1}Stone{C:red,E:1} cards afterwards",
+                    "{C:inactive}(Currently {X:chips,C:white} X#3# {C:inactive} Chips){}" 
+                }
+            },
+            j_akyrs_utage_charts = {
+                name = "Utage Charts",
+                text = {
+                    "{C:playable}+#1#{} Hand Selection"
                 }
             },
             j_akyrs_maxwells_notebook = {
@@ -1006,6 +1055,38 @@ return {
                 },
             }
         },
+        Akyrs_Dialog = {
+            akyrs_balance_dialog_intro = {
+                name = "", 
+                text = {
+                    "Hello! Thank you and Welcome to {C:edition}Aikoyori's Shenanigans{}",
+                    "I am {E:2,C:dark_edition}Aikoyori{} and I will guide you through",
+                    "some necessary settings. Let's get started!"
+                }
+            },
+            akyrs_balance_dialog_cryptid = {
+                name = "", 
+                text = {
+                    "Hmmm... It seems like {E:2,C:blue}Cryptid{} has been installed.",
+                    "I'll go ahead and apply the {E:1,C:red}Absurd{} Balance.",
+                    "If you want to change it to {E:2,C:green}Adequate{},",
+                    "You can change it in the mod configuration at any time.",
+                }
+            },
+            akyrs_balance_dialog_details = {
+                name = "", 
+                text = {
+                    "This mod comes included with {E:2,C:green}Adequate{} Balance",
+                    "and {E:1,C:red}Absurd{} Balance.",
+                    "- {E:2,C:green}Adequate{} - The intended experience.",
+                    "balanced around Vanilla but slightly more unique",
+                    "- {E:1,C:red}Absurd{} (Requires Talisman) - Bigger Number",
+                    "Special Abilities, Crazier effects, Direr Consequences.",
+                    "{C:inactive}--------------------------------------------------------",
+                    "You can change these at any time in the mod settings."
+                }
+            },
+        },
         Other={
             akyrs_self_destructs={
                 name="Self-Destructive",
@@ -1058,7 +1139,7 @@ return {
                     "Win a challenge run to unlock",
                     "Hardcore Challenge mode",
                 },
-            }
+            },
         },
         Planet={
             c_akyrs_p_ara={
@@ -1394,6 +1475,8 @@ return {
         achievement_descriptions={},
         achievement_names={},
         blind_states={},
+        akyrs_balancing_wizard = {
+        },
         challenge_names={
             c_akyrs_space_oddity = "Space Oddity",
             c_akyrs_4_hibanas = "Hibana for Eternity",
@@ -1495,7 +1578,20 @@ return {
             k_akyrs_plus_alphabet = "+1 Alphabet",
 
             k_akyrs_solitaire_redeal = "Redeal",
-            
+
+            k_akyrs_balance_dialog_intro_next = "Next",
+            k_akyrs_balance_dialog_cryptid_accept = "Sounds Good. (End)",
+            k_akyrs_balance_dialog_cryptid_decline = "I want to hear more!",
+            k_akyrs_balance_dialog_details_next = "Alright, I'll pick...",
+            k_akyrs_balance_dialog_adequate_text = "Adequate",
+            k_akyrs_balance_dialog_adequate_description = "Balanced towards vanilla",
+            k_akyrs_balance_dialog_absurd_text = "Absurd (Requires Talisman)",
+            k_akyrs_balance_dialog_absurd_description = "Bigger Number, Crazier Effects, Direr Consequences",
+            k_akyrs_balance_dialog_finish_wizard = "Let's Go! (End)",
+
+            k_akyrs_wildcard_behaviour_txt = "Wildcards Behaviour",
+            k_akyrs_config_balance_txt = "Balance",
+
             k_akyrs_wildcard_behaviours={
                 'Automatic',
                 'Force No Unset',
@@ -1509,6 +1605,16 @@ return {
                 {'Automatically find a letter for wildcard and','also set the letter automatically to the target if it is unset.',} 
             },
 
+            k_akyrs_balance_selects={
+                'Adequate',
+                'Absurd',
+            },
+            
+            k_akyrs_balance_descriptions={
+                'Balanced towards vanilla',
+                '(Requires Talisman) Bigger Number, Crazier Effects, Direr Consequences',
+            },
+            
             k_akyrs_joker_preview = "Enable Joker Preview Window",
             k_akyrs_joker_preview_description={
                 'Some Jokers have a small "Preview" window where the effect of the Joker',
@@ -1613,7 +1719,8 @@ return {
             akyrs_thing = "Something"
         },
         tutorial={},
-        v_dictionary={},
+        v_dictionary={
+        },
         v_text={
             ch_c_sliced_space={
                 "Start run with a {C:dark_edition}Sliced{} Space Joker",

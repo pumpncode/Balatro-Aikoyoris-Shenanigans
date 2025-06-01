@@ -1468,6 +1468,27 @@ function Game:main_menu(ctx)
             }
         )
     end
+    AKYRS.simple_event_add(
+        function()
+            if not G.PROFILES[G.SETTINGS.profile].akyrs_balance then
+                G.FUNCS.overlay_menu({
+                    definition = AKYRS.UIBox_balancing_intro("intro"),
+                    config = {
+                        align = "cm",
+                        offset = {x=-2,y=10},
+                        major = G.ROOM_ATTACH,
+                        bond = 'Weak',
+                        no_esc = true
+                    }
+                })
+                local atl = G.ASSET_ATLAS['akyrs_aikoyori_intro']
+                local scale = 10
+                G.AKYRS_AIKOYORI = G.AKYRS_AIKOYORI or Sprite(16,12,scale*atl.px/1000,scale*atl.py/1000, atl,{ x = 0, y = 0 })
+                G.AKYRS_AIKOYORI.T.y = 3
+            end
+            return true
+        end
+    )
 
 
     return r
@@ -1579,4 +1600,12 @@ function Blind:set_blind(blind, initial, silent)
     else
         return setBlindHook(self,blind, initial, silent)
     end
+end
+
+local calcindivfx = SMODS.calculate_individual_effect
+SMODS.calculate_individual_effect = function (effect, scored_card, key, amount, from_edition)
+    if effect == 'akyrs_no_calculate' then
+        G.GAME.akyrs_no_calculate = true
+    end
+    return calcindivfx(effect, scored_card, key, amount, from_edition)
 end

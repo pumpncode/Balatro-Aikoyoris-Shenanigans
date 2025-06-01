@@ -4,9 +4,10 @@ if JokerDisplay then
         text = {
             {
                 border_nodes = {
-                    { text = "X" },
+                    { text = AKYRS.bal_val("X","^")},
                     { ref_table = "card.joker_display_values", ref_value = "mult", retrigger_type = "exp" }
                 },
+                border_colour = AKYRS.bal_val(G.C.MULT,G.C.DARK_EDITION)
             }
         },
         reminder_text = {
@@ -20,7 +21,7 @@ if JokerDisplay then
             { text = " stored)" },
         },
         calc_function = function(card)
-            card.joker_display_values.mult = card.ability.extra.mult
+            card.joker_display_values.mult = AKYRS.bal_val(card.ability.extra.mult,card.ability.extra.exp)
             card.joker_display_values.mult_stored = card.ability.extra.mult_stored
         end
     }

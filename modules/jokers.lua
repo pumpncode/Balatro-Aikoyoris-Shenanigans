@@ -17,12 +17,19 @@ SMODS.Joker {
     config = {
         extra = {
             mult_stored = 1,
-            mult = 2.5,
-            starting_mult = 1
+            mult = 2.25,
+            starting_mult = 1,
+            exp = 1.5
         }
     },
 
     loc_vars = function(self, info_queue, card)
+        if AKYRS.bal() == "absurd" then
+            return {
+                key = self.key..'_absurd',
+                vars = { card.ability.extra.mult_stored, card.ability.extra.exp, card.ability.extra.starting_mult }
+            }
+        end
         return {
             vars = { card.ability.extra.mult_stored, card.ability.extra.mult, card.ability.extra.starting_mult }
         }
@@ -33,6 +40,12 @@ SMODS.Joker {
             mult = mod_mult(card.ability.extra.mult_stored)
             card.ability.extra.mult_stored = stored
             update_hand_text({ immediate = true, nopulse = true, delay = 0 }, { mult_stored = stored })
+            if AKYRS.bal() == "absurd" then
+                return {
+                    message = "Swapped!",
+                    emult = card.ability.extra.exp,
+                }
+            end
             return {
                 message = "Swapped!",
                 xmult = card.ability.extra.mult,
@@ -62,7 +75,9 @@ SMODS.Joker {
     config = {
         extra = {
             mult_stored = 0,
+            xmult_stored = 1,
             mult = 4,
+            xmult = 1,
             times = 2,
             total_times = 2,
             times_increment = 1,
@@ -73,16 +88,48 @@ SMODS.Joker {
     },
 
     loc_vars = function(self, info_queue, card)
+        if AKYRS.bal() == "absurd" then
+            return {
+                key = self.key..'_absurd',
+                vars = { card.ability.extra.xmult, card.ability.extra.xmult_stored, card.ability.extra.times,
+                    card.ability.extra.total_times, card.ability.extra.times_increment }
+            }
+        end
         return {
             vars = { card.ability.extra.mult, card.ability.extra.mult_stored, card.ability.extra.times,
                 card.ability.extra.total_times, card.ability.extra.times_increment }
         }
     end,
     calculate = function(self, card, context)
+        if context.individual and AKYRS.bal() == "adequate" then
+            SMODS.calculate_effect({
+                message = localize { type = 'variable', key = 'a_remaining', vars = { card.ability.extra.times }},
+                card = card,
+                func = function ()
+                    card.ability.extra.times = card.ability.extra.times - 1
+                    if card.ability.extra.times <= 0 then
+                        SMODS.calculate_effect({
+                            message = localize("k_upgrade_ex"),
+                            func = function ()
+                                card.ability.extra.mult_stored = card.ability.extra.mult_stored + card.ability.extra.mult
+                                card.ability.extra.total_times = card.ability.extra.total_times + card.ability.extra.times_increment
+                                card.ability.extra.times = card.ability.extra.total_times
+                            end,
+                            card = card
+                        })
+                    end
+                end
+            })
+        end
         if context.joker_main then
-            return {
-                mult = card.ability.extra.mult_stored,
-            }
+            return AKYRS.bal_val(
+                {
+                    mult = card.ability.extra.mult_stored,
+                },
+                {
+                    xmult = card.ability.extra.xmult_stored,
+                }
+            )
         end
     end,
     blueprint_compat = true
@@ -99,6 +146,12 @@ SMODS.Joker {
     rarity = 3,
     cost = 6,
     loc_vars = function(self, info_queue, card)
+        if AKYRS.bal() == "absurd" then
+            return {
+                key = self.key..'_absurd',
+            vars = { card.ability.extra.emult }
+            }
+        end
         return {
             vars = { card.ability.extra.mult }
         }
@@ -107,6 +160,7 @@ SMODS.Joker {
         name = "Quasi Connectivity",
         extra = {
             mult = 6,
+            emult = 4,
             first_hand = true
         }
     },
@@ -131,21 +185,34 @@ SMODS.Joker {
             end
             for i = 1, quasiCount do
                 if (#jokers > 0) then
-                    local _card = pseudorandom_element(jokers, pseudoseed('akyrj:quasi_connectivity'))
-                    if _card then
-                        _card:set_debuff(true)
-                        _card:juice_up(1, 1)
+                    local re = AKYRS.bal() == "absurd" and 2 or 1
+                    for i = 1, re do
+                        local _card = pseudorandom_element(jokers, pseudoseed('akyrs:quasi_connectivity'))
+                        local iter = 1
+                        while _card and _card.debuff and iter < #jokers do
+                            local _card = pseudorandom_element(jokers, pseudoseed('akyrs:quasi_connectivity'))
+                            iter = iter + 1
+                        end
+                        if _card then
+                            _card:set_debuff(true)
+                            _card:juice_up(1, 1)
+                        end
+                        jokers[_card] = nil
                     end
-                    jokers[_card] = nil
                 end
             end
             G.GAME.aiko_has_quasi = false
             card.ability.extra.first_hand = false
         end
         if context.joker_main then
-            return {
-                xmult = card.ability.extra.mult,
-            }
+            return AKYRS.bal_val(
+                {
+                    xmult = card.ability.extra.mult,
+                },
+                {
+                    emult = card.ability.extra.emult,
+                }
+            )
         end
         if context.selling_card then
             for i = 1, #G.jokers.cards do
@@ -168,6 +235,13 @@ SMODS.Joker {
     rarity = 2,
     cost = 3,
     loc_vars = function(self, info_queue, card)
+        info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
+        if AKYRS.bal() == "absurd" then
+            return {
+                key = self.key..'_absurd',
+                vars = { card.ability.extra.chip_add, card.ability.extra.chip_add_stack_absurd }
+            }
+        end
         return {
             vars = { card.ability.extra.chip_add, card.ability.extra.chip_add_stack }
         }
@@ -177,12 +251,24 @@ SMODS.Joker {
         extra = {
             chip_add = 64,
             chip_add_stack = 2,
+            chip_add_stack_absurd = 12,
         }
     },
     calculate = function(self, card, context)
+        if context.before and AKYRS.bal() == "absurd" then
+            AKYRS.simple_event_add(
+                function()
+                    for _,cardhand in ipairs(G.hand.cards) do
+                        cardhand:set_ability(G.P_CENTERS["m_stone"])
+                        cardhand:juice_up(0.5, 2)
+                    end
+                    return true
+                end
+            )
+        end
         if context.individual and context.cardarea == G.play then
-            if context.other_card.ability.name == "Stone Card" then
-                for i = 1, card.ability.extra.chip_add_stack do
+            if context.other_card.config.center_key == "m_stone" then
+                for i = 1, AKYRS.bal_val(card.ability.extra.chip_add_stack,card.ability.extra.chip_add_stack_absurd) do
                     context.other_card:juice_up(0.5, 2)
                     SMODS.calculate_effect({
                         chips = card.ability.extra.chip_add,
@@ -214,6 +300,12 @@ SMODS.Joker {
     cost = 4,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
+        if AKYRS.bal() == "absurd" then
+            return {
+                key = self.key..'_absurd',
+                vars = { card.ability.extra.xchip_add, card.ability.extra.chip_add_stack_absurd, card.ability.extra.xchip_storage  }
+            }
+        end
         return {
             vars = { card.ability.extra.chip_add, card.ability.extra.chip_add_stack }
         }
@@ -221,8 +313,12 @@ SMODS.Joker {
     config = {
         name = "Netherite Pickaxe",
         extra = {
+            xchip_add = 0.64,
+            xchip_storage = 1,
+
             chip_add = 64,
             chip_add_stack = 5,
+            chip_add_stack_absurd = 18,
         }
     },
     generate_ui = function(self, info_queue, card, desc_nodes, specific_vars, full_UI_table)
@@ -257,16 +353,47 @@ SMODS.Joker {
     end,
     calculate = function(self, card, context)
         if context.individual and context.cardarea == G.play then
-            if context.other_card.ability.name == "Stone Card" then
+            if context.other_card.config.center_key == "m_stone" then
                 context.other_card.ability.aiko_about_to_be_destroyed = true
-                for i = 1, card.ability.extra.chip_add_stack do
+                if AKYRS.bal() == "absurd" then
                     SMODS.calculate_effect({
-                        chips = card.ability.extra.chip_add,
-                        juice_card = context.other_card,
+                        message = localize("k_upgrade_ex"),
+                        func = function ()
+                            card.ability.extra.xchip_storage = card.ability.extra.xchip_storage + card.ability.extra.xchip_add * card.ability.extra.chip_add_stack_absurd
+                        end
                     },card)
+                else
+                    for i = 1, card.ability.extra.chip_add_stack do
+                        SMODS.calculate_effect({
+                            chips = card.ability.extra.chip_add,
+                            juice_card = context.other_card,
+                        },card)
+                    end
                 end
                 
             end
+        end
+
+        if context.joker_main and AKYRS.bal() == "absurd" then
+            return {
+                xchips = card.ability.extra.xchip_storage
+            }
+        end
+
+        if context.pre_discard and AKYRS.bal() == "absurd" then
+            return {
+                func = function ()
+                    AKYRS.simple_event_add(
+                        function()
+                            for _,cardhand in ipairs(context.full_hand) do
+                                cardhand:set_ability(G.P_CENTERS["m_stone"])
+                                cardhand:juice_up(0.5, 2)
+                            end
+                            return true
+                        end
+                    )
+                end
+            }
         end
 
         if context.destroy_card and context.cardarea == G.play and not context.blueprint and not context.destroy_card.ability.eternal then

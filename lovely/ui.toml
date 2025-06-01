@@ -359,3 +359,28 @@ position = "before"
 payload = """if not AUT.card_type then return nil end"""
 overwrite = true
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = """    if self.debug_tools then """
+position = "before"
+payload = """
+if (self.AKYRS_AIKOYORI and not self.AKYRS_AIKOYORI.REMOVED) then
+    love.graphics.push()
+    self.AKYRS_AIKOYORI:draw(dt)
+    self.akyrs_aiko_y = self.akyrs_aiko_y or 3
+    self.AKYRS_AIKOYORI.T.y = self.akyrs_aiko_y + math.sin(G.TIMERS.REAL * 2.1) * 0.1
+    love.graphics.pop()
+end"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """  args.focus_args = args.focus_args or nil"""
+position = "before"
+payload = """args.akyrs_extras = args.akyrs_extras or nil"""
+overwrite = true
+match_indent = true

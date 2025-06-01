@@ -369,8 +369,9 @@ payload = """
 if (self.AKYRS_AIKOYORI and not self.AKYRS_AIKOYORI.REMOVED) then
     love.graphics.push()
     self.AKYRS_AIKOYORI:draw(dt)
-    self.akyrs_aiko_y = self.akyrs_aiko_y or 3
-    self.AKYRS_AIKOYORI.T.y = self.akyrs_aiko_y + math.sin(G.TIMERS.REAL * 2.1) * 0.1
+    self.akyrs_aiko_y = self.akyrs_aiko_y or 0
+    self.AKYRS_AIKOYORI.T.y = self.akyrs_aiko_y + G.WINDOWTRANS.real_window_h/(G.TILESCALE*G.TILESIZE)-self.AKYRS_AIKOYORI.T.h+0.1 + math.sin(G.TIMERS.REAL * 2.1) * 0.1
+    self.AKYRS_AIKOYORI.T.x = G.WINDOWTRANS.real_window_w/(G.TILESCALE*G.TILESIZE)-self.AKYRS_AIKOYORI.T.w+1
     love.graphics.pop()
 end"""
 overwrite = true

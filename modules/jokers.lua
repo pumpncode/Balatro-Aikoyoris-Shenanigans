@@ -1333,6 +1333,7 @@ SMODS.Joker{
                             local rankToChangeTo = card2.base.value
                             local ed = poll_edition("akyrs_centrifuge_absurd_edition",1, true, true)
                             local en = SMODS.poll_enhancement({guaranteed = true, key = "akyrs_centrifuge_absurd"})
+                            if type(en) == "string" then en = G.P_CENTERS[en] end
                             local rim = true
                             if i == 1 or i == #G.play.cards then
                                 rankToChangeTo = pseudorandom_element(SMODS.Ranks[card2.base.value].next,pseudoseed("akyrscentrifuge"))

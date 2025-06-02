@@ -819,6 +819,18 @@ return {
                     "{C:inactive,s:0.8}PSA: Please enable 2FA on all your online accounts!",
                 }
             },
+            j_akyrs_2fa_absurd = {
+                name = "Two-Factor Authentication",
+                text = { 
+                    "{C:attention}All Played Cards'{} Rank",
+                    "and Suit are {C:attention}randomized{} after scoring",
+                    "Gains {X:chips,C:white} X#1# {} Chips if rank stays the same",
+                    "Gains {X:mult,C:white} X#2# {} Mult if suit stays the same",
+                    "{C:inactive}(Currently {X:chips,C:white} X#3# {C:inactive} Chips",
+                    "{C:inactive}and {X:mult,C:white} X#4# {C:inactive} Mult)",
+                    "{C:inactive,s:0.8}PSA: Please enable 2FA on all your online accounts!",
+                }
+            },
             j_akyrs_gaslighting = {
                 name = "Gaslighting",
                 text = { 
@@ -826,6 +838,15 @@ return {
                     "{C:attention}Will not reset at all if score catches fire.",
                     "{C:inactive,s:0.7}Trust me, not Jimbo.",
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+                }
+            },
+            j_akyrs_gaslighting_absurd = {
+                name = "Gaslighting",
+                text = { 
+                    "{C:edition,X:dark_edition,s:1.1} ^^#1# {} Mult",
+                    "{C:attention}Definitely won't make you lose.",
+                    "{C:inactive,s:0.6}You're just imagining things about me having",
+                    "{C:inactive,s:0.6}#3# in #4# chance to give {X:inactive,C:white,s:0.6} ^^#2# {C:inactive,s:0.6} Mult instead",
                 }
             },
             j_akyrs_hibana = {
@@ -845,11 +866,29 @@ return {
                     "Gives {C:chips}+#2#{} Chips per card played",
                 }
             },
+            j_akyrs_centrifuge_absurd = {
+                name = "Centrifuge",
+                text = { 
+                    "If at least {C:attention}3{} cards were played",
+                    "First and last card {C:attention}+#1#{} Rank",
+                    "Both gains new enhancement and edition",
+                    "all other cards {C:attention}-#1#{} Rank",
+                    "and becomes {C:attention}Scoreless{}",
+                }
+            },
             j_akyrs_henohenomoheji = {
                 name = "Henohenomoheji",
                 text = { 
                     "Cards with Letter {C:attention}K{},{C:attention}Q{}, and {C:attention}J",
                     "are considered {C:attention}Face{} Cards",
+                }
+            },
+            j_akyrs_henohenomoheji_absurd = {
+                name = "Henohenomoheji",
+                text = { 
+                    "Cards with Letter {C:attention}K{}, {C:attention}Q{}, and {C:attention}J",
+                    "are considered as {C:attention}Kings{}, {C:attention}Queens{},",
+                    "and {C:attention}Jacks{} respectively",
                 }
             },
             j_akyrs_neurosama = {
@@ -863,6 +902,17 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
                 }
             },
+            j_akyrs_neurosama_absurd = {
+                name = "Neuro Sama",
+                text = { 
+                    "This Joker {C:attention}multiplies{} its {X:mult,C:white}Xmult{} by {X:mult,C:white} X#2# {}",
+                    "for every {C:hearts}Hearts{} scored",
+                    "and if {T:j_akyrs_evilneuro,C:red}Evil Neuro{} is present,",
+                    "also {C:attention}multiplies{} its {X:mult,C:white}Xmult{} by {X:mult,C:white} X#2# {}",
+                    "for every {C:spades}Spades{} scored",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
+                }
+            },
             j_akyrs_evilneuro = {
                 name = "Evil Neuro",
                 text = { 
@@ -870,6 +920,17 @@ return {
                     "for every {C:clubs}Clubs{} scored",
                     "and if {T:j_akyrs_neurosama,C:red}Neuro Sama{} is present,",
                     "also gains {X:chips,C:white} X#2# {} Chips",
+                    "for every {C:diamonds}Diamonds{} scored",
+                    "{C:inactive}(Currently {X:chips,C:white} X#1# {C:inactive} Chips)",
+                }
+            },
+            j_akyrs_evilneuro_absurd = {
+                name = "Evil Neuro",
+                text = { 
+                    "This Joker {C:attention}expotentiates{} its {X:chips,C:white}Xchips{} by {X:dark_edition,C:white} ^#2# {}",
+                    "for every {C:clubs}Clubs{} scored",
+                    "and if {T:j_akyrs_neurosama,C:red}Neuro Sama{} is present,",
+                    "also {C:attention}expotentiates{} its {X:chips,C:white}Xchips{} by {X:dark_edition,C:white} ^#2# {}",
                     "for every {C:diamonds}Diamonds{} scored",
                     "{C:inactive}(Currently {X:chips,C:white} X#1# {C:inactive} Chips)",
                 }
@@ -898,6 +959,12 @@ return {
                 name = "Happy Ghast",
                 text = { 
                     "{X:mult,C:white}X#1#{} Mult",
+                }
+            },
+            j_akyrs_happy_ghast_absurd = {
+                name = "Happy Ghast",
+                text = { 
+                    "{X:dark_edition,C:white}^#1#{} Mult",
                 }
             },
             j_akyrs_charred_roach = {

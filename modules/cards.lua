@@ -154,6 +154,9 @@ SMODS.Enhancement{
         return { vars = {
         } }
     end,
+    in_pool = function (self, args)
+        return false
+    end,
     never_scores = true,
     replace_base_card = false,
     overrides_base_rank = true
@@ -177,6 +180,9 @@ SMODS.Enhancement{
             odds = 4
         }
     },
+    in_pool = function (self, args)
+        return false
+    end,
     calculate = function (self, card, context)
         if context.main_scoring and context.cardarea == G.play then
             return {

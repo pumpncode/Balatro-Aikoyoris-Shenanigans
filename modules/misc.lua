@@ -1230,11 +1230,26 @@ AKYRS.wrap_in_col = function(table_ui)
 end
 
 
-AKYRS.bal = function()
+AKYRS.bal = function(balance)
+    if balance then
+        return G.PROFILES[G.SETTINGS.profile].akyrs_balance == balance
+    end
     return G.PROFILES[G.SETTINGS.profile].akyrs_balance
 end
 
 AKYRS.bal_val = function(adeq,absu)
-    if AKYRS.bal() == "adequate" then return adeq end
-    if AKYRS.bal() == "absurd" then return absu end
+    if AKYRS.bal("adequate") then return adeq end
+    if AKYRS.bal("absurd") then return absu end
+end
+
+AKYRS.remove_dupes = function(table)
+    local seen = {}
+    for i = #table, 1, -1 do
+        local card = table[i]
+        if seen[card] then
+            table.remove(table, i)
+        else
+            seen[card] = true
+        end
+    end
 end

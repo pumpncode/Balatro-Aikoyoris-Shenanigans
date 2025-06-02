@@ -25,6 +25,8 @@ if JokerDisplay then
             card.joker_display_values.mult_stored = card.ability.extra.mult_stored
         end
     }
+    -- will be dealt with later
+    --[[
     jod["j_akyrs_observer"] = {
         text = {
             { text = "+", colour = G.C.MULT },
@@ -335,5 +337,5 @@ if JokerDisplay then
             card.joker_display_values.add = card.ability.extras.xchips_inc
             card.joker_display_values.suits = "(Clubs"..(#SMODS.find_card("j_akyrs_neurosama") > 0 and " or Diamonds" or "")..")"
         end,
-    }
+    }]]
 end

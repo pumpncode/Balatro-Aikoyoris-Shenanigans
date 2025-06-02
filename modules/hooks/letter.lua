@@ -163,21 +163,27 @@ function Card:get_id()
             return -math.random(100, 1000000)
         end
     end
+    if #SMODS.find_card("j_akyrs_henohenomoheji") > 0 and AKYRS.bal("absurd") then
+        if self and self.get_letter_with_pretend and self.ability and self.ability.aikoyori_letters_stickers and G.GAME.akyrs_character_stickers_enabled then
+            if self:get_letter_with_pretend():lower() == "j" then return 11 end
+            if self:get_letter_with_pretend():lower() == "q" then return 12 end
+            if self:get_letter_with_pretend():lower() == "k" then return 13 end
+        end
+    end
     local c = getIDHook(self)
     return c
 end
 
 local isFaceHook = Card.is_face
 function Card:is_face(from_boss)
-    if #SMODS.find_card("j_akyrs_henohenomoheji") > 0 then
+    if next(SMODS.find_card("j_akyrs_henohenomoheji")) then
         if self and self.get_letter_with_pretend and self.ability and self.ability.aikoyori_letters_stickers and G.GAME.akyrs_character_stickers_enabled and
         (self:get_letter_with_pretend():lower() == "j" or 
         self:get_letter_with_pretend():lower() == "q" or 
         self:get_letter_with_pretend():lower() == "k") then
             return true
         end
-    end
-    if self.is_null and not next(find_joker("Pareidolia")) then return false end
+    elseif self.is_null and not next(SMODS.find_card("j_pareidolia")) then return false end
     local c = isFaceHook(self, from_boss)
     return c
 end

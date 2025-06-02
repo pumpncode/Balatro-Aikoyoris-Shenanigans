@@ -11,9 +11,9 @@ pattern = """    local badges = {}"""
 position = "after"
 payload = """
             loc_vars = loc_vars or {}
-            if (self.is_null or SMODS.has_enhancement(self, "m_akyrs_scoreless")) and loc_vars then
-                loc_vars.nominal_chips = nil
-            end
+            -- if (self.is_null or SMODS.has_enhancement(self, "m_akyrs_scoreless")) and loc_vars then
+            --     loc_vars.nominal_chips = nil
+            -- end
 """
 overwrite = true
 match_indent = true
@@ -35,6 +35,17 @@ if self.ability.name == 'The Wheel of Fortune' then
     end
 end
 """
+overwrite = true
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = """            text = localize{type='variable',key='a_xchips'..(amt<0 and '_minus' or ''),vars={math.abs(amt)}}"""
+position = "at"
+payload = """            text = Talisman and localize{type='variable',key='a_xchips'..(to_big(amt)<to_big(0) and '_minus' or ''),vars={math.abs(amt)}} or localize{type='variable',key='a_xchips'..(amt<0 and '_minus' or ''),vars={math.abs(amt)}}"""
 overwrite = true
 match_indent = true
 

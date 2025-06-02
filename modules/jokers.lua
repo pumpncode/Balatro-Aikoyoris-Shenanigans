@@ -775,9 +775,9 @@ SMODS.Joker {
             info_queue[#info_queue+1] = G.P_CENTERS["m_lucky"]
             info_queue[#info_queue+1] = G.P_CENTERS["j_akyrs_shimmer_bucket"]
             info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_tldr_tldr_absurd", vars = {card.ability.extra.xmult}}
             info_queue[#info_queue+1] = G.P_CENTERS["v_akyrs_alphabet_soup"]
             info_queue[#info_queue+1] = G.P_CENTERS["j_oops"]
-            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_tldr_tldr_absurd", vars = {card.ability.extra.mult}}
         else
             info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
             info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_tldr_tldr", vars = {card.ability.extra.mult}}
@@ -786,26 +786,31 @@ SMODS.Joker {
             key = AKYRS.bal_val(self.key, self.key.."_absurd"), 
             scale = 0.7,
             vars = { 
-                card.ability.extra.mult,
+                AKYRS.bal_val(card.ability.extra.mult,card.ability.extra.xmult)
             }
         }
     end,
     config = {
         extra = {
-            mult = 2
+            mult = 2,
+            xmult = 3
         },
     },
     calculate = function(self, card, context)
-        if context.joker_main or context.individual and not context.end_of_round and (context.cardarea == G.hand or context.cardarea == G.play) then
-            return AKYRS.bal_val(
-                {
-                    mult = card.ability.extra.mult
-                },
-                {
-                    xmult = card.ability.extra.mult
+        if AKYRS.bal() == "absurd" then
+                if context.joker_main then
+                return {
+                    xmult = card.ability.extra.xmult
                 }
-
-            )
+            end
+        else
+            if context.joker_main or context.individual and not context.end_of_round and (context.cardarea == G.hand or context.cardarea == G.play) then
+                return AKYRS.bal_val(
+                    {
+                        mult = card.ability.extra.mult
+                    }
+                )
+            end
         end
     end,
     blueprint_compat = true,
@@ -823,7 +828,9 @@ SMODS.Joker {
     cost = 2,
     loc_vars = function(self, info_queue, card)
         return {
-            vars = { }
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"), 
+            vars = {
+            }
         }
     end,
     config = {
@@ -835,8 +842,11 @@ SMODS.Joker {
             return {
                 message = localize('k_akyrs_reciprocaled'),
                 func = function()
-                    mult = mod_mult(hand_chips / mult)
-                    
+                    if AKYRS.bal() == "absurd" then
+                        hand_chips = mod_mult(mult / hand_chips)
+                    else
+                        mult = mod_mult(hand_chips / mult)
+                    end
                     update_hand_text({ delay = 0, immediate = false }, { mult = mult, chips = hand_chips })
                 end
             }

@@ -329,8 +329,7 @@ return {
             dd_akyrs_tldr_tldr_absurd={
                 name="Too Long; Ain't reading allat",
                 text={
-                    "{C:white,X:mult} X#1# {} Mult per card",
-                    "played and in hand",
+                    "{C:white,X:mult} X#1# {} Mult",
                 },
             },
             dd_akyrs_aikoyori_base_ability={
@@ -761,35 +760,31 @@ return {
             j_akyrs_tldr_joker_absurd = {
                 name = "TL;DR Joker",
                 text = {
-                    "In the beginning, there was {C:attention,E:1,s:1.1}Balatro{} - not a deity, but something more complex - an ever-shuffling embodiment of {C:playable}chaos{} wrapped in crisp, digital playing",
-                    "cards. The game exists in a liminal space between logic and {C:tarot}lunacy{}, math and mirage, where {C:green}probability{} becomes pliable and poker mutates into myth",
-                    "with each {C:blue}hand{}. In {C:attention,E:1,s:1.1}Balatro{}, one doesn’t merely {E:2,C:attention}play{} poker. One communes with the improbable. Here, {C:attention}straights{} stretch into the surreal, and {C:attention}flushes",
-                    "whisper forbidden geometry. {C:playable}The{} deck is alive, vibrating with potential energy and pixelated menace, as every draw feels like yanking {C:attention}Ceremonial Dagger{} from a",
-                    "haunted {C:attention}Mega Buffoon Pack{}. And looming large above the fray is the pantheon of the unholy: the Jokers. They are not jesters; they are gods. Mathematical",
-                    "spirits dressed as {C:playable}clown{}s. Each Joker bends the rules, breaks them, and sometimes eats them whole, fueling strategies built on hubris, spreadsheets,",
-                    "and primal instinct alike. Enter the {C:attention}TL;DR Joker{}, a Joker whispered of in halls of madness and theory: a rectangular rune inscribed with a",
-                    "singular prophecy: “{C:white,X:mult} X#1# {} Mult if hand contains a high card, per card” It is simple. It is divine. It is arbitrarily brilliant. Why {C:white,X:mult} X#1# {}? Why not",
-                    "{C:white,X:mult} X3 {} Mult? Or {C:white,X:mult} X17 {}? Or {C:white,X:mult,f:6} Xπ {} Mult? Because {C:white,X:mult} X#1# {} is the atomic number of drama. Because four is the number of horsemen, {C:attention}suits{}, seasons, cardinal directions. Because to",
-                    "look upon a hand and see a {C:attention}King{}, and be told, {C:attention,E:1}“You may multiply,”{} is to witness design at the intersection of {C:playable}chaos{} theory and stylish arrogance. The",
-                    "{C:attention}TL;DR Joker{} does not beg for synergy. It {C:attention}demands{} reverence and vigilance. It turns high cards into sacred relics, their mere presence {C:spectral}summoning{}",
-                    "power. No longer are {C:attention}Jacks{} just teenage nobility in a velvet blazer of mid-value. Now they are conduits of cosmic {C:white,X:mult} XMult {}, bridges to {C:dark_edition}exponentia{}l",
-                    "escalation. And let us speak plainly of {C:attention}“high cards”{} - those royal specters of cardboard rank. The {C:attention}Jack{}, swaggering in adolescent cunning. The {C:attention}Queen{},",
-                    "dangerous and divine. The {C:attention}King{}, a heavy-headed monarch wielding {C:attention}tax{} burdens and {C:white,X:mult} XMult {}ipliers alike. And the {C:attention}Ace{} - ambiguous, adaptable, alpha and omega,",
-                    "god-tier wildness incarnate. To draw one is {C:tarot}lucky{}. To play one is strategy. To combine one with {C:attention}TL;DR Joker{} is to summon an equation so violent, it",
-                    "punches through the spreadsheet matrix. It’s not just a combo. It’s a lifestyle. A statement. A mathematical swagger. Decks warp around it. You start",
-                    "seeking {C:attention}royalty{} not out of vanity, but devotion. The {C:hearts}hearts{} beat faster. The {C:spades}spades{} dig deeper. The {C:diamonds}diamonds{} glint with purpose. Even the {C:clubs}clubs{},",
-                    "usually so brutish, now {C:attention}shimmer{} with refined potential. Every draw becomes a prayer: please, let it be a {C:attention}Queen{}. Or a {C:attention}King{}. Or her {C:attention}Jack{}. Because even",
-                    "if the poker hand is garbage, a single face card sanctifies it. {C:attention,E:1,s:1.1}Balatro{} becomes not a game of best hands, but of best {C:attention}conditions{} for value. A trash",
-                    "hand with a King is not trash - it’s a {C:white,X:mult} X#1# {}-fueled engine of consequence. Let us now wander backward in time - centuries before Jokers, before {C:attention,E:1,s:1.1}Balatro{},",
-                    "before silicon and CPUs - back to 9th century {C:white,X:red,f:4}中国{}, where {C:attention}playing cards{} began. There, amid scrolls and shadow puppets, the corner{C:tarot}stone{} of",
-                    "gaming was born. The uncertainty of paper, the dance of fate inked in {C:attention}characters{} and calligraphy. In that world, {C:green}luck{} was not an {C:attention}adversary{} - it was an",
-                    "{C:attention}elemental truth{}. {C:green}Dice{} were cast not for control, but for communion with the unknown. Chance was worshipped as a muse, not solved as a math problem.",
-                    "And so too, in {C:attention,E:1,s:1.1}Balatro{}, do we feel this ancient reverence for uncertainty. The {C:attention}TL;DR Joker{}, in its modern mask, is ancestor to those ancient",
-                    "principles. It is the phoenix feather embedded in a digital deck, the whisper of dynasties. It reminds us that no matter how far we've come - from silk",
-                    "cards to OLED screens - we are still haunted and humbled by the {C:green}uncertainties of chance{}. So when we draw a {C:attention}high card{}, and {C:attention}TL;DR Joker{} flickers into",
-                    "being, we do not merely multiply - we {C:attention}invoke{} the ancient. The timeless. The chaotic. We become both strategist and supplicant, mathematician and",
-                    "{C:red}myst{}ic. The run ends. The screen fades. The Joker remains. {C:attention}TL;DR Joker{}. {C:attention}High cards{}. High stakes. High living. It is not just a mechanic. It is a",
-                    "metaphor. {C:attention,E:1,s:1.1}Balatro{} teaches that success is built not only on full hands, but on full {C:hearts}hearts{}. Sometimes, all it takes is a King - and a Joker who notices."
+                    "In the beginning, there was {C:attention,E:1,s:1.1}Balatro{} - not a deity, but something more complex - an ever-shuffling embodiment of {C:playable}chaos{} wrapped in crisp, digital playing cards. The game exists",
+                    "in a liminal space between logic and {C:tarot}lunacy{}, math and mirage, where {C:green}probability{} becomes pliable and poker mutates into myth with each {C:blue}hand{}. In {C:attention,E:1,s:1.1}Balatro{}, one doesn’t merely {E:2,C:attention}play{}",
+                    "poker. One communes with the improbable. Here, {C:attention}straights{} stretch into the surreal, and {C:attention}flushes whisper forbidden geometry. {C:playable}The{} deck is alive, vibrating with potential energy",
+                    "and pixelated menace, as every draw feels like yanking {C:attention}Ceremonial Dagger{} from a haunted {C:attention}Mega Buffoon Pack{}. And looming large above the fray is the pantheon of the unholy: the",
+                    "Jokers. They are not jesters; they are gods. Mathematical spirits dressed as {C:playable}clown{}s. Each Joker bends the rules, breaks them, and sometimes eats them whole, fueling strategies",
+                    "built on hubris, spreadsheets, and primal instinct alike. Enter the {C:attention}TL;DR Joker{}, a Joker whispered of in halls of madness and theory: a rectangular rune inscribed with a",
+                    "singular prophecy: “{C:white,X:mult} X#1# {} Mult if hand contains a high card” It is simple. It is divine. It is arbitrarily brilliant. Why {C:white,X:mult} X#1# {}? Why not {C:white,X:mult} X1.19542 {} Mult? Or {C:white,X:mult} X638.95 {}? Or {C:white,X:mult,f:6} Xπ {}",
+                    "Mult? Because {C:white,X:mult} X#1# {} is the sacred number of drama. Because three is the number of the holy sprit,  {C:attention}face cards{}, triangles in triforce, wheels on tricycles. Because to look upon a",
+                    "hand and see a {C:attention}King{}, and be told, {C:attention,E:1}“You may multiply,”{} is to witness design at the intersection of {C:playable}chaos{} theory and stylish arrogance. The {C:attention}TL;DR Joker{} does not beg for synergy.",
+                    "It {C:attention}demands{} reverence and vigilance. It turns high cards into sacred relics, their mere presence {C:spectral}summoning{} power. No longer are {C:attention}Jacks{} just teenage nobility in a velvet blazer of",
+                    "mid-value. Now they are conduits of cosmic {C:white,X:mult} XMult {}, bridges to {C:dark_edition}exponentia{}l escalation. And let us speak plainly of {C:attention}“high cards”{} - those royal specters of cardboard rank. The",
+                    "{C:attention}Jack{}, swaggering in adolescent cunning. The {C:attention}Queen{}, dangerous and divine. The {C:attention}King{}, a heavy-headed monarch wielding {C:attention}tax{} burdens and {C:white,X:mult} XMult {}ipliers alike. And the {C:attention}Ace{} -",
+                    "ambiguous, adaptable, alpha and omega, god-tier wildness incarnate. To draw one is {C:tarot}lucky{}. To play one is strategy. To combine one with {C:attention}TL;DR Joker{} is to summon an equation so",
+                    "violent, it punches through the spreadsheet matrix. It’s not just a combo. It’s a lifestyle. A statement. A mathematical swagger. Decks warp around it. You start seeking",
+                    "{C:attention}royalty{} not out of vanity, but devotion. The {C:hearts}hearts{} beat faster. The {C:spades}spades{} dig deeper. The {C:diamonds}diamonds{} glint with purpose. Even the {C:clubs}clubs{}, usually so brutish, now {C:attention}shimmer{} with",
+                    "refined potential. Every draw becomes a prayer: please, let it be a {C:attention}Queen{}. Or a {C:attention}King{}. Or her {C:attention}Jack{}. Because even if the poker hand is garbage, a single face card sanctifies it.",
+                    "{C:attention,E:1,s:1.1}Balatro{} becomes not a game of best hands, but of best {C:attention}conditions{} for value. A trash hand with a King is not trash - it’s a {C:white,X:mult} X#1# {}-fueled engine of consequence. Let us now wander",
+                    "backward in time - centuries before Jokers, before {C:attention,E:1,s:1.1}Balatro{}, before silicon and CPUs - back to 9th century {C:white,X:red,f:4}中国{}, where {C:attention}playing cards{} began. There, amid scrolls and shadow puppets,",
+                    "the corner{C:tarot}stone{} of gaming was born. The uncertainty of paper, the dance of fate inked in {C:attention}characters{} and calligraphy. In that world, {C:green}luck{} was not an {C:attention}adversary{} - it was an",
+                    "{C:attention}elemental truth{}. {C:green}Dice{} were cast not for control, but for communion with the unknown. Chance was worshipped as a muse, not solved as a math problem. And so too, in {C:attention,E:1,s:1.1}Balatro{}, do",
+                    "we feel this ancient reverence for uncertainty. The {C:attention}TL;DR Joker{}, in its modern mask, is ancestor to those ancient principles. It is the phoenix feather embedded in a digital",
+                    "deck, the whisper of dynasties. It reminds us that no matter how far we've come - from silk cards to OLED screens - we are still haunted and humbled by the {C:green}uncertainties of",
+                    "chance{}. So when we draw a {C:attention}high card{}, and {C:attention}TL;DR Joker{} flickers into being, we do not merely multiply - we {C:attention}invoke{} the ancient. The timeless. The chaotic. We become both",
+                    "strategist and supplicant, mathematician and {C:red}myst{}ic. The run ends. The screen fades. The Joker remains. {C:attention}TL;DR Joker{}. {C:attention}High cards{}. High stakes. High living. It is not just a",
+                    "mechanic. It is a metaphor. {C:attention,E:1,s:1.1}Balatro{} teaches that success is built not only on full hands, but on full {C:hearts}hearts{}. Sometimes, all it takes is a King - and a Joker who notices"
                 }
             },
             j_akyrs_reciprocal_joker = {
@@ -797,6 +792,13 @@ return {
                 text = { 
                     "Set {X:mult,C:white}Mult{} to",
                     "{X:chips,C:white}Chips{} divided by {X:mult,C:white}Mult{}",
+                }
+            },
+            j_akyrs_reciprocal_joker_absurd = {
+                name = "Reciprocal Joker",
+                text = { 
+                    "Set {X:chips,C:white}Chips{} to",
+                    "{X:mult,C:white}Mult{} divided by {X:chips,C:white}Chips{}",
                 }
             },
             j_akyrs_kyoufuu_all_back = {

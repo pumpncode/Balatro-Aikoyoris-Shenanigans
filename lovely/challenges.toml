@@ -276,6 +276,16 @@ payload = """if args._hc then challenge = AKYRS.HC_CHALLENGES[args._id] end"""
 overwrite = true
 match_indent = true
 
+# IN CASE OF ENTROPY
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = """local challenge = G.CHALLENGES[args._id] or Entropy.GetDailyChallenge()"""
+position = "after"
+payload = """if args._hc then challenge = AKYRS.HC_CHALLENGES[args._id] end"""
+overwrite = true
+match_indent = true
+
 
 
 

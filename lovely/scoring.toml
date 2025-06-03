@@ -49,3 +49,15 @@ payload = """            text = Talisman and localize{type='variable',key='a_xch
 overwrite = true
 match_indent = true
 
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = """            G.STATE = G.STATES.HAND_PLAYED"""
+position = "before"
+payload = """SMODS.calculate_context({akyrs_pre_play = true, akyrs_pre_play_cards = G.hand.highlighted})
+"""
+overwrite = true
+match_indent = true
+

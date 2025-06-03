@@ -442,7 +442,7 @@ function end_round()
                         }), 'base')
                     end
                     if SMODS.get_enhancements(card)["m_akyrs_ash_card"] or card.config.center_key == "j_akyrs_ash_joker" then
-                        local odder = pseudorandom("ashed") < G.GAME.probabilities.normal / card.ability.extras.odds
+                        local odder = pseudorandom("ashed") < G.GAME.probabilities.normal / card.ability.extras.odds or AKYRS.bal("absurd")
                         if odder then
                             G.E_MANAGER:add_event(Event({
                                 func = function()
@@ -942,8 +942,12 @@ function Card:akyrs_mod_card_value_init()
     end
     if #SMODS.find_card("j_akyrs_chicken_jockey") > 0 and self.config.center_key == "j_popcorn" then
         local jj = SMODS.find_card("j_akyrs_chicken_jockey")
-        local val = jj[#jj].ability.extras.decrease_popcorn
-        self.ability.extra = val
+        if AKYRS.bal("absurd") then
+            self.ability.extra = jj[#jj].ability.extras.decrease_popcorn_absurd
+            self.ability.mult = jj[#jj].ability.extras.popcorn_original_absurd
+        else
+            self.ability.extra = jj[#jj].ability.extras.decrease_popcorn
+        end
     end
     if self.config.center_key == "j_akyrs_emerald" then
         self.sell_cost = self.cost * self.ability.extras.xcost

@@ -11,6 +11,7 @@ SMODS.Joker {
         x = 0,
         y = 0
     },
+    pools = { ["Minecraft"] = true, ["Redstone"] = true },
     key = "redstone_repeater",
     rarity = 2,
     cost = 5,
@@ -139,6 +140,7 @@ SMODS.Joker {
 -- quasi connectivity
 SMODS.Joker {
 
+    pools = { ["Minecraft"] = true, ["Redstone"] = true },
     atlas = 'AikoyoriJokers',
     pos = {
         x = 2,
@@ -230,6 +232,7 @@ SMODS.Joker {
 -- diamond pick
 SMODS.Joker {
     atlas = 'AikoyoriJokers',
+    pools = { ["Minecraft"] = true },
     pos = {
         x = 3,
         y = 0
@@ -296,6 +299,7 @@ SMODS.Joker {
 -- netherite pick
 SMODS.Joker {
     atlas = 'AikoyoriJokers',
+    pools = { ["Minecraft"] = true },
     pos = {
         x = 4,
         y = 0
@@ -413,6 +417,7 @@ SMODS.Joker {
 }
 -- utage charts
 SMODS.Joker {
+    pools = { ["Rhythm Games"] = true, ["Maimai"] = true },
     atlas = 'AikoyoriJokers',
     pos = {
         x = 5,
@@ -504,6 +509,7 @@ SMODS.Joker {
         x = 8,
         y = 0
     },
+    pools = { ["Meme"] = true },
     key = "eat_pant",
     rarity = 3,
     cost = 6,
@@ -584,6 +590,7 @@ SMODS.Joker {
         x = 9,
         y = 1
     },
+    pools = { ["Rhythm Games"] = true, ["Maimai"] = true },
     key = "tsunagite",
     rarity = 4,
     cost = 50,
@@ -673,7 +680,7 @@ SMODS.Joker {
                 end
 
             end
-            if total <= 15 or AKYRS.bal("absurd") then
+            if total <= 15 or AKYRS.bal("absurd") or context.forcetrigger then
                 return AKYRS.bal_val({
                     chips = card.ability.extra.chips,
                     xchips = card.ability.extra.Xchips,
@@ -688,7 +695,7 @@ SMODS.Joker {
             end
 
         end		
-        if context.using_consumeable then
+        if context.using_consumeable or context.forcetrigger then
             if context.consumeable.config.center_key == 'c_wheel_of_fortune' then
                 card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.gain_chips 
                 card.ability.extra.Xchips = card.ability.extra.Xchips + card.ability.extra.gain_Xchips 
@@ -716,6 +723,7 @@ SMODS.Joker {
         x = 0,
         y = 1
     },
+    pools = { ["J-POP"] = true },
     key = "yona_yona_dance",
     rarity = 2,
     cost = 6,
@@ -798,13 +806,13 @@ SMODS.Joker {
     },
     calculate = function(self, card, context)
         if AKYRS.bal("absurd") then
-                if context.joker_main then
+                if context.joker_main or context.forcetrigger then
                 return {
                     xmult = card.ability.extra.xmult
                 }
             end
         else
-            if context.joker_main or context.individual and not context.end_of_round and (context.cardarea == G.hand or context.cardarea == G.play) then
+            if context.joker_main or context.individual and not context.end_of_round and (context.cardarea == G.hand or context.cardarea == G.play) or context.forcetrigger then
                 return AKYRS.bal_val(
                     {
                         mult = card.ability.extra.mult
@@ -838,7 +846,7 @@ SMODS.Joker {
         },
     },
     calculate = function(self, card, context)
-        if context.joker_main then
+        if context.joker_main or context.forcetrigger then
             return {
                 message = localize('k_akyrs_reciprocaled'),
                 func = function()
@@ -859,6 +867,7 @@ SMODS.Joker {
 SMODS.Joker {
     atlas = 'AikoyoriJokers',
     key = "kyoufuu_all_back",
+    pools = { ["Vocaloids"] = true, ["J-POP"] = true },
     pos = {
         x = 2,
         y = 1
@@ -874,7 +883,7 @@ SMODS.Joker {
         },
     },
     calculate = function(self, card, context)
-        if context.hand_drawn then
+        if context.hand_drawn or context.forcetrigger then
             return {
                 message = localize('k_akyrs_drawn_discard'),
                 func = function()
@@ -900,6 +909,7 @@ SMODS.Joker {
 
 SMODS.Joker {
     atlas = 'AikoyoriJokers',
+    pools = { ["Tech"] = true, },
     key = "2fa",
     pos = {
         x = 3,
@@ -941,7 +951,7 @@ SMODS.Joker {
         },
     },
     calculate = function(self, card, context)
-        if context.before then
+        if context.before or context.forcetrigger then
             for i, _card in ipairs(G.play.cards) do
                 card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.extra
             end
@@ -949,7 +959,7 @@ SMODS.Joker {
                 message = localize("k_akyrs_2fa_generate")
             }
         end
-        if context.joker_main and AKYRS.bal("adequate") then
+        if (context.joker_main or context.forcetrigger) and AKYRS.bal("adequate") then
             return {
                 chips = card.ability.extra.chips
             }
@@ -1070,7 +1080,7 @@ SMODS.Joker{
         }
     end,
     calculate = function(self, card, context)
-        if AKYRS.bal("absurd") and context.joker_main then
+        if AKYRS.bal("absurd") and (context.joker_main or context.forcetrigger) then
             local odder = pseudorandom("akyrs_gaslighting_absurd") > G.GAME.probabilities.normal / card.ability.extra.chance
             if odder then
                 return {
@@ -1084,7 +1094,7 @@ SMODS.Joker{
             end
         end
         if AKYRS.bal("adequate") then
-            if context.joker_main then
+            if context.joker_main or context.forcetrigger then
                 return {
                     xmult = card.ability.extra.xmult
                 }
@@ -1131,6 +1141,7 @@ SMODS.Joker{
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "hibana",
+    pools = { ["Vocaloids"] = true, ["J-POP"] = true },
     pos = {
         x = 5,
         y = 1
@@ -1174,7 +1185,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.end_of_round and context.cardarea == G.jokers then
+        if (context.end_of_round or context.forcetrigger) and context.cardarea == G.jokers then
             if card.ability.akyrs_cycler ~= 1 and card.ability.akyrs_cycler ~= 2 and card.ability.akyrs_cycler ~= 3 and card.ability.akyrs_cycler ~= 4 then
                 card.ability.akyrs_cycler = 1
             end
@@ -1235,6 +1246,7 @@ AKYRS.LetterJoker {
         x = 0,
         y = 0
     },
+    pools = { ["Letter"] = true },
     key = "maxwells_notebook",
     rarity = 3,
     cost = 4,
@@ -1275,6 +1287,7 @@ AKYRS.LetterJoker {
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "centrifuge",
+    pools = { ["Science"] = true },
     pos = {
         x = 0, y = 2
     },
@@ -1389,6 +1402,7 @@ AKYRS.LetterJoker{
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "neurosama",
+    pools = { ["Vtuber"] = true, },
     pos = {
         x = 1, y = 2
     },
@@ -1438,7 +1452,7 @@ SMODS.Joker{
                 }
             end
         end
-        if context.joker_main then
+        if context.joker_main or context.forcetrigger then
             return {
                 xmult = AKYRS.bal_val(card.ability.extras.xmult,card.ability.extras.xmult_absurd)
             }
@@ -1451,6 +1465,7 @@ SMODS.Joker{
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "evilneuro",
+    pools = { ["Vtuber"] = true, },
     pos = {
         x = 2, y = 2
     },
@@ -1499,7 +1514,7 @@ SMODS.Joker{
                 }
             end
         end
-        if context.joker_main then
+        if context.joker_main or context.forcetrigger then
             return {
                 xchips = AKYRS.bal_val(card.ability.extras.xchips,card.ability.extras.xchips_absurd)
             }
@@ -1516,6 +1531,7 @@ SMODS.Joker{
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "dried_ghast",
+    pools = { ["Minecraft"] = true, },
     pos = {
         x = 3, y = 2
     },
@@ -1549,7 +1565,7 @@ SMODS.Joker{
         if context.selling_card and context.card == card and not context.blueprint then
             G.GAME.current_round.discards_left = card.ability.current_round_discards 
         end
-        if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+        if (context.end_of_round and context.cardarea == G.jokers or context.forcetrigger) and not context.blueprint then
             if not card.ability.do_not_decrease then
                 return {
                     message = localize("k_akyrs_moisture"),
@@ -1571,11 +1587,13 @@ SMODS.Joker{
 
         end
     end,
+    demicoloncompat = true,
 }
 
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "ghastling",
+    pools = { ["Minecraft"] = true, },
     pos = {
         x = 4, y = 2
     },
@@ -1603,7 +1621,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.after and context.cardarea == G.jokers and not context.blueprint then
+        if (context.after and context.cardarea == G.jokers or context.forcetrigger) and not context.blueprint then
             if not card.ability.do_not_decrease then
                 return {
                     message = localize("k_akyrs_growth"),
@@ -1625,12 +1643,13 @@ SMODS.Joker{
             end
 
         end
-        if context.joker_main then
+        if (context.joker_main or context.forcetrigger) then
             return {
                 mult = card.ability.extras.mult
             }
         end
     end,
+    demicoloncompat = true,
     blueprint_compat = true
 }
 
@@ -1638,6 +1657,7 @@ SMODS.Joker{
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
     key = "happy_ghast",
+    pools = { ["Minecraft"] = true, },
     pos = {
         x = 5, y = 2
     },
@@ -1662,7 +1682,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.joker_main then
+        if context.joker_main or context.forcetrigger then
             return AKYRS.bal_val({
                 xmult = card.ability.extras.xmult
             },{
@@ -1670,12 +1690,14 @@ SMODS.Joker{
             })
         end
     end,
+    demicoloncompat = true,
     blueprint_compat = true
 }
 
 -- charred roach
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
+    pools = { ["Meme"] = true, },
     key = "charred_roach",
     pos = {
         x = 6, y = 2
@@ -1687,45 +1709,39 @@ SMODS.Joker{
         extras = {
         }
     },
+    demicoloncompat = true,
     loc_vars = function (self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS["e_akyrs_burnt"]
         
     end,
     calculate = function (self, card, context)
-        if context.akyrs_card_remove and not SMODS.get_enhancements(context.card_getting_removed)['e_akyrs_burnt'] and context.card_getting_removed ~= card
-        and not (context.card_getting_removed.config and context.card_getting_removed.config.center_key and context.card_getting_removed.config.center_key == "j_akyrs_ash_joker") then
+        if context.akyrs_card_remove and context.card_getting_removed ~= card and not (context.card_getting_removed.edition and context.card_getting_removed.edition.key == "e_akyrs_burnt")
+        then
             return {
                 func = function ()
-                    if context.card_getting_removed.area == G.jokers then
-                        local copy = copy_card(context.card_getting_removed,nil,nil,nil, true)
+                    local crm = context.card_getting_removed
+                    if crm.ability.set == "Joker" and crm.config.center_key ~= "j_akyrs_ash_joker" then
+                        local copy = copy_card(crm,nil,nil,nil, true)
                         copy:set_edition('e_akyrs_burnt')
                         copy.sell_cost = 0
                         G.jokers:emplace(copy)
                     end
-                end
-            }
-        end
-        if context.remove_playing_cards and not context.blueprint then
-            return {
-                func = function ()
-                    local new_cards = {}
-                    for k, val in ipairs(context.removed) do
-                        if not SMODS.get_enhancements(val)["m_akyrs_ash_card"] then
-                            G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                            local copy = copy_card(val,nil,nil,G.playing_card, true)
-                            G.deck.config.card_limit = G.deck.config.card_limit + 1
-                            table.insert(G.playing_cards, copy)
-                            copy:set_edition('e_akyrs_burnt')
-                            copy:add_to_deck()
-                            copy.sell_cost = 0
+                    if (crm.ability.set == "Enhanced" or crm.ability.set == "Default") and not (crm.config.center_key == "m_akyrs_ash_card") then
+                        G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                        local copy = copy_card(crm,nil,nil,G.playing_card, true)
+                        G.deck.config.card_limit = G.deck.config.card_limit + 1
+                        table.insert(G.playing_cards, copy)
+                        copy:set_edition('e_akyrs_burnt')
+                        if #G.hand.cards > 0 then
                             G.hand:emplace(copy)
-                            copy:start_materialize(nil)
-                            new_cards[#new_cards+1] = copy
+                        else
+                            G.deck:emplace(copy)
                         end
-
+                        copy:add_to_deck()
+                        copy.sell_cost = 0
+                        copy:start_materialize(nil)
+                        playing_card_joker_effects({copy})
                     end
-
-                    playing_card_joker_effects(new_cards)
                 end
             }
         end
@@ -1748,10 +1764,19 @@ SMODS.Joker{
         name = "Ash Joker",
         extras = {
             chips = 35,
+            echips = 2,
             odds = 4
         }
     },
     loc_vars = function (self, info_queue, card)
+        if AKYRS.bal("absurd") then
+            return {
+                key = self.key .. "_absurd",
+                vars = {
+                    card.ability.extras.echips,
+                }
+            }
+        end
         return {
             vars = {
                 card.ability.extras.chips,
@@ -1761,20 +1786,24 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.joker_main then
-            return {
+        if context.joker_main or context.forcetrigger then
+            return AKYRS.bal_val({
                 chips = card.ability.extras.chips
-            }
+            }, {
+                echips = card.ability.extras.echips
+            })
         end
         if context.end_of_round and context.cardarea == G.jokers then
-            local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.ability.extras.odds
+            local odder = pseudorandom("burnt") < G.GAME.probabilities.normal / card.ability.extras.odds or AKYRS.bal("absurd")
             card.ability.akyrs_ash_disintegrate = odder
         end
-    end
+    end,
+    demicoloncompat = true,
 }
 -- yee
 AKYRS.LetterJoker{
     atlas = 'AikoyoriJokers',
+    pools = { ["Meme"] = true, },
     key = "yee",
     pos = {
         x = 8, y = 2
@@ -1785,10 +1814,21 @@ AKYRS.LetterJoker{
         name = "Yee",
         extras = {
             chips = 20,
-            mult = 12
+            mult = 12,
+            xchips = 1,
+            xchips_add = 1
         }
     },
     loc_vars = function (self, info_queue, card)
+        if AKYRS.bal("absurd") then
+            return {
+                key = self.key .. "_absurd",
+                vars = {
+                    card.ability.extras.xchips_add,
+                    card.ability.extras.xchips,
+                }
+            }
+        end
         return {
             vars = {
                 card.ability.extras.chips,
@@ -1797,21 +1837,54 @@ AKYRS.LetterJoker{
         }
     end,
     calculate = function (self, card, context)
-        if context.individual and context.cardarea == G.play and G.GAME.aiko_current_word then
-            local w = AKYRS.get_letter_freq_from_cards(G.play.cards)
-            local l = string.lower(context.other_card:get_letter_with_pretend())
-            if (w["y"] and w["y"] >= 1 and w["e"] and w["e"] >= 2) and (l == "y" or l == "e") then
+        if AKYRS.bal("absurd") then
+            if context.akyrs_pre_play then
                 return {
-                    mult = card.ability.extras.mult,
-                    chips = card.ability.extras.chips
+                    message = localize("k_akyrs_yee"),
+                    colour = G.C.GREEN,
+                    func = function ()
+                        AKYRS.change_letter_to(context.akyrs_pre_play_cards[1],"y", true)
+                        context.akyrs_pre_play_cards[1]:juice_up(0.5,1)
+                        AKYRS.change_letter_to(context.akyrs_pre_play_cards[2],"e", true)
+                        context.akyrs_pre_play_cards[2]:juice_up(0.5,1)
+                    end
                 }
             end
+            if context.before then
+                if not (context.scoring_name == "High Card" or context.scoring_name == "cry_None") then
+                    return {
+                        message = localize("k_upgrade_ex"),
+                        message_card = card,
+                        func = function ()
+                            card.ability.extras.xchips = card.ability.extras.xchips + card.ability.extras.xchips_add
+                        end
+                    }
+                end
+            end
+            if context.joker_main then
+                return {
+                    xchips = card.ability.extras.xchips
+                }
+            end
+        else
+            if context.individual and context.cardarea == G.play and G.GAME.aiko_current_word then
+                local w = AKYRS.get_letter_freq_from_cards(G.play.cards)
+                local l = string.lower(context.other_card:get_letter_with_pretend())
+                if (w["y"] and w["y"] >= 1 and w["e"] and w["e"] >= 2) and (l == "y" or l == "e") then
+                    return {
+                        mult = card.ability.extras.mult,
+                        chips = card.ability.extras.chips
+                    }
+                end
+            end
         end
+
     end
 }
 -- chicken jockey
 SMODS.Joker{
     atlas = 'AikoyoriJokers',
+    pools = { ["Meme"] = true, },
     key = "chicken_jockey",
     pos = {
         x = 9, y = 2
@@ -1823,12 +1896,27 @@ SMODS.Joker{
         extras = {
             xmult = 1,
             xmult_inc = 2,
+            emult = 1,
+            emult_inc = 1,
             decrease_popcorn = 9,
+            popcorn_original_absurd = 5,
+            decrease_popcorn_absurd = 1,
         }
     },
     loc_vars = function (self, info_queue, card)
-        info_queue[#info_queue+1] = localize{set = "Joker", key = "j_popcorn"}
+        info_queue[#info_queue+1] = localize{key = "j_popcorn", vars = {20,4}}
         info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        if AKYRS.bal("absurd") then
+            return {
+                key = self.key .. "_absurd",
+                vars = {
+                    card.ability.extras.emult_inc,
+                    card.ability.extras.emult,
+                    card.ability.extras.decrease_popcorn_absurd,
+                    card.ability.extras.popcorn_original_absurd,
+                }
+            }
+        end
         return {
             vars = {
                 card.ability.extras.xmult_inc,
@@ -1840,7 +1928,7 @@ SMODS.Joker{
     calculate = function (self, card, context)
         if context.joker_main then
             return {
-                xmult = card.ability.extras.xmult
+                xmult = AKYRS.bal_val(card.ability.extras.xmult,card.ability.extras.emult)
             }
         end
 
@@ -1851,6 +1939,7 @@ SMODS.Joker{
                     message = localize("k_upgrade_ex"),
                     func = function ()
                         card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_inc
+                        card.ability.extras.emult = card.ability.extras.emult + card.ability.extras.emult_inc
                     end
                 }
             end
@@ -1871,6 +1960,7 @@ AKYRS.tetoris_piece = {
 }
 AKYRS.LetterJoker {
     key = "tetoris",
+    pools = { ["Vocaloids"] = true, ["J-POP"] = true },
     atlas = 'AikoyoriJokers',
     pos = {
         x = 0, y = 3
@@ -1913,6 +2003,7 @@ AKYRS.LetterJoker {
 
 local toga_tags = {"tag_toga_togajokerbooster","tag_toga_togajokerziparchive","tag_toga_togarararchive","tag_toga_togacardcabarchive","tag_toga_togaxcopydnaarchive",}
 SMODS.Joker {
+    pools = { ["Self-Insert"] = true, },
     key = "aikoyori",
     atlas = 'AikoyoriJokers',
     pos = {
@@ -2018,6 +2109,7 @@ SMODS.Joker {
 }
 
 SMODS.Joker{
+    pools = { ["Rhythm Games"] = true, ["Maimai"] = true },
     key = "mukuroju_no_hakamori",
     atlas = 'AikoyoriJokers',
     pos = {
@@ -2066,6 +2158,7 @@ SMODS.Joker{
 
 }
 SMODS.Joker{
+    pools = { ["Minecraft"] = true },
     key = "emerald",
     atlas = 'AikoyoriJokers',
     pos = {
@@ -2095,6 +2188,7 @@ SMODS.Joker{
     end
 }
 SMODS.Joker{
+    pools = { ["Terraria"] = true, },
     key = "shimmer_bucket",
     atlas = 'AikoyoriJokers',
     pos = {
@@ -2142,6 +2236,7 @@ SMODS.Joker{
 
 SMODS.Joker{
     key = "space_elevator",
+    pools = { ["Satisfactory"] = true, },
     atlas = 'AikoyoriJokers',
     pos = {
         x = 6, y = 3
@@ -2230,6 +2325,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "turret",
     atlas = 'AikoyoriJokers',
+    pools = { ["Portal"] = true, },
     pos = {
         x = 7, y = 3
     },
@@ -2275,6 +2371,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "aether_portal",
     atlas = 'AikoyoriJokers',
+    pools = { ["Minecraft"] = true, },
     pos = {
         x = 8, y = 3
     },
@@ -2319,6 +2416,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "corkscrew",
     atlas = 'AikoyoriJokers',
+    pools = { ["Hamsterball"] = true, },
     pos = {
         x = 9, y = 3
     },
@@ -2355,6 +2453,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "goodbye_sengen",
     atlas = 'AikoyoriJokers',
+    pools = { ["Vocaloids"] = true, ["J-POP"] = true },
     pos = {
         x = 0, y = 4
     },
@@ -2385,6 +2484,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "liar_dancer",
     atlas = 'AikoyoriJokers',
+    pools = { ["Vocaloids"] = true, ["J-POP"] = true },
     pos = {
         x = 1, y = 4
     },
@@ -2424,6 +2524,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "pissandshittium",
     atlas = 'AikoyoriJokers',
+    pools = { ["Meme"] = true },
     pos = {
         x = 4, y = 4
     },
@@ -2457,6 +2558,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "pandora_paradoxxx",
     atlas = 'AikoyoriJokers',
+    pools = { ["Rhythm Games"] = true, ["Maimai"] = true },
     pos = {
         x = 5, y = 4
     },
@@ -2497,6 +2599,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "story_of_undertale",
     atlas = 'AikoyoriJokers',
+    pools = { ["Meme"] = true, },
     pos = {
         x = 6, y = 4
     },
@@ -2549,6 +2652,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "no_hints_here",
     atlas = 'AikoyoriJokers',
+    pools = { ["Rhythm Games"] = true, ["ADOFAI"] = true },
     pos = {
         x = 7, y = 4
     },
@@ -2589,6 +2693,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "brushing_clothes_pattern",
     atlas = 'AikoyoriJokers',
+    pools = { ["Rhythm Games"] = true, ["Chunithm"] = true },
     pos = {
         x = 8, y = 4
     },
@@ -2632,6 +2737,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = "you_tried",
     atlas = 'AikoyoriJokers',
+    pools = { ["Meme"] = true, },
     pos = {
         x = 9, y = 4
     },

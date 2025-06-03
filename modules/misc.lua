@@ -1253,3 +1253,14 @@ AKYRS.remove_dupes = function(table)
         end
     end
 end
+
+
+AKYRS.change_letter_to = function(card,letter,respect_wild)
+    if not card or not letter then return false end
+    if respect_wild and card.ability.aikoyori_letters_stickers == "#" then
+        card.ability.aikoyori_pretend_letter = letter
+    else
+        card.ability.aikoyori_letters_stickers = letter
+    end
+    
+end

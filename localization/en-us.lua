@@ -530,7 +530,6 @@ return {
                 name = "Sliced",
                 text = {
                     "Triggers twice",
-                    "All values are halved"
                 }
             },
             e_akyrs_burnt = {
@@ -562,6 +561,14 @@ return {
                     "{C:blue}+#1#{} Chips",
                     "{C:green}#2# in #3#{} chance",
                     "of disintegrating into nothing",
+                    "at the end of the round"
+                },
+            },
+            m_akyrs_ash_card_absurd = {
+                name="Ash Card",
+                text={
+                    "{C:purple,X:edition} ^#1# {} Chips",
+                    "{C:attention}Always{} disintegrating into nothing",
                     "at the end of the round"
                 },
             }
@@ -804,7 +811,7 @@ return {
             j_akyrs_kyoufuu_all_back = {
                 name = "Kyoufuu All Back",
                 text = { 
-                    "Return previously {C:attention}discarded",
+                    "Return previously {C:attention}played and discarded",
                     "{C:attention and played{} cards back to deck"
                 }
             },
@@ -927,10 +934,10 @@ return {
             j_akyrs_evilneuro_absurd = {
                 name = "Evil Neuro",
                 text = { 
-                    "This Joker {C:attention}expotentiates{} its {X:chips,C:white}Xchips{} by {X:dark_edition,C:white} ^#2# {}",
+                    "This Joker {C:attention}expotentiates{} its {X:chips,C:white}Xchips{} by {X:edition,C:purple} ^#2# {}",
                     "for every {C:clubs}Clubs{} scored",
                     "and if {T:j_akyrs_neurosama,C:red}Neuro Sama{} is present,",
-                    "also {C:attention}expotentiates{} its {X:chips,C:white}Xchips{} by {X:dark_edition,C:white} ^#2# {}",
+                    "also {C:attention}expotentiates{} its {X:chips,C:white}Xchips{} by {X:edition,C:purple} ^#2# {}",
                     "for every {C:diamonds}Diamonds{} scored",
                     "{C:inactive}(Currently {X:chips,C:white} X#1# {C:inactive} Chips)",
                 }
@@ -983,13 +990,33 @@ return {
                     "at the end of the round"
                 }
             },
+            j_akyrs_ash_joker_absurd = {
+                name = "Ash Joker",
+                text = { 
+                    "{C:purple,X:edition} ^#1# {} Chips",
+                    "{C:attention}Always{} disintegrating into nothing",
+                    "at the end of the round"
+                }
+            },
             j_akyrs_yee = {
                 name = "Yee",
                 text = { 
-                    "If played word contains {C:attention}a Y{} and {C:blue}two E's{},",
+                    "If played word contains {C:green}a Y{} and {C:green}two E's{},",
                     "Gain {C:chips}+#1#{} Chips and {C:mult}+#2#{} Mult",
                     "Per Scored {C:attention}Y's{} and {C:blue}E's{}",
                     "{s:0.7,C:inactive}Who even remembered this???{}"
+                }
+            },
+            j_akyrs_yee_absurd = {
+                name = "Yee",
+                text = { 
+                    "{C:attention}Before hand is scored{}, change",
+                    "{C:attention}first two{} letters of played hand",
+                    "to {C:green}Y{} and {C:green}E{}.",
+                    "This joker gain {X:chips,C:white} X#1# {} Chips",
+                    "if hand is {C:attention}NOT{} a {C:attention}High Card",
+                    "{C:inactive}(Currently {X:chips,C:white} X#2# {C:inactive} Chips)",
+                    "{s:0.7,C:inactive}bobobobo bo bobo bo bobo bobobobo bo bobo YEE{}"
                 }
             },
             j_akyrs_chicken_jockey = {
@@ -1002,6 +1029,19 @@ return {
                     "{C:red}Popcorn{} eaten.",
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
                     "{s:0.7,C:inactive}Absolute Cinema.{}"
+                }
+            },
+            j_akyrs_chicken_jockey_absurd = {
+                name = "Chicken Jockey",
+                text = { 
+                    "Every {C:red}Popcorn{} obtained",
+                    "while this Joker is present",
+                    "Starts at {C:red}#4#{} and",
+                    "decreses Mult by {C:red}-#3#{} Mult per round instead",
+                    "Gain {X:dark_edition,C:white}^#1#{} Mult per",
+                    "{C:red}Popcorn{} eaten.",
+                    "{C:inactive}(Currently {X:dark_edition,C:white} ^#2# {C:inactive} Mult)",
+                    "{s:0.7,C:inactive}They want me to fight the chicken?{}"
                 }
             },
             j_akyrs_tetoris = {
@@ -1684,6 +1724,7 @@ return {
             k_akyrs_cinema = "Cinema!",
             k_akyrs_received = "Received",
             k_akyrs_sendoff = "Blast Off!",
+            k_akyrs_yee = "Yee!",
             k_akyrs_pissandshittium = "https://pissandshittium.org/",
             k_akyrs_pandora_give_tag = "Re:MASTER 15",
             k_akyrs_woah_undertale = "Woah..",

@@ -168,6 +168,15 @@ SMODS.Enhancement{
     atlas = 'cardUpgrades',
     pos = {x = 2, y = 0},
     loc_vars = function (self, info_queue, card)
+        
+        if AKYRS.bal("absurd") then
+            return {
+                key = self.key .. "_absurd",
+                vars = {
+                    card.ability.extras.echips,
+                }
+            }
+        end
         return { vars = {
             card.ability.extras.chips,
             G.GAME.probabilities.normal or 1,
@@ -177,6 +186,7 @@ SMODS.Enhancement{
     config = {
         extras = {
             chips = 35,
+            echips = 2,
             odds = 4
         }
     },
@@ -185,9 +195,11 @@ SMODS.Enhancement{
     end,
     calculate = function (self, card, context)
         if context.main_scoring and context.cardarea == G.play then
-            return {
+            return AKYRS.bal_val({
                 chips = card.ability.extras.chips
-            }
+            }, {
+                echips = card.ability.extras.echips
+            })
         end
     end,
     no_rank = true,

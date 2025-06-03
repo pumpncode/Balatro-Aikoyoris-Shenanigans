@@ -24,7 +24,7 @@ SMODS.Joker {
     },
 
     loc_vars = function(self, info_queue, card)
-        if AKYRS.bal() == "absurd" then
+        if AKYRS.bal("absurd") then
             return {
                 key = self.key..'_absurd',
                 vars = { card.ability.extra.mult_stored, card.ability.extra.exp, card.ability.extra.starting_mult }
@@ -35,12 +35,12 @@ SMODS.Joker {
         }
     end,
     calculate = function(self, card, context)
-        if context.joker_main and card then
+        if context.joker_main and card or context.forcetrigger then
             stored = mult
             mult = mod_mult(card.ability.extra.mult_stored)
             card.ability.extra.mult_stored = stored
             update_hand_text({ immediate = true, nopulse = true, delay = 0 }, { mult_stored = stored })
-            if AKYRS.bal() == "absurd" then
+            if AKYRS.bal("absurd") then
                 return {
                     message = "Swapped!",
                     emult = card.ability.extra.exp,
@@ -52,7 +52,8 @@ SMODS.Joker {
             }
         end
     end,
-    blueprint_compat = true
+    blueprint_compat = true,
+	demicoloncompat = true,
 }
 
 
@@ -88,7 +89,7 @@ SMODS.Joker {
     },
 
     loc_vars = function(self, info_queue, card)
-        if AKYRS.bal() == "absurd" then
+        if AKYRS.bal("absurd") then
             return {
                 key = self.key..'_absurd',
                 vars = { card.ability.extra.xmult, card.ability.extra.xmult_stored, card.ability.extra.times,
@@ -101,7 +102,7 @@ SMODS.Joker {
         }
     end,
     calculate = function(self, card, context)
-        if context.individual and AKYRS.bal() == "adequate" then
+        if context.individual and AKYRS.bal("adequate") then
             SMODS.calculate_effect({
                 message = localize { type = 'variable', key = 'a_remaining', vars = { card.ability.extra.times }},
                 card = card,
@@ -121,7 +122,7 @@ SMODS.Joker {
                 end
             })
         end
-        if context.joker_main then
+        if context.joker_main or context.forcetrigger then
             return AKYRS.bal_val(
                 {
                     mult = card.ability.extra.mult_stored,
@@ -132,6 +133,7 @@ SMODS.Joker {
             )
         end
     end,
+	demicoloncompat = true,
     blueprint_compat = true
 }
 -- quasi connectivity
@@ -146,7 +148,7 @@ SMODS.Joker {
     rarity = 3,
     cost = 6,
     loc_vars = function(self, info_queue, card)
-        if AKYRS.bal() == "absurd" then
+        if AKYRS.bal("absurd") then
             return {
                 key = self.key..'_absurd',
             vars = { card.ability.extra.emult }
@@ -185,7 +187,7 @@ SMODS.Joker {
             end
             for i = 1, quasiCount do
                 if (#jokers > 0) then
-                    local re = AKYRS.bal() == "absurd" and 2 or 1
+                    local re = AKYRS.bal("absurd") and 2 or 1
                     for i = 1, re do
                         local _card = pseudorandom_element(jokers, pseudoseed('akyrs:quasi_connectivity'))
                         local iter = 1
@@ -204,7 +206,7 @@ SMODS.Joker {
             G.GAME.aiko_has_quasi = false
             card.ability.extra.first_hand = false
         end
-        if context.joker_main then
+        if context.joker_main or context.forcetrigger then
             return AKYRS.bal_val(
                 {
                     xmult = card.ability.extra.mult,
@@ -222,6 +224,7 @@ SMODS.Joker {
             end
         end
     end,
+	demicoloncompat = true,
     blueprint_compat = true
 }
 -- diamond pick
@@ -236,7 +239,7 @@ SMODS.Joker {
     cost = 3,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
-        if AKYRS.bal() == "absurd" then
+        if AKYRS.bal("absurd") then
             return {
                 key = self.key..'_absurd',
                 vars = { card.ability.extra.chip_add, card.ability.extra.chip_add_stack_absurd }
@@ -255,7 +258,7 @@ SMODS.Joker {
         }
     },
     calculate = function(self, card, context)
-        if context.before and AKYRS.bal() == "absurd" then
+        if context.before and AKYRS.bal("absurd") and not context.blueprint or context.forcetrigger then
             AKYRS.simple_event_add(
                 function()
                     for _,cardhand in ipairs(G.hand.cards) do
@@ -278,15 +281,17 @@ SMODS.Joker {
                 return {
                     juice_card = context.other_card,
                     func = function ()
+                        if  not context.blueprint then
                         context.other_card:set_ability(
                             pseudorandom_element(NON_STONE_UPGRADES, pseudoseed('akyrj:pickaxe')), nil, true)
-                                
+                        end
                     end
                 }
             end
         end
     end,
-    blueprint_compat = false
+	demicoloncompat = true,
+    blueprint_compat = true
 }
 -- netherite pick
 SMODS.Joker {
@@ -300,7 +305,7 @@ SMODS.Joker {
     cost = 4,
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
-        if AKYRS.bal() == "absurd" then
+        if AKYRS.bal("absurd") then
             return {
                 key = self.key..'_absurd',
                 vars = { card.ability.extra.xchip_add, card.ability.extra.chip_add_stack_absurd, card.ability.extra.xchip_storage  }
@@ -352,10 +357,10 @@ SMODS.Joker {
         end
     end,
     calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play then
+        if context.individual and context.cardarea == G.play and not context.blueprint then
             if context.other_card.config.center_key == "m_stone" then
                 context.other_card.ability.aiko_about_to_be_destroyed = true
-                if AKYRS.bal() == "absurd" then
+                if AKYRS.bal("absurd") then
                     SMODS.calculate_effect({
                         message = localize("k_upgrade_ex"),
                         func = function ()
@@ -374,13 +379,13 @@ SMODS.Joker {
             end
         end
 
-        if context.joker_main and AKYRS.bal() == "absurd" then
+        if (context.joker_main or context.forcetrigger) and AKYRS.bal("absurd")  then
             return {
                 xchips = card.ability.extra.xchip_storage
             }
         end
 
-        if context.pre_discard and AKYRS.bal() == "absurd" then
+        if context.pre_discard and AKYRS.bal("absurd") and not context.forcetrigger then
             return {
                 func = function ()
                     AKYRS.simple_event_add(
@@ -403,7 +408,8 @@ SMODS.Joker {
             end
         end
     end,
-    blueprint_compat = false
+	demicoloncompat = true,
+    blueprint_compat = true
 }
 -- utage charts
 SMODS.Joker {
@@ -450,26 +456,44 @@ SMODS.Joker {
     rarity = 3,
     cost = 6,
     loc_vars = function(self, info_queue, card)
+        if AKYRS.bal("absurd") then
+            info_queue[#info_queue+1] = G.P_CENTERS["m_akyrs_scoreless"]
+        end
         return {
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"),
             vars = { 
-                card.ability.extra.mult
-             }
+                AKYRS.bal_val(card.ability.extra.mult, card.ability.extra.emult_absurd)
+            }
         }
     end,
     config = {
         extra = {
-            mult = 1.5,
+            mult = 1.75,
+            emult_absurd = 1.2,
         }
     },
     calculate = function(self, card, context)
-        if context.individual and context.other_card.debuff and not context.end_of_round and 
-        (   context.cardarea == G.play or 
-            context.cardarea == G.hand ) then
-            return {
-                xmult = card.ability.extra.mult
-            }
+        if AKYRS.bal("absurd") then
+            if context.individual and context.cardarea == 'unscored' then
+                return {
+                    emult = card.ability.extra.emult_absurd,
+                    func = function ()
+                        context.other_card:set_ability(G.P_CENTERS["m_akyrs_scoreless"])
+                        context.other_card:juice_up(0.5,1)
+                    end
+                }
+            end
+        else
+            if context.individual and context.other_card.debuff and not context.end_of_round and 
+            (   context.cardarea == G.play or 
+                context.cardarea == G.hand ) then
+                return {
+                    xmult = card.ability.extra.mult
+                }
+            end
         end
     end,
+	demicoloncompat = true,
     blueprint_compat = true,
 }
 
@@ -485,40 +509,66 @@ SMODS.Joker {
     cost = 6,
     loc_vars = function(self, info_queue, card)
         return {
-            vars = { 
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"), 
+            vars = AKYRS.bal_val({ 
                 math.floor(card.ability.extra.card_target),
                 card.ability.extra.extra,
                 card.ability.extra.Xmult,
-             }
+             }, { 
+                "heheheha",
+                card.ability.extra.extra_absurd,
+                card.ability.extra.Xmult_absurd,
+             })
         }
     end,
     config = {
         extra = {
             extra = 0.4,
+            extra_absurd = 2,
             card_target = 4,
             Xmult = 1,
+            Xmult_absurd = 1,
         }
     },
     calculate = function(self, card, context)
         if context.joker_main then	
             return {
-                xmult = card.ability.extra.Xmult
+                xmult = AKYRS.bal_val(card.ability.extra.Xmult,card.ability.extra.Xmult_absurd)
             }
         end
-        if context.individual and context.cardarea == G.play and #context.full_hand == math.floor(card.ability.extra.card_target) then
-            card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.extra
-            return {
-				message = localize('k_upgrade_ex'),
-				colour = G.C.MULT,
-				card = card
-			}
-        end		
-        if context.destroy_card and (context.cardarea == G.play or context.cardarea == 'unscored') and not context.blueprint and not context.destroy_card.ability.eternal then
-            if #context.full_hand == math.floor(card.ability.extra.card_target) then
-                return { remove = true }
+        if AKYRS.bal("absurd") then
+            if context.individual and context.cardarea == G.play and next(context.poker_hands["Two Pair"]) or context.forcetrigger then
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT,
+                    card = card,
+                    func = function ()
+                        card.ability.extra.Xmult_absurd = card.ability.extra.Xmult_absurd + card.ability.extra.extra_absurd
+                    end
+                }
+            end
+            if context.destroy_card and (context.cardarea == G.play or context.cardarea == 'unscored') and not context.blueprint and not context.destroy_card.ability.eternal and not context.forcetrigger then
+                if next(context.poker_hands["Two Pair"]) then
+                    return { remove = true }
+                end
+            end
+        else
+            if context.individual and context.cardarea == G.play and #context.full_hand == math.floor(card.ability.extra.card_target) or context.forcetrigger  then
+                card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.extra
+                return {
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.MULT,
+                    card = card
+                }
+            end
+            if context.destroy_card and (context.cardarea == G.play or context.cardarea == 'unscored') and not context.blueprint and not context.destroy_card.ability.eternal and not context.forcetrigger then
+                if #context.full_hand == math.floor(card.ability.extra.card_target) then
+                    return { remove = true }
+                end
             end
         end
     end,
+	demicoloncompat = true,
     blueprint_compat = true,
 }
 
@@ -536,20 +586,44 @@ SMODS.Joker {
     },
     key = "tsunagite",
     rarity = 4,
-    cost = 30,
+    cost = 50,
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = {key = "akyrs_chip_mult_xchip_xmult", set = 'Other', vars = { 
-            card.ability.extra.chips,
-            card.ability.extra.mult,
-            card.ability.extra.Xchips,
-            card.ability.extra.Xmult, } }
-        info_queue[#info_queue+1] = {key = "akyrs_gain_chip_mult_xchip_xmult", set = 'Other', vars = { 
-            card.ability.extra.gain_chips,
-            card.ability.extra.gain_mult,
-            card.ability.extra.gain_Xchips,
-            card.ability.extra.gain_Xmult } }
-        info_queue[#info_queue+1] = {key = "akyrs_tsunagite_scores", set = 'Other', }
+        info_queue[#info_queue+1] = {key = "akyrs_chip_mult_xchip_xmult", set = 'Other', vars = 
+            AKYRS.bal_val({ 
+                    card.ability.extra.chips,
+                    card.ability.extra.mult,
+                    card.ability.extra.Xchips,
+                    card.ability.extra.Xmult,
+                },
+                { 
+                    card.ability.extra.chips_absurd,
+                    card.ability.extra.mult_absurd,
+                    card.ability.extra.Xchips_absurd,
+                    card.ability.extra.Xmult_absurd,
+                }
+            )
+        }
+        info_queue[#info_queue+1] = {key = "akyrs_gain_chip_mult_xchip_xmult", set = 'Other', vars = 
+            AKYRS.bal_val({ 
+                    card.ability.extra.chips,
+                    card.ability.extra.mult,
+                    card.ability.extra.Xchips,
+                    card.ability.extra.Xmult,
+                },
+                { 
+                    card.ability.extra.gain_chips_absurd,
+                    card.ability.extra.gain_mult_absurd,
+                    card.ability.extra.gain_Xchips_absurd,
+                    card.ability.extra.gain_Xmult_absurd,
+                }
+            )
+        }
+        if not AKYRS.bal("absurd") then
+            info_queue[#info_queue+1] = {key = "akyrs_tsunagite_scores", set = 'Other', }
+        end
+        info_queue[#info_queue+1] = {key = "akyrs_tsunagite_name", set = 'Other', }
         return {
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"), 
             vars = { 
                 card.ability.extra.total,
             }
@@ -570,6 +644,20 @@ SMODS.Joker {
             gain_Xchips = 0.05,
             gain_mult = 5,
             gain_Xmult = 0.05,
+            -- absurd
+            chips_absurd = 150,
+            Xchips_absurd = 1.5,
+            mult_absurd = 15,
+            Xmult_absurd = 1.5,
+            base_chips_absurd = 150,
+            base_Xchips_absurd = 1.5,
+            base_mult_absurd = 15,
+            base_Xmult_absurd = 1.5,
+            
+            gain_chips_absurd = 15,
+            gain_Xchips_absurd = 1.5,
+            gain_mult_absurd = 15,
+            gain_Xmult_absurd = 1.5,
         }
     },
     calculate = function(self, card, context)
@@ -585,13 +673,18 @@ SMODS.Joker {
                 end
 
             end
-            if total <= 15 then
-                return {
+            if total <= 15 or AKYRS.bal("absurd") then
+                return AKYRS.bal_val({
                     chips = card.ability.extra.chips,
                     xchips = card.ability.extra.Xchips,
                     mult = card.ability.extra.mult,
                     xmult = card.ability.extra.Xmult
-                }
+                },{
+                    chips = card.ability.extra.chips_absurd,
+                    xchips = card.ability.extra.Xchips_absurd,
+                    mult = card.ability.extra.mult_absurd,
+                    xmult = card.ability.extra.Xmult_absurd,
+                })
             end
 
         end		
@@ -601,30 +694,18 @@ SMODS.Joker {
                 card.ability.extra.Xchips = card.ability.extra.Xchips + card.ability.extra.gain_Xchips 
                 card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.gain_mult 
                 card.ability.extra.Xmult = card.ability.extra.Xmult + card.ability.extra.gain_Xmult
+                card.ability.extra.chips_absurd = card.ability.extra.chips_absurd + card.ability.extra.gain_chips_absurd
+                card.ability.extra.Xchips_absurd = card.ability.extra.Xchips_absurd + card.ability.extra.gain_Xchips_absurd
+                card.ability.extra.mult_absurd = card.ability.extra.mult_absurd + card.ability.extra.gain_mult_absurd
+                card.ability.extra.Xmult_absurd = card.ability.extra.Xmult_absurd + card.ability.extra.gain_Xmult_absurd
                 SMODS.calculate_effect({
                     message= localize('k_upgrade_ex')
                 }, card)
             end
         end
-        --[[
-        if context.end_of_round then
-            if G.GAME.blind.boss and (
-                card.ability.extra.chips ~= card.ability.extra.base_chips or
-                card.ability.extra.Xchips ~= card.ability.extra.base_Xchips or
-                card.ability.extra.mult ~= card.ability.extra.base_mult or
-                card.ability.extra.Xmult ~= card.ability.extra.base_Xmult  
-            ) then
-                card.ability.extra.chips = card.ability.extra.base_chips
-                card.ability.extra.Xchips = card.ability.extra.base_Xchips 
-                card.ability.extra.mult = card.ability.extra.base_mult 
-                card.ability.extra.Xmult = card.ability.extra.base_Xmult 
-                SMODS.calculate_effect({
-                    message= localize('k_reset')
-                }, card)
-            end
-        end]]
     end,
     blueprint_compat = true,
+	demicoloncompat = true,
 }
 
 
@@ -663,11 +744,13 @@ SMODS.Joker {
         end
     end,
     blueprint_compat = true,
+	demicoloncompat = true,
 }
 
 SMODS.Joker {
     key = "tldr_joker",
     atlas = 'AikoyoriJokers',
+	pools = { ["Meme"] = true },
     pos = {
         x = 6,
         y = 1
@@ -679,27 +762,59 @@ SMODS.Joker {
     rarity = 1,
     cost = 2,
     loc_vars = function(self, info_queue, card)
-        info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
-        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_tldr_tldr", vars = {card.ability.extra.mult}}
+        if AKYRS.bal("absurd") then
+            info_queue[#info_queue+1] = G.P_CENTERS["j_chaos"]
+            info_queue[#info_queue+1] = G.P_CENTERS["c_moon"]
+            info_queue[#info_queue+1] = G.P_CENTERS["v_grabber"]
+            info_queue[#info_queue+1] = G.P_CENTERS["j_ceremonial"]
+            if Cryptid then
+                info_queue[#info_queue+1] = G.P_CENTERS["c_cry_summoning"]
+                info_queue[#info_queue+1] = G.P_CENTERS["j_cry_exponentia"]
+                info_queue[#info_queue+1] = G.P_BLINDS["bl_cry_tax"]
+            end
+            info_queue[#info_queue+1] = G.P_CENTERS["m_lucky"]
+            info_queue[#info_queue+1] = G.P_CENTERS["j_akyrs_shimmer_bucket"]
+            info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_tldr_tldr_absurd", vars = {card.ability.extra.xmult}}
+            info_queue[#info_queue+1] = G.P_CENTERS["v_akyrs_alphabet_soup"]
+            info_queue[#info_queue+1] = G.P_CENTERS["j_oops"]
+        else
+            info_queue[#info_queue+1] = G.P_CENTERS["m_stone"]
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_tldr_tldr", vars = {card.ability.extra.mult}}
+        end
         return {
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"), 
+            scale = 0.7,
             vars = { 
-                card.ability.extra.mult,
-             }
+                AKYRS.bal_val(card.ability.extra.mult,card.ability.extra.xmult)
+            }
         }
     end,
     config = {
         extra = {
-            mult = 2
+            mult = 2,
+            xmult = 3
         },
     },
     calculate = function(self, card, context)
-        if context.joker_main or context.individual and not context.end_of_round and (context.cardarea == G.hand or context.cardarea == G.play) then
-            return {
-                mult = card.ability.extra.mult
-            }
+        if AKYRS.bal("absurd") then
+                if context.joker_main then
+                return {
+                    xmult = card.ability.extra.xmult
+                }
+            end
+        else
+            if context.joker_main or context.individual and not context.end_of_round and (context.cardarea == G.hand or context.cardarea == G.play) then
+                return AKYRS.bal_val(
+                    {
+                        mult = card.ability.extra.mult
+                    }
+                )
+            end
         end
     end,
     blueprint_compat = true,
+	demicoloncompat = true,
 }
 
 SMODS.Joker {
@@ -713,7 +828,9 @@ SMODS.Joker {
     cost = 2,
     loc_vars = function(self, info_queue, card)
         return {
-            vars = { }
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"), 
+            vars = {
+            }
         }
     end,
     config = {
@@ -725,13 +842,17 @@ SMODS.Joker {
             return {
                 message = localize('k_akyrs_reciprocaled'),
                 func = function()
-                    mult = mod_mult(hand_chips / mult)
-                    
+                    if AKYRS.bal("absurd") then
+                        hand_chips = mod_mult(mult / hand_chips)
+                    else
+                        mult = mod_mult(hand_chips / mult)
+                    end
                     update_hand_text({ delay = 0, immediate = false }, { mult = mult, chips = hand_chips })
                 end
             }
         end
     end,
+	demicoloncompat = true,
     blueprint_compat = true,
 }
 
@@ -753,13 +874,20 @@ SMODS.Joker {
         },
     },
     calculate = function(self, card, context)
-        if context.pre_discard then
+        if context.hand_drawn then
             return {
                 message = localize('k_akyrs_drawn_discard'),
                 func = function()
                     AKYRS.simple_event_add(
                         function ()
                             G.FUNCS.draw_from_discard_to_deck()
+
+                            AKYRS.simple_event_add(
+                                function ()
+                                    AKYRS.remove_dupes(G.deck.cards)
+                                    return true
+                                end, 0
+                            )
                             return true
                         end, 0
                     )
@@ -781,7 +909,18 @@ SMODS.Joker {
     cost = 3,
     loc_vars = function(self, info_queue, card)
         if AKYRS.config.show_joker_preview then
-            info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_2fa_example"]
+            info_queue[#info_queue + 1] = AKYRS.DescriptionDummies["dd_akyrs_2fa_example"]
+        end
+        if AKYRS.bal("absurd") then
+            return {
+                key = self.key .. "_absurd",
+                vars = {
+                    card.ability.extra.xchips_gain,
+                    card.ability.extra.xmult_gain,
+                    card.ability.extra.xchips,
+                    card.ability.extra.xmult,
+                }
+            }            
         end
         return {
             vars = {
@@ -794,11 +933,15 @@ SMODS.Joker {
         extra = {
             chips = 0,
             extra = 8,
+
+            xmult = 1,
+            xchips = 1,
+            xmult_gain = .1,
+            xchips_gain = 0.3,
         },
     },
     calculate = function(self, card, context)
         if context.before then
-            
             for i, _card in ipairs(G.play.cards) do
                 card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.extra
             end
@@ -806,77 +949,86 @@ SMODS.Joker {
                 message = localize("k_akyrs_2fa_generate")
             }
         end
-        if context.joker_main then
+        if context.joker_main and AKYRS.bal("adequate") then
             return {
                 chips = card.ability.extra.chips
             }
         end
-        if context.end_of_round and context.cardarea == G.jokers  then
+        if context.end_of_round and context.cardarea == G.jokers and AKYRS.bal("adequate") then
             return {
                 message = localize("k_akyrs_2fa_reset"),
-                func = function ()
+                func = function()
                     card.ability.extra.chips = card.ability.extra.chips / 2
                 end
             }
         end
         if context.after and not context.blueprint then
-            
-            for i, _card in ipairs(G.play.cards) do
-                local percent = math.abs(1.15 - (i-0.999)/(#G.hand.cards-0.998)*0.3)
-                G.E_MANAGER:add_event(Event{
-                    trigger = 'after',
-                    blocking = false,
-                    delay = 0.2*i*AKYRS.get_speed_mult(_card),
-                    func = function ()
-                        if G.play and G.play.cards then
-                            local percent = math.abs(1.15 - (i-0.999)/(#G.play.cards-0.998)*0.3)
-                            if G.play.cards[i] then
-                                G.play.cards[i]:flip()
-                            end
-                            --G.play.cards[i]:a_cool_fucking_spin(1,math.pi * 100)
-                            play_sound('card1', percent);
-                        end
-                        return true
-                    end
-                })
-                G.E_MANAGER:add_event(Event{
-                    trigger = 'after',
-                    delay = 0.5*AKYRS.get_speed_mult(card)+0.2*i*AKYRS.get_speed_mult(_card),
-                    blocking = false,
-                    func = function ()
-                            
-                        if G.play and G.play.cards then
-                            local _rank = nil
-                            local _suit = nil
-                            while _rank == nil or _suit == nil do
-                                _rank = pseudorandom_element(SMODS.Ranks, pseudoseed('akyrs2far'))
-                                _suit = pseudorandom_element(SMODS.Suits, pseudoseed('akyrs2fas'))
-                            end
-                            
-                            
-                            --G.play.cards[i]:a_cool_fucking_spin(1,10)
-                            
-                            if G.play.cards[i] then
-                                SMODS.change_base(G.play.cards[i],_suit.key,_rank.key)
-                                G.play.cards[i]:flip()
-                            end
-                            
-                        end
-
-                        return true
-                    end
-                })
-            end
-            delay((0.5*AKYRS.get_speed_mult(card)+0.2*#G.play.cards))
             return {
+                func = function()
+                    for i, _card in ipairs(G.play.cards) do
+                        local original_rank = _card:get_id()
+                        local original_suit = _card.base.suit
+                        G.E_MANAGER:add_event(Event {
+                            trigger = 'after',
+                            blocking = false,
+                            delay = 0.2 * AKYRS.get_speed_mult(_card),
+                            func = function()
+                                if G.play and G.play.cards then
+                                    local percent = math.abs(1.15 - (i - 0.999) / (#G.play.cards - 0.998) * 0.3)
+                                    if G.play.cards[i] then
+                                        G.play.cards[i]:flip()
+                                    end
+                                    --G.play.cards[i]:a_cool_fucking_spin(1,math.pi * 100)
+                                    play_sound('card1', percent);
+                                end
+                                return true
+                            end
+                        })
+                        G.E_MANAGER:add_event(Event {
+                            trigger = 'after',
+                            delay = 0.5 * AKYRS.get_speed_mult(card),
+                            blocking = false,
+                            func = function()
+                                if G.play and G.play.cards then
+                                    local _rank = nil
+                                    local _suit = nil
+                                    while _rank == nil or _suit == nil do
+                                        _rank = pseudorandom_element(SMODS.Ranks, pseudoseed('akyrs2far'))
+                                        _suit = pseudorandom_element(SMODS.Suits, pseudoseed('akyrs2fas'))
+                                    end
+                                    if G.play.cards[i] then
+                                        assert(SMODS.change_base(G.play.cards[i], _suit.key, _rank.key))
+                                        G.play.cards[i]:flip()
+                                        if G.play.cards[i]:get_id() == original_rank and AKYRS.bal("absurd") then
+                                            card.ability.extra.xchips = card.ability.extra.xchips + card.ability.extra.xchips_gain
+                                            SMODS.calculate_effect({
+                                                message = localize("k_upgrade_ex"),
+                                                colour = G.C.CHIPS
+                                            }, card)
+                                        end
+                                        if G.play.cards[i].base.suit == original_suit and AKYRS.bal("absurd") then
+                                            card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+                                            SMODS.calculate_effect({
+                                                message = localize("k_upgrade_ex"),
+                                                colour = G.C.MULT
+                                            }, card)
+                                        end
+                                    end
+                                end
+
+                                return true
+                            end
+                        })
+                    end
+                    delay((0.5 * AKYRS.get_speed_mult(card) + 0.2 * #G.play.cards))
+                end,
                 message = localize("k_akyrs_2fa_regen"),
-                
             }
         end
     end,
+    demicoloncompat = true,
     blueprint_compat = false,
 }
-
 -- gaslighting 
 SMODS.Joker{
     
@@ -887,14 +1039,29 @@ SMODS.Joker{
         y = 1
     },
     rarity = 3,
-    cost = 3,
+    cost = 5,
     config = {
         extra = {
             xmult = 1,
             extra = 0.5,
+            eemult = 1.21,
+            eemult_negative = 0.35,
+            chance = 3,
+            super_mario = 1,
         },
     },
     loc_vars = function(self, info_queue, card)
+        if AKYRS.bal("absurd") then
+            return {
+                key = self.key .. "_absurd",
+                vars = {
+                    card.ability.extra.eemult,
+                    card.ability.extra.eemult_negative,
+                    (G.GAME.probabilities.normal or 1)*card.ability.extra.super_mario,
+                    card.ability.extra.chance,
+                }
+            }
+        end
         return {
             vars = {
                 card.ability.extra.extra,
@@ -903,43 +1070,61 @@ SMODS.Joker{
         }
     end,
     calculate = function(self, card, context)
-        if context.joker_main then
-            return {
-                xmult = card.ability.extra.xmult
-            }
+        if AKYRS.bal("absurd") and context.joker_main then
+            local odder = pseudorandom("akyrs_gaslighting_absurd") > G.GAME.probabilities.normal / card.ability.extra.chance
+            if odder then
+                return {
+                    eemult = card.ability.extra.eemult
+                }
+            else
+                return {
+                    eemult = card.ability.extra.eemult_negative
+
+                }
+            end
         end
-        if context.final_scoring_step and G.GAME.blind then
-            
-                local comp = false
-                if Talisman then
-                    comp = G.GAME.blind.chips:lt(G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult)
-                else
-                    
-                    comp = G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult >= G.GAME.blind.chips
-                end
-                G.E_MANAGER:add_event(
-                    Event{
-                        func = function ()
-                            if AKYRS.score_catches_fire_or_not() then
-                                card.ability.extra.xmult = 1
-                            else 
-                                card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.extra
+        if AKYRS.bal("adequate") then
+            if context.joker_main then
+                return {
+                    xmult = card.ability.extra.xmult
+                }
+            end
+            if context.final_scoring_step and G.GAME.blind then
+                
+                    local comp = false
+                    if Talisman then
+                        comp = G.GAME.blind.chips:lt(G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult)
+                    else
+                        
+                        comp = G.GAME.current_round.current_hand.chips * G.GAME.current_round.current_hand.mult >= G.GAME.blind.chips
+                    end
+                    G.E_MANAGER:add_event(
+                        Event{
+                            func = function ()
+                                if AKYRS.score_catches_fire_or_not() then
+                                    card.ability.extra.xmult = 1
+                                else 
+                                    card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.extra
+                                end
+                                return true
                             end
-                            return true
-                        end
-                    }
-                )
-                if comp then
-                    return {
-                        message = localize("k_akyrs_extinguish")
-                    }
-                else 
-                    return {
-                        message = localize("k_akyrs_burn"),
-                    }
-                end
+                        }
+                    )
+                    if comp then
+                        return {
+                            message = localize("k_akyrs_extinguish")
+                        }
+                    else 
+                        return {
+                            message = localize("k_akyrs_burn"),
+                        }
+                    end
+            end
         end
-    end
+ 
+    end,
+    demicoloncompat = true,
+    blueprint_compat = true,
 }
 
 -- hibana 
@@ -1035,7 +1220,8 @@ SMODS.Joker{
         if G.deck then
             G.deck:shuffle()
         end
-    end
+    end,
+    demicoloncompat = true,
 }
 
 
@@ -1101,6 +1287,15 @@ SMODS.Joker{
         }
     },
     loc_vars = function (self, info_queue, card)
+        if AKYRS.bal("absurd") then
+            info_queue[#info_queue+1] = G.P_CENTERS["m_akyrs_scoreless"]
+            return {
+                key = self.key .. "_absurd",
+                vars = {
+                    1,
+                }
+            }
+        end
         return {
             vars = {
                 1,
@@ -1118,7 +1313,7 @@ SMODS.Joker{
                     blocking = false,
                     -- the abs thing is so it does the center to the sides effect
                     -- TODO: Maybe make it flip from center to border like a centrifuge, not priority tho
-                    delay = 0.2*i*AKYRS.get_speed_mult(card),
+                    delay = 0.2*AKYRS.get_speed_mult(card),
                     func = function ()
                         if G.play and G.play.cards then
                             local percent = math.abs(1.15 - (i-0.999)/(#G.play.cards-0.998)*0.3)
@@ -1133,28 +1328,42 @@ SMODS.Joker{
                 G.E_MANAGER:add_event(
                     Event{
                         trigger = 'after',
-                        delay = 0.5*AKYRS.get_speed_mult(card)+(0.2*i)*AKYRS.get_speed_mult(card),
+                        delay = 0.5*AKYRS.get_speed_mult(card),
                         func = function ()
                             local rankToChangeTo = card2.base.value
+                            local ed = poll_edition("akyrs_centrifuge_absurd_edition",1, true, true)
+                            local en = SMODS.poll_enhancement({guaranteed = true, key = "akyrs_centrifuge_absurd"})
+                            if type(en) == "string" then en = G.P_CENTERS[en] end
+                            local rim = true
                             if i == 1 or i == #G.play.cards then
                                 rankToChangeTo = pseudorandom_element(SMODS.Ranks[card2.base.value].next,pseudoseed("akyrscentrifuge"))
                             else
+                                en = G.P_CENTERS["m_akyrs_scoreless"]
                                 rankToChangeTo = pseudorandom_element(SMODS.Ranks[card2.base.value].prev,pseudoseed("akyrscentrifuge"))
+                                rim = false
                             end
                             card2:flip()
-                            card2 = SMODS.change_base(card2, nil, rankToChangeTo)
+                            assert(SMODS.change_base(card2, nil, rankToChangeTo))
+                            if AKYRS.bal("absurd") then
+                                card2:set_ability(en)
+                                if rim then card2:set_edition(ed) end
+                                
+                            end
                             return true
                         end
                     }
                 )
             end
-            delay(0.5*AKYRS.get_speed_mult(card)+0.2*#G.play.cards)
+            delay(0.1*AKYRS.get_speed_mult(card)+0.3*#G.play.cards)
+        end
+        if context.joker_main and AKYRS.bal("adequate") then
             return {
                 chips = card.ability.extra.chips * #G.play.cards,
                 message = localize("k_akyrs_centrifuged")
             }
         end
-    end
+    end,
+    demicoloncompat = true,
 
 }
 
@@ -1164,6 +1373,11 @@ AKYRS.LetterJoker{
     pos = {
         x = 6, y = 0
     },
+    loc_vars = function(self, info_queue, card)
+        return {
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"), 
+        }
+    end,
     rarity = 1,
     cost = 2,
     config = {
@@ -1185,14 +1399,26 @@ SMODS.Joker{
         extras = {
             xmult = 1,
             xmult_inc = 0.1,
+            xmult_absurd = 1,
+            xmult_inc_absurd = 1.2,
         }
     },
     loc_vars = function (self,info_queue, card)
+        
+        if Talisman then
+            card.ability.extras.xmult_absurd = to_big(card.ability.extras.xmult_absurd)
+            card.ability.extras.xmult_inc_absurd = to_big(card.ability.extras.xmult_inc_absurd)
+        end
         return {
-            vars = {
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"), 
+            vars = AKYRS.bal_val({
                 card.ability.extras.xmult,
                 card.ability.extras.xmult_inc
-            }
+            },
+            {
+                card.ability.extras.xmult_absurd,
+                card.ability.extras.xmult_inc_absurd
+            })
         }
     end,
     calculate = function (self, card, context)
@@ -1200,19 +1426,26 @@ SMODS.Joker{
             if context.other_card:is_suit("Hearts") or ((context.other_card:is_suit("Spades") and next(SMODS.find_card("j_akyrs_evilneuro")))) then
                 return {
                     message = localize("k_upgrade_ex"),
+                    message_card = card,
                     func = function ()
+                        if Talisman then
+                            card.ability.extras.xmult_absurd = to_big(card.ability.extras.xmult_absurd)
+                            card.ability.extras.xmult_inc_absurd = to_big(card.ability.extras.xmult_inc_absurd)
+                        end
                         card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_inc
+                        card.ability.extras.xmult_absurd = card.ability.extras.xmult_absurd * card.ability.extras.xmult_inc_absurd
                     end
                 }
             end
         end
         if context.joker_main then
             return {
-                xmult = card.ability.extras.xmult
+                xmult = AKYRS.bal_val(card.ability.extras.xmult,card.ability.extras.xmult_absurd)
             }
         end
     end,
-    blueprint_compat = true
+    blueprint_compat = true,
+    demicoloncompat = true,
 }
 
 SMODS.Joker{
@@ -1228,14 +1461,25 @@ SMODS.Joker{
         extras = {
             xchips = 1,
             xchips_inc = 0.1,
+            xchips_absurd = 1.1,
+            xchips_inc_absurd = 1.1,
         }
     },
     loc_vars = function (self,info_queue, card)
+        if Talisman then
+            card.ability.extras.xchips_absurd = to_big(card.ability.extras.xchips_absurd)
+            card.ability.extras.xchips_inc_absurd = to_big(card.ability.extras.xchips_inc_absurd)
+        end
         return {
-            vars = {
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"), 
+            vars = AKYRS.bal_val({
                 card.ability.extras.xchips,
                 card.ability.extras.xchips_inc
-            }
+            },
+            {
+                card.ability.extras.xchips_absurd,
+                card.ability.extras.xchips_inc_absurd
+            })
         }
     end,
     calculate = function (self, card, context)
@@ -1243,19 +1487,26 @@ SMODS.Joker{
             if context.other_card:is_suit("Clubs") or ((context.other_card:is_suit("Diamonds") and next(SMODS.find_card("j_akyrs_neurosama")))) then
                 return {
                     message = localize("k_upgrade_ex"),
+                    message_card = card,
                     func = function ()
                         card.ability.extras.xchips = card.ability.extras.xchips + card.ability.extras.xchips_inc
+                        if Talisman then
+                            card.ability.extras.xchips_absurd = to_big(card.ability.extras.xchips_absurd)
+                            card.ability.extras.xchips_inc_absurd = to_big(card.ability.extras.xchips_inc_absurd)
+                        end
+                        card.ability.extras.xchips_absurd = card.ability.extras.xchips_absurd ^ card.ability.extras.xchips_inc_absurd
                     end
                 }
             end
         end
         if context.joker_main then
             return {
-                xchips = card.ability.extras.xchips
+                xchips = AKYRS.bal_val(card.ability.extras.xchips,card.ability.extras.xchips_absurd)
             }
         end
     end,
-    blueprint_compat = true
+    blueprint_compat = true,
+    demicoloncompat = true,
 }
 
 
@@ -1334,6 +1585,7 @@ SMODS.Joker{
         name = "Ghastling",
         extras = {
             rounds_left = 10,
+            rounds_left_absurd = 20,
             mult = 21.6
         }
     },
@@ -1344,7 +1596,7 @@ SMODS.Joker{
         info_queue[#info_queue+1] = G.P_CENTERS["j_akyrs_happy_ghast"]
         return {
             vars = {
-                card.ability.extras.rounds_left,
+                AKYRS.bal_val(card.ability.extras.rounds_left,card.ability.extras.rounds_left_absurd),
                 card.ability.extras.mult,
                 3
             }
@@ -1357,7 +1609,8 @@ SMODS.Joker{
                     message = localize("k_akyrs_growth"),
                     func = function ()
                         card.ability.extras.rounds_left = card.ability.extras.rounds_left - (#SMODS.find_card("j_ice_cream") + 1)
-                        if card.ability.extras.rounds_left <= 0 then
+                        card.ability.extras.rounds_left_absurd = card.ability.extras.rounds_left_absurd - (#SMODS.find_card("j_ice_cream") + 1)
+                        if AKYRS.bal_val(card.ability.extras.rounds_left <= 0,card.ability.extras.rounds_left_absurd <= 0) then
                             card:start_dissolve({G.C.RED}, nil, 0.5)
                             SMODS.add_card({ key = "j_akyrs_happy_ghast"})
                         end
@@ -1393,7 +1646,8 @@ SMODS.Joker{
     config = {
         name = "Happy Ghast",
         extras = {
-            xmult = 4.2
+            xmult = 4.32,
+            emult_absurd = 2.16
         }
     },
     in_pool = function (self, args)
@@ -1401,16 +1655,19 @@ SMODS.Joker{
     end,
     loc_vars = function (self,info_queue, card)
         return {
+            key = AKYRS.bal_val(self.key, self.key.."_absurd"),
             vars = {
-                card.ability.extras.xmult
+                AKYRS.bal_val(card.ability.extras.xmult,card.ability.extras.emult_absurd)
             }
         }
     end,
     calculate = function (self, card, context)
         if context.joker_main then
-            return {
+            return AKYRS.bal_val({
                 xmult = card.ability.extras.xmult
-            }
+            },{
+                emult = card.ability.extras.emult_absurd
+            })
         end
     end,
     blueprint_compat = true
@@ -2032,7 +2289,8 @@ SMODS.Joker{
         info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
         return {
             vars = {
-                G.GAME.probabilities.normal,
+                
+                (G.GAME.probabilities.normal or 1),
                 card.ability.extras.odds
             }
         }
@@ -2214,7 +2472,7 @@ SMODS.Joker{
         info_queue[#info_queue+1] = {set = "Tag", key = "tag_standard"}
         return {
             vars = {
-                G.GAME.probabilities.normal,
+                (G.GAME.probabilities.normal or 1),
                 card.ability.extras.odds
             }
         }

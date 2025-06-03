@@ -1,4 +1,7 @@
 if Cryptid then -- TODO: Ask Cryptid Discord so I can hook this up properly
+
+    Cryptid.mod_whitelist["Aikoyori's Shenanigans"] = true
+    Cryptid.big_num_blacklist["j_akyrs_hibana"] = true
     sendInfoMessage("Cryptid Detected... vro ;P","Aikoyori's Shenanigans")
     local original_cluster_fuck = SMODS.PokerHandParts.cry_cfpart.func
     SMODS.PokerHandPart:take_ownership("cry_cfpart",{

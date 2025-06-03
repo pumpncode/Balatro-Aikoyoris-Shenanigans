@@ -11,11 +11,41 @@ pattern = """    local badges = {}"""
 position = "after"
 payload = """
             loc_vars = loc_vars or {}
-            if (self.is_null or SMODS.has_enhancement(self, "m_akyrs_scoreless")) and loc_vars then
-                loc_vars.nominal_chips = nil
-            end
+            -- if (self.is_null or SMODS.has_enhancement(self, "m_akyrs_scoreless")) and loc_vars then
+            --     loc_vars.nominal_chips = nil
+            -- end
 """
 overwrite = true
 match_indent = true
 
+
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = """    if self.ability.name == 'The Wheel of Fortune' or self.ability.name == 'Ectoplasm' or self.ability.name == 'Hex' then"""
+position = "before"
+payload = """
+if self.ability.name == 'The Wheel of Fortune' then
+    if next(SMODS.find_card("j_akyrs_tsunagite")) then
+        SMODS.calculate_effect({
+            message = localize("k_akyrs_tsunagi_absurd_wheel_nope")
+        },self)
+        return
+    end
+end
+"""
+overwrite = true
+match_indent = true
+
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = """            text = localize{type='variable',key='a_xchips'..(amt<0 and '_minus' or ''),vars={math.abs(amt)}}"""
+position = "at"
+payload = """            text = Talisman and localize{type='variable',key='a_xchips'..(to_big(amt)<to_big(0) and '_minus' or ''),vars={math.abs(amt)}} or localize{type='variable',key='a_xchips'..(amt<0 and '_minus' or ''),vars={math.abs(amt)}}"""
+overwrite = true
+match_indent = true
 

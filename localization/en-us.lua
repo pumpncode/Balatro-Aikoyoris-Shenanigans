@@ -326,6 +326,12 @@ return {
                     "played and in hand",
                 },
             },
+            dd_akyrs_tldr_tldr_absurd={
+                name="Too Long; Ain't reading allat",
+                text={
+                    "{C:white,X:mult} X#1# {} Mult",
+                },
+            },
             dd_akyrs_aikoyori_base_ability={
                 name="Base Ability",
                 text={
@@ -675,6 +681,14 @@ return {
                     "{C:inactive,s:0.8}Please check back later if you're on macOS",
                 }
             },
+            j_akyrs_it_is_forbidden_to_dog_absurd = {
+                name = "It is forbidden to dog",
+                text = { 
+                    "{C:attention}Unscored{} played cards",
+                    "give {X:dark_edition,C:white} ^#1#{} Mult each",
+                    "{C:attention}All{} unscored cards becomes {C:attention}Scoreless{}",
+                }
+            },
             j_akyrs_eat_pant = {
                 name = "eat pant",
                 text = { 
@@ -684,13 +698,31 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#3# {C:inactive} Mult)",
                 }
             },
+            j_akyrs_eat_pant_absurd = {
+                name = "eat pant",
+                text = { 
+                    "If played hand contains a {C:attention}Two Pair{}",
+                    "This joker gains {X:mult,C:white} X#2# {} Mult for every scored cards",
+                    "{C:red}Destroys all played cards{}",
+                    "{C:inactive}(Currently {X:mult,C:white} X#3# {C:inactive} Mult)",
+                }
+            },
             j_akyrs_tsunagite = {
-                name = "Tsunagite",
+                name = "{f:5,C:akyrs_luminous}系ぎて",
                 text = { 
                     "Gives value listed",
                     "if played hand sum does not exceed {C:attention}#1#{}",
                     "Joker gain the value listed",
                     "When a {C:tarot,T:c_wheel_of_fortune}Wheel of Fortune{} is used",
+                }
+            },
+            j_akyrs_tsunagite_absurd = {
+                name = "{f:5,C:akyrs_luminous}系ぎて{}",
+                text = { 
+                    "Gives value listed",
+                    "Joker gain the value listed",
+                    "When a {C:tarot,T:c_wheel_of_fortune}Wheel of Fortune{} is used",
+                    "{C:tarot,T:c_wheel_of_fortune}Wheel of Fortune{} always fails",
                 }
             },
             j_akyrs_yona_yona_dance = {
@@ -714,7 +746,7 @@ return {
                         "It compels players to consider their hand composition carefully, aiming to incorporate {C:attention}High Cards{} and maximize benefits.",
                         "Delving into the history of gambling, card games have been a corner{C:tarot}stone{} of gaming culture for centuries.",
                         "by {C:attention}activating for every card in hand and at play{}, this ability ensures you will gain a high score by merely playing a {C:attention}High Card{}.",
-                        "From the ancient {C:white,X:red}Chinese{} who are credited with inventing playing cards in the {C:attention}9th century{} to the spread of card",
+                        "From the ancient {C:white,X:red,f:4}中国人{} who are credited with inventing playing cards in the {C:attention}9th century{} to the spread of card",
                         "games across Europe during the {C:chips}Middle Ages{}, gambling has evolved into a sophisticated form of entertainment and strategy.",
                         "The concept of {C:mult}multipliers{}, like the '{C:mult}+#1#{} Mult' in {C:attention,E:1,s:1.5}Balatro{}, echoes innovations in probability and risk-taking found",
                         "throughout gambling history, where players sharpened their skills to navigate the {C:green}uncertainties of chance.{}",
@@ -725,11 +757,48 @@ return {
                         "strategic tool and an exhilarating element.",
                 }
             },
+            j_akyrs_tldr_joker_absurd = {
+                name = "TL;DR Joker",
+                text = {
+                    "In the beginning, there was {C:attention,E:1,s:1.1}Balatro{} - not a deity, but something more complex - an ever-shuffling embodiment of {C:playable}chaos{} wrapped in crisp, digital playing cards. The game exists",
+                    "in a liminal space between logic and {C:tarot}lunacy{}, math and mirage, where {C:green}probability{} becomes pliable and poker mutates into myth with each {C:blue}hand{}. In {C:attention,E:1,s:1.1}Balatro{}, one doesn’t merely {E:2,C:attention}play{}",
+                    "poker. One communes with the improbable. Here, {C:attention}straights{} stretch into the surreal, and {C:attention}flushes whisper forbidden geometry. {C:playable}The{} deck is alive, vibrating with potential energy",
+                    "and pixelated menace, as every draw feels like yanking {C:attention}Ceremonial Dagger{} from a haunted {C:attention}Mega Buffoon Pack{}. And looming large above the fray is the pantheon of the unholy: the",
+                    "Jokers. They are not jesters; they are gods. Mathematical spirits dressed as {C:playable}clown{}s. Each Joker bends the rules, breaks them, and sometimes eats them whole, fueling strategies",
+                    "built on hubris, spreadsheets, and primal instinct alike. Enter the {C:attention}TL;DR Joker{}, a Joker whispered of in halls of madness and theory: a rectangular rune inscribed with a",
+                    "singular prophecy: “{C:white,X:mult} X#1# {} Mult if hand contains a high card” It is simple. It is divine. It is arbitrarily brilliant. Why {C:white,X:mult} X#1# {}? Why not {C:white,X:mult} X1.19542 {} Mult? Or {C:white,X:mult} X638.95 {}? Or {C:white,X:mult,f:6} Xπ {}",
+                    "Mult? Because {C:white,X:mult} X#1# {} is the sacred number of drama. Because three is the number of the holy sprit,  {C:attention}face cards{}, triangles in triforce, wheels on tricycles. Because to look upon a",
+                    "hand and see a {C:attention}King{}, and be told, {C:attention,E:1}“You may multiply,”{} is to witness design at the intersection of {C:playable}chaos{} theory and stylish arrogance. The {C:attention}TL;DR Joker{} does not beg for synergy.",
+                    "It {C:attention}demands{} reverence and vigilance. It turns high cards into sacred relics, their mere presence {C:spectral}summoning{} power. No longer are {C:attention}Jacks{} just teenage nobility in a velvet blazer of",
+                    "mid-value. Now they are conduits of cosmic {C:white,X:mult} XMult {}, bridges to {C:dark_edition}exponentia{}l escalation. And let us speak plainly of {C:attention}“high cards”{} - those royal specters of cardboard rank. The",
+                    "{C:attention}Jack{}, swaggering in adolescent cunning. The {C:attention}Queen{}, dangerous and divine. The {C:attention}King{}, a heavy-headed monarch wielding {C:attention}tax{} burdens and {C:white,X:mult} XMult {}ipliers alike. And the {C:attention}Ace{} -",
+                    "ambiguous, adaptable, alpha and omega, god-tier wildness incarnate. To draw one is {C:tarot}lucky{}. To play one is strategy. To combine one with {C:attention}TL;DR Joker{} is to summon an equation so",
+                    "violent, it punches through the spreadsheet matrix. It’s not just a combo. It’s a lifestyle. A statement. A mathematical swagger. Decks warp around it. You start seeking",
+                    "{C:attention}royalty{} not out of vanity, but devotion. The {C:hearts}hearts{} beat faster. The {C:spades}spades{} dig deeper. The {C:diamonds}diamonds{} glint with purpose. Even the {C:clubs}clubs{}, usually so brutish, now {C:attention}shimmer{} with",
+                    "refined potential. Every draw becomes a prayer: please, let it be a {C:attention}Queen{}. Or a {C:attention}King{}. Or her {C:attention}Jack{}. Because even if the poker hand is garbage, a single face card sanctifies it.",
+                    "{C:attention,E:1,s:1.1}Balatro{} becomes not a game of best hands, but of best {C:attention}conditions{} for value. A trash hand with a King is not trash - it’s a {C:white,X:mult} X#1# {}-fueled engine of consequence. Let us now wander",
+                    "backward in time - centuries before Jokers, before {C:attention,E:1,s:1.1}Balatro{}, before silicon and CPUs - back to 9th century {C:white,X:red,f:4}中国{}, where {C:attention}playing cards{} began. There, amid scrolls and shadow puppets,",
+                    "the corner{C:tarot}stone{} of gaming was born. The uncertainty of paper, the dance of fate inked in {C:attention}characters{} and calligraphy. In that world, {C:green}luck{} was not an {C:attention}adversary{} - it was an",
+                    "{C:attention}elemental truth{}. {C:green}Dice{} were cast not for control, but for communion with the unknown. Chance was worshipped as a muse, not solved as a math problem. And so too, in {C:attention,E:1,s:1.1}Balatro{}, do",
+                    "we feel this ancient reverence for uncertainty. The {C:attention}TL;DR Joker{}, in its modern mask, is ancestor to those ancient principles. It is the phoenix feather embedded in a digital",
+                    "deck, the whisper of dynasties. It reminds us that no matter how far we've come - from silk cards to OLED screens - we are still haunted and humbled by the {C:green}uncertainties of",
+                    "chance{}. So when we draw a {C:attention}high card{}, and {C:attention}TL;DR Joker{} flickers into being, we do not merely multiply - we {C:attention}invoke{} the ancient. The timeless. The chaotic. We become both",
+                    "strategist and supplicant, mathematician and {C:red}myst{}ic. The run ends. The screen fades. The Joker remains. {C:attention}TL;DR Joker{}. {C:attention}High cards{}. High stakes. High living. It is not just a",
+                    "mechanic. It is a metaphor. {C:attention,E:1,s:1.1}Balatro{} teaches that success is built not only on full hands, but on full {C:hearts}hearts{}. Sometimes, all it takes is a King - and a Joker who notices"
+                }
+            },
             j_akyrs_reciprocal_joker = {
                 name = "Reciprocal Joker",
                 text = { 
                     "Set {X:mult,C:white}Mult{} to",
                     "{X:chips,C:white}Chips{} divided by {X:mult,C:white}Mult{}",
+                }
+            },
+            j_akyrs_reciprocal_joker_absurd = {
+                name = "Reciprocal Joker",
+                text = { 
+                    "Set {X:chips,C:white}Chips{} to",
+                    "{X:mult,C:white}Mult{} divided by {X:chips,C:white}Chips{}",
                 }
             },
             j_akyrs_kyoufuu_all_back = {
@@ -750,6 +819,18 @@ return {
                     "{C:inactive,s:0.8}PSA: Please enable 2FA on all your online accounts!",
                 }
             },
+            j_akyrs_2fa_absurd = {
+                name = "Two-Factor Authentication",
+                text = { 
+                    "{C:attention}All Played Cards'{} Rank",
+                    "and Suit are {C:attention}randomized{} after scoring",
+                    "Gains {X:chips,C:white} X#1# {} Chips if rank stays the same",
+                    "Gains {X:mult,C:white} X#2# {} Mult if suit stays the same",
+                    "{C:inactive}(Currently {X:chips,C:white} X#3# {C:inactive} Chips",
+                    "{C:inactive}and {X:mult,C:white} X#4# {C:inactive} Mult)",
+                    "{C:inactive,s:0.8}PSA: Please enable 2FA on all your online accounts!",
+                }
+            },
             j_akyrs_gaslighting = {
                 name = "Gaslighting",
                 text = { 
@@ -757,6 +838,15 @@ return {
                     "{C:attention}Will not reset at all if score catches fire.",
                     "{C:inactive,s:0.7}Trust me, not Jimbo.",
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
+                }
+            },
+            j_akyrs_gaslighting_absurd = {
+                name = "Gaslighting",
+                text = { 
+                    "{C:edition,X:dark_edition,s:1.1} ^^#1# {} Mult",
+                    "{C:attention}Definitely won't make you lose.",
+                    "{C:inactive,s:0.6}You're just imagining things about me having",
+                    "{C:inactive,s:0.6}#3# in #4# chance to give {X:inactive,C:white,s:0.6} ^^#2# {C:inactive,s:0.6} Mult instead",
                 }
             },
             j_akyrs_hibana = {
@@ -776,11 +866,29 @@ return {
                     "Gives {C:chips}+#2#{} Chips per card played",
                 }
             },
+            j_akyrs_centrifuge_absurd = {
+                name = "Centrifuge",
+                text = { 
+                    "If at least {C:attention}3{} cards were played",
+                    "First and last card {C:attention}+#1#{} Rank",
+                    "Both gains new enhancement and edition",
+                    "all other cards {C:attention}-#1#{} Rank",
+                    "and becomes {C:attention}Scoreless{}",
+                }
+            },
             j_akyrs_henohenomoheji = {
                 name = "Henohenomoheji",
                 text = { 
                     "Cards with Letter {C:attention}K{},{C:attention}Q{}, and {C:attention}J",
                     "are considered {C:attention}Face{} Cards",
+                }
+            },
+            j_akyrs_henohenomoheji_absurd = {
+                name = "Henohenomoheji",
+                text = { 
+                    "Cards with Letter {C:attention}K{}, {C:attention}Q{}, and {C:attention}J",
+                    "are considered as {C:attention}Kings{}, {C:attention}Queens{},",
+                    "and {C:attention}Jacks{} respectively",
                 }
             },
             j_akyrs_neurosama = {
@@ -794,6 +902,17 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
                 }
             },
+            j_akyrs_neurosama_absurd = {
+                name = "Neuro Sama",
+                text = { 
+                    "This Joker {C:attention}multiplies{} its {X:mult,C:white}Xmult{} by {X:mult,C:white} X#2# {}",
+                    "for every {C:hearts}Hearts{} scored",
+                    "and if {T:j_akyrs_evilneuro,C:red}Evil Neuro{} is present,",
+                    "also {C:attention}multiplies{} its {X:mult,C:white}Xmult{} by {X:mult,C:white} X#2# {}",
+                    "for every {C:spades}Spades{} scored",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
+                }
+            },
             j_akyrs_evilneuro = {
                 name = "Evil Neuro",
                 text = { 
@@ -801,6 +920,17 @@ return {
                     "for every {C:clubs}Clubs{} scored",
                     "and if {T:j_akyrs_neurosama,C:red}Neuro Sama{} is present,",
                     "also gains {X:chips,C:white} X#2# {} Chips",
+                    "for every {C:diamonds}Diamonds{} scored",
+                    "{C:inactive}(Currently {X:chips,C:white} X#1# {C:inactive} Chips)",
+                }
+            },
+            j_akyrs_evilneuro_absurd = {
+                name = "Evil Neuro",
+                text = { 
+                    "This Joker {C:attention}expotentiates{} its {X:chips,C:white}Xchips{} by {X:dark_edition,C:white} ^#2# {}",
+                    "for every {C:clubs}Clubs{} scored",
+                    "and if {T:j_akyrs_neurosama,C:red}Neuro Sama{} is present,",
+                    "also {C:attention}expotentiates{} its {X:chips,C:white}Xchips{} by {X:dark_edition,C:white} ^#2# {}",
                     "for every {C:diamonds}Diamonds{} scored",
                     "{C:inactive}(Currently {X:chips,C:white} X#1# {C:inactive} Chips)",
                 }
@@ -829,6 +959,12 @@ return {
                 name = "Happy Ghast",
                 text = { 
                     "{X:mult,C:white}X#1#{} Mult",
+                }
+            },
+            j_akyrs_happy_ghast_absurd = {
+                name = "Happy Ghast",
+                text = { 
+                    "{X:dark_edition,C:white}^#1#{} Mult",
                 }
             },
             j_akyrs_charred_roach = {
@@ -1133,6 +1269,13 @@ return {
                     "Face Cards count as 10",
                 },
             },
+            akyrs_tsunagite_name={
+                name="Joker Name",
+                text={
+                    "{s:1.5}Tsunagite",
+                    "{C:inactive,s:0.9}(Tsu-nah-gi-teh)"
+                },
+            },
             akyrs_hardcore_challenge_locked = {
                 name = "Locked",
                 text={
@@ -1235,7 +1378,14 @@ return {
         Spectral={},
         Stake={},
         Tag={},
-        Tarot={},
+        Tarot={
+            c_akyrs_wof_nopes = {
+                name="The Wheel of Fortune (Modified)",
+                text={
+                    "Does not do anything.",
+                },
+            },
+        },
         Voucher={
             v_akyrs_alphabet_soup={
                 name="Alphabet Soup",
@@ -1540,6 +1690,7 @@ return {
             k_akyrs_story_of_undertale = "Story of Undertale..",
 
             k_akyrs_random_letter = "randomly selected letter",
+            k_akyrs_tsunagi_absurd_wheel_nope = "1 Miss!",
 
             k_akyrs_cannot_be_disabled = "Cannot Be Disabled",
             k_akyrs_cannot_be_rerolled = "Cannot Be Rerolled",

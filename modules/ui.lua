@@ -1005,7 +1005,7 @@ function AKYRS.UIBox_balancing_intro(page)
     child_elements = {
       { n = G.UIT.R, config = { padding = 0.1, align = "cl" }, nodes = {
         { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
-          create_toggle({w = 0.5, label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'adequate', callback = G.FUNCS.akyrs_select_balance_checkbox}),
+          create_toggle({w = 0, label = '', scale = 1, ref_table = AKYRS.akyrs_selection, ref_value = 'adequate', callback = G.FUNCS.akyrs_select_balance_checkbox}),
         }},
         { n = G.UIT.C, config = { padding = 0.1, align = "cl" }, nodes = {
           { n = G.UIT.T, config = { colour = G.C.WHITE, text = localize('k_akyrs_balance_dialog_adequate_text'), scale = 0.8}}

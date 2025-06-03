@@ -14,7 +14,7 @@ function mod_chips(_chips)
 end
 
 function Card.aiko_trigger_external(card)
-    if (card.config.center_key == "j_akyrs_observer") and AKYRS.bal() == "absurd" then
+    if (card.config.center_key == "j_akyrs_observer") and AKYRS.bal("absurd") then
         card.ability.extra.times = card.ability.extra.times - 1
 
         card_eval_status_text(card, 'jokers', nil, 0.5, nil, {

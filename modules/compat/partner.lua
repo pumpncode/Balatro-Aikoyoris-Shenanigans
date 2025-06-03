@@ -16,12 +16,12 @@ if Partner_API then
         unlocked = false,
         discovered = true,
         pos = {x = 1, y = 0},
-        config = {extra = {related_card = "j_akyrs_aikoyori", chips = 0, retrigg = 2}},
+        config = {extra = {related_card = "j_akyrs_aikoyori", chips = 0, retrigg = 1, retrigg_absurd = 2}},
         loc_vars = function(self, info_queue, card)
             local rtx = 1
             local me = SMODS.find_card("j_akyrs_aikoyori")
             if next(me) then rtx = rtx * #me + 1 end
-            return { vars = {card.ability.extra.retrigg*rtx} }
+            return { vars = {AKYRS.bal_val(card.ability.extra.retrigg,card.ability.extra.retrigg_absurd)*rtx} }
         end,
         calculate = function(self, card, context)
             if context.repetition and not context.repetition_only then
@@ -30,7 +30,7 @@ if Partner_API then
                 if next(me) then rtx = rtx * #me + 1 end
                 return {
                     message_card = card,
-                    repetitions = card.ability.extra.retrigg * rtx
+                    repetitions = AKYRS.bal_val(card.ability.extra.retrigg,card.ability.extra.retrigg_absurd) * rtx
                 }
             end
         end,

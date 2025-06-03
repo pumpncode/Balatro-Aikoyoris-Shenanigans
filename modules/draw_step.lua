@@ -77,11 +77,12 @@ SMODS.DrawStep:take_ownership('floating_sprite',{
             if self.config.center.soul_pos and (self.config.center.discovered or self.bypass_discovery_center) then
                 local scale_mod = 0.1
                 local rotate_mod = 0
-                if G.PROFILES[G.SETTINGS.profile].akyrs_balance == "absurd" then
+                if G.PROFILES[G.SETTINGS.profile].akyrs_balance == "absurd" and not G.SETTINGS.reduced_motion then
+                    
                     local x = G.TIMERS.REAL * 0.2
                     rotate_mod = ((1 - math.abs((-x-math.floor(-x)) * math.sin(-x*math.pi)) ^ 0.6)*2) * 2 * math.pi
                 else
-                    rotate_mod = 0.08*math.cos(1.94236*G.TIMERS.REAL)
+                    rotate_mod = 0.08*math.cos(1.94236*G.TIMERS.REAL) + (AKYRS.bal_val(0,math.pi) or 0)
                 end
                 
                 local xmod = 0

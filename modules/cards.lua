@@ -50,8 +50,8 @@ SMODS.Back{
     loc_vars = function (self, info_queue, card)
         return { vars = {
             self.config.akyrs_math_threshold,
-            self.config.discards,
-            self.config.hand_size
+            5 - self.config.akyrs_selection,
+            self.config.akyrs_gain_selection_per_ante
         } }
     end,
     config = {
@@ -60,11 +60,13 @@ SMODS.Back{
         akyrs_mathematics_enabled = true,
         akyrs_character_stickers_enabled = true,
         akyrs_no_skips = true,
-        akyrs_selection = 1e100,
+        akyrs_selection = -1,
+        akyrs_gain_selection_per_ante = 1,
         discards = 1,
-        akyrs_math_threshold = 2,
+        akyrs_always_skip_shops = true,
+        akyrs_math_threshold = 1,
         hand_size = 6,
-        akyrs_power_of_ten_scaling = 4,
+        akyrs_power_of_x_scaling = 13.69,
         akyrs_hide_normal_hands = true,
         akyrs_hide_high_card = true,
         akyrs_hand_to_not_hide = {["akyrs_expression"] = true,["akyrs_modification"] = true },

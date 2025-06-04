@@ -19,7 +19,7 @@ SMODS.Blind{
     set_blind = function(self)
         G.GAME.aiko_puzzle_win = false
         G.GAME.current_round.advanced_blind = true
-        G.GAME.word_todo = AKYRS.aiko_pickRandomInTable(puzzle_words)
+        G.GAME.word_todo = AKYRS.aiko_pickRandomInTable(AKYRS.puzzle_words)
         
         G.hand:change_size(3)
         G.FUNCS.draw_from_deck_to_hand(3)
@@ -1074,13 +1074,16 @@ SMODS.Blind {
 SMODS.Blind {
     key = "expert_inflation",
     dollars = 10,
-    mult = 24,
+    mult = 1,
     boss_colour = HEX('7371ff'),
     debuff = {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
         akyrs_is_postwin_blind = true,
         akyrs_cannot_be_overridden = true,
+        akyrs_anteth_power_of_x_blind_req = 2,
+        akyrs_anteth_power_of_x_blind_req_multiplier = 2,
+        akyrs_anteth_power_of_x_blind_req_power = 1.2,
     },
     
     in_pool = function (self)

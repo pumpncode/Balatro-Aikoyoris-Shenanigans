@@ -19,9 +19,10 @@ return {
             b_akyrs_math_deck = {
                 name = 'Math Deck',
                 text = { 'Make Maths Expressions',
-                'Get within {C:red}+-#1#%{}',
+                'Get within {C:red,f:6}±{C:red}#1#%{}',
                 'of the Blind Requirements',
-                '{C:red}+#2#{} Discards & {C:attention}+#3#{} Hand Size',
+                'Can only play {C:playable}#2#{} cards',
+                'Gain {C:playable}+#3#{} selection per Ante',
                 },
             },
             b_akyrs_hardcore_challenges={
@@ -958,7 +959,7 @@ return {
                     "And after playing {C:attention}#1#{} hands,",
                     "creates a {T:j_akyrs_happy_ghast,C:purple}Happy Ghast{}",
                     "{C:red}Self-destructs{}",
-                    "Decreses by {C:blue}1{} more every hand",
+                    "Decreases by {C:blue}1{} more every hand",
                     "per {T:j_ice_cream,C:blue}Ice Cream{} present",
                 }
             },
@@ -1024,7 +1025,7 @@ return {
                 text = { 
                     "Every {C:red}Popcorn{} obtained",
                     "while this Joker is present",
-                    "decreses Mult by {C:red}-#3#{} per round instead",
+                    "decreases Mult by {C:red}-#3#{} per round instead",
                     "Gain {X:mult,C:white}X#1#{} Mult per",
                     "{C:red}Popcorn{} eaten.",
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
@@ -1037,7 +1038,7 @@ return {
                     "Every {C:red}Popcorn{} obtained",
                     "while this Joker is present",
                     "Starts at {C:red}#4#{} Mult and",
-                    "decreses Mult by {C:red}-#3#{} per round instead",
+                    "decreases Mult by {C:red}-#3#{} per round instead",
                     "Gain {X:dark_edition,C:white}^#1#{} Mult per",
                     "{C:red}Popcorn{} eaten.",
                     "{C:inactive}(Currently {X:dark_edition,C:white} ^#2# {C:inactive} Mult)",
@@ -1770,6 +1771,10 @@ return {
             k_akyrs_plus_alphabet = "+1 Alphabet",
 
             k_akyrs_solitaire_redeal = "Redeal",
+
+            ph_akyrs_math_score_1 = "Score within ",
+            ph_akyrs_math_score_2 = "% of",
+            k_akyrs_power_ante = "ante",
 
             k_akyrs_balance_dialog_intro_next = "Next",
             k_akyrs_balance_dialog_cryptid_accept = "Sounds Good. (End)",

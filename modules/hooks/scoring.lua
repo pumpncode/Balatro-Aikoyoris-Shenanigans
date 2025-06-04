@@ -129,19 +129,20 @@ end
 local get_blind_amount_hook = get_blind_amount
 function get_blind_amount(ante)
     local r = get_blind_amount_hook(ante)
-    if G.GAME.akyrs_power_of_ten_scaling then
+    if G.GAME.akyrs_power_of_x_scaling then
         if Talisman then
-            r = to_big(10):pow(ante)
+            r = to_big(G.GAME.akyrs_power_of_x_scaling):pow(ante)*10
         else
-            r = math.pow(10,ante)
+            r = math.pow(G.GAME.akyrs_power_of_x_scaling,ante)*10
         end
     end
     if G.GAME.akyrs_random_scale then
         if Talisman then
-            r = (pseudorandom(pseudoseed("akyrs_random_scale"),to_number(G.GAME.akyrs_random_scale.min*r),to_number(G.GAME.akyrs_random_scale.max*r)))
+            G.GAME.akyrs_blind_random = G.GAME.akyrs_blind_random or r*(pseudorandom(pseudoseed("akyrs_random_scale"),to_number(G.GAME.akyrs_random_scale.min),to_number(G.GAME.akyrs_random_scale.max)))
         else
-            r = (pseudorandom(pseudoseed("akyrs_random_scale"),G.GAME.akyrs_random_scale.min*r,G.GAME.akyrs_random_scale.max*r))
+            G.GAME.akyrs_blind_random = G.GAME.akyrs_blind_random or r*(pseudorandom(pseudoseed("akyrs_random_scale"),G.GAME.akyrs_random_scale.min*r,G.GAME.akyrs_random_scale.max*r))
         end
+        r = G.GAME.akyrs_blind_random
     end
     
     return r

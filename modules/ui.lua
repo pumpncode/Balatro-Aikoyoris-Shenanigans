@@ -11,7 +11,7 @@ end
 
 
 function SPECIAL_BOSSS_BLIND(G, stake_sprite)
-  local blindloc = getSpecialBossBlindText((G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind) and
+  local blindloc = AKYRS.getBlindText((G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind) and
   G.GAME.blind.config.blind.key or "nu")
   return {
     { n = G.UIT.O, config = { object = G.GAME.blind, draw_layer = 1 } },
@@ -56,7 +56,7 @@ function SPECIAL_BOSSS_BLIND(G, stake_sprite)
 end
 
 function SPECIAL_BOSSS_BLIND_TOOLTIP(blind, ability_text, stake_sprite, _dollars)
-  local blindloc = getSpecialBossBlindText((blind and blind.key) and blind.key or "nu")
+  local blindloc = AKYRS.getBlindText((blind and blind.key) and blind.key or "nu")
   return
   {
     n = G.UIT.R,
@@ -94,7 +94,7 @@ end
 
 function SPECIAL_BOSSS_BLIND_SELECT(G, stake_sprite, disabled, _reward, blind_choice)
   --print(table_to_string_depth(blind_choice.config,1))
-  local blindloc = getSpecialBossBlindText((blind_choice.config and blind_choice.config.key) and blind_choice.config.key or
+  local blindloc = AKYRS.getBlindText((blind_choice.config and blind_choice.config.key) and blind_choice.config.key or
   "nu")
   return {
     {

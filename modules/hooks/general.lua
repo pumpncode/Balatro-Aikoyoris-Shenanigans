@@ -1202,11 +1202,17 @@ function Back:apply_to_run()
     if self.effect.config.akyrs_letters_xmult_enabled then
         G.GAME.akyrs_letters_xmult_enabled = true
     end
-    if self.effect.config.akyrs_power_of_ten_scaling then
-        G.GAME.akyrs_power_of_ten_scaling = true
+    if self.effect.config.akyrs_power_of_x_scaling then
+        G.GAME.akyrs_power_of_x_scaling = self.effect.config.akyrs_power_of_x_scaling
+    end
+    if self.effect.config.akyrs_always_skip_shops then
+        G.GAME.akyrs_always_skip_shops = self.effect.config.akyrs_always_skip_shops
     end
     if self.effect.config.akyrs_no_skips then
         G.GAME.akyrs_no_skips = self.effect.config.akyrs_no_skips
+    end
+    if self.effect.config.akyrs_gain_selection_per_ante then
+        G.GAME.akyrs_gain_selection_per_ante = self.effect.config.akyrs_gain_selection_per_ante
     end
 
     if self.effect.config.akyrs_any_drag then
@@ -1601,7 +1607,7 @@ function Blind:set_blind(blind, initial, silent)
     if G.GAME.blind and G.GAME.blind.in_blind and not G.GAME.blind.defeated and G.GAME.blind.debuff.akyrs_cannot_be_overridden and 
     (not G.GAME.blind.debuff.akyrs_can_be_replaced_by or G.GAME.blind.debuff.akyrs_can_be_replaced_by[blind.key])
     then
-        AKYRS.nope_buzzer()
+        --AKYRS.nope_buzzer()
     else
         return setBlindHook(self,blind, initial, silent)
     end

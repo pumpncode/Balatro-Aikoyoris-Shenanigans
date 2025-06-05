@@ -1310,3 +1310,7 @@ AKYRS.mod_blind_display = function(blind)
         return {n=G.UIT.T, config={text = pwrd..localize('k_x_base'), scale = 0.4, colour = G.C.RED}}
     end
 end
+
+AKYRS.word_blind = function()
+    return (G.GAME.blind and G.GAME.blind.debuff.akyrs_is_word_blind)
+end

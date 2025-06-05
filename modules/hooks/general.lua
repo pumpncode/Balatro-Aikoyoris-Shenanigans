@@ -491,7 +491,7 @@ function Game:update_selecting_hand(dt)
     
 
 
-    if not self.aiko_wordle and AKYRS.isBlindKeyAThing() == "bl_akyrs_the_thought" then
+    if not self.aiko_wordle and AKYRS.checkBlindKey("bl_akyrs_the_thought") then
         self.aiko_wordle = UIBox {
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
             config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
@@ -510,7 +510,7 @@ function Game:update_hand_played(dt)
     if self.aiko_wordle then
         self.aiko_wordle:remove(); self.aiko_wordle = nil
     end
-    if not self.aiko_wordle and AKYRS.isBlindKeyAThing() == "bl_akyrs_the_thought" then
+    if not self.aiko_wordle and AKYRS.checkBlindKey("bl_akyrs_the_thought") then
         self.aiko_wordle = UIBox {
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
             config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
@@ -710,7 +710,7 @@ G.FUNCS.evaluate_play = function(e)
     end
     -- print(#G.play.cards)
     local word_split = nil
-    if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled then
+    if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled or AKYRS.word_blind() then
         
         local aiko_current_word_split = {}
         word_split = {}
@@ -828,7 +828,7 @@ G.FUNCS.evaluate_play = function(e)
     end
     local ret = eval_hook(e)
     
-    if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled and word_split then
+    if( G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled or AKYRS.word_blind() ) and word_split then
         EMPTY(G.GAME.akyrs_last_played_letters)
         G.GAME.akyrs_last_played_letters = word_split
     end

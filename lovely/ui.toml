@@ -120,19 +120,6 @@ match_indent = true
 
 
 
-[[patches]]
-[patches.pattern]
-target = "functions/UI_definitions.lua"
-pattern = """local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.4)
-    blind_text[#blind_text + 1] ="""
-position = "after"
-payload = """
-        blind.debuff.special_blind and SPECIAL_BOSSS_BLIND_TOOLTIP(blind,ability_text,stake_sprite,_dollars) or 
-"""
-overwrite = true
-match_indent = true
-
-
 
 [[patches]]
 [patches.pattern]

@@ -107,7 +107,7 @@ for i = 3, 31 do
         visible = false,
         example = exampler,
         evaluate = function(parts, hand_in)
-            if ((not G.GAME.akyrs_character_stickers_enabled) or (not G.GAME.akyrs_wording_enabled)) then 
+            if ((not G.GAME.akyrs_character_stickers_enabled) or (not G.GAME.akyrs_wording_enabled)) and not AKYRS.word_blind() then 
             return {} end
             local word_hand = {}
             local hand = AKYRS.shallow_indexed_table_copy(hand_in)

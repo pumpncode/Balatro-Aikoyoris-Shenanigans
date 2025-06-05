@@ -2304,7 +2304,7 @@ SMODS.Joker{
                         else
                             SMODS.add_card{ set = "Spectral", edition = "e_negative" }
                         end
-                        card.ability.extras.target_play = pseudorandom(pseudoseed("akyrs_space_elevator_num"),10*card.ability.extras.phase,15*card.ability.extras.phase)
+                        card.ability.extras.target_play = pseudorandom(pseudoseed("akyrs_space_elevator_num"),5*card.ability.extras.phase+7,7*card.ability.extras.phase)
                         card.ability.extras.played = 0
                         return {
                             message = localize("k_akyrs_sendoff")

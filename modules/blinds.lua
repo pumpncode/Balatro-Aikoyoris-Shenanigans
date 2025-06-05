@@ -53,6 +53,24 @@ SMODS.Blind{
                 end
             })
         )
+        -- add 5 temp wilds to hand so players don't get fucked royally
+        AKYRS.simple_event_add(
+            function ()
+                for i = 1, 5 do
+                    AKYRS.simple_event_add(
+                        function ()
+                            local wldcrd = Card(11.5,15,G.CARD_W,G.CARD_H,pseudorandom_element(G.P_CARDS,pseudoseed("thethoughtblind")),G.P_CENTERS['c_base'],{playing_card = G.playing_card})
+                            wldcrd.is_null = true
+                            wldcrd.ability.akyrs_self_destructs = true
+                            AKYRS.change_letter_to(wldcrd,"#")
+                            G.hand:emplace(wldcrd)
+                            return true
+                        end, 0.1
+                    )
+                end
+                return true
+            end, 0
+        )
     end,
     drawn_to_hand = function(self)
         G.FUNCS.draw_from_discard_to_deck()

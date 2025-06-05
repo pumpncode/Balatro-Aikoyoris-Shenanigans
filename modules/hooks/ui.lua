@@ -710,15 +710,16 @@ function create_UIBox_HUD_blind()
     local elem = x.nodes[2].nodes[2].nodes[2]
 
 
-    if bl and bl.debuff.special_blind and elem and not bldis then
-        local blindloc = getSpecialBossBlindText(G.GAME.round_resets.blind_choices[G.GAME.blind_on_deck] or "nololxd")
+    if bl and elem then
+        local blindloc = AKYRS.getBlindText(G.GAME.round_resets.blind_choices[G.GAME.blind_on_deck] or "nololxd")
         local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
-        elem.nodes[1].nodes[1].config.text = blindloc[1]
-        elem.nodes[2].nodes = {
+        if blindloc[1] then elem.nodes[1].nodes[1].config.text = blindloc[1] end
+        if blindloc[2] then elem.nodes[2].nodes = {
             { n = G.UIT.O, config = { w = 0.5, h = 0.5, colour = G.C.BLUE, object = stake_sprite, hover = true, can_collide = false } },
             { n = G.UIT.B, config = { h = 0.1, w = 0.1 } },
             { n = G.UIT.T, config = { text = blindloc[2], scale = 0.4, colour = G.C.RED, id = 'HUD_blind_count', shadow = true } }
         }
+        end
     end    
     if #shit > 0 then
         G.akyrs_blind_icons = true
@@ -745,16 +746,21 @@ function create_UIBox_blind_choice(type, run_info)
     local x = ogBlindSel(type, run_info)
     local bl = G.P_BLINDS[G.GAME.round_resets.blind_choices[type]]
     local elem = AKYRS.search_UIT_for_id(x, "blind_desc")
-    if bl and bl.debuff.special_blind and elem then
-        local blindloc = getSpecialBossBlindText(G.GAME.round_resets.blind_choices[type] or "nololxd")
+    if bl and elem then
+        local blindloc = AKYRS.getBlindText(G.GAME.round_resets.blind_choices[type] or "nololxd")
         local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
-        elem.nodes[2].nodes[1].nodes[1].config.text = blindloc[1]
-        elem.nodes[2].nodes[2].nodes = {
+        if blindloc[1] then
+            elem.nodes[2].nodes[1].nodes[1].config.text = blindloc[1]
+        end
+        if blindloc[2] then
+            elem.nodes[2].nodes[2].nodes = {
             
-            { n = G.UIT.O, config = { w = 0.5, h = 0.5, colour = G.C.BLUE, object = stake_sprite, hover = true, can_collide = false } },
-            { n = G.UIT.B, config = { h = 0.1, w = 0.1 } },
-            { n = G.UIT.T, config = { text = blindloc[2], scale = 0.4, colour = G.C.RED, shadow = true } }
-        }
+                { n = G.UIT.O, config = { w = 0.5, h = 0.5, colour = G.C.BLUE, object = stake_sprite, hover = true, can_collide = false } },
+                { n = G.UIT.B, config = { h = 0.1, w = 0.1 } },
+                { n = G.UIT.T, config = { text = blindloc[2], scale = 0.4, colour = G.C.RED, shadow = true } }
+            }
+        end
+
     end
     return x
 end

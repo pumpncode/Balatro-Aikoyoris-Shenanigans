@@ -1,4 +1,4 @@
-puzzle_words = {
+AKYRS.puzzle_words = {
     "aback",
     "abase",
     "abate",

@@ -19,7 +19,7 @@ SMODS.Blind{
     set_blind = function(self)
         G.GAME.aiko_puzzle_win = false
         G.GAME.current_round.advanced_blind = true
-        G.GAME.word_todo = AKYRS.aiko_pickRandomInTable(puzzle_words)
+        G.GAME.word_todo = AKYRS.aiko_pickRandomInTable(AKYRS.puzzle_words)
         
         G.hand:change_size(3)
         G.FUNCS.draw_from_deck_to_hand(3)
@@ -52,6 +52,24 @@ SMODS.Blind{
                     return true
                 end
             })
+        )
+        -- add 5 temp wilds to hand so players don't get fucked royally
+        AKYRS.simple_event_add(
+            function ()
+                for i = 1, 5 do
+                    AKYRS.simple_event_add(
+                        function ()
+                            local wldcrd = Card(11.5,15,G.CARD_W,G.CARD_H,pseudorandom_element(G.P_CARDS,pseudoseed("thethoughtblind")),G.P_CENTERS['c_base'],{playing_card = G.playing_card})
+                            wldcrd.is_null = true
+                            wldcrd.ability.akyrs_self_destructs = true
+                            AKYRS.change_letter_to(wldcrd,"#")
+                            G.hand:emplace(wldcrd)
+                            return true
+                        end, 0.1
+                    )
+                end
+                return true
+            end, 0
         )
     end,
     drawn_to_hand = function(self)
@@ -1074,13 +1092,16 @@ SMODS.Blind {
 SMODS.Blind {
     key = "expert_inflation",
     dollars = 10,
-    mult = 24,
+    mult = 1,
     boss_colour = HEX('7371ff'),
     debuff = {
         akyrs_cannot_be_disabled = true,
         akyrs_blind_difficulty = "expert",
         akyrs_is_postwin_blind = true,
         akyrs_cannot_be_overridden = true,
+        akyrs_anteth_power_of_x_blind_req = 2,
+        akyrs_anteth_power_of_x_blind_req_multiplier = 2,
+        akyrs_anteth_power_of_x_blind_req_power = 1.2,
     },
     
     in_pool = function (self)

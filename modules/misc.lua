@@ -250,13 +250,33 @@ function table_to_string_depth(tables, depth)
     return strRet
 end
 
-function getSpecialBossBlindText(key)
-    if (key == "bl_akyrs_the_thought") then
+function AKYRS.getBlindText(key)
+    if G.GAME.akyrs_mathematics_enabled then
+        return {
+            localize("ph_akyrs_math_score_1")..G.GAME.akyrs_math_threshold..localize("ph_akyrs_math_score_2")
+            ,nil
+        }
+    elseif (key == "bl_akyrs_the_thought") and G.GAME.blind and not G.GAME.blind.disabled then
+        return {localize("ph_aiko_beat_puzzle"),localize("ph_word_puzzle")}
+    else
+        return {nil,nil}
+    end
+end
+
+function AKYRS.getCashOutText(key)
+    if G.GAME.akyrs_mathematics_enabled then
+        return {
+            localize("ph_akyrs_math_score_1")..G.GAME.akyrs_math_threshold..localize("ph_akyrs_math_score_2")
+            ,nil
+        }
+    elseif (key == "bl_akyrs_the_thought") and G.GAME.blind and not G.GAME.blind.disabled then
         return {localize("ph_aiko_beat_puzzle"),localize("ph_word_puzzle")}
     else
         return {localize("ph_akyrs_unknown"),localize("ph_akyrs_unknown")}
     end
 end
+
+
 function getGameOverBlindText()
     if G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.key then
         if (G.GAME.blind.config.blind.key == "bl_akyrs_the_thought") then
@@ -1263,4 +1283,34 @@ AKYRS.change_letter_to = function(card,letter,respect_wild)
         card.ability.aikoyori_letters_stickers = letter
     end
     
+end
+
+-- i hate writing lua in the patch\
+-- also return blind requirement
+AKYRS.mod_blind_requirement = function(blind,chips)
+    if blind.debuff.akyrs_anteth_power_of_x_blind_req then
+        local ante_power = G.GAME.round_resets.ante ^ blind.debuff.akyrs_anteth_power_of_x_blind_req_power * blind.debuff.akyrs_anteth_power_of_x_blind_req_multiplier
+        chips = chips * blind.debuff.akyrs_anteth_power_of_x_blind_req ^ ante_power
+    end
+    return chips
+end
+
+-- this one returns a node so we can add it to the blind popup
+AKYRS.mod_blind_display = function(blind)
+    if blind.debuff.akyrs_anteth_power_of_x_blind_req then
+        local blind_exp_has_power = blind.debuff.akyrs_anteth_power_of_x_blind_req_power and blind.debuff.akyrs_anteth_power_of_x_blind_req_power ~= 1
+        local blind_exp_has_multi = blind.debuff.akyrs_anteth_power_of_x_blind_req_multiplier and blind.debuff.akyrs_anteth_power_of_x_blind_req_multiplier ~= 1
+
+        local pwrd = blind.debuff.akyrs_anteth_power_of_x_blind_req .. "^" .. 
+            (blind_exp_has_multi and "("..blind.debuff.akyrs_anteth_power_of_x_blind_req_multiplier or "") ..
+            (blind_exp_has_power and "("..localize('k_akyrs_power_ante').."^"..blind.debuff.akyrs_anteth_power_of_x_blind_req_power..")" or localize('k_akyrs_power_ante')) ..
+            (blind_exp_has_multi and ")" or "") 
+
+
+        return {n=G.UIT.T, config={text = pwrd..localize('k_x_base'), scale = 0.4, colour = G.C.RED}}
+    end
+end
+
+AKYRS.word_blind = function()
+    return (G.GAME.blind and G.GAME.blind.debuff.akyrs_is_word_blind)
 end

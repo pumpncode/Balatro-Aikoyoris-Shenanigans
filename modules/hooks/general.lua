@@ -491,7 +491,7 @@ function Game:update_selecting_hand(dt)
     
 
 
-    if not self.aiko_wordle and AKYRS.isBlindKeyAThing() == "bl_akyrs_the_thought" then
+    if not self.aiko_wordle and AKYRS.checkBlindKey("bl_akyrs_the_thought") then
         self.aiko_wordle = UIBox {
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
             config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
@@ -510,7 +510,7 @@ function Game:update_hand_played(dt)
     if self.aiko_wordle then
         self.aiko_wordle:remove(); self.aiko_wordle = nil
     end
-    if not self.aiko_wordle and AKYRS.isBlindKeyAThing() == "bl_akyrs_the_thought" then
+    if not self.aiko_wordle and AKYRS.checkBlindKey("bl_akyrs_the_thought") then
         self.aiko_wordle = UIBox {
             definition = create_UIBOX_Aikoyori_WordPuzzleBox(),
             config = { align = "b", offset = { x = 0, y = 0.4 }, major = G.jokers, bond = 'Weak' }
@@ -710,7 +710,7 @@ G.FUNCS.evaluate_play = function(e)
     end
     -- print(#G.play.cards)
     local word_split = nil
-    if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled then
+    if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled or AKYRS.word_blind() then
         
         local aiko_current_word_split = {}
         word_split = {}
@@ -828,7 +828,7 @@ G.FUNCS.evaluate_play = function(e)
     end
     local ret = eval_hook(e)
     
-    if G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled and word_split then
+    if( G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled or AKYRS.word_blind() ) and word_split then
         EMPTY(G.GAME.akyrs_last_played_letters)
         G.GAME.akyrs_last_played_letters = word_split
     end
@@ -1202,11 +1202,17 @@ function Back:apply_to_run()
     if self.effect.config.akyrs_letters_xmult_enabled then
         G.GAME.akyrs_letters_xmult_enabled = true
     end
-    if self.effect.config.akyrs_power_of_ten_scaling then
-        G.GAME.akyrs_power_of_ten_scaling = true
+    if self.effect.config.akyrs_power_of_x_scaling then
+        G.GAME.akyrs_power_of_x_scaling = self.effect.config.akyrs_power_of_x_scaling
+    end
+    if self.effect.config.akyrs_always_skip_shops then
+        G.GAME.akyrs_always_skip_shops = self.effect.config.akyrs_always_skip_shops
     end
     if self.effect.config.akyrs_no_skips then
         G.GAME.akyrs_no_skips = self.effect.config.akyrs_no_skips
+    end
+    if self.effect.config.akyrs_gain_selection_per_ante then
+        G.GAME.akyrs_gain_selection_per_ante = self.effect.config.akyrs_gain_selection_per_ante
     end
 
     if self.effect.config.akyrs_any_drag then
@@ -1601,7 +1607,7 @@ function Blind:set_blind(blind, initial, silent)
     if G.GAME.blind and G.GAME.blind.in_blind and not G.GAME.blind.defeated and G.GAME.blind.debuff.akyrs_cannot_be_overridden and 
     (not G.GAME.blind.debuff.akyrs_can_be_replaced_by or G.GAME.blind.debuff.akyrs_can_be_replaced_by[blind.key])
     then
-        AKYRS.nope_buzzer()
+        --AKYRS.nope_buzzer()
     else
         return setBlindHook(self,blind, initial, silent)
     end

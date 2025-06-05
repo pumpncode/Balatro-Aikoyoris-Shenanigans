@@ -1,5 +1,5 @@
 function AKYRS.aikoyori_draw_extras(card, layer)
-    if card and AKYRS.aikoyori_letters_stickers and (G.GAME.akyrs_character_stickers_enabled or card.ability.forced_letter_render) then
+    if card and AKYRS.aikoyori_letters_stickers and (G.GAME.akyrs_character_stickers_enabled or card.ability.forced_letter_render) or AKYRS.word_blind() then
         if card.ability.aikoyori_letters_stickers and AKYRS.aikoyori_letters_stickers[card.ability.aikoyori_letters_stickers] then
             local movement_mod = 0.05 * math.sin(1.1 * (G.TIMERS.REAL + card.aiko_draw_delay)) - 0.07
             local rot_mod = 0.02 * math.sin(0.72 * (G.TIMERS.REAL + card.aiko_draw_delay)) + 0.03

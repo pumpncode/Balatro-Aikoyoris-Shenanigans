@@ -2018,12 +2018,17 @@ SMODS.Joker {
         name = "Aikoyori",
         extras = {
             base = {
-                xmult = 1.984
+                xmult = 1.984,
+                emult = 1.5,
             }
         }
     },
     loc_vars = function (self, info_queue, card)
-        info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_base_ability", vars = {card.ability.extras.base.xmult}}
+        if AKYRS.bal_val("adequate") then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_base_ability", vars = {card.ability.extras.base.xmult}}
+        else
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_base_ability_absurd", vars = {card.ability.extras.base.emult}}
+        end
         if Cryptid then
             info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_aikoyori_cryptid_ability"}
         end
@@ -2047,9 +2052,30 @@ SMODS.Joker {
         if SMODS.Mods.cryptposting then
             info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_cryptposting_ability"}
         end
+        if SMODS.Mods.Prism then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_prism_ability"}
+        end
+        if garb_enabled then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_garbshit_ability"}
+        end
+        if SMODS.Mods.finity then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_finity_ability"}
+        end
+        if Bakery_API then
+            info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_bakery_ability"}
+        end
         return {
-            
         }
+    end,
+    add_to_deck = function (self, card, from_debuff)
+        if Bakery_API then
+            G.GAME.modifiers.Bakery_extra_charms = G.GAME.modifiers.Bakery_extra_charms and G.GAME.modifiers.Bakery_extra_charms + 1 or 1
+        end
+    end,
+    remove_from_deck = function (self, card, from_debuff)
+        if Bakery_API then
+            G.GAME.modifiers.Bakery_extra_charms = G.GAME.modifiers.Bakery_extra_charms and G.GAME.modifiers.Bakery_extra_charms - 1 or 1
+        end
     end,
     calculate = function (self, card, context)
         if context.before then
@@ -2080,12 +2106,28 @@ SMODS.Joker {
                     SMODS.add_card({set = "Bakery", area = G.consumeables, edition = "e_negative"})
                 end
             end
+            if SMODS.Mods.Prism then
+                if not next(context.poker_hands["Flush"]) then
+                    SMODS.add_card({set = "Myth", area = G.consumeables, edition = "e_negative"})
+                end
+            end
+        end 
+        if SMODS.Mods.finity and context.blind_defeated and G.GAME.blind and G.GAME.blind.boss and G.GAME.blind.config.blind.boss.showdown then
+            SMODS.add_card({set = "Spectral", area = G.consumeables, edition = "e_negative", key = "c_finity_finity"})
+        end
+        if garb_enabled and context.selling_card and context.card.ability.set == "Joker" then
+            SMODS.add_card({set = "Stamp", area = G.consumeables, edition = "e_negative"})
         end
         if context.individual and context.cardarea == G.play then
             if not context.other_card:is_face() then
-                return {
-                    xmult = card.ability.extras.base.xmult
-                }
+                return AKYRS.bal_val(
+                    {
+                        xmult = card.ability.extras.base.xmult
+                    },
+                    {
+                        emult = card.ability.extras.base.emult
+                    }
+                )
             end
         end
         if context.akyrs_round_eval then

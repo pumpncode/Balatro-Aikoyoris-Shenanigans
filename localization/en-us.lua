@@ -340,6 +340,13 @@ return {
                     "{C;attention}non-face{} cards scored",
                 },
             },
+            dd_akyrs_aikoyori_base_ability_absurd={
+                name="Base Ability",
+                text={
+                    "{X:dark_edition,C:white} ^#1# {} Mult per",
+                    "{C;attention}non-face{} cards scored",
+                },
+            },
             dd_akyrs_aikoyori_cryptid_ability={
                 name="Cryptid Ability",
                 text={
@@ -400,6 +407,33 @@ return {
                     "It will be changed later",
                 },
             },
+            dd_akyrs_prism_ability={
+                name="Prism Ability",
+                text={
+                    "Create a Negative {C:attention}Myth Card{}",
+                    "if Hand doesn't contain a {C:attention}Flush"
+                },
+            },
+            dd_akyrs_garbshit_ability={
+                name="GARBSHIT Ability",
+                text={
+                    "Create a {C:dark_edition}Negative {C:attention}Stamp Card{}",
+                    "When a {C:attention}Joker{} is sold"
+                },
+            },
+            dd_akyrs_finity_ability={
+                name="Finity Ability",
+                text={
+                    "Create a {C:dark_edition}Negative {C:spectral}Finity{}",
+                    "When a {C:attention}Showdown{} Blind is defeated"
+                },
+            },
+            dd_akyrs_bakery_ability={
+                name="Bakery Ability",
+                text={
+                    "{X:dark_edition,C:white} +1 {}{C:attention} Charm{} available in shop{}",
+                },
+            },
             dd_akyrs_mukuroju_en = {
                 name = "Mukuroju no Hakamori",
                 text = { 
@@ -414,6 +448,7 @@ return {
                     "Gives {X:dark_edition,C:white} ^#1# {} Mult instead",
                 }
             },
+            -- blind icons
             dd_akyrs_expert_blind  = {
                 name="Expert Blind",
                 text={

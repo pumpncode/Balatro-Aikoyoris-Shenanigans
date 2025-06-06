@@ -139,11 +139,11 @@ function Card:get_chip_x_mult()
 end
 
 local copyCardHook = copy_card
-function copy_card(other, new_card, card_scale, playing_card, strip_edition)
-    local c = copyCardHook(other, new_card, card_scale, playing_card, strip_edition)
+function copy_card(...)
+    local c = {copyCardHook(...)}
     c.is_null = other.is_null
     c.akyrs_old_ability = other.ability
-    return c
+    return unpack(c)
 end
 
 local isSuitHook = Card.is_suit

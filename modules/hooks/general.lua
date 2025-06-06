@@ -60,6 +60,7 @@ end
 function SMODS.current_mod.reset_game_globals(run_start)
     G.GAME.current_round.discards_sub = 0
     G.GAME.current_round.hands_sub = 0
+    G.GAME.current_round.aiko_infinite_hack = "∞"
     if G.GAME.akyrs_last_ante ~= G.GAME.round_resets.ante or G.GAME.akyrs_letter_target then
         G.GAME.akyrs_letter_target = pseudorandom_element(AKYRS.raw_scrabble_letters, pseudoseed(G.GAME.pseudorandom.seed.."akyrs".."letter_pick"))
         G.GAME.akyrs_last_ante = G.GAME.round_resets.ante
@@ -143,7 +144,7 @@ function Card:update(dt)
     end
     
     if self.config.center_key == "j_akyrs_emerald" and self.sell_cost ~= self.cost * self.ability.extras.xcost then
-        self.sell_cost = self.cost * self.ability.extras.xcost
+        self.sell_cost = AKYRS.bal_val(self.cost * self.ability.extras.xcost,(self.cost + self.ability.extras.pluscost) ^ self.ability.extras.ecost)
     end
     if G.STATE == G.STATES.SELECTING_HAND then
         if not self.ability.akyrs_executed_debuff and G.GAME.blind and not G.GAME.blind.disabled then
@@ -950,7 +951,8 @@ function Card:akyrs_mod_card_value_init()
         end
     end
     if self.config.center_key == "j_akyrs_emerald" then
-        self.sell_cost = self.cost * self.ability.extras.xcost
+        self.sell_cost = AKYRS.bal_val(self.cost * self.ability.extras.xcost,(self.cost + self.ability.extras.pluscost) ^ self.ability.extras.ecost)
+        if self.sell_cost ~= self.sell_cost then self.sell_cost = 1e300 end
     end
     if G.GAME.modifiers.akyrs_all_cards_are_stone then
         if self.ability.set == "Default" or self.ability.set == "Enhanced" then

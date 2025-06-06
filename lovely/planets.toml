@@ -84,9 +84,9 @@ match_indent = true
 [[patches]]
 [patches.pattern]
 target = "card.lua"
-pattern = """                        if v.config.hand_type == G.GAME.last_hand_played then
-                            _planet = v.key
-                        end"""
+pattern = """if v.config.hand_type == G.GAME.last_hand_played then
+    _planet = v.key
+end"""
 position = "before"
 payload = '''
 if v.config.hand_type then

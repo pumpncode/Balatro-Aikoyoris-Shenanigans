@@ -1958,7 +1958,7 @@ AKYRS.tetoris_piece = {
     i = true,
     t = true,
 }
-AKYRS.LetterJoker {
+SMODS.Joker {
     key = "tetoris",
     pools = { ["Vocaloids"] = true, ["J-POP"] = true },
     atlas = 'AikoyoriJokers',
@@ -1972,9 +1972,20 @@ AKYRS.LetterJoker {
         extras = {
             chips = 10,
             xchips = 2.1,
+            immutable = {
+                counter = 0
+            }
         }
     },
     loc_vars = function (self, info_queue, card)
+        if AKYRS.bal("absurd") then
+            return {
+                key = self.key.."_absurd"..(Cryptid and "_cryptid" or "")..(Entropy and "_entropy" or ""),
+                vars = {
+                    card.ability.extras.immutable.counter,
+                }
+            }
+        end
         return {
             vars = {
                 card.ability.extras.chips,
@@ -1983,19 +1994,58 @@ AKYRS.LetterJoker {
         }
     end,
     calculate = function (self, card, context)
-        if context.individual and context.cardarea == G.play and G.GAME.akyrs_character_stickers_enabled then
-            if AKYRS.tetoris_piece[string.lower(context.other_card:get_letter_with_pretend())] then
+        if AKYRS.bal("absurd") then
+            
+            if context.akyrs_pre_play then
                 return {
-                    chips = card.ability.extras.chips,
+                    func = function ()
+                        card.ability.extras.immutable.counter = card.ability.extras.immutable.counter + #G.hand.highlighted
+                    end
                 }
             end
-        end
-        if context.joker_main then
-            local c = AKYRS.get_letter_freq_from_cards(G.play.cards)
-            if (c["l"] or c["s"] or c["o"] or c["z"] or c["j"] or c["i"] or c["t"]) and G.GAME.akyrs_character_stickers_enabled then
-                return {
-                    xchips = card.ability.extras.xchips,
-                }
+            if context.before then
+                card.ability.extras.immutable.counter = math.max(card.ability.extras.immutable.counter,0)
+                SMODS.calculate_effect({func = function() 
+                    if Entropy and card.ability.extras.immutable.counter >= 50 then
+                        SMODS.add_card{ key = "c_entr_beyond", set = "Omen", edition = "e_negative"} 
+                        card.ability.extras.immutable.counter = card.ability.extras.immutable.counter - 50
+                    end
+                end})
+                SMODS.calculate_effect({func = function() 
+                    if Entropy and card.ability.extras.immutable.counter >= 40 then
+                        SMODS.add_card{ key = "c_cry_gateway", set = "Spectral", edition = "e_negative"} 
+                        card.ability.extras.immutable.counter = card.ability.extras.immutable.counter - 40
+                    end
+                end})
+                SMODS.calculate_effect({func = function() 
+                    if Entropy and card.ability.extras.immutable.counter >= 30 then
+                        SMODS.add_card{ key = "c_soul", set = "Spectral", edition = "e_negative"} 
+                        card.ability.extras.immutable.counter = card.ability.extras.immutable.counter - 30
+                    end
+                end})
+                SMODS.calculate_effect({func = function() 
+                    if Entropy and card.ability.extras.immutable.counter >= 4 then
+                        SMODS.add_card{ set = "Spectral", edition = "e_negative"} 
+                        card.ability.extras.immutable.counter = card.ability.extras.immutable.counter - 4
+                    end
+                end})
+            end
+        else
+            if context.individual and context.cardarea == G.play and G.GAME.akyrs_character_stickers_enabled then
+                if AKYRS.tetoris_piece[string.lower(context.other_card:get_letter_with_pretend())] or context.other_card:get_id() == 10 or context.other_card:get_id() == 11 or context.other_card:is_suit("Spades") then
+                    return {
+                        chips = card.ability.extras.chips,
+                    }
+                end
+            end
+            if context.joker_main then
+                local c = AKYRS.get_letter_freq_from_cards(G.play.cards)
+                local r = AKYRS.get_ranks_freq_from_cards(G.play.cards)
+                if (c["l"] or c["s"] or c["o"] or c["z"] or c["j"] or c["i"] or c["t"] or r[11] or r[10]) and G.GAME.akyrs_character_stickers_enabled then
+                    return {
+                        xchips = card.ability.extras.xchips,
+                    }
+                end
             end
         end
     end
@@ -2163,20 +2213,29 @@ SMODS.Joker{
         name = "躯樹の墓守",
         extras = {
             xmult = 1,
+            xmult_absurd = 1,
             xmult_add = 0.5,
         }
     },
     loc_vars = function (self, info_queue, card)
-        info_queue[#info_queue+1] = {key = 'dd_akyrs_mukuroju_en', vars = { card.ability.extras.xmult_add, card.ability.extras.xmult }, set = "DescriptionDummy"}
+        if AKYRS.bal("absurd") then
+            info_queue[#info_queue+1] = {key = 'dd_akyrs_mukuroju_en_absurd', vars = { card.ability.extras.xmult_add, card.ability.extras.xmult }, set = "DescriptionDummy"}
+        else
+            info_queue[#info_queue+1] = {key = 'dd_akyrs_mukuroju_en', vars = { card.ability.extras.xmult_absurd }, set = "DescriptionDummy"}
+        end
+
         info_queue[#info_queue+1] = G.P_CENTERS['c_star']
         if SMODS.Mods.MoreFluff then
             info_queue[#info_queue+1] = G.P_CENTERS['c_mf_rot_star']
         end
         return {
-            vars = {
+            key = self.key .. AKYRS.bal_val("","_absurd"),
+            vars = AKYRS.bal_val({
                 card.ability.extras.xmult_add,
                 card.ability.extras.xmult
-            }
+            },{
+                card.ability.extras.xmult_absurd
+            })
         }
     end,
     calculate = function (self, card, context)
@@ -2184,14 +2243,16 @@ SMODS.Joker{
         context.consumeable.config.center_key == "c_star" or
         context.consumeable.config.center_key == "c_mf_rot_star"
         ) then
-            card.ability.extras.mult = card.ability.extras.mult + card.ability.extras.mult_add
+            
+            card.ability.extras.xmult = card.ability.extras.xmult * 8
+            card.ability.extras.xmult = card.ability.extras.xmult + card.ability.extras.xmult_add
             return {
                 message = localize("k_upgrade_ex"),
             }
         end
         if context.joker_main then
             return {
-                xmult = card.ability.extras.xmult
+                xmult = AKYRS.bal_val(card.ability.extras.xmult,card.ability.extras.xmult_absurd)
             }
         end
     end,
@@ -2212,6 +2273,8 @@ SMODS.Joker{
         name = "Emerald",
         extras = {
             xcost = 4,
+            pluscost = 4,
+            ecost = 2,
         }
     },
     loc_vars = function (self, info_queue, card)
@@ -2382,7 +2445,7 @@ SMODS.Joker{
                 return {
                     vars = 
                     {
-                        othercard.cost
+                        math.max(othercard.cost,0)
                     }
                 }
             end
@@ -2403,7 +2466,7 @@ SMODS.Joker{
                     func = function ()
                         othercard:start_dissolve({G.C.RED},1.6)
                     end,
-                    dollars = othercard.cost
+                    dollars = math.max(othercard.cost,0)
                 }
             end
         end

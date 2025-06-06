@@ -223,8 +223,12 @@ G.FUNCS.cash_out = function(e)
             SMODS.change_discard_limit(G.GAME.akyrs_gain_selection_per_ante)
         end
     end
+    
+    if G.aiko_wordle then
+        G.aiko_wordle:remove(); G.aiko_wordle = nil
+    end
     if not G.GAME.current_round.advanced_blind or G.GAME.aiko_puzzle_win then
-        local ret = cashOutHook(e)
+        local ret = {cashOutHook(e)}
         G.GAME.aiko_puzzle_win = nil
         G.GAME.current_round.advanced_blind = false
         G.GAME.current_round.aiko_round_played_words = {}
@@ -232,7 +236,7 @@ G.FUNCS.cash_out = function(e)
         G.GAME.current_round.aiko_round_misaligned_letter = {}
         G.GAME.current_round.aiko_round_incorrect_letter = {}
         G.GAME.current_round.advanced_blind = false
-        return ret
+        return unpack(ret)
     else
         return nil
     end

@@ -71,13 +71,9 @@ target = "functions/common_events.lua"
 pattern = """                    table.insert(left_text, {n=G.UIT.O, config={w=1.2,h=1.2 , object = blind_sprite, hover = true, can_collide = false}})"""
 position = "after"
 payload = """
-            if G.GAME.aiko_puzzle_win then
-                table.insert(left_text,
-                {n=G.UIT.C, config={padding = 0.05, align = 'cm', minw = 4}, nodes={
-                    {n=G.UIT.R, config={align = 'cm'}, nodes={
-                        {n=G.UIT.O, config={object = DynaText({string = {' '..localize('ph_puzzle_clear')..' '}, colours = {G.C.FILTER}, shadow = true, pop_in = 0, scale = 0.5*scale, silent = true})}}
-                    }}
-                }}) 
+            local akyrs_cashouttxt = AKYRS.getCashOutText(config,scale, stake_sprite)
+            if akyrs_cashouttxt then
+                table.insert(left_text, akyrs_cashouttxt) 
             else
 """
 overwrite = true

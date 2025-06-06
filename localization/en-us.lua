@@ -442,6 +442,14 @@ return {
                     "{C:inactive}(Currently {X:mult,C:white} X#2# {C:inactive} Mult)",
                 }
             },
+            dd_akyrs_mukuroju_en_absurd = {
+                name = "Mukuroju no Hakamori",
+                text = { 
+                    "This Joker {C:attention}octuples{} ({X:mult,C:white} X8 {})",
+                    "its {X:mult,C:white} Xmult {} every time {C:tarot}The Star{} is used",
+                    "{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)",
+                }
+            },
             dd_akyrs_nhh_cryptid = {
                 name = "If Cryptid is installed...",
                 text = { 
@@ -1083,10 +1091,49 @@ return {
             j_akyrs_tetoris = {
                 name = "Tetoris",
                 text = { 
-                    "{C:attention}L{}, {C:attention}S{}, {C:attention}O{}, {C:attention}Z{}, {C:attention}J{}, {C:attention}I{}, and {C:attention}T{}",
+                    "{C:attention}L{}, {C:attention}S{}{C:inactive}(pades), {C:attention}O{}, {C:attention}Z{}, {C:attention}J{C:inactive}(ack), {C:attention}I{}, and {C:attention}T{}{C:inactive}(en)",
                     "gives {C:chips}+#1#{} Chips when scored",
                     "and {X:chips,C:white}X#2#{} Chips if any one those is present.",
                     "{s:0.9,C:inactive,f:akyrs_MochiyPopOne}テテテテト テト テテテテトリス!{}"
+                }
+            },
+            j_akyrs_tetoris_absurd = {
+                name = "Tetoris",
+                text = { 
+                    "Increase {C:attention}counter{} by {C:attention}1{} per card played",
+                    "If counter is at least {C:attention}4{} when a hand is played,",
+                    "Create a {C:dark_edition}Negative{} {C:spectral}Spectral Card{} and {C:attention}reduce{} the counter by {C:attention}4{}",
+                    "If counter is at least {C:attention}30{} when a hand is played,",
+                    "Create a {C:dark_edition}Negative{} {C:spectral}The Soul{} and {C:attention}reduce{} the counter by {C:attention}30{}",
+                    "{C:inactive}(Lines Cleared : {X:attention,C:white} #1# {C:inactive})",
+                }
+            },
+            j_akyrs_tetoris_absurd_cryptid = {
+                name = "Tetoris",
+                text = { 
+                    "Increase {C:attention}counter{} by {C:attention}1{} per card played",
+                    "If counter is at least {C:attention}4{} when a hand is played,",
+                    "Create a {C:spectral}Spectral Card{} and {C:attention}reduce{} the counter by {C:attention}4{}",
+                    "If counter is at least {C:attention}30{} when a hand is played,",
+                    "Create a {C:dark_edition}Negative{} {C:spectral}The Soul{} and {C:attention}reduce{} the counter by {C:attention}30{}",
+                    "If counter is at least {C:attention}40{} when a hand is played,",
+                    "Create a {C:dark_edition}Negative{} {C:spectral}Gateway{} and {C:attention}reduce{} the counter by {C:attention}40{}",
+                    "{C:inactive}(Lines Cleared : {X:attention,C:white} #1# {C:inactive})",
+                }
+            },
+            j_akyrs_tetoris_absurd_cryptid_entropy = {
+                name = "Tetoris",
+                text = { 
+                    "Increase {C:attention}counter{} by {C:attention}1{} per card played",
+                    "If counter is at least {C:attention}4{} when a hand is played,",
+                    "Create a {C:spectral}Spectral Card{} and {C:attention}reduce{} the counter by {C:attention}4{}",
+                    "If counter is at least {C:attention}30{} when a hand is played,",
+                    "Create a {C:dark_edition}Negative{} {C:spectral}The Soul{} and {C:attention}reduce{} the counter by {C:attention}30{}",
+                    "If counter is at least {C:attention}40{} when a hand is played,",
+                    "Create a {C:dark_edition}Negative{} {C:spectral}Gateway{} and {C:attention}reduce{} the counter by {C:attention}40{}",
+                    "If counter is at least {C:attention}50{} when a hand is played,",
+                    "Create a {C:dark_edition}Negative{} {C:playable}Beyond{} and {C:attention}reduce{} the counter by {C:attention}50{}",
+                    "{C:inactive}(Lines Cleared : {X:attention,C:white} #1# {C:inactive})",
                 }
             },
             -- toga
@@ -1118,8 +1165,16 @@ return {
                 name = "{f:5}躯樹の墓守",
                 text = { 
                     "{f:5}このジョーカーは、{f:5,C:tarot}星{f:5}を使用するたびに",
-                    "{f:5}倍率 {X:mult,C:white} X#1# {f:5} を得る",
+                    "{f:5}倍率 {X:mult,C:white,f:5} X#1# {f:5} を得る",
                     "{C:inactive}({C:inactive,f:5}現在 倍率 {X:mult,C:white} X#2# {C:inactive})",
+                }
+            },
+            j_akyrs_mukuroju_no_hakamori_absurd = {
+                name = "{f:5}躯樹の墓守",
+                text = { 
+                    "{f:5}このジョーカーは、{f:5,C:tarot}星{f:5}を使用するたびに",
+                    "{f:5}自分の倍率は {X:mult,C:white} 八倍 {f:5} で殖える",
+                    "{C:inactive}({C:inactive,f:5}現在 倍率 {X:mult,C:white} X#1# {C:inactive})",
                 }
             },
             j_akyrs_emerald = {
@@ -1127,7 +1182,15 @@ return {
                 text = { 
                     "This joker sells for {X:money,C:black}X#1#{}",
                     "its buy cost ({C:money}$#2#{})",
-                    "{C:inactive}(placeholder ability)",
+                    "{C:inactive}(Buying this might unlock something)",
+                }
+            },
+            j_akyrs_emerald_absurd = {
+                name = "Emerald",
+                text = { 
+                    "This joker sells for {X:akyrs_money_x,C:akyrs_money_c}(x+#1#)^#2#{}",
+                    "where {X:akyrs_money_x,C:akyrs_money_c}x{} is its buy cost ({C:money}$#2#{})",
+                    "{C:inactive}(Buying this might unlock something)",
                 }
             },
             j_akyrs_shimmer_bucket = {
@@ -1178,6 +1241,14 @@ return {
                 text = { 
                     "{C:white,X:mult} X#1#{} Mult",
                     "{C:attention}Moves itself{}",
+                    "after clicking Play",
+                }
+            },
+            j_akyrs_corkscrew_absurd = {
+                name = "Corkscrew",
+                text = { 
+                    "{C:edition,X:spectral,E:2} ^^^#1#{} Mult",
+                    "{C:attention}Value is Negative on the left{}",
                     "after clicking Play",
                 }
             },

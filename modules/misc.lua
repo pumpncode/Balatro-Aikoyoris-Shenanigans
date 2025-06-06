@@ -263,16 +263,25 @@ function AKYRS.getBlindText(key)
     end
 end
 
-function AKYRS.getCashOutText(key)
+function AKYRS.getCashOutText(config,scale,stake_sprite)
+    if config.saved then return end
+    if G.GAME.aiko_puzzle_win then
+        return {n=G.UIT.C, config={padding = 0.05, align = 'cm', minw = 2}, nodes={
+            {n=G.UIT.R, config={align = 'cm'}, nodes={
+                {n=G.UIT.O, config={object = DynaText({string = {' '..localize('ph_puzzle_clear')..' '}, colours = {G.C.EDITION}, shadow = true, pop_in = 0, float = true, scale = .8*scale, silent = true})}}
+            }}
+        }}
+    end
     if G.GAME.akyrs_mathematics_enabled then
-        return {
-            localize("ph_akyrs_math_score_1")..G.GAME.akyrs_math_threshold..localize("ph_akyrs_math_score_2")
-            ,nil
-        }
-    elseif (key == "bl_akyrs_the_thought") and G.GAME.blind and not G.GAME.blind.disabled then
-        return {localize("ph_aiko_beat_puzzle"),localize("ph_word_puzzle")}
-    else
-        return {localize("ph_akyrs_unknown"),localize("ph_akyrs_unknown")}
+        return {n=G.UIT.C, config={padding = 0.05, align = 'cm'}, nodes={
+            {n=G.UIT.R, config={align = 'cm'}, nodes={
+                {n=G.UIT.O, config={object = DynaText({string = {' '..localize("ph_akyrs_math_score_1")..G.GAME.akyrs_math_threshold..localize("ph_akyrs_math_score_2")..' '}, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, pop_in = 0, scale = 0.4*scale, silent = true})}}
+            }},
+            {n=G.UIT.R, config={align = 'cm', minh = 0.8}, nodes={
+                {n=G.UIT.O, config={w=0.5,h=0.5 , object = stake_sprite, hover = true, can_collide = false}},
+                {n=G.UIT.T, config={text = G.GAME.blind.chip_text, scale = scale_number(G.GAME.blind.chips, scale, 100000), colour = G.C.RED, shadow = true}}
+            }}
+        }}
     end
 end
 
@@ -1032,6 +1041,17 @@ AKYRS.get_letter_freq_from_cards = function(listofcards)
     end
     return wordArray
 end
+AKYRS.get_ranks_freq_from_cards = function(listofcards)
+    
+    local wordArray = {}
+    for i,v in ipairs(listofcards) do
+        if not SMODS.has_no_rank(v) then
+            local w = v:get_id()
+            wordArray[w] = wordArray[w] and wordArray[w] + 1 or 1
+        end
+    end
+    return wordArray
+end
 AKYRS.icon_sprites = {}
 
 AKYRS.remove_formatting = function(string_in)
@@ -1262,12 +1282,13 @@ AKYRS.bal_val = function(adeq,absu)
     if AKYRS.bal("absurd") then return absu end
 end
 
-AKYRS.remove_dupes = function(table)
+AKYRS.remove_dupes = function(tabled)
+    if not tabled then return end
     local seen = {}
-    for i = #table, 1, -1 do
-        local card = table[i]
+    for i = #tabled, 1, -1 do
+        local card = tabled[i]
         if seen[card] then
-            table.remove(table, i)
+            table.remove(tabled, i)
         else
             seen[card] = true
         end
@@ -1313,4 +1334,10 @@ end
 
 AKYRS.word_blind = function()
     return (G.GAME.blind and G.GAME.blind.debuff.akyrs_is_word_blind)
+end
+
+AKYRS.pos_to_val = function(ind,targ)
+    if not ind or not targ then return end
+    local calc_ind = ind - targ / 2 
+    return Talisman and (to_big(1.1):pow(calc_ind)) or 1.1 ^ calc_ind
 end

@@ -21,22 +21,23 @@ SMODS.Blind{
         G.GAME.current_round.advanced_blind = true
         G.GAME.word_todo = AKYRS.aiko_pickRandomInTable(AKYRS.puzzle_words)
         
-        G.hand:change_size(3)
-        G.FUNCS.draw_from_deck_to_hand(3)
-        
-        G.GAME.current_round.discards_sub = G.GAME.current_round.discards_left + 1
-        self.discards_sub = G.GAME.current_round.discards_left + 1 -- math.max(G.GAME.current_round.discards_left, 0)
-        ease_discard(-self.discards_sub)
-        
-        G.GAME.current_round.hand_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,6)
-        self.hands_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,6)
-        ease_hands_played(-self.hands_sub)
+
         
         --print ("Word is "..G.GAME.word_todo)
         G.E_MANAGER:add_event(
             Event({
                 delay = 10,
                 func = function()
+                    G.hand:change_size(3)
+                    G.FUNCS.draw_from_deck_to_hand()
+                    
+                    G.GAME.current_round.discards_sub = G.GAME.current_round.discards_left + 1
+                    self.discards_sub = G.GAME.current_round.discards_left + 1 -- math.max(G.GAME.current_round.discards_left, 0)
+                    ease_discard(-self.discards_sub)
+                    
+                    G.GAME.current_round.hand_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,6)
+                    self.hands_sub = G.GAME.round_resets.hands-math.max(G.GAME.round_resets.hands,6)
+                    ease_hands_played(-self.hands_sub)
                     ease_background_colour{new_colour = HEX('95df3e'), special_colour = HEX('ffd856'), tertiary_colour = G.C.BLACK, contrast = 3}
                     
                     return true
@@ -73,8 +74,19 @@ SMODS.Blind{
         )
     end,
     drawn_to_hand = function(self)
-        G.FUNCS.draw_from_discard_to_deck()
-        G.deck:shuffle('akyrthought')
+        AKYRS.simple_event_add(
+            function()
+                G.FUNCS.draw_from_discard_to_deck()
+                G.deck:shuffle('akyrthought')
+                AKYRS.simple_event_add(
+                    function()
+                        G.FUNCS.draw_from_deck_to_hand()
+                        return true
+                    end,0.2
+                )
+                return true
+            end,0.2
+        )
     end,
     in_pool = function(self)
         return (G.GAME.akyrs_character_stickers_enabled and G.GAME.akyrs_wording_enabled)
@@ -659,7 +671,7 @@ SMODS.Blind {
         akyrs_alternate_action = true
     },
     debuff_hand = function (self, cards, hand, handname, check)
-        if G.GAME.current_round.akyrs_last_action and G.GAME.current_round.akyrs_last_action == "play" then
+        if G.GAME.current_round.akyrs_last_action and G.GAME.current_round.akyrs_last_action == "play" and not G.GAME.blind.disabled  then
             return true
         end
         return false
@@ -721,7 +733,7 @@ SMODS.Blind {
         }
     end,
     calculate = function (self, blind, context)
-        if context.individual and not context.repetition and context.cardarea == G.play then
+        if context.individual and not context.repetition and context.cardarea == G.play and not G.GAME.blind.disabled then
             return {
                 xmult = blind.debuff.akyrs_mult_per_played,
             }

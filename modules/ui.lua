@@ -614,7 +614,7 @@ function AKYRS.create_better_text_input(args)
   args.max_length = args.max_length or 16
   args.all_caps = args.all_caps or false
   args.prompt_text = args.prompt_text or localize('k_enter_text')
-  args.current_prompt_text = ''
+  args.current_prompt_text = args.ref_table[args.ref_value] or ''
   args.id = args.id or "text_input"
 
   local text = {ref_table = args.ref_table, ref_value = args.ref_value, letters = {}, current_position = string.len(args.ref_table[args.ref_value])}
@@ -646,7 +646,7 @@ end
 -- TEXT INPUT IS JANK
 
 G.FUNCS.akyrs_text_input = function(e)
-  local args =e.config.ref_table
+  local args = e.config.ref_table
   if G.CONTROLLER.text_input_hook == e then
     e.parent.parent.config.colour = args.hooked_colour
     args.current_prompt_text = ''
@@ -951,4 +951,32 @@ function AKYRS.UIBox_balancing_intro(page)
       }
     }
   }
+end
+
+
+AKYRS.start_onboarding = function ()
+  
+    AKYRS.simple_event_add(
+        function()
+            if not G.PROFILES[G.SETTINGS.profile].akyrs_balance then
+                G.SETTINGS.paused = true
+                G.FUNCS.overlay_menu({
+                    definition = AKYRS.UIBox_balancing_intro("intro"),
+                    config = {
+                        align = "cm",
+                        offset = {x=-2,y=10},
+                        major = G.ROOM_ATTACH,
+                        bond = 'Weak',
+                        no_esc = true
+                    }
+                })
+                local atl = G.ASSET_ATLAS['akyrs_aikoyori_intro']
+                local scale = 10
+                G.AKYRS_AIKOYORI = G.AKYRS_AIKOYORI or Sprite(16,12,scale*atl.px/1000,scale*atl.py/1000, atl,{ x = 0, y = 0 })
+                G.AKYRS_AIKOYORI.T.y = 3
+            end
+            return true
+        end
+    )
+  
 end

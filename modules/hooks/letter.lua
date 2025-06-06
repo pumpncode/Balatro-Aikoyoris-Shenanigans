@@ -95,6 +95,15 @@ function Card:stop_drag()
     if G.deck and self.area and self.area == G.jokers and self.config.center_key == "j_akyrs_hibana" then
         G.deck:shuffle()
     end
+    if self.config.center_key == "j_akyrs_corkscrew" and self.area and self.area.cards then
+        for _,cx in ipairs(self.area.cards) do
+            if cx.config.center_key == "j_akyrs_corkscrew" then
+                local current = AKYRS.find_index(cx.area.cards,cx)
+                cx.ability.extras.immutable.index = current
+                cx.ability.extras.emult = AKYRS.pos_to_val(cx.ability.extras.immutable.index,#cx.area.cards)
+            end
+        end
+    end
     return c
 end 
 
@@ -139,11 +148,12 @@ function Card:get_chip_x_mult()
 end
 
 local copyCardHook = copy_card
-function copy_card(other, new_card, card_scale, playing_card, strip_edition)
-    local c = copyCardHook(other, new_card, card_scale, playing_card, strip_edition)
-    c.is_null = other.is_null
-    c.akyrs_old_ability = other.ability
-    return c
+function copy_card(...)
+    local other, new_card, card_scale, playing_card, strip_edition = ...
+    local c = {copyCardHook(...)}
+    c[1].is_null = other.is_null
+    c[1].akyrs_old_ability = other.ability
+    return unpack(c)
 end
 
 local isSuitHook = Card.is_suit
@@ -223,8 +233,12 @@ G.FUNCS.cash_out = function(e)
             SMODS.change_discard_limit(G.GAME.akyrs_gain_selection_per_ante)
         end
     end
+    
+    if G.aiko_wordle then
+        G.aiko_wordle:remove(); G.aiko_wordle = nil
+    end
     if not G.GAME.current_round.advanced_blind or G.GAME.aiko_puzzle_win then
-        local ret = cashOutHook(e)
+        local ret = {cashOutHook(e)}
         G.GAME.aiko_puzzle_win = nil
         G.GAME.current_round.advanced_blind = false
         G.GAME.current_round.aiko_round_played_words = {}
@@ -232,7 +246,7 @@ G.FUNCS.cash_out = function(e)
         G.GAME.current_round.aiko_round_misaligned_letter = {}
         G.GAME.current_round.aiko_round_incorrect_letter = {}
         G.GAME.current_round.advanced_blind = false
-        return ret
+        return unpack(ret)
     else
         return nil
     end

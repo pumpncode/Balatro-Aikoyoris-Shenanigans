@@ -38,3 +38,23 @@ SMODS.Gradient{
     },
     cycle = 10
 }
+
+SMODS.Gradient{
+    key = "akyrs_money_x",
+    colours = {
+        HEX("ffea29"),
+        HEX("6e914a"),
+        HEX("319137"),
+    },
+    cycle = 10
+}
+
+SMODS.Gradient{
+    key = "akyrs_money_c",
+    colours = {
+        HEX("319137"),
+        HEX("ffea29"),
+        HEX("bfe34b"),
+    },
+    cycle = 10
+}

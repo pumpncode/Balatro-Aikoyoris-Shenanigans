@@ -137,13 +137,25 @@ function ease_discard(mod, instant, silent)
     local discard_UI = G.HUD:get_UIE_by_ID('discard_UI_count')
     if discard_UI then
         if G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.blind and G.GAME.blind.config.blind.debuff and G.GAME.blind.config.blind.debuff.infinite_discards and not G.GAME.blind.disabled and not G.GAME.blind.disabled and not G.GAME.aiko_puzzle_win then
-            G.GAME.current_round.aiko_infinite_hack = "8"
+            G.GAME.current_round.aiko_infinite_hack = "∞"
+            discard_UI.config.object.font = G.FONTS[8] -- thanks go noto core
             discard_UI.config.object.config.string[1].ref_value = "aiko_infinite_hack"
-            discard_UI.config.object.T.r = 1.57
-            discard_UI.config.object:update()
+            --discard_UI.config.object.T.r = 1.57
+            attention_text({
+                text = localize("ph_akyrs_unknown"),
+                scale = 0.8, 
+                hold = 0.7,
+                cover = discard_UI.parent,
+                cover_colour = G.C.RED,
+                align = 'cm',
+            })
+            --Play a chip sound
+            if not silent then play_sound('chips2') end
+            discard_UI.config.object:update_text(true)
         else
             discard_UI.config.object.config.string[1].ref_value = "discards_left"
             discard_UI.config.object.T.r = 0
+            discard_UI.config.object.font = G.LANG.font
             local ret = easeDiscardHook(mod, instant, silent)
             return ret
         end

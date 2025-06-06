@@ -140,9 +140,10 @@ end
 
 local copyCardHook = copy_card
 function copy_card(...)
+    local bbb = {...}
     local c = {copyCardHook(...)}
-    c.is_null = other.is_null
-    c.akyrs_old_ability = other.ability
+    c[1].is_null = bbb[2].is_null
+    c[1].akyrs_old_ability = bbb[2].ability
     return unpack(c)
 end
 

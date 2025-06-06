@@ -1,4 +1,4 @@
-local l = SMODS.Rank{
+--[[local l = SMODS.Rank{
     key = "non_playing",
     card_key = "SP",
     pos = { x = 0 },
@@ -20,7 +20,7 @@ local l = SMODS.Rank{
     
 }
 
-SMODS.Suit{
+local j = SMODS.Suit{
     key = "joker",
     card_key = "j",
     pos = { y = 0 },
@@ -32,7 +32,7 @@ SMODS.Suit{
     hc_ui_atlas  = 'special_suit_icon',
     
     inject = function(self)
-        SMODS.inject_p_card(self, SMODS.Ranks[l.key])
+        --SMODS.inject_p_card(self, SMODS.Ranks[l.key])
     end,
     lc_colour = AKYRS.C.JOKER_LC,
     hc_colour = AKYRS.C.JOKER_HC,
@@ -40,7 +40,7 @@ SMODS.Suit{
         return false
     end
 }
-SMODS.Suit{
+local c = SMODS.Suit{
     key = "consumable",
     card_key = "c",
     pos = { y = 0 },
@@ -52,7 +52,7 @@ SMODS.Suit{
     hc_ui_atlas  = 'special_suit_icon',
     
     inject = function(self)
-        SMODS.inject_p_card(self, SMODS.Ranks[l.key])
+        --SMODS.inject_p_card(self, SMODS.Ranks[l.key])
     end,
     lc_colour = AKYRS.C.CONSU_LC,
     hc_colour = AKYRS.C.CONSU_HC,
@@ -60,7 +60,7 @@ SMODS.Suit{
         return false
     end
 }
-SMODS.Suit{
+local b = SMODS.Suit{
     key = "booster",
     card_key = "b",
     pos = { y = 0 },
@@ -72,7 +72,7 @@ SMODS.Suit{
     hc_ui_atlas  = 'special_suit_icon',
     
     inject = function(self)
-        SMODS.inject_p_card(self, SMODS.Ranks[l.key])
+        --SMODS.inject_p_card(self, SMODS.Ranks[l.key])
     end,
     lc_colour = AKYRS.C.BOOST_LC,
     hc_colour = AKYRS.C.BOOST_HC,
@@ -80,7 +80,7 @@ SMODS.Suit{
         return false
     end
 }
-SMODS.Suit{
+local y = SMODS.Suit{
     key = "voucher",
     card_key = "v",
     pos = { y = 0 },
@@ -92,7 +92,7 @@ SMODS.Suit{
     hc_ui_atlas  = 'special_suit_icon',
     
     inject = function(self)
-        SMODS.inject_p_card(self, SMODS.Ranks[l.key])
+        --SMODS.inject_p_card(self, SMODS.Ranks[l.key])
     end,
     lc_colour = AKYRS.C.VOUCH_LC,
     hc_colour = AKYRS.C.VOUCH_HC,
@@ -100,7 +100,7 @@ SMODS.Suit{
         return false
     end
 }
-SMODS.Suit{
+local th = SMODS.Suit{
     key = "thing",
     card_key = "th",
     pos = { y = 0 },
@@ -112,7 +112,7 @@ SMODS.Suit{
     hc_ui_atlas  = 'special_suit_icon',
     
     inject = function(self)
-        SMODS.inject_p_card(self, SMODS.Ranks[l.key])
+        --SMODS.inject_p_card(self, SMODS.Ranks[l.key])
     end,
     lc_colour = AKYRS.C.THING_LC,
     hc_colour = AKYRS.C.THING_HC,
@@ -120,3 +120,4 @@ SMODS.Suit{
         return false
     end
 }
+]]

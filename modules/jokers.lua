@@ -2528,29 +2528,58 @@ SMODS.Joker{
     rarity = 1,
     cost = 3,
     config = {
-        extras = { xmult = 2 }
+        extras = { xmult = 2, emult = 1, immutable = {index = 1} }
     },
     loc_vars = function (self, info_queue, card)
         info_queue[#info_queue+1] = {set = "DescriptionDummy", key = "dd_akyrs_placeholder_art"}
+        if AKYRS.bal("absurd") then
+            local current = nil
+            if card.area then
+                current = AKYRS.find_index(card.area.cards,card)
+                card.ability.extras.emult = AKYRS.pos_to_val(card.ability.extras.immutable.index,#card.area.cards)
+            end
+            return {
+                key = self.key .. "_absurd",
+                vars = {
+                    (G.GAME and current) and card.ability.extras.emult or localize("ph_akyrs_unknown")
+                }
+            }
+        end
         return {
             vars = {
-                card.ability.extras.xmult
+                card.ability.extras.emult
             }
         }
     end,
+    add_to_deck = function (self, card, from_debuff)
+        if card.area and card.area.cards then
+            local current = AKYRS.find_index(card.area.cards,card)
+            card.ability.extras.immutable.index = current
+            card.ability.extras.emult = AKYRS.pos_to_val(card.ability.extras.immutable.index,#card.area.cards)
+        end
+    end,
     calculate = function (self, card, context)
         if context.before then
-            if card.area then
+            if card.area and card.area.cards then
                 local where = pseudorandom("akyrs_corkscrew_move_target",1,#card.area.cards)
                 local current = AKYRS.find_index(card.area.cards,card)
-                card.area.cards[where],card.area.cards[current] = card.area.cards[current],card.area.cards[where]
+                card.area.cards[where],card.area.cards[current or 1] = card.area.cards[current],card.area.cards[where]
+                card.ability.extras.immutable.index = current
                 card.area:align_cards()
+                card.ability.extras.emult = AKYRS.pos_to_val(card.ability.extras.immutable.index,#card.area.cards)
             end
         end
         if context.joker_main then
-            return {
-                xmult = card.ability.extras.xmult
-            }
+            if AKYRS.bal("adequate") then
+                return {
+                    xmult = card.ability.extras.xmult
+                }
+            else
+                return {
+                    emult = card.ability.extras.emult
+                }
+            end
+
         end
     end,
     blueprint_compat = true

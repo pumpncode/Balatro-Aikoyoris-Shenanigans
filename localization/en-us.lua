@@ -573,7 +573,8 @@ return {
             e_akyrs_sliced = {
                 name = "Sliced",
                 text = {
-                    "Triggers twice",
+                    "{C:attention}Halves{} all values",
+                    "Triggers {C:attention}twice",
                 }
             },
             e_akyrs_burnt = {
@@ -1247,9 +1248,10 @@ return {
             j_akyrs_corkscrew_absurd = {
                 name = "Corkscrew",
                 text = { 
-                    "{C:edition,X:spectral,E:2} ^^^#1#{} Mult",
-                    "{C:attention}Value is Negative on the left{}",
-                    "after clicking Play",
+                    "{C:white,X:dark_edition,E:2} ^#1#{} Mult",
+                    "{C:attention}Value is based on its position{}",
+                    "{C:attention}Moves itself{} after clicking Play",
+                    "{C:inactive}(Drag to Check value)",
                 }
             },
             j_akyrs_goodbye_sengen = {

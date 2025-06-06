@@ -1335,3 +1335,9 @@ end
 AKYRS.word_blind = function()
     return (G.GAME.blind and G.GAME.blind.debuff.akyrs_is_word_blind)
 end
+
+AKYRS.pos_to_val = function(ind,targ)
+    if not ind or not targ then return end
+    local calc_ind = ind - targ / 2 
+    return Talisman and (to_big(1.1):pow(calc_ind)) or 1.1 ^ calc_ind
+end

@@ -928,17 +928,22 @@ function Card:akyrs_mod_card_value_init()
     end
     if G.GAME.akyrs_any_drag then
         if not self.base.value and not self.base.suit then
-            if self.ability.set == "Voucher" then
-                self:set_base(AKYRS.construct_case_base("akyrs_voucher","akyrs_non_playing"), true)
-            elseif self.ability.set == "Booster" then
-                self:set_base(AKYRS.construct_case_base("akyrs_booster","akyrs_non_playing"), true)
-            elseif self.ability.consumeable then
-                self:set_base(AKYRS.construct_case_base("akyrs_consumable","akyrs_non_playing"), true)
-            elseif self.ability.set == "Joker" then
-                self:set_base(AKYRS.construct_case_base("akyrs_joker","akyrs_non_playing"), true)
-            else
-                self:set_base(AKYRS.construct_case_base("akyrs_thing","akyrs_non_playing"), true)
-            end
+            local rank = pseudorandom_element(SMODS.Ranks,pseudoseed("akyrsmodcard"))
+            local suit = pseudorandom_element(SMODS.Suits,pseudoseed("akyrsmodcard2"))
+            assert(SMODS.change_base(self,suit.key,rank.key))
+            --[[
+                if self.ability.set == "Voucher" then
+                    self:set_base(AKYRS.construct_case_base("akyrs_voucher","akyrs_non_playing"), true)
+                elseif self.ability.set == "Booster" then
+                    self:set_base(AKYRS.construct_case_base("akyrs_booster","akyrs_non_playing"), true)
+                elseif self.ability.consumeable then
+                    self:set_base(AKYRS.construct_case_base("akyrs_consumable","akyrs_non_playing"), true)
+                elseif self.ability.set == "Joker" then
+                    self:set_base(AKYRS.construct_case_base("akyrs_joker","akyrs_non_playing"), true)
+                else
+                    self:set_base(AKYRS.construct_case_base("akyrs_thing","akyrs_non_playing"), true)
+                end
+            ]]
         end
     end
     if #SMODS.find_card("j_akyrs_chicken_jockey") > 0 and self.config.center_key == "j_popcorn" then
@@ -1480,30 +1485,8 @@ function Game:main_menu(ctx)
             }
         )
     end
-    AKYRS.simple_event_add(
-        function()
-            if not G.PROFILES[G.SETTINGS.profile].akyrs_balance then
-                G.SETTINGS.paused = true
-                G.FUNCS.overlay_menu({
-                    definition = AKYRS.UIBox_balancing_intro("intro"),
-                    config = {
-                        align = "cm",
-                        offset = {x=-2,y=10},
-                        major = G.ROOM_ATTACH,
-                        bond = 'Weak',
-                        no_esc = true
-                    }
-                })
-                local atl = G.ASSET_ATLAS['akyrs_aikoyori_intro']
-                local scale = 10
-                G.AKYRS_AIKOYORI = G.AKYRS_AIKOYORI or Sprite(16,12,scale*atl.px/1000,scale*atl.py/1000, atl,{ x = 0, y = 0 })
-                G.AKYRS_AIKOYORI.T.y = 3
-            end
-            return true
-        end
-    )
 
-
+    AKYRS.start_onboarding()
     return r
 end
 

@@ -95,6 +95,15 @@ function Card:stop_drag()
     if G.deck and self.area and self.area == G.jokers and self.config.center_key == "j_akyrs_hibana" then
         G.deck:shuffle()
     end
+    if self.config.center_key == "j_akyrs_corkscrew" and self.area and self.area.cards then
+        for _,cx in ipairs(self.area.cards) do
+            if cx.config.center_key == "j_akyrs_corkscrew" then
+                local current = AKYRS.find_index(cx.area.cards,cx)
+                cx.ability.extras.immutable.index = current
+                cx.ability.extras.emult = AKYRS.pos_to_val(cx.ability.extras.immutable.index,#cx.area.cards)
+            end
+        end
+    end
     return c
 end 
 

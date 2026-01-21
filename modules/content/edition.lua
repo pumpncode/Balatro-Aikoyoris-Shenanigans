@@ -83,7 +83,7 @@ SMODS.Edition{
     sound = { sound = "akyrs_sliced_sfx", per = 0.8, vol = 0.3 },
     in_shop = true,
     on_apply = function (card)
-        if not card.ability.akyrs_upgrade_sliced then
+        if not card.ability.akyrs_upgrade_sliced and card.config and card.config.center_key and G.P_CENTERS[card.config.center_key] then
             local x = AKYRS.deep_copy(G.P_CENTERS[card.config.center_key].config)
             AKYRS.mod_card_values(x,{multiply = 0.5, unkeywords = AKYRS.blacklist_mod})
             for n, v in pairs(x) do

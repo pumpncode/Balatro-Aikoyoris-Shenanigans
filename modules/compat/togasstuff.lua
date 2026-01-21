@@ -9,7 +9,7 @@ if AKYRS.is_mod_loaded("TOGAPack") then
             return G.GAME.akyrs_character_stickers_enabled
         end,
         set_badges = function (self, card, badges)
-            SMODS.create_mod_badges({ mod = togabalatro },badges)
+            if self.discovered then SMODS.create_mod_badges({ mod = togabalatro },badges) end
         end,
         config = {
             extras = { money = 1 }
@@ -49,7 +49,7 @@ if AKYRS.is_mod_loaded("TOGAPack") then
             return G.GAME.akyrs_character_stickers_enabled
         end,
         set_badges = function (self, card, badges)
-            SMODS.create_mod_badges({ mod = togabalatro },badges)
+            if self.discovered then SMODS.create_mod_badges({ mod = togabalatro },badges) end
         end,
         loc_vars = function (self, info_queue, card)
             return {

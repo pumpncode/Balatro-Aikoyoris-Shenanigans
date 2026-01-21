@@ -2188,22 +2188,27 @@ SMODS.Blind{
         if not blind.disabled then
             if context.before then
                 if context.scoring_name == G.GAME.current_round.akyrs_picked_poker_hands then
-                    return {
+                    SMODS.calculate_effect({
                         func = function ()
                             blind.effect.times_left = (blind.effect.times_left) - 1
                             if blind.effect.times_left <= 0 then
                                 G.GAME.aiko_puzzle_win = true
-                            end                            
-                            AKYRS.simple_event_add(
-                                function()
-                                    AKYRS.force_check_win({ force_draw = true})
-                                    return true
-                                end, 0
-                            )
-                            recalculateBlindUI()
+                            end                         
                         end
-                    }
+                    }, blind)
                 end
+                return {
+                    func = function ()
+                        AKYRS.simple_event_add(
+                            function()
+                                AKYRS.force_check_win({ force_draw = true, state_to_go = G.STATES.SELECTING_HAND })
+                                return true
+                            end, 0
+                        )
+                        recalculateBlindUI()
+
+                    end
+                }
             end
         end
     end,

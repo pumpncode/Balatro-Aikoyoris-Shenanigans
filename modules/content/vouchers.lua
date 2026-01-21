@@ -1,7 +1,7 @@
 SMODS.Voucher {
     key = "alphabet_soup",
     atlas = 'aikoyoriVouchers', pos = { x = 2, y = 0 } ,
-    cost = 10,
+    cost = 8,
     config = {
         extras = {
             addentum = 2
@@ -40,7 +40,7 @@ SMODS.Voucher {
 SMODS.Voucher {
     key = "crossing_field",
     atlas = 'aikoyoriVouchers', pos = { x = 3, y = 0 } ,
-    cost = 10,
+    cost = 12,
     config = {
         extras = {
             addentum = 3
@@ -72,7 +72,7 @@ SMODS.Voucher {
 SMODS.Voucher {
     key = "banquet",
     atlas = 'aikoyoriVouchers', pos = { x = 0, y = 0 } ,
-    cost = 10,
+    cost = 15,
     config = {
         extras = {
             addentum = 1
@@ -100,7 +100,7 @@ SMODS.Voucher {
 SMODS.Voucher {
     key = "worlds_end",
     atlas = 'aikoyoriVouchers', pos = { x = 1, y = 0 } ,
-    cost = 10,
+    cost = 15,
     config = {
         extras = {
             addentum = 2

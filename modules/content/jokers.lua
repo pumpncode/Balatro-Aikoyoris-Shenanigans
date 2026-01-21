@@ -3771,6 +3771,7 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "shine_bright_like_a_diamond",
+    pools = { Meme = true },
     atlas = 'AikoyoriJokers',
     pos = { x = 9, y = 6 },
     pools = {  },
@@ -3806,35 +3807,7 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = "so_close",
-    atlas = 'AikoyoriJokers',
-    pos = { x = 0, y = 7 },
-    pools = {  },
-    config = {
-        extras = {
-            score_xbase = 0.03
-        }
-    },
-    rarity = 2,
-    cost = 7,
-    loc_vars = function (self, info_queue, card)
-        return {
-            vars = {
-                card.ability.extras.score_xbase * 100
-            }
-        }
-    end,
-    calculate = function (self, card, context)
-        if context.individual and context.poker_hands and context.poker_hands["Two Pair"] and context.cardarea == G.hand then
-            return {
-                akyrs_score = card.ability.extras.score_xbase * (G.GAME.blind.chips or 0)
-            }
-        end
-    end,
-    blueprint_compat = true,
-}
-
-SMODS.Joker {
-    key = "so_close",
+    pools = { ["Video Game"] = true, ["Peggle"] = true },
     atlas = 'AikoyoriJokers',
     pos = { x = 0, y = 7 },
     pools = {  },
@@ -3865,6 +3838,7 @@ SMODS.Joker {
 SMODS.Joker {
     key = "snow_pea",
     atlas = 'AikoyoriJokers',
+    pools = { ["Video Game"] = true, ["Plants vs Zombies"] = true },
     pos = { x = 1, y = 7 },
     pools = {  },
     config = {
@@ -3882,6 +3856,219 @@ SMODS.Joker {
         }
     end,
     calculate = function (self, card, context)
+        if context.joker_main then
+            return {
+                akyrs_xscore = card.ability.extras.xscore
+            }
+        end
+    end,
+    blueprint_compat = true,
+}
+
+SMODS.Joker {
+    key = "konton_boogie",
+    atlas = 'AikoyoriJokers',
+    pos = { x = 2, y = 7 },
+    pools = { ["Vocaloid"] = true, },
+    pools = {  },
+    config = {
+        extras = {
+            gain = 0.1,
+            lose = 0.5,
+            xmult = 1,
+        },
+    },
+    rarity = 2,
+    cost = 8,
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.gain,
+                card.ability.extras.lose,
+                card.ability.extras.xmult,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.before and #context.full_hand == #context.scoring_hand and not context.blueprint then
+            return {
+                func = function ()
+                    SMODS.scale_card(card, {
+                        ref_table = card.ability.extras,
+                        ref_value = 'xmult',
+                        scalar_value = 'lose',
+                        scaling_message = { localize("k_akyrs_downgrade_ex") },
+                        operation = function(ref_table, ref_value, initial, scalar_value)
+                            ref_table[ref_value] = math.max(ref_table[ref_value] - scalar_value, 1)
+                        end,
+                    })
+                end
+            }
+        end
+        if context.individual and context.cardarea == 'unscored' and not context.blueprint then
+            return {
+                func = function ()
+                    SMODS.scale_card(card, {
+                        ref_table = card.ability.extras,
+                        ref_value = 'xmult',
+                        scalar_value = 'gain',
+                    })
+                end
+            }
+        end
+        if context.joker_main then
+            return {
+                xmult = card.ability.extras.xmult
+            }
+        end
+    end,
+    blueprint_compat = true,
+}
+
+SMODS.Joker {
+    key = "yamada_perfect",
+    atlas = 'AikoyoriJokers',
+    pos = { x = 3, y = 7 },
+    pools = { ["Vocaloid"] = true, },
+    pools = {  },
+    config = {
+        extras = {
+            gain = 0.1,
+            lose = 0.1,
+            xchips = 1,
+            suit = "",
+        },
+    },
+    set_ability = function (self, card, initial, delay_sprites)
+        card.ability.extras.suit = pseudorandom_element(SMODS.Suits,"akyrs_yamadaperfect_suit").key
+    end,
+    rarity = 2,
+    cost = 6,
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.gain,
+                card.ability.extras.lose,
+                card.ability.extras.xchips,
+                localize(card.ability.extras.suit,"suits_plural"),
+                colours = {
+                    G.C.SUITS[card.ability.extras.suit]
+                }
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.individual and not context.blueprint and context.cardarea == G.play then
+            
+            if context.other_card and context.other_card:is_suit(card.ability.extras.suit) then
+                SMODS.calculate_effect({
+                    func = function ()
+                        SMODS.scale_card(card, {
+                            ref_table = card.ability.extras,
+                            ref_value = 'xchips',
+                            scalar_value = 'lose',
+                            scaling_message = { localize("k_akyrs_downgrade_ex") },
+                            operation = function(ref_table, ref_value, initial, scalar_value)
+                                ref_table[ref_value] = math.max(ref_table[ref_value] - scalar_value, 1)
+                            end,
+                        })
+                    end
+                }, card)
+            end
+            if context.poker_hands and next(context.poker_hands["Flush"]) and not context.other_card:is_suit(card.ability.extras.suit) then
+                SMODS.calculate_effect({
+                    func = function ()
+                        SMODS.scale_card(card, {
+                            ref_table = card.ability.extras,
+                            ref_value = 'xchips',
+                            scalar_value = 'gain',
+                        })
+                    end
+                }, card)
+            end
+        end
+        if context.joker_main then
+            return {
+                xchips = card.ability.extras.xchips
+            }
+        end
+        if context.after and context.cardarea == card.area then
+            return {
+                message = localize("k_reset"),
+                func = function ()
+                    card.ability.extras.suit = pseudorandom_element(SMODS.Suits,"akyrs_yamadaperfect_suit").key
+                end,
+            }
+        end
+    end,
+    blueprint_compat = true,
+}
+
+SMODS.Joker {
+    key = "trend_angelina",
+    atlas = 'AikoyoriJokers',
+    pos = { x = 4, y = 7 },
+    pools = { ["Vocaloid"] = true, },
+    pools = {  },
+    config = {
+        extras = {
+            gain = 0.4,
+            lose = 0.1,
+            xscore = 1,
+        },
+    },
+    rarity = 2,
+    cost = 6,
+    loc_vars = function (self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extras.gain,
+                card.ability.extras.lose,
+                card.ability.extras.xscore,
+            }
+        }
+    end,
+    calculate = function (self, card, context)
+        if context.before and not context.blueprint then
+            if context.poker_hands and next(context.poker_hands["Straight"]) then
+                SMODS.calculate_effect({
+                    func = function ()
+                        SMODS.scale_card(card, {
+                            ref_table = card.ability.extras,
+                            ref_value = 'xscore',
+                            scalar_value = 'gain',
+                        })
+                    end
+                }, card)
+            end
+            return {
+                func = function ()
+                    local freq = AKYRS.get_ranks_freq_from_cards(context.scoring_hand)
+                    for k, v in pairs(freq) do
+                        if v > 1 then
+                            SMODS.calculate_effect({
+                                func = function ()
+                                    for _, cx in ipairs(context.scoring_hand) do
+                                        if cx:get_id() == k then
+                                            cx:juice_up(0.2, 0.2)
+                                        end
+                                    end
+                                    SMODS.scale_card(card, {
+                                        ref_table = card.ability.extras,
+                                        ref_value = 'xscore',
+                                        scalar_value = 'lose',
+                                        scaling_message = { localize("k_akyrs_downgrade_ex") },
+                                        operation = function(ref_table, ref_value, initial, scalar_value)
+                                            ref_table[ref_value] = math.max(ref_table[ref_value] - scalar_value, 1)
+                                        end,
+                                    })
+                                end
+                            }, card)
+                        end
+                    end
+                end
+            }
+        end
         if context.joker_main then
             return {
                 akyrs_xscore = card.ability.extras.xscore

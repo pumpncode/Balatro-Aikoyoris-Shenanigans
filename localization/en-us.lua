@@ -2441,6 +2441,64 @@ return {
                     "{C:white,X:purple}X#1#{} Score",
                 }
             },
+            j_akyrs_konton_boogie = {
+                name = {
+                    "{f:5}混沌ブギ",
+                    "Konton Boogie",
+                },
+                text = {
+                    {
+                        "This Joker gains {C:white,X:mult} X#1# {} Mult",
+                        "per unscored card",
+                    },
+                    {
+                        "This Joker loses {C:white,X:mult} X#2# {} Mult",
+                        "if hand has {C:attention}no unscored cards",
+                    },
+                    {
+                        "{C:inactive}(Currently {C:white,X:mult} X#3# {C:inactive} Mult)",
+                    }
+                }
+            },
+            j_akyrs_yamada_perfect = {
+                name = {
+                    "{f:5}山田PERFECT",
+                    "Yamada Perfect",
+                },
+                text = {
+                    {
+                        "This Joker gains {C:white,X:chips} X#1# {} Chips",
+                        "per card if played hand contains a {C:attention}Flush",
+                    },
+                    {
+                        "This Joker loses {C:white,X:chips} X#2# {} Chips instead",
+                        "per {V:1}#4#{} scored",
+                        "{C:inactive}Suit changes every hand",
+                    },
+                    {
+                        "{C:inactive}(Currently {C:white,X:chips} X#3# {C:inactive} Chips)",
+                    }
+                }
+            },
+            j_akyrs_trend_angelina = {
+                name = {
+                    "{f:5}流行アンジェリーナ",
+                    "Trend Angelina",
+                },
+                text = {
+                    {
+                        "This Joker gains {C:white,X:purple} X#1# {} Score",
+                        "if played hand contains a {C:attention}Straight",
+                    },
+                    {
+                        "This Joker loses {C:white,X:purple} X#2# {} Score",
+                        "per {C:attention}duplicated ranks{} in scoring hand",
+                    },
+                    {
+                        "{C:inactive}(Currently {C:white,X:purple} X#3# {C:inactive} Score)",
+                    }
+                }
+            },
         },
         Partner = {
             pnr_akyrs_aikoyori = {

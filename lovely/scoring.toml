@@ -176,27 +176,6 @@ payload = """end"""
 overwrite = true
 match_indent = true
 
-
-[[patches]]
-[patches.pattern]
-target = "functions/state_events.lua"
-pattern = """        if modded then update_hand_text({sound = 'chips2', modded = modded}, {chips = hand_chips, mult = mult}) end"""
-position = "before"
-payload = """if not akyrs_no_default_update then"""
-overwrite = true
-match_indent = true
-
-[[patches]]
-[patches.pattern]
-target = "functions/state_events.lua"
-pattern = """        if modded then update_hand_text({sound = 'chips2', modded = modded}, {chips = hand_chips, mult = mult}) end"""
-position = "after"
-payload = """end"""
-overwrite = true
-match_indent = true
-
-
-
 [[patches]]
 [patches.pattern]
 target = "functions/state_events.lua"

@@ -200,6 +200,10 @@ AKYRS.hand_display_mod = function(hand,text,disp_text,poker_hands)
         --print(rawget(G.GAME.hands[text], "mult"))
         local hm = G.GAME.akyrs_pure_hand_modifier
         local final_mult, final_chips
+        if Cryptid and Cryptid.ascend then 
+            pre_mult = Cryptid.ascend(pre_mult)
+            pre_chips = Cryptid.ascend(pre_chips)
+        end
         if Talisman and type(hm) == "table" and type(to_big(hm.multiplier)) == "table" then
             hm.multiplier = to_big(hm.multiplier)
             hm.power = to_big(hm.power)
@@ -242,11 +246,15 @@ AKYRS.base_cm_mod = function(hand,poker_info,b_chip,b_mult,already_ran)
         G.GAME.akyrs_pure_hand_modifier = G.GAME.akyrs_pure_hand_modifier or { multiplier = 2, power = 1, level = 1, played = 0 }
         -- this function runs twice so
         G.GAME.akyrs_pure_hand_modifier.played = (G.GAME.akyrs_pure_hand_modifier.played or 0) + (already_ran and 0 or 1)
+        local hand_vals = {
+            mult = b_mult,
+            chips = b_chip,
+        }
         -- what the fuck balatro why is this tostring function essential to it working????
-        local _ = tostring(rawget(G.GAME.hands[text], "mult") or 1)
-        local _2 = tostring(rawget(G.GAME.hands[text], "chips") or 1)
-        local pre_mult = rawget(G.GAME.hands[text], "mult") or 1
-        local pre_chips = rawget(G.GAME.hands[text], "chips") or 1
+        local _ = tostring(rawget(hand_vals, "mult") or 1)
+        local _2 = tostring(rawget(hand_vals, "chips") or 1)
+        local pre_mult = rawget(hand_vals, "mult") or 1
+        local pre_chips = rawget(hand_vals, "chips") or 1
         --print(rawget(G.GAME.hands[text], "mult"))
         local hm = G.GAME.akyrs_pure_hand_modifier
         local final_mult, final_chips

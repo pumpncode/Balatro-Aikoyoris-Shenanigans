@@ -3925,7 +3925,11 @@ return {
             k_akyrs_gain_discard = "<SPLASH>",
             
             k_akyrs_use_from_drag = "USE",
-            k_akyrs_use_from_drag_2 = "[Ethically]",
+            k_akyrs_use_from_drag_apply = "APPLY",
+            k_akyrs_use_from_drag_voucher = "(Redeem)",
+            k_akyrs_use_from_drag_consumable = "(Consumable)",
+            k_akyrs_use_from_drag_joker = "(Initial Effect)",
+            k_akyrs_use_from_drag_pcard = "(Add to Deck)",
             b_akyrs_normal_jokers = "Normal Jokers",
             b_akyrs_letter_jokers = "Letter Jokers",
             k_akyrs_ate_up = "Eaten Up!",

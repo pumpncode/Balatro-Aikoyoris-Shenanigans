@@ -599,9 +599,22 @@ end
 function AKYRS.UIDEF.use_ui(card)
     local colour = G.C.AKYRS_AIKOYORI_BOW
     local text_colour = G.C.UI.TEXT_LIGHT
+    local added_to_deck = card.added_to_deck
     
     local text = localize("k_akyrs_use_from_drag")
-    local text2 = localize("k_akyrs_use_from_drag_2")
+    local text2 = localize("k_akyrs_use_from_drag_consumable")
+    if card.config.center.set == "Voucher" then
+        text2 = localize("k_akyrs_use_from_drag_voucher")
+    end
+    if card.config.center.set == "Joker" then
+        if added_to_deck then return {n = G.UIT.ROOT, nodes = {}} end
+        text = localize("k_akyrs_use_from_drag_apply")
+        text2 = localize("k_akyrs_use_from_drag_joker")
+    end
+    if card.config.center.set == "Default" or card.config.center.set == "Enhanced" then
+        text = localize("k_akyrs_use_from_drag_apply")
+        text2 = localize("k_akyrs_use_from_drag_pcard")
+    end
     if card.area then
         return {
             n = G.UIT.ROOT,
@@ -645,7 +658,7 @@ function AKYRS.UIDEF.use_ui(card)
                                                 {
                                                     n = G.UIT.R,
                                                     nodes = {
-                                                        { n = G.UIT.T, config = { text = text2, colour = text_colour, scale = 0.2, shadow = true } },
+                                                        { n = G.UIT.T, config = { text = text2, colour = text_colour, scale = 0.25, shadow = true } },
                                                     }
                                                 },
                                             }

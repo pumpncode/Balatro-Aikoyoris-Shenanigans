@@ -279,7 +279,11 @@ AKYRS.picker_initial_action = function()
         trigger = "before",
         func = function ()
             G.hand:unhighlight_all()
-            local cards_to_pick = AKYRS.pseudorandom_elements(G.hand.cards,G.hand.config.highlighted_limit, "akyrpickerseed")
+            local cards_candidate = AKYRS.filter_table(G.hand.cards, function (c, k)
+                return not c.highlighted and not c.ability.akyrs_perma_selection
+            end, true, true)
+            cards_candidate = AKYRS.remove_dupes(cards_candidate)
+            local cards_to_pick = AKYRS.pseudorandom_elements(cards_candidate,G.hand.config.highlighted_limit, "akyrpickerseed")
             table.sort(cards_to_pick, AKYRS.hand_sort_function)
             
             G.E_MANAGER:add_event(Event({

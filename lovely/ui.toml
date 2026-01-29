@@ -785,3 +785,21 @@ position = "before"
 payload = """AKYRS.run_info_tab(),"""
 overwrite = true
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = """                          G.CONTROLLER:snap_to({node = G.shop:get_UIE_by_ID('next_round_button')})"""
+position = "before"
+payload = """if G.shop then"""
+overwrite = true
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/button_callbacks.lua"
+pattern = """                          G.CONTROLLER:snap_to({node = G.shop:get_UIE_by_ID('next_round_button')})"""
+position = "after"
+payload = """end"""
+overwrite = true
+match_indent = true

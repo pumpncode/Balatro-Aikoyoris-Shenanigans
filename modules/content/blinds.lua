@@ -833,12 +833,6 @@ SMODS.Blind {
     },
     boss = {min = 1, max = 10, showdown = true},
     pos = { x = 0, y = 10 },
-    recalc_debuff = function (self, card, from_blind)
-        if card.seal then 
-            return true
-        end
-        return false
-    end,
     calculate = function (self, blind, context)
         if context.akyrs_pre_play and not blind.disabled then
             return {

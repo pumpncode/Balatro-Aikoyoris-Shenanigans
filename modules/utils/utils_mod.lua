@@ -858,8 +858,17 @@ function AKYRS.end_round_hook()
 
     end
     G.GAME.akyrs_sfc_used = nil
+    
+    if G.playing_card then
+        AKYRS.remove_dupes(G.playing_cards)
+    end
     for _, cardarea in ipairs(G.I.CARDAREA) do
         if cardarea and cardarea.cards then
+            
+            cardarea.cards = AKYRS.filter_table(cardarea.cards, function (c)
+                return not c.REMOVED and not c.being_removed
+            end, true, true)
+            AKYRS.remove_dupes(cardarea.cards)
             for i, card in ipairs(cardarea.cards) do
 
                 if card.ability.akyrs_self_destructs then

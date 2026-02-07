@@ -1429,8 +1429,8 @@ SMODS.Joker{
     config = {
         name = "Neuro Sama",
         extras = {
-            xmult = 0,
-            xmult_inc = 0.06,
+            xmult = 1,
+            xmult_inc = 0.1,
             xmult_absurd = 1,
             xmult_inc_absurd = 1.2,
         }
@@ -1449,7 +1449,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.individual and context.cardarea == G.play and not context.blueprint then
+        if context.individual and context.cardarea == G.play and not context.blueprint and not next(context.poker_hands["Flush"]) then
             if context.other_card:is_suit("Hearts") or ((context.other_card:is_suit("Spades") and next(SMODS.find_card("j_akyrs_evilneuro")))) then
                 return {
                     message_card = card,
@@ -1491,7 +1491,7 @@ SMODS.Joker{
         name = "Evil Neuro",
         extras = {
             xchips = 1,
-            xchips_inc = 0.06,
+            xchips_inc = 0.1,
             xchips_absurd = 1.1,
             xchips_inc_absurd = 1.1,
         }
@@ -1510,7 +1510,7 @@ SMODS.Joker{
         }
     end,
     calculate = function (self, card, context)
-        if context.individual and context.cardarea == G.play and not context.blueprint then
+        if context.individual and context.cardarea == G.play and not context.blueprint and not next(context.poker_hands["Flush"]) then
             if context.other_card:is_suit("Clubs") or ((context.other_card:is_suit("Diamonds") and next(SMODS.find_card("j_akyrs_neurosama")))) then
                 return {
                     message_card = card,
@@ -2098,7 +2098,7 @@ SMODS.Joker{
             local emerald_list = AKYRS.filter_table(G.jokers.cards, function (cd, ind)
                 return cd.config.center.key == self.key
             end, true, true)
-            print(#emerald_list, G.jokers.config.card_limit, #emerald_list == G.jokers.config.card_limit)
+            --print(#emerald_list, G.jokers.config.card_limit, #emerald_list == G.jokers.config.card_limit)
             if #emerald_list == G.jokers.config.card_limit then
                 check_for_unlock({ type = "full_emerald_in_slot" })
             end

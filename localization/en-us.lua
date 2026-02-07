@@ -1611,6 +1611,9 @@ return {
                 name = "Neuro Sama",
                 text = { 
                     {
+                        "If hand {C:attention}DOES NOT{} contain a {C:attention}Flush",
+                    },
+                    {
                         "This Joker gains {X:mult,C:white} X#2# {} Mult",
                         "for every {C:hearts}Hearts{} scored",
                     },
@@ -1629,6 +1632,9 @@ return {
                 name = "Neuro Sama",
                 text = { 
                     {
+                        "If hand {C:attention}DOES NOT{} contain a {C:attention}Flush",
+                    },
+                    {
                         "This Joker {C:attention}multiplies{} its {X:mult,C:white}XMult{} by {X:mult,C:white} X#2# {}",
                         "for every {C:hearts}Hearts{} scored",
                     },{
@@ -1646,6 +1652,9 @@ return {
                 name = "Evil Neuro",
                 text = { 
                     {
+                        "If hand {C:attention}DOES NOT{} contain a {C:attention}Flush",
+                    },
+                    {
                         "This Joker gains {X:chips,C:white} X#2# {} Chips",
                         "for every {C:clubs}Clubs{} scored",
                     },
@@ -1662,6 +1671,9 @@ return {
             j_akyrs_evilneuro_absurd = {
                 name = "Evil Neuro",
                 text = { 
+                    {
+                        "If hand {C:attention}DOES NOT{} contain a {C:attention}Flush",
+                    },
                     {
                         "This Joker {C:attention}exponentiates{} its {X:chips,C:white}XChips{} by {X:edition,C:purple} ^#2# {}",
                         "for every {C:clubs}Clubs{} scored",
@@ -3514,7 +3526,7 @@ return {
                 name="Weeping Angel",
                 text=
                 {
-                    "{C:attention}Flips all cards{} in current hand",
+                    "Temporarily {C:attention}flips all cards{} in current hand",
                     "{C:money}+$#1#{} per {C:attention}face down{} cards after flipping{}",
                 },
             },

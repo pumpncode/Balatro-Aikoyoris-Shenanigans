@@ -188,6 +188,7 @@ SMODS.Consumable{
         extra = 2,
     },
     loc_vars = function (self, info_queue, card)
+        info_queue[#info_queue+1] = { key = "pinned", set = "Other" }
         return {
             vars = {
                 card.ability.extra
@@ -242,8 +243,8 @@ SMODS.Consumable{
     key = "umbral_break_up",
     atlas = "umbra",
     config = {
-        min_highlighted = 1,
-        max_highlighted = 1
+        min_highlighted = 3,
+        max_highlighted = 3
     },
     loc_vars = function (self, info_queue, card)
         info_queue[#info_queue+1] = AKYRS.DescriptionDummies["dd_akyrs_break_up_tip"]
